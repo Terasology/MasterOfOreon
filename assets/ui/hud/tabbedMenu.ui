@@ -1,0 +1,338 @@
+{
+    "type" : "ManagerInterfaceHUDElement",
+    "id" : "tabbedMenuHUDElement",
+    "contents" : {
+        "type" : "relativeLayout",
+        "contents" : [
+            {
+                "type" : "ColumnLayout",
+                "contents" : [
+        			{
+                        "type" : "MultiRowLayout",
+                        "contents" : [
+                			{
+                                "type" : "UIToggleButton",
+                                "id" : "designTabCommand",
+                                "selected" : true,
+                                "text" : "Design"
+                			},
+                  			{
+                                "type" : "UIToggleButton",
+                                "id" : "researchTabCommand",
+                                "text" : "Research"
+                			},
+                  			{
+                                "type" : "UIToggleButton",
+                                "id" : "summonTabCommand",
+                                "text" : "Summon"
+                			},
+                			{
+                                "type" : "UIToggleButton",
+                                "id" : "creatureTabCommand",
+                                "text" : "Review"
+                			}
+                        ]
+        			},
+                    {
+                        "type" : "PickOneLayout",
+                        "id" : "tabbedPane",
+                        "contents" : [
+		        			{
+		                        "type" : "ColumnLayout",
+		                        "id" : "designTab",
+		                        "columns" : 3,
+		                        "autoSizeColumns" : true,
+		                        "contents" : [
+		                			{
+		                                "type" : "UIButton",
+		                                "id" : "digCommand",
+		                                "text" : "Dig"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "cutTreeCommand",
+		                                "text" : "Cut Tree"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "doorCommand",
+		                                "text" : "Place Door"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "doorResourceType",
+		                                "text" : "wood"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "doorResourceCount",
+		                                "text" : "5"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "bedCommand",
+		                                "text" : "Place Bed"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "bedResourceType",
+		                                "text" : "wood"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "bedResourceCount",
+		                                "text" : "10"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "cageCommand",
+		                                "text" : "Place Beast Cage"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "cageResourceType",
+		                                "text" : "wood"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "cageResourceCount",
+		                                "text" : "12"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "storageCommand",
+		                                "text" : "Designate Storage"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "treasureCommand",
+		                                "text" : "Designate Treasure Room"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "treasureResourceType",
+		                                "text" : "wood"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "treasureResourceCount",
+		                                "text" : "5"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "trainingRoomCommand",
+		                                "text" : "Designate Training Room"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "trainingRoomResourceType",
+		                                "text" : "iron"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "trainingRoomResourceCount",
+		                                "text" : "20"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "libraryCommand",
+		                                "text" : "Designate Library"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "libraryResourceType",
+		                                "text" : "wood"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "libraryResourceCount",
+		                                "text" : "20"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "laboratoryCommand",
+		                                "text" : "Designate Laboratory"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "laboratoryResourceType",
+		                                "text" : "stone"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "laboratoryResourceCount",
+		                                "text" : "15"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "workshopCommand",
+		                                "text" : "Designate Workshop"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "workshopResourceType",
+		                                "text" : "iron"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "workshopResourceCount",
+		                                "text" : "15"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "graveyardCommand",
+		                                "text" : "Designate Graveyard"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "graveyardResourceType",
+		                                "text" : "stone"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "graveyardResourceCount",
+		                                "text" : "20"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "boulderTrapCommand",
+		                                "text" : "Designate Boulder Trap"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "boulderTrapAvailableCount",
+		                                "text" : "0"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "text" : "ready"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "gasTrapCommand",
+		                                "text" : "Designate Gas Trap"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "id" : "gasTrapAvailableCount",
+		                                "text" : "0"
+		                			},
+		                  			{
+		                                "type" : "UILabel",
+		                                "text" : "ready"
+		                			},
+		                  			{
+		                                "type" : "UIButton",
+		                                "id" : "guardPostCommand",
+		                                "text" : "Designate Guard Post"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                			{
+		                                "type" : "UIButton",
+		                                "id" : "removeConstructionCommand",
+		                                "text" : "Remove Construction"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			}
+		                        ]
+		        			},
+		        			{
+		                        "type" : "ColumnLayout",
+		                        "id" : "researchTab",
+		                        "columns" : 1,
+		                        "contents" : [
+		                			{
+		                                "type" : "UILabel",
+		                                "text" : "Research stuff goes here"
+		                			}
+		                        ]
+		        			},
+		        			{
+		                        "type" : "ColumnLayout",
+		                        "id" : "creatureTab",
+		                        "columns" : 1,
+		                        "contents" : [
+		                			{
+		                                "type" : "UILabel",
+		                                "text" : "Creatures: 1 / 20"
+		                			},
+		                			{
+		                                "type" : "UILabel",
+		                                "text" : "N Oreon Builders"
+		                			},
+		                			{
+		                                "type" : "UILabel",
+		                                "text" : "N Oreon Guards"
+		                			},
+		                			{
+		                                "type" : "UILabel",
+		                                "text" : "N Oreon Kings"
+		                			}
+		                        ]
+		        			},
+		        			{
+		                        "type" : "ColumnLayout",
+		                        "id" : "summonTab",
+		                        "columns" : 1,
+		                        "contents" : [
+		                			{
+		                                "type" : "UIButton",
+		                                "id" : "summonOreonBuilderCommand",
+		                                "text" : "Oreon Builder"
+		                			},
+		                			{
+		                                "type" : "UIButton",
+		                                "id" : "summonOreonGuardCommand",
+		                                "text" : "Oreon Guard"
+		                			},
+		                			{
+		                                "type" : "UIButton",
+		                                "id" : "summonOreonKingCommand",
+		                                "text" : "Oreon King"
+		                			}
+		                        ]
+		        			}
+                        ]
+					},
+                ],
+                "layoutInfo" : {
+                    "use-content-width" : true,
+                    "use-content-height" : true,
+                    "position-right" : {
+                        "target" : "RIGHT"
+                    },
+                    "position-top" : {
+                        "target" : "TOP"
+                    }
+                }
+            }
+        ]
+    }
+}

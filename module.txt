@@ -1,0 +1,9 @@
+{
+    "id" : "ManagerInterface",
+    "version" : "0.1.0",
+    "author" : "",
+    "displayName" : "ManagerInterface",
+    "description" : "",
+    "dependencies" : [],
+    "isServerSideOnly" : false
+}
