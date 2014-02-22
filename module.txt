@@ -1,9 +1,9 @@
 {
     "id" : "ManagerInterface",
     "version" : "0.1.0",
-    "author" : "",
+    "author" : "Mike Kienenberger <mkienenb@gmail.com>",
     "displayName" : "ManagerInterface",
-    "description" : "",
+    "description" : "Provides a manager interface for working with Terasology",
     "dependencies" : [],
     "isServerSideOnly" : false
 }
