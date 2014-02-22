@@ -18,12 +18,21 @@ package org.terasology.managerInterface;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.asset.AssetType;
+import org.terasology.asset.AssetUri;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.input.binds.general.HideHUDButton;
+import org.terasology.managerInterface.nui.EmptyNonModalScreenLayer;
 import org.terasology.managerInterface.nui.ManagerInterfaceHUDElement;
+import org.terasology.managerInterface.nui.ToggleMouseGrabberButton;
+import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.NUIManager;
 
 @Share(ManagerInterfaceSystem.class)
@@ -34,8 +43,30 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
 
+    private EmptyNonModalScreenLayer EMPTY_NON_MODAL_SCREEN = new EmptyNonModalScreenLayer();
+    private boolean isEmptyNonModalScreenLayerOpen;
+
     @Override
-    public void initialise() {
+    
+    public void postBegin() {
         ManagerInterfaceHUDElement menuHUDElement = ManagerInterfaceHUDElement.getMenuHudElement();
     }
+    
+    // Higher priority than critical because NUI grabs all input when mouse is released
+    @ReceiveEvent(components = ClientComponent.class, priority=250)
+    public void onToggleMouseGrabber(ToggleMouseGrabberButton event, EntityRef entity) {
+        if (event.isDown()) {
+            
+            if (isEmptyNonModalScreenLayerOpen) {
+                nuiManager.closeScreen(EMPTY_NON_MODAL_SCREEN);
+                isEmptyNonModalScreenLayerOpen = false;
+            } else {
+                nuiManager.pushScreen(EMPTY_NON_MODAL_SCREEN);
+                isEmptyNonModalScreenLayerOpen = true;
+            }
+
+            event.consume();
+        }
+    }
+
 }
