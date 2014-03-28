@@ -4,6 +4,11 @@
     "author" : "Mike Kienenberger <mkienenb@gmail.com>",
     "displayName" : "ManagerInterface",
     "description" : "Provides a manager interface for working with Terasology\nUse the M key to toggle mouse grab so you can use the interface.",
-    "dependencies" : [],
+    "dependencies" : [
+		{
+            "id" : "Miniion",
+            "minVersion" : "0.2.0"
+        }
+    ],
     "isServerSideOnly" : false
 }

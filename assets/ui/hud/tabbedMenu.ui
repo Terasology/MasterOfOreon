@@ -54,6 +54,17 @@
 		                  			{
 		                                "type" : "UISpace"
 		                			},
+		                			{
+		                                "type" : "UIButton",
+		                                "id" : "plantCommand",
+		                                "text" : "Plant"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
+		                  			{
+		                                "type" : "UISpace"
+		                			},
 		                  			{
 		                                "type" : "UIButton",
 		                                "id" : "cutTreeCommand",

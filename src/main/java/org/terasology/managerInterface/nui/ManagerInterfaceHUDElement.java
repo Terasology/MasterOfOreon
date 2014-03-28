@@ -15,20 +15,23 @@
  */
 package org.terasology.managerInterface.nui;
 
+import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.asset.AssetType;
-import org.terasology.asset.AssetUri;
 import org.terasology.common.nui.PickOneLayout;
 import org.terasology.common.nui.UIToggleButton;
-import org.terasology.math.Rect2f;
+import org.terasology.managerInterface.ManagerInterfaceSystem;
+import org.terasology.miniion.nui.layers.CreatureMinionMenuSystem;
+import org.terasology.miniion.nui.layers.SummonMinionMenuSystem;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.rendering.nui.AbstractWidget;
 import org.terasology.rendering.nui.ControlWidget;
-import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.UIWidget;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
+import org.terasology.rendering.nui.layouts.ColumnLayout;
 import org.terasology.rendering.nui.widgets.ActivateEventListener;
+import org.terasology.rendering.nui.widgets.UIButton;
 
 /**
  * @author mkienenb
@@ -36,8 +39,6 @@ import org.terasology.rendering.nui.widgets.ActivateEventListener;
 public class ManagerInterfaceHUDElement extends CoreHudWidget implements ControlWidget {
 
     private static final Logger logger = LoggerFactory.getLogger(ManagerInterfaceHUDElement.class);
-
-    public static final String TABBED_MENU_WIDGET_ID = "managerinterface:tabbedMenu";
 
     private UIToggleButton designTabCommand;
     private UIToggleButton researchTabCommand;
@@ -50,6 +51,8 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
     private AbstractWidget researchTab;
     private AbstractWidget summonTab;
     private AbstractWidget creatureTab;
+    
+    private UIButton plantCommand;
 
     @Override
     public void initialise() {
@@ -135,6 +138,8 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                     tabbedPane.setSelectedWidget(summonTab);
                 }
             });
+            
+            populateSummonMenus();
         }
 
         if (creatureTabCommand != null) {
@@ -149,20 +154,59 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                     tabbedPane.setSelectedWidget(creatureTab);
                 }
             });
+            
+            populateCreaturesMenu();
+        }
+        
+        plantCommand = find("plantCommand", UIButton.class);
+
+        if (plantCommand == null) {
+            logger.warn("No plantCommand widget defined");
+        }
+
+        if (plantCommand != null) {
+            plantCommand.subscribe(new ActivateEventListener() {
+                @Override
+                public void onActivated(UIWidget widget) {
+                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
+                    managerInterfaceSystem.setPlantMode();
+                }
+            });
         }
     }
 
-    public static ManagerInterfaceHUDElement getMenuHudElement() {
-        NUIManager nuiManager = CoreRegistry.get(NUIManager.class);
+    public void populateSummonMenus() {
+        
+        // TODO: We shouldn't assume this is a ColumnLayout
+        ColumnLayout summonTabColumnLayout = (ColumnLayout)summonTab;
 
-        // TODO: temporary workaround for bug:
-        AssetUri uri = new AssetUri(AssetType.UI_ELEMENT, TABBED_MENU_WIDGET_ID);
-        ManagerInterfaceHUDElement tabbedMenuHUDElement = nuiManager.getHUD().getHUDElement(uri, ManagerInterfaceHUDElement.class);
-
-        if (null == tabbedMenuHUDElement) {
-            tabbedMenuHUDElement = nuiManager.getHUD().addHUDElement(TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+        Iterator<UIWidget> iterator = summonTab.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
         }
 
-        return tabbedMenuHUDElement;
+        SummonMinionMenuSystem summonMinionMenuSystem = CoreRegistry.get(SummonMinionMenuSystem.class);
+        summonMinionMenuSystem.populateSummonMenus(summonTabColumnLayout);
+    }
+
+    public void populateCreaturesMenu() {
+        // TODO: We shouldn't assume this is a ColumnLayout
+        ColumnLayout creatureTabColumnLayout = (ColumnLayout)creatureTab;
+
+        Iterator<UIWidget> iterator = creatureTab.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+
+        CreatureMinionMenuSystem creatureMinionMenuSystem = CoreRegistry.get(CreatureMinionMenuSystem.class);
+        creatureMinionMenuSystem.populateCreatureMenus(creatureTabColumnLayout);
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+        populateCreaturesMenu();
     }
 }
