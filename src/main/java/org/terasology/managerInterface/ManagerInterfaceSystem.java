@@ -48,7 +48,8 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     enum ManagerCommandMode {
         None,
         Plant,
-        Dig
+        Dig,
+        CutTree
     }
     
     private ManagerCommandMode currentManagerCommandMode = ManagerCommandMode.None;
@@ -133,5 +134,13 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
 
     public void setPlantMode() {
         currentManagerCommandMode = ManagerCommandMode.Plant;
+    }
+
+    public void setDigMode() {
+        currentManagerCommandMode = ManagerCommandMode.Dig;
+    }
+
+    public void setCutTreeMode() {
+        currentManagerCommandMode = ManagerCommandMode.CutTree;
     }
 }

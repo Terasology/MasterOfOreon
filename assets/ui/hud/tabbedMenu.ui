@@ -9,6 +9,7 @@
                 "contents" : [
         			{
                         "type" : "MultiRowLayout",
+                        "id" : "tabLayout",
                         "contents" : [
                 			{
                                 "type" : "UIToggleButton",
@@ -44,7 +45,7 @@
 		                        "autoSizeColumns" : true,
 		                        "contents" : [
 		                			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "digCommand",
 		                                "text" : "Dig"
 		                			},
@@ -55,7 +56,7 @@
 		                                "type" : "UISpace"
 		                			},
 		                			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "plantCommand",
 		                                "text" : "Plant"
 		                			},
@@ -66,7 +67,7 @@
 		                                "type" : "UISpace"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "cutTreeCommand",
 		                                "text" : "Cut Tree"
 		                			},
@@ -77,7 +78,7 @@
 		                                "type" : "UISpace"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "doorCommand",
 		                                "text" : "Place Door"
 		                			},
@@ -92,7 +93,7 @@
 		                                "text" : "5"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "bedCommand",
 		                                "text" : "Place Bed"
 		                			},
@@ -107,7 +108,7 @@
 		                                "text" : "10"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "cageCommand",
 		                                "text" : "Place Beast Cage"
 		                			},
@@ -122,7 +123,7 @@
 		                                "text" : "12"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "storageCommand",
 		                                "text" : "Designate Storage"
 		                			},
@@ -133,7 +134,7 @@
 		                                "type" : "UISpace"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "treasureCommand",
 		                                "text" : "Designate Treasure Room"
 		                			},
@@ -148,7 +149,7 @@
 		                                "text" : "5"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "trainingRoomCommand",
 		                                "text" : "Designate Training Room"
 		                			},
@@ -163,7 +164,7 @@
 		                                "text" : "20"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "libraryCommand",
 		                                "text" : "Designate Library"
 		                			},
@@ -178,7 +179,7 @@
 		                                "text" : "20"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "laboratoryCommand",
 		                                "text" : "Designate Laboratory"
 		                			},
@@ -193,7 +194,7 @@
 		                                "text" : "15"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "workshopCommand",
 		                                "text" : "Designate Workshop"
 		                			},
@@ -208,7 +209,7 @@
 		                                "text" : "15"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "graveyardCommand",
 		                                "text" : "Designate Graveyard"
 		                			},
@@ -223,7 +224,7 @@
 		                                "text" : "20"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "boulderTrapCommand",
 		                                "text" : "Designate Boulder Trap"
 		                			},
@@ -237,7 +238,7 @@
 		                                "text" : "ready"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "gasTrapCommand",
 		                                "text" : "Designate Gas Trap"
 		                			},
@@ -251,7 +252,7 @@
 		                                "text" : "ready"
 		                			},
 		                  			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "guardPostCommand",
 		                                "text" : "Designate Guard Post"
 		                			},
@@ -262,7 +263,7 @@
 		                                "type" : "UISpace"
 		                			},
 		                			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "removeConstructionCommand",
 		                                "text" : "Remove Construction"
 		                			},
@@ -314,17 +315,17 @@
 		                        "columns" : 1,
 		                        "contents" : [
 		                			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "summonOreonBuilderCommand",
 		                                "text" : "Oreon Builder"
 		                			},
 		                			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "summonOreonGuardCommand",
 		                                "text" : "Oreon Guard"
 		                			},
 		                			{
-		                                "type" : "UIButton",
+		                                "type" : "UIToggleButton",
 		                                "id" : "summonOreonKingCommand",
 		                                "text" : "Oreon King"
 		                			}

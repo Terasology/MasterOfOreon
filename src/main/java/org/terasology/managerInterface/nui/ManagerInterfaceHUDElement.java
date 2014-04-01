@@ -21,17 +21,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.common.nui.PickOneLayout;
 import org.terasology.common.nui.UIToggleButton;
+import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.managerInterface.ManagerInterfaceSystem;
-import org.terasology.miniion.nui.layers.CreatureMinionMenuSystem;
+import org.terasology.miniion.components.MinionComponent;
 import org.terasology.miniion.nui.layers.SummonMinionMenuSystem;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.rendering.nui.AbstractWidget;
 import org.terasology.rendering.nui.ControlWidget;
+import org.terasology.rendering.nui.CoreLayout;
 import org.terasology.rendering.nui.UIWidget;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.rendering.nui.layouts.ColumnLayout;
 import org.terasology.rendering.nui.widgets.ActivateEventListener;
-import org.terasology.rendering.nui.widgets.UIButton;
 
 /**
  * @author mkienenb
@@ -51,11 +55,15 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
     private AbstractWidget researchTab;
     private AbstractWidget summonTab;
     private AbstractWidget creatureTab;
-    
-    private UIButton plantCommand;
+
+    private UIToggleButton plantCommand;
+    private UIToggleButton digCommand;
+    private UIToggleButton cutTreeCommand;
 
     @Override
     public void initialise() {
+        final CoreLayout<?> tabLayout = find("tabLayout", CoreLayout.class);
+
         designTabCommand = find("designTabCommand", UIToggleButton.class);
         researchTabCommand = find("researchTabCommand", UIToggleButton.class);
         summonTabCommand = find("summonTabCommand", UIToggleButton.class);
@@ -102,11 +110,7 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             designTabCommand.subscribe(new ActivateEventListener() {
                 @Override
                 public void onActivated(UIWidget widget) {
-                    designTabCommand.setSelected(true);
-                    researchTabCommand.setSelected(false);
-                    summonTabCommand.setSelected(false);
-                    creatureTabCommand.setSelected(false);
-
+                    selectToggleButtonInColumnLayout(tabLayout, widget);
                     tabbedPane.setSelectedWidget(designTab);
                 }
             });
@@ -116,11 +120,7 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             researchTabCommand.subscribe(new ActivateEventListener() {
                 @Override
                 public void onActivated(UIWidget widget) {
-                    designTabCommand.setSelected(false);
-                    researchTabCommand.setSelected(true);
-                    summonTabCommand.setSelected(false);
-                    creatureTabCommand.setSelected(false);
-
+                    selectToggleButtonInColumnLayout(tabLayout, widget);
                     tabbedPane.setSelectedWidget(researchTab);
                 }
             });
@@ -130,15 +130,11 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             summonTabCommand.subscribe(new ActivateEventListener() {
                 @Override
                 public void onActivated(UIWidget widget) {
-                    designTabCommand.setSelected(false);
-                    researchTabCommand.setSelected(false);
-                    summonTabCommand.setSelected(true);
-                    creatureTabCommand.setSelected(false);
-
+                    selectToggleButtonInColumnLayout(tabLayout, widget);
                     tabbedPane.setSelectedWidget(summonTab);
                 }
             });
-            
+
             populateSummonMenus();
         }
 
@@ -146,39 +142,64 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             creatureTabCommand.subscribe(new ActivateEventListener() {
                 @Override
                 public void onActivated(UIWidget widget) {
-                    designTabCommand.setSelected(false);
-                    researchTabCommand.setSelected(false);
-                    summonTabCommand.setSelected(false);
-                    creatureTabCommand.setSelected(true);
-
+                    selectToggleButtonInColumnLayout(tabLayout, widget);
                     tabbedPane.setSelectedWidget(creatureTab);
                 }
             });
-            
+
             populateCreaturesMenu();
         }
-        
-        plantCommand = find("plantCommand", UIButton.class);
 
+        plantCommand = find("plantCommand", UIToggleButton.class);
         if (plantCommand == null) {
             logger.warn("No plantCommand widget defined");
         }
-
         if (plantCommand != null) {
             plantCommand.subscribe(new ActivateEventListener() {
                 @Override
                 public void onActivated(UIWidget widget) {
+                    selectToggleButtonInColumnLayout(designTab, widget);
                     ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
                     managerInterfaceSystem.setPlantMode();
+                }
+            });
+        }
+
+        digCommand = find("digCommand", UIToggleButton.class);
+        if (digCommand == null) {
+            logger.warn("No digCommand widget defined");
+        }
+        if (digCommand != null) {
+            digCommand.subscribe(new ActivateEventListener() {
+                @Override
+                public void onActivated(UIWidget widget) {
+                    selectToggleButtonInColumnLayout(designTab, widget);
+                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
+                    managerInterfaceSystem.setDigMode();
+                }
+            });
+        }
+
+        cutTreeCommand = find("cutTreeCommand", UIToggleButton.class);
+        if (cutTreeCommand == null) {
+            logger.warn("No cutTreeCommand widget defined");
+        }
+        if (cutTreeCommand != null) {
+            cutTreeCommand.subscribe(new ActivateEventListener() {
+                @Override
+                public void onActivated(UIWidget widget) {
+                    selectToggleButtonInColumnLayout(designTab, widget);
+                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
+                    managerInterfaceSystem.setCutTreeMode();
                 }
             });
         }
     }
 
     public void populateSummonMenus() {
-        
+
         // TODO: We shouldn't assume this is a ColumnLayout
-        ColumnLayout summonTabColumnLayout = (ColumnLayout)summonTab;
+        ColumnLayout summonTabColumnLayout = (ColumnLayout) summonTab;
 
         Iterator<UIWidget> iterator = summonTab.iterator();
         while (iterator.hasNext()) {
@@ -186,13 +207,36 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             iterator.remove();
         }
 
-        SummonMinionMenuSystem summonMinionMenuSystem = CoreRegistry.get(SummonMinionMenuSystem.class);
-        summonMinionMenuSystem.populateSummonMenus(summonTabColumnLayout);
+        PrefabManager prefMan = CoreRegistry.get(PrefabManager.class);
+
+        for (final Prefab prefab : prefMan.listPrefabs(MinionComponent.class)) {
+
+            String[] tempstring = prefab.getName().split(":");
+            if (tempstring.length == 2) {
+                String minionName = tempstring[1];
+                UIToggleButton selectMinionMenu = new UIToggleButton();
+                selectMinionMenu.setText(minionName);
+                selectMinionMenu.subscribe(new ActivateEventListener() {
+                    @Override
+                    public void onActivated(UIWidget widget) {
+                        selectToggleButtonInColumnLayout(summonTab, widget);
+                        SummonMinionMenuSystem summonMinionMenuSystem = CoreRegistry.get(SummonMinionMenuSystem.class);
+                        summonMinionMenuSystem.createMinion(prefab);
+                    }
+
+                });
+
+                summonTabColumnLayout.addWidget(selectMinionMenu);
+            }
+        }
     }
+
+    // TODO: eventually this needs to be done by listening for minion create/destroy events,
+    // probably in ManagerInterfaceSystem
 
     public void populateCreaturesMenu() {
         // TODO: We shouldn't assume this is a ColumnLayout
-        ColumnLayout creatureTabColumnLayout = (ColumnLayout)creatureTab;
+        ColumnLayout creatureTabColumnLayout = (ColumnLayout) creatureTab;
 
         Iterator<UIWidget> iterator = creatureTab.iterator();
         while (iterator.hasNext()) {
@@ -200,13 +244,48 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             iterator.remove();
         }
 
-        CreatureMinionMenuSystem creatureMinionMenuSystem = CoreRegistry.get(CreatureMinionMenuSystem.class);
-        creatureMinionMenuSystem.populateCreatureMenus(creatureTabColumnLayout);
+        EntityManager entityManager = CoreRegistry.get(EntityManager.class);
+        Iterable<EntityRef> entityIterable = entityManager.getEntitiesWith(MinionComponent.class);
+        for (EntityRef entityRef : entityIterable) {
+
+            MinionComponent minionComponent = entityRef.getComponent(MinionComponent.class);
+
+            String minionIdentity = minionComponent.flavortext + " - " + minionComponent.name;
+
+            UIToggleButton existingMinionMenuItem = new UIToggleButton();
+            existingMinionMenuItem.setText(minionIdentity);
+            existingMinionMenuItem.subscribe(new ActivateEventListener() {
+                @Override
+                public void onActivated(UIWidget widget) {
+                    selectToggleButtonInColumnLayout(creatureTab, widget);
+                    // Go to minion? select minion?
+                }
+            });
+
+            creatureTabColumnLayout.addWidget(existingMinionMenuItem);
+        }
     }
 
-    @Override
-    public void update(float delta) {
-        super.update(delta);
-        populateCreaturesMenu();
+    private void selectToggleButtonInColumnLayout(UIWidget layoutWidget, UIWidget selectedToggleButtonWidget) {
+        if (!(layoutWidget instanceof CoreLayout)) {
+            logger.warn(layoutWidget + " is not an instance of CoreLayout");
+            return;
+        }
+        if (!(selectedToggleButtonWidget instanceof UIToggleButton)) {
+            logger.warn(selectedToggleButtonWidget + " is not an instance of UIToggleButton");
+            return;
+        }
+        
+        CoreLayout<?> layout = (CoreLayout<?>) layoutWidget;
+        
+        Iterator<UIWidget> iterator = layout.iterator();
+        while (iterator.hasNext()) {
+            UIWidget widget = iterator.next();
+            if (widget instanceof UIToggleButton) {
+                UIToggleButton toggleButton = (UIToggleButton)widget;
+                toggleButton.setSelected(toggleButton == selectedToggleButtonWidget);
+            }
+        }
     }
+
 }
