@@ -93,6 +93,9 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
             case Plant:
                 aiSystem.createAssignedTask(AssignedTaskType.Plant, event.getSelection());
                 break;
+            case Dig:
+                aiSystem.createAssignedTask(AssignedTaskType.Dig, event.getSelection());
+                break;
         }
     }
 
