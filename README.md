@@ -1,1 +1,1 @@
-Manager Interface for Terasology
+Master of Oreon World Manager Interface for Terasology

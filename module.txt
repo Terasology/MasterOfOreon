@@ -1,8 +1,8 @@
 {
-    "id" : "ManagerInterface",
+    "id" : "masteroforeon",
     "version" : "0.1.0",
     "author" : "Mike Kienenberger <mkienenb@gmail.com>",
-    "displayName" : "ManagerInterface",
+    "displayName" : "Master Of Oreon",
     "description" : "Provides a manager interface for working with Terasology\nUse the M key to toggle mouse grab so you can use the interface.",
     "dependencies" : [
 		{

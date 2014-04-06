@@ -15,10 +15,10 @@
  */
 {
     "DisplayName" : {
-        "name" : "Zoning tool"
+        "name" : "Selection Tool"
     },
     "Item" : {
-        "icon" : "managerInterface:zoneicons16.zonetool",
+        "icon" : "masteroforeon:toolicons16.selectiontool",
         "usage" : "ON_BLOCK",
         "consumedOnUse" : false,
         "renderWithIcon" : true

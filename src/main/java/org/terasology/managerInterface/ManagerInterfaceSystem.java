@@ -41,8 +41,8 @@ import org.terasology.rendering.nui.NUIManager;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ManagerInterfaceSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ManagerInterfaceSystem.class);
-    public static final String MOUSE_CAPTURING_SCREEN_UIELEMENT_ID = "managerinterface:mouseCapturingScreen";
-    public static final String TABBED_MENU_WIDGET_ID = "managerinterface:tabbedMenu";
+    public static final String MOUSE_CAPTURING_SCREEN_UIELEMENT_ID = "masteroforeon:mouseCapturingScreen";
+    public static final String TABBED_MENU_WIDGET_ID = "masteroforeon:tabbedMenu";
 
     enum ManagerCommandMode {
         None,
@@ -70,7 +70,7 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     // TODO: this should be in a separate class, most likely.  Maybe ManagerInterface
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
-        createAndGiveItemToPlayerIfPossible("managerinterface" + ":" + "zonetool", player);
+        createAndGiveItemToPlayerIfPossible("masteroforeon" + ":" + "selectiontool", player);
     }
 
     private void createAndGiveItemToPlayerIfPossible(String uri, EntityRef player) {
