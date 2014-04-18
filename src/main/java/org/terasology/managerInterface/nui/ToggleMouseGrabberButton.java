@@ -25,6 +25,6 @@ import org.terasology.input.RegisterBindButton;
  * @author mkienenb
  */
 @RegisterBindButton(id = "toggleMouseGrabber", description = "Toggle Mouse Grabber")
-@DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.M)
+@DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.O)
 public class ToggleMouseGrabberButton extends BindButtonEvent {
 }
