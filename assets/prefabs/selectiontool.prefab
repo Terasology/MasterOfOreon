@@ -18,7 +18,7 @@
         "name" : "Selection Tool"
     },
     "Item" : {
-        "icon" : "masteroforeon:toolicons16.selectiontool",
+        "icon" : "masteroforeon:toolicons16#selectiontool",
         "usage" : "ON_BLOCK",
         "consumedOnUse" : false,
         "renderWithIcon" : true
