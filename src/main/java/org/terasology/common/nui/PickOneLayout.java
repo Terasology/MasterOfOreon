@@ -18,7 +18,7 @@ package org.terasology.common.nui;
 import java.util.Iterator;
 import java.util.List;
 
-import org.terasology.math.Vector2i;
+import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.CoreLayout;
 import org.terasology.rendering.nui.LayoutHint;
