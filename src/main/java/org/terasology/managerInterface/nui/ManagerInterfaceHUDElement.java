@@ -38,7 +38,6 @@ import org.terasology.rendering.nui.layouts.ColumnLayout;
 import org.terasology.rendering.nui.widgets.ActivateEventListener;
 
 /**
- * @author mkienenb
  */
 public class ManagerInterfaceHUDElement extends CoreHudWidget implements ControlWidget {
 
@@ -275,9 +274,9 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             logger.warn(selectedToggleButtonWidget + " is not an instance of UIToggleButton");
             return;
         }
-        
+
         CoreLayout<?> layout = (CoreLayout<?>) layoutWidget;
-        
+
         Iterator<UIWidget> iterator = layout.iterator();
         while (iterator.hasNext()) {
             UIWidget widget = iterator.next();
