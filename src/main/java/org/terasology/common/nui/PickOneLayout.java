@@ -82,4 +82,8 @@ public class PickOneLayout extends CoreLayout<LayoutHint> {
         return widgetList.iterator();
     }
 
+    @Override
+    public void removeWidget(UIWidget element) {
+        // TODO: Implement (added as compile fix after engine change)
+    }
 }
