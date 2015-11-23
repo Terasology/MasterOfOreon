@@ -29,7 +29,7 @@ import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.managerInterface.nui.ManagerInterfaceHUDElement;
 import org.terasology.managerInterface.nui.ToggleMouseGrabberButton;
-import org.terasology.math.Rect2f;
+import org.terasology.math.geom.Rect2f;
 import org.terasology.miniion.components.AssignedTaskType;
 import org.terasology.miniion.componentsystem.controllers.RevisedSimpleMinionAISystem;
 import org.terasology.miniion.componentsystem.controllers.TaskManagementSystem;
