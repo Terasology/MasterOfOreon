@@ -1,5 +1,5 @@
 {
-    "id" : "masteroforeon",
+    "id" : "MasterOfOreon",
     "version" : "0.1.1-SNAPSHOT",
     "author" : "Mike Kienenberger <mkienenb@gmail.com>",
     "displayName" : "Master Of Oreon",
