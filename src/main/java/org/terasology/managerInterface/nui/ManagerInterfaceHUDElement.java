@@ -26,8 +26,8 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.managerInterface.ManagerInterfaceSystem;
-import org.terasology.miniion.components.MinionComponent;
-import org.terasology.miniion.nui.layers.SummonMinionMenuSystem;
+//import org.terasology.miniion.components.MinionComponent;
+//import org.terasology.miniion.nui.layers.SummonMinionMenuSystem;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.rendering.nui.AbstractWidget;
 import org.terasology.rendering.nui.ControlWidget;
@@ -208,7 +208,8 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
 
         PrefabManager prefMan = CoreRegistry.get(PrefabManager.class);
 
-        for (final Prefab prefab : prefMan.listPrefabs(MinionComponent.class)) {
+        //TODO Implement new MinionComponent and summon logic using Portals, currently SummonMinionMenuSystem has the spawn logic
+        /*for (final Prefab prefab : prefMan.listPrefabs(MinionComponent.class)) {
 
             String[] tempstring = prefab.getName().split(":");
             if (tempstring.length == 2) {
@@ -227,7 +228,7 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
 
                 summonTabColumnLayout.addWidget(selectMinionMenu);
             }
-        }
+        }*/
     }
 
     // TODO: eventually this needs to be done by listening for minion create/destroy events,
@@ -244,7 +245,8 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
         }
 
         EntityManager entityManager = CoreRegistry.get(EntityManager.class);
-        Iterable<EntityRef> entityIterable = entityManager.getEntitiesWith(MinionComponent.class);
+        //TODO This loop lists out the Oreons that can be summoned
+        /*Iterable<EntityRef> entityIterable = entityManager.getEntitiesWith(MinionComponent.class);
         for (EntityRef entityRef : entityIterable) {
 
             MinionComponent minionComponent = entityRef.getComponent(MinionComponent.class);
@@ -262,7 +264,7 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             });
 
             creatureTabColumnLayout.addWidget(existingMinionMenuItem);
-        }
+        }*/
     }
 
     private void selectToggleButtonInColumnLayout(UIWidget layoutWidget, UIWidget selectedToggleButtonWidget) {
