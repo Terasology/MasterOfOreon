@@ -22,13 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.terasology.common.nui.PickOneLayout;
 import org.terasology.common.nui.UIToggleButton;
 import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.managerInterface.ManagerInterfaceSystem;
-import org.terasology.miniion.components.MinionComponent;
-import org.terasology.miniion.nui.layers.SummonMinionMenuSystem;
-import org.terasology.registry.CoreRegistry;
+import org.terasology.registry.In;
 import org.terasology.rendering.nui.AbstractWidget;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.CoreLayout;
@@ -42,6 +38,13 @@ import org.terasology.rendering.nui.widgets.ActivateEventListener;
 public class ManagerInterfaceHUDElement extends CoreHudWidget implements ControlWidget {
 
     private static final Logger logger = LoggerFactory.getLogger(ManagerInterfaceHUDElement.class);
+
+    @In
+    private EntityManager entityManager;
+    @In
+    private ManagerInterfaceSystem managerInterfaceSystem;
+    @In
+    private PrefabManager prefMan;
 
     private UIToggleButton designTabCommand;
     private UIToggleButton researchTabCommand;
@@ -158,7 +161,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                 @Override
                 public void onActivated(UIWidget widget) {
                     selectToggleButtonInColumnLayout(designTab, widget);
-                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
                     managerInterfaceSystem.setPlantMode();
                 }
             });
@@ -173,7 +175,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                 @Override
                 public void onActivated(UIWidget widget) {
                     selectToggleButtonInColumnLayout(designTab, widget);
-                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
                     managerInterfaceSystem.setDigMode();
                 }
             });
@@ -188,7 +189,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                 @Override
                 public void onActivated(UIWidget widget) {
                     selectToggleButtonInColumnLayout(designTab, widget);
-                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
                     managerInterfaceSystem.setCutTreeMode();
                 }
             });
@@ -206,28 +206,7 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             iterator.remove();
         }
 
-        PrefabManager prefMan = CoreRegistry.get(PrefabManager.class);
-
-        for (final Prefab prefab : prefMan.listPrefabs(MinionComponent.class)) {
-
-            String[] tempstring = prefab.getName().split(":");
-            if (tempstring.length == 2) {
-                String minionName = tempstring[1];
-                UIToggleButton selectMinionMenu = new UIToggleButton();
-                selectMinionMenu.setText(minionName);
-                selectMinionMenu.subscribe(new ActivateEventListener() {
-                    @Override
-                    public void onActivated(UIWidget widget) {
-                        selectToggleButtonInColumnLayout(summonTab, widget);
-                        SummonMinionMenuSystem summonMinionMenuSystem = CoreRegistry.get(SummonMinionMenuSystem.class);
-                        summonMinionMenuSystem.createMinion(prefab);
-                    }
-
-                });
-
-                summonTabColumnLayout.addWidget(selectMinionMenu);
-            }
-        }
+        //TODO Implement new MinionComponent and summon logic using Portals, currently SummonMinionMenuSystem has the spawn logic
     }
 
     // TODO: eventually this needs to be done by listening for minion create/destroy events,
@@ -243,26 +222,7 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             iterator.remove();
         }
 
-        EntityManager entityManager = CoreRegistry.get(EntityManager.class);
-        Iterable<EntityRef> entityIterable = entityManager.getEntitiesWith(MinionComponent.class);
-        for (EntityRef entityRef : entityIterable) {
-
-            MinionComponent minionComponent = entityRef.getComponent(MinionComponent.class);
-
-            String minionIdentity = minionComponent.flavortext + " - " + minionComponent.name;
-
-            UIToggleButton existingMinionMenuItem = new UIToggleButton();
-            existingMinionMenuItem.setText(minionIdentity);
-            existingMinionMenuItem.subscribe(new ActivateEventListener() {
-                @Override
-                public void onActivated(UIWidget widget) {
-                    selectToggleButtonInColumnLayout(creatureTab, widget);
-                    // Go to minion? select minion?
-                }
-            });
-
-            creatureTabColumnLayout.addWidget(existingMinionMenuItem);
-        }
+        //TODO A loop which lists out the Oreons that can be summoned
     }
 
     private void selectToggleButtonInColumnLayout(UIWidget layoutWidget, UIWidget selectedToggleButtonWidget) {

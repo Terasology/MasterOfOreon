@@ -30,9 +30,6 @@ import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.managerInterface.nui.ManagerInterfaceHUDElement;
 import org.terasology.managerInterface.nui.ToggleMouseGrabberButton;
 import org.terasology.math.geom.Rect2f;
-import org.terasology.miniion.components.AssignedTaskType;
-import org.terasology.miniion.componentsystem.controllers.RevisedSimpleMinionAISystem;
-import org.terasology.miniion.componentsystem.controllers.TaskManagementSystem;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -53,9 +50,10 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     }
     
     private ManagerCommandMode currentManagerCommandMode = ManagerCommandMode.None;
-    
-    @In 
-    private TaskManagementSystem taskManager;
+
+    //TODO Implement new TaskManagementSystem
+    //@In
+    //private TaskManagementSystem taskManager;
     
     @In
     private NUIManager nuiManager;
@@ -92,10 +90,9 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
                 // do nothing
                 break;
             case Plant:
-                taskManager.createAssignedTask(AssignedTaskType.Plant, event.getSelection());
+                //requires task manager implementation
                 break;
             case Dig:
-                taskManager.createAssignedTask(AssignedTaskType.Dig, event.getSelection());
                 break;
         }
     }
