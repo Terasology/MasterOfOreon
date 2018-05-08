@@ -24,7 +24,7 @@ import org.terasology.common.nui.UIToggleButton;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.managerInterface.ManagerInterfaceSystem;
-import org.terasology.registry.CoreRegistry;
+import org.terasology.registry.In;
 import org.terasology.rendering.nui.AbstractWidget;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.CoreLayout;
@@ -38,6 +38,13 @@ import org.terasology.rendering.nui.widgets.ActivateEventListener;
 public class ManagerInterfaceHUDElement extends CoreHudWidget implements ControlWidget {
 
     private static final Logger logger = LoggerFactory.getLogger(ManagerInterfaceHUDElement.class);
+
+    @In
+    private EntityManager entityManager;
+    @In
+    private ManagerInterfaceSystem managerInterfaceSystem;
+    @In
+    private PrefabManager prefMan;
 
     private UIToggleButton designTabCommand;
     private UIToggleButton researchTabCommand;
@@ -154,7 +161,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                 @Override
                 public void onActivated(UIWidget widget) {
                     selectToggleButtonInColumnLayout(designTab, widget);
-                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
                     managerInterfaceSystem.setPlantMode();
                 }
             });
@@ -169,7 +175,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                 @Override
                 public void onActivated(UIWidget widget) {
                     selectToggleButtonInColumnLayout(designTab, widget);
-                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
                     managerInterfaceSystem.setDigMode();
                 }
             });
@@ -184,7 +189,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
                 @Override
                 public void onActivated(UIWidget widget) {
                     selectToggleButtonInColumnLayout(designTab, widget);
-                    ManagerInterfaceSystem managerInterfaceSystem = CoreRegistry.get(ManagerInterfaceSystem.class);
                     managerInterfaceSystem.setCutTreeMode();
                 }
             });
@@ -202,8 +206,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             iterator.remove();
         }
 
-        PrefabManager prefMan = CoreRegistry.get(PrefabManager.class);
-
         //TODO Implement new MinionComponent and summon logic using Portals, currently SummonMinionMenuSystem has the spawn logic
     }
 
@@ -220,7 +222,6 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
             iterator.remove();
         }
 
-        EntityManager entityManager = CoreRegistry.get(EntityManager.class);
         //TODO A loop which lists out the Oreons that can be summoned
     }
 
