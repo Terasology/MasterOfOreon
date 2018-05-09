@@ -15,13 +15,54 @@
  */
 package org.terasology.spawning.nui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.prefab.PrefabManager;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.UIWidget;
+import org.terasology.rendering.nui.widgets.ActivateEventListener;
+import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.spawning.OreonSpawnComponent;
+import org.terasology.spawning.OreonSpawnEvent;
+
 
 public class SpawnScreenLayer extends CoreScreenLayer {
 
+    private static final Logger logger = LoggerFactory.getLogger(SpawnScreenLayer.class);
+
+    @In
+    EntityManager entityManager;
+    @In
+    PrefabManager prefabManager;
+
+    private UIButton summonOreonBuilderCommand;
+
+    private EntityRef portalEntity;
+
     @Override
     public void initialise() {
+        summonOreonBuilderCommand = find("summonOreonBuilderCommand", UIButton.class);
+        logger.info("Button found");
+        summonOreonBuilderCommand.subscribe(button -> {
+            logger.info("Button pressed" + portalEntity);
+            EntityRef oreon = entityManager.create(portalEntity.getComponent(LocationComponent.class));
+            OreonSpawnComponent oreonSpawnComponent = new OreonSpawnComponent();
+            oreonSpawnComponent.oreonPrefab = prefabManager.getPrefab("Oreons:OreonBuilder");
+            oreon.addComponent(oreonSpawnComponent);
 
+            logger.info("Sending Oreon Spawn Event" + oreon);
+            oreon.send(new OreonSpawnEvent());
+        });
+
+    }
+
+    public void setPortalEntity(EntityRef target) {
+        logger.info("portal entity changed from " + portalEntity + " " + target);
+        portalEntity = target;
     }
 
 }

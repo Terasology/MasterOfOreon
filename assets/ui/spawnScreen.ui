@@ -8,20 +8,20 @@
         "contents" : [
             {
                 "type" : "ColumnLayout",
-                "id" : "summonTab",
+                "columns": 1,
                 "contents" : [
                     {
-                        "type" : "UIToggleButton",
+                        "type" : "UIButton",
                         "id" : "summonOreonBuilderCommand",
                         "text" : "Oreon Builder"
                     },
                     {
-                        "type" : "UIToggleButton",
+                        "type" : "UIButton",
                         "id" : "summonOreonGuardCommand",
                         "text" : "Oreon Guard"
                     },
                     {
-                        "type" : "UIToggleButton",
+                        "type" : "UIButton",
                         "id" : "summonOreonKingCommand",
                         "text" : "Oreon King"
                     }
