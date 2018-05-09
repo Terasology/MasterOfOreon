@@ -24,7 +24,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.action.GiveItemAction;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.managerInterface.nui.ManagerInterfaceHUDElement;
@@ -34,6 +34,8 @@ import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.items.BlockItemFactory;
 
 @Share(ManagerInterfaceSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -48,39 +50,36 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
         Dig,
         CutTree
     }
-    
+
     private ManagerCommandMode currentManagerCommandMode = ManagerCommandMode.None;
 
     //TODO Implement new TaskManagementSystem
     //@In
     //private TaskManagementSystem taskManager;
-    
+
     @In
     private NUIManager nuiManager;
-    
+
     @In
     private EntityManager entityManager;
+
+    @In
+    private InventoryManager inventoryManager;
+
+    @In
+    private BlockManager blockManager;
 
     @Override
     public void postBegin() {
         toggleManagerInterface();
     }
-    
+
     // TODO: this should be in a separate class, most likely.  Maybe ManagerInterface
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
-        createAndGiveItemToPlayerIfPossible("masteroforeon" + ":" + "selectiontool", player);
-    }
-
-    private void createAndGiveItemToPlayerIfPossible(String uri, EntityRef player) {
-        EntityRef item = entityManager.create(uri);
-        GiveItemAction action = new GiveItemAction(EntityRef.NULL, item);
-        player.send(action);
-        if (!action.isConsumed()) {
-            logger.warn(uri + " could not be created and given to player.");
-            item.destroy();
-        }
-            
+        BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
+        inventoryManager.giveItem(player, player, entityManager.create("MasterOfOreon:selectionTool"));
+        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("MasterOfOreon:portal"), 10));
     }
 
     @ReceiveEvent
@@ -121,7 +120,7 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
         }
         nuiManager.toggleScreen(MOUSE_CAPTURING_SCREEN_UIELEMENT_ID);
     }
-    
+
     // NOTE: this is not currently supported for HUD elements, and we would rather monitor when a minion component is created/destroyed in any case
     public void update(float delta) {
         if (nuiManager.isOpen(MOUSE_CAPTURING_SCREEN_UIELEMENT_ID)) {

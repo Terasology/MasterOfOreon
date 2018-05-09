@@ -1,0 +1,39 @@
+{
+    "type" : "SpawnScreenLayer",
+    "skin" : "engine:default",
+    "id" : "spawnScreen",
+    "contents" :
+    {
+        "type" : "RelativeLayout",
+        "contents" : [
+            {
+                "type" : "ColumnLayout",
+                "id" : "summonTab",
+                "contents" : [
+                    {
+                        "type" : "UIToggleButton",
+                        "id" : "summonOreonBuilderCommand",
+                        "text" : "Oreon Builder"
+                    },
+                    {
+                        "type" : "UIToggleButton",
+                        "id" : "summonOreonGuardCommand",
+                        "text" : "Oreon Guard"
+                    },
+                    {
+                        "type" : "UIToggleButton",
+                        "id" : "summonOreonKingCommand",
+                        "text" : "Oreon King"
+                    }
+                ],
+
+                "layoutInfo": {
+                          "width": 300,
+                          "height": 100,
+                          "position-horizontal-center": {},
+                          "position-vertical-center": {}
+                }
+            }
+        ]
+    }
+}
