@@ -55,6 +55,9 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         //TODO Resource consuming spawn
         //TODO oreon still spawns mid-air
         EntityRef newOreon = entityManager.create(prefabToSpawn, spawnPos);
+        NetworkComponent netComp = new NetworkComponent();
+        netComp.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+        newOreon.addComponent(netComp);
         OreonSpawnComponent oreonSpawnComponent = newOreon.getComponent(OreonSpawnComponent.class);
         oreonSpawnComponent.parent = player;
         logger.info("Player " + oreonSpawnComponent.parent.getOwner() + "Spawned a new Oreon of Type : " + prefabToSpawn.toString());

@@ -18,7 +18,9 @@ package org.terasology.spawning;
 import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.network.ServerEvent;
 
+@ServerEvent
 public class OreonSpawnEvent implements Event {
     private Prefab oreonPrefab;
     private Vector3f location;
