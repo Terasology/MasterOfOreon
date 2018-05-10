@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.LocalPlayer;
@@ -35,32 +36,47 @@ public class SpawnScreenLayer extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(SpawnScreenLayer.class);
 
     @In
-    EntityManager entityManager;
+    private EntityManager entityManager;
     @In
-    LocalPlayer localPlayer;
+    private LocalPlayer localPlayer;
     @In
-    PrefabManager prefabManager;
+    private PrefabManager prefabManager;
 
     private UIButton summonOreonBuilderCommand;
+    private UIButton summonOreonGuardCommand;
+    private UIButton summonOreonKingCommand;
 
     private EntityRef portalEntity;
 
     @Override
     public void initialise() {
         summonOreonBuilderCommand = find("summonOreonBuilderCommand", UIButton.class);
-        logger.info("Button found");
-        summonOreonBuilderCommand.subscribe(button -> {
-            setPortalEntity();
-            logger.info("Button pressed " + portalEntity);
-            EntityRef oreon = entityManager.create(portalEntity.getComponent(LocationComponent.class));
-            OreonSpawnComponent oreonSpawnComponent = new OreonSpawnComponent();
-            oreonSpawnComponent.oreonPrefab = prefabManager.getPrefab("Oreons:OreonBuilder");
-            oreon.addComponent(oreonSpawnComponent);
+        summonOreonGuardCommand = find("summonOreonGuardCommand", UIButton.class);
+        summonOreonKingCommand = find("summonOreonKingCommand", UIButton.class);
 
-            logger.info("Sending Oreon Spawn Event" + oreon);
-            oreon.send(new OreonSpawnEvent());
+        summonOreonBuilderCommand.subscribe(button -> {
+            sendOreonSpawnEvent(prefabManager.getPrefab("Oreons:OreonBuilder"));
         });
 
+        summonOreonGuardCommand.subscribe(button -> {
+            sendOreonSpawnEvent(prefabManager.getPrefab("Oreons:OreonGuard"));
+        });
+
+        summonOreonKingCommand.subscribe(button -> {
+            sendOreonSpawnEvent(prefabManager.getPrefab("Oreons:OreonKing"));
+        });
+    }
+
+    public void sendOreonSpawnEvent(Prefab prefabToSpawn) {
+        setPortalEntity();
+        if(portalEntity.hasComponent(LocationComponent.class)) {
+            EntityRef oreon = entityManager.create(portalEntity.getComponent(LocationComponent.class));
+            OreonSpawnComponent oreonSpawnComponent = new OreonSpawnComponent();
+            oreonSpawnComponent.oreonPrefab = prefabToSpawn;
+            oreon.addComponent(oreonSpawnComponent);
+            logger.info("sending spawn event");
+            localPlayer.getCharacterEntity().send(new OreonSpawnEvent(prefabToSpawn, portalEntity.getComponent(LocationComponent.class).getWorldPosition()));
+        }
     }
 
     public void setPortalEntity() {
