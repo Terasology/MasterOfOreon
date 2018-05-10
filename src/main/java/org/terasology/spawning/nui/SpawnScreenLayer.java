@@ -70,11 +70,6 @@ public class SpawnScreenLayer extends CoreScreenLayer {
     public void sendOreonSpawnEvent(Prefab prefabToSpawn) {
         setPortalEntity();
         if(portalEntity.hasComponent(LocationComponent.class)) {
-            EntityRef oreon = entityManager.create(portalEntity.getComponent(LocationComponent.class));
-            OreonSpawnComponent oreonSpawnComponent = new OreonSpawnComponent();
-            oreonSpawnComponent.oreonPrefab = prefabToSpawn;
-            oreon.addComponent(oreonSpawnComponent);
-            logger.info("sending spawn event");
             localPlayer.getCharacterEntity().send(new OreonSpawnEvent(prefabToSpawn, portalEntity.getComponent(LocationComponent.class).getWorldPosition()));
         }
     }
