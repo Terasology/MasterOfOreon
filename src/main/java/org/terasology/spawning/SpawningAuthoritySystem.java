@@ -62,21 +62,10 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
     }
 
     /**
-     * Sends a {@link ActivateSpawnScreenEvent} to client which activates Portal
-     */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH, components = PortalComponent.class)
-    public void sendActivateScreenEvent(ActivateEvent event, EntityRef entityRef) {
-        event.getInstigator().send(new ActivateSpawnScreenEvent(entityRef));
-        event.consume();
-    }
-
-    /**
      * Spawns the desired Oreon at the location of Portal which sends the event
      */
     @ReceiveEvent(components = OreonSpawnComponent.class)
-    public void oreonSpawn(OreonSpawnEvent event, EntityRef entityRef) {
-        EntityRef oreon = entityRef;
-
+    public void oreonSpawn(OreonSpawnEvent event, EntityRef oreon) {
         setSpawnPos(oreon);
         setPrefabToSpawn(oreon);
 
@@ -84,6 +73,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
         // spawn the new oreon into the world
         //TODO Resource consuming spawn
+        //TODO oreon still spawns mid-air
         EntityRef newOreon = entityManager.create(prefabToSpawn, spawnPos);
         OreonSpawnComponent oreonSpawnComponent = newOreon.getComponent(OreonSpawnComponent.class);
         oreonSpawnComponent.parent = localPlayer.getCharacterEntity();

@@ -21,10 +21,10 @@ import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.logic.players.LocalPlayer;
+import org.terasology.portals.PortalComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
-import org.terasology.rendering.nui.UIWidget;
-import org.terasology.rendering.nui.widgets.ActivateEventListener;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.spawning.OreonSpawnEvent;
@@ -37,6 +37,8 @@ public class SpawnScreenLayer extends CoreScreenLayer {
     @In
     EntityManager entityManager;
     @In
+    LocalPlayer localPlayer;
+    @In
     PrefabManager prefabManager;
 
     private UIButton summonOreonBuilderCommand;
@@ -48,7 +50,8 @@ public class SpawnScreenLayer extends CoreScreenLayer {
         summonOreonBuilderCommand = find("summonOreonBuilderCommand", UIButton.class);
         logger.info("Button found");
         summonOreonBuilderCommand.subscribe(button -> {
-            logger.info("Button pressed" + portalEntity);
+            setPortalEntity();
+            logger.info("Button pressed " + portalEntity);
             EntityRef oreon = entityManager.create(portalEntity.getComponent(LocationComponent.class));
             OreonSpawnComponent oreonSpawnComponent = new OreonSpawnComponent();
             oreonSpawnComponent.oreonPrefab = prefabManager.getPrefab("Oreons:OreonBuilder");
@@ -60,9 +63,10 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     }
 
-    public void setPortalEntity(EntityRef target) {
-        logger.info("portal entity changed from " + portalEntity + " " + target);
-        portalEntity = target;
+    public void setPortalEntity() {
+        for(EntityRef portal : entityManager.getEntitiesWith(PortalComponent.class, LocationComponent.class)){
+            portalEntity = portal;
+        }
     }
 
 }

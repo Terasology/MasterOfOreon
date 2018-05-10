@@ -16,6 +16,11 @@
 {
     "Portal" : {
     },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "masteroforeon:spawnScreen"
+    },
+
     "PlaySoundAction" : {
         "sounds": "masteroforeon:spawn"
     }

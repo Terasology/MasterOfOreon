@@ -17,15 +17,12 @@ package org.terasology.spawning;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.spawning.nui.SpawnScreenLayer;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class SpawningClientSystem extends BaseComponentSystem {
@@ -36,14 +33,4 @@ public class SpawningClientSystem extends BaseComponentSystem {
 
     @In
     private LocalPlayer localPlayer;
-
-    @ReceiveEvent
-    public void onActivateSpawnScreenEvent(ActivateSpawnScreenEvent event, EntityRef entity) {
-        if (entity.equals(localPlayer.getCharacterEntity())) {
-            logger.info("Recieved ActivateSpawnScreenEvent" + entity);
-            SpawnScreenLayer spawnScreenLayer = nuiManager.pushScreen("MasterOfOreon:spawnScreen", SpawnScreenLayer.class);
-            spawnScreenLayer.setPortalEntity(event.getTargetEntity());
-        }
-    }
-
 }
