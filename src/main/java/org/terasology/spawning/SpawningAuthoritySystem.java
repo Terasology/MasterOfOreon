@@ -30,6 +30,7 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
+import org.terasology.utilities.random.MersenneRandom;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
 
@@ -62,17 +63,17 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         spawnPos = event.getSpawnPos();
         spawnPos.y = spawnPos.y - (float)0.5;
 
-        // spawn the new oreon into the world
-        //TODO Resource consuming spawn
-        //TODO oreon still spawns mid-air
-
         boolean toSpawn = consumeItem(player, prefabToSpawn);
         if(toSpawn) {
+            // spawn the new oreon into the world
             EntityRef newOreon = entityManager.create(prefabToSpawn, spawnPos);
             NetworkComponent netComp = new NetworkComponent();
             netComp.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
             newOreon.addComponent(netComp);
             newOreon.getComponent(OreonSpawnComponent.class).parent = player;
+
+            assignRandomAttributes(newOreon);
+
             logger.info("Player " + newOreon.getComponent(OreonSpawnComponent.class).parent + "Spawned a new Oreon of Type : " + prefabToSpawn);
         }
     }
@@ -149,6 +150,22 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
         //successfully removed the required number of needed item
         return true;
+    }
+
+    public void assignRandomAttributes(EntityRef oreon) {
+        OreonAttributeComponent oreonAttributes = new OreonAttributeComponent();
+
+        MersenneRandom random = new MersenneRandom();
+
+        if(prefabToSpawn.getName().equals("Oreons:OreonBuilder")) {
+            oreonAttributes.intelligence = random.nextInt(oreonAttributes.maxIntelligence);
+        }
+        else {
+            oreonAttributes.intelligence = 0;
+        }
+        oreonAttributes.strength = random.nextInt(oreonAttributes.maxStrength);
+
+        oreon.addComponent(oreonAttributes);
     }
 
 }
