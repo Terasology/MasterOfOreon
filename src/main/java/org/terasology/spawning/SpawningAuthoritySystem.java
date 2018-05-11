@@ -34,6 +34,8 @@ import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.family.BlockFamily;
 
+import java.util.List;
+
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class SpawningAuthoritySystem extends BaseComponentSystem {
@@ -59,6 +61,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
     public void oreonSpawn(OreonSpawnEvent event, EntityRef player) {
         prefabToSpawn = event.getOreonPrefab();
         spawnPos = event.getSpawnPos();
+        spawnPos.y = spawnPos.y - (float)0.5;
 
         // spawn the new oreon into the world
         //TODO Resource consuming spawn
@@ -77,39 +80,52 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     public boolean consumeItem(EntityRef player, Prefab prefab) {
         OreonSpawnComponent oreonSpawnComponent = prefab.getComponent(OreonSpawnComponent.class);
-        String neededItem = oreonSpawnComponent.itemToConsume;
-        if (neededItem != null) {
-            logger.info("This Oreon has an item demand for spawning: {}", neededItem);
+        List<String> neededItemList = oreonSpawnComponent.itemToConsume;
+        List<Integer> neededNumberList = oreonSpawnComponent.numberToConsume;
+        if (neededItemList != null) {
+            int numberOfItems = neededItemList.size();
             if (player.hasComponent(InventoryComponent.class)) {
-                BlockFamily neededFamily = blockManager.getBlockFamily(neededItem);
-                logger.info("Needed block family: {}", neededFamily);
+                int itemNumber = 0;
+                for (itemNumber = 0; itemNumber < numberOfItems; itemNumber++) {
+                    String neededItem = neededItemList.get(itemNumber);
+                    Integer neededNumber = neededNumberList.get(itemNumber);
+                    logger.info("This Oreon has an item demand for spawning: {}", neededItem);
+                    BlockFamily neededFamily = blockManager.getBlockFamily(neededItem);
 
-                EntityRef inventorySlot = inventoryManager.getItemInSlot(player, 0);
-                int inventorySize = inventoryManager.getNumSlots(player);
+                    EntityRef inventorySlot = inventoryManager.getItemInSlot(player, 0);
+                    int inventorySize = inventoryManager.getNumSlots(player);
 
-                int slotNumber = 0;
-                while (slotNumber <= inventorySize) {
-                    DisplayNameComponent displayName = inventorySlot.getComponent(DisplayNameComponent.class);
-                    if (displayName != null) {
-                        if (neededFamily.getDisplayName().equals(displayName.name)) {
-                            logger.info("Found the item needed to spawn stuff! Decrementing by 1 then spawning");
-
-                            EntityRef result = inventoryManager.removeItem(player, player, inventorySlot, true, 1);
-                            logger.info("Result from decrementing: {}", result);
-                            logger.info("Successfully decremented an existing item stack - accepting item-based spawning");
-                            return true;
-
+                    int slotNumber = 0;
+                    boolean foundItem = false;
+                    while (slotNumber <= inventorySize) {
+                        DisplayNameComponent displayName = inventorySlot.getComponent(DisplayNameComponent.class);
+                        if (displayName != null) {
+                            if (neededFamily.getDisplayName().equals(displayName.name)) {
+                                logger.info("Found the item needed to spawn stuff! Decrementing by {}, then spawning", neededNumber);
+                                EntityRef result = inventoryManager.removeItem(player, player, inventorySlot, false, neededNumber);
+                                if(result.equals(EntityRef.NULL)) {
+                                    logger.info("Could not decrement the required amount form inventory, not spawning");
+                                    return false;
+                                }
+                                foundItem = true;
+                                break;
+                            }
                         }
-                    }
 
-                    slotNumber++;
-                    logger.info("Next Slot number" + slotNumber);
-                    inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
+                        slotNumber++;
+                        inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
+                    }
+                    if(!foundItem) {
+                        logger.info("Could not find required item {} in inventory, not spawning", neededItem);
+                        break;
+                    }
+                }
+                if(itemNumber == numberOfItems) {
+                    logger.info("Found all items required for spawning, creating your Oreon");
+                    return true;
                 }
 
-                logger.info("Could not find required item in inventory, not spawning");
                 return false;
-
             }
 
             logger.info("No inventory to source material from, cannot spawn");

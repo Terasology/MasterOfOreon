@@ -19,8 +19,11 @@ import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 
+import java.util.List;
+
 public class OreonSpawnComponent implements Component {
-    public String itemToConsume;
+    public List<String> itemToConsume;
+    public List<Integer> numberToConsume;
 
     public Prefab oreonPrefab;
 
