@@ -25,17 +25,16 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.family.BlockFamily;
+import org.terasology.world.block.items.BlockItemComponent;
 
-import java.util.List;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class SpawningAuthoritySystem extends BaseComponentSystem {
@@ -66,7 +65,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         // spawn the new oreon into the world
         //TODO Resource consuming spawn
         //TODO oreon still spawns mid-air
-        logger.info("Recieved oreon spawn event");
+
         boolean toSpawn = consumeItem(player, prefabToSpawn);
         if(toSpawn) {
             EntityRef newOreon = entityManager.create(prefabToSpawn, spawnPos);
@@ -74,58 +73,35 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
             netComp.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
             newOreon.addComponent(netComp);
             newOreon.getComponent(OreonSpawnComponent.class).parent = player;
-            logger.info("Player " + newOreon.getComponent(OreonSpawnComponent.class).parent.getId() + "Spawned a new Oreon of Type : " + prefabToSpawn);
+            logger.info("Player " + newOreon.getComponent(OreonSpawnComponent.class).parent + "Spawned a new Oreon of Type : " + prefabToSpawn);
         }
     }
 
     public boolean consumeItem(EntityRef player, Prefab prefab) {
         OreonSpawnComponent oreonSpawnComponent = prefab.getComponent(OreonSpawnComponent.class);
-        List<String> neededItemList = oreonSpawnComponent.itemToConsume;
-        List<Integer> neededNumberList = oreonSpawnComponent.numberToConsume;
-        if (neededItemList != null) {
+        HashMap<String, Integer> itemsHashMap = oreonSpawnComponent.itemsToConsume;
+
+        if (oreonSpawnComponent.itemsToConsume != null) {
+            ArrayList<String> neededItemList = new ArrayList(itemsHashMap.keySet());
             int numberOfItems = neededItemList.size();
             if (player.hasComponent(InventoryComponent.class)) {
-                int itemNumber = 0;
-                for (itemNumber = 0; itemNumber < numberOfItems; itemNumber++) {
-                    String neededItem = neededItemList.get(itemNumber);
-                    Integer neededNumber = neededNumberList.get(itemNumber);
-                    logger.info("This Oreon has an item demand for spawning: {}", neededItem);
-                    BlockFamily neededFamily = blockManager.getBlockFamily(neededItem);
+                ArrayList<Integer> requiredSlots = getSlotsForRequiredItems(itemsHashMap, player);
 
-                    EntityRef inventorySlot = inventoryManager.getItemInSlot(player, 0);
-                    int inventorySize = inventoryManager.getNumSlots(player);
-
-                    int slotNumber = 0;
-                    boolean foundItem = false;
-                    while (slotNumber <= inventorySize) {
-                        DisplayNameComponent displayName = inventorySlot.getComponent(DisplayNameComponent.class);
-                        if (displayName != null) {
-                            if (neededFamily.getDisplayName().equals(displayName.name)) {
-                                logger.info("Found the item needed to spawn stuff! Decrementing by {}, then spawning", neededNumber);
-                                EntityRef result = inventoryManager.removeItem(player, player, inventorySlot, false, neededNumber);
-                                if(result.equals(EntityRef.NULL)) {
-                                    logger.info("Could not decrement the required amount form inventory, not spawning");
-                                    return false;
-                                }
-                                foundItem = true;
-                                break;
-                            }
-                        }
-
-                        slotNumber++;
-                        inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
-                    }
-                    if(!foundItem) {
-                        logger.info("Could not find required item {} in inventory, not spawning", neededItem);
-                        break;
-                    }
-                }
-                if(itemNumber == numberOfItems) {
-                    logger.info("Found all items required for spawning, creating your Oreon");
-                    return true;
+                //all required items not in inventory
+                if (requiredSlots.size() != numberOfItems) {
+                    logger.info("Could not find all required items in inventory");
+                    return false;
                 }
 
-                return false;
+                for (int slotNumber = 0; slotNumber < numberOfItems; slotNumber++) {
+                    if(!removeNeededItem(itemsHashMap, requiredSlots.get(slotNumber), player)) {
+                        //could not decrement the required number from inventory
+                        return false;
+                    }
+                }
+
+                logger.info("Found all items required for spawning, creating your Oreon");
+                return true;
             }
 
             logger.info("No inventory to source material from, cannot spawn");
@@ -133,6 +109,45 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         }
 
         logger.info("No item required to spawn, spawning your Oreon");
+        return true;
+    }
+
+    public ArrayList<Integer> getSlotsForRequiredItems(HashMap<String, Integer> items, EntityRef player) {
+        ArrayList<Integer> requiredSlots = new ArrayList<>();
+
+        int inventorySize = inventoryManager.getNumSlots(player);
+
+        for(int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+            EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
+
+            BlockItemComponent blockItemComponent = inventorySlot.getComponent(BlockItemComponent.class);
+            if (blockItemComponent != null) {
+                String blockFamily = blockItemComponent.blockFamily.toString();
+                //if this item is required
+                if (items.containsKey(blockFamily)) {
+                    requiredSlots.add(slotNumber);
+                }
+            }
+        }
+
+        return requiredSlots;
+    }
+
+    public boolean removeNeededItem(HashMap<String, Integer> items, int slotNumber, EntityRef player) {
+        EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
+        BlockItemComponent blockItemComponent = inventorySlot.getComponent(BlockItemComponent.class);
+        String blockFamily = blockItemComponent.blockFamily.toString();
+
+        logger.info("This Oreon has an item demand for spawning: " + blockFamily);
+        logger.info("Found the item needed to spawn stuff! Decrementing by {}, then spawning", items.get(blockFamily));
+
+        EntityRef result = inventoryManager.removeItem(player, player, inventorySlot, false, items.get(blockFamily));
+        if(result == null) {
+            logger.info("Could not decrement the required amount from inventory, not spawning");
+            return false;
+        }
+
+        //successfully removed the required number of needed item
         return true;
     }
 
