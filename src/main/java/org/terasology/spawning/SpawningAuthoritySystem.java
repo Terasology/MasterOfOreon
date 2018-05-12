@@ -43,7 +43,7 @@ import java.util.Map;
 public class SpawningAuthoritySystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(SpawningAuthoritySystem.class);
 
-    private static final String OREON_BUILDER_PREFAB = "Oreons:OreonBuilder";
+    private static final String OREON_BUILDER_PREFAB = Constants.getOreonBuilderPrefab();
 
     @In
     private BlockManager blockManager;

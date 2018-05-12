@@ -34,6 +34,7 @@ import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.spawning.Constants;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
@@ -41,8 +42,11 @@ import org.terasology.world.block.items.BlockItemFactory;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ManagerInterfaceSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ManagerInterfaceSystem.class);
-    public static final String MOUSE_CAPTURING_SCREEN_UIELEMENT_ID = "masteroforeon:mouseCapturingScreen";
-    public static final String TABBED_MENU_WIDGET_ID = "masteroforeon:tabbedMenu";
+
+    public static final String MOUSE_CAPTURING_SCREEN_UIELEMENT_ID = Constants.getMouseCapturingScreenUielementId();
+    public static final String TABBED_MENU_WIDGET_ID = Constants.getTabbedMenuWidgetId();
+    public static final String SELECTION_TOOL_PREFAB = Constants.getSelectionToolPrefab();
+    public static final String PORTAL_PREFAB = Constants.getPortalPrefab();
 
     enum ManagerCommandMode {
         None,
@@ -78,8 +82,8 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
-        inventoryManager.giveItem(player, player, entityManager.create("MasterOfOreon:selectionTool"));
-        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("MasterOfOreon:portal"), 10));
+        inventoryManager.giveItem(player, player, entityManager.create(SELECTION_TOOL_PREFAB));
+        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(PORTAL_PREFAB), 10));
     }
 
     @ReceiveEvent

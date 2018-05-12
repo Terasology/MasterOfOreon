@@ -27,6 +27,7 @@ import org.terasology.portals.PortalComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.spawning.Constants;
 import org.terasology.spawning.OreonSpawnEvent;
 
 
@@ -34,13 +35,13 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     private static final Logger logger = LoggerFactory.getLogger(SpawnScreenLayer.class);
 
-    private static final String OREON_BUILDER_PREFAB = "Oreons:OreonBuilder";
-    private static final String OREON_GUARD_PREFAB = "Oreons:OreonGuard";
-    private static final String OREON_KING_PREFAB = "Oreons:OreonKing";
+    public static final String OREON_BUILDER_PREFAB = Constants.getOreonBuilderPrefab();
+    private static final String OREON_GUARD_PREFAB = Constants.getOreonGuardPrefab();
+    private static final String OREON_KING_PREFAB = Constants.getOreonKingPrefab();
 
-    private static final String OREON_BUILDER_UI_ID = "summonOreonBuilderCommand";
-    private static final String OREON_GUARD_UI_ID = "summonOreonGuardCommand";
-    private static final String OREON_KING_UI_ID = "summonOreonKingCommand";
+    private static final String OREON_BUILDER_UI_ID = Constants.getOreonBuilderUiId();
+    private static final String OREON_GUARD_UI_ID = Constants.getOreonGuardUiId();
+    private static final String OREON_KING_UI_ID = Constants.getOreonKingUiId();
 
     @In
     private EntityManager entityManager;
@@ -76,9 +77,9 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     public void sendOreonSpawnEvent(Prefab prefabToSpawn) {
         setPortalEntity();
-        boolean portalHasALocation = portalEntity.hasComponent(LocationComponent.class);
-        if (portalHasALocation) {
-            localPlayer.getCharacterEntity().send(new OreonSpawnEvent(prefabToSpawn, portalEntity.getComponent(LocationComponent.class).getWorldPosition()));
+        LocationComponent portalLocation = portalEntity.getComponent(LocationComponent.class);
+        if (portalLocation != null) {
+            localPlayer.getCharacterEntity().send(new OreonSpawnEvent(prefabToSpawn, portalLocation.getWorldPosition()));
         }
     }
 
