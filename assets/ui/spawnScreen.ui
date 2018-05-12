@@ -33,16 +33,14 @@
                                 "id" : "oreonBuilderResourceRequired",
                                 "layoutInfo": {
                                     "width": 500,
-                                    "use-content-height": true,
-                                    "position-horizontal-center": {},
-                                    "position-vertical-center": {}
+                                    "use-content-height": true
                                 }
                             }
                         ]
                     },
                         {
                             "type" : "UISpace",
-                            "size" : [16, 16]
+                            "size" : [1, 8]
                         },
                     {
                         "type" : "RowLayout",
@@ -59,9 +57,7 @@
                                 "id" : "oreonGuardResourceRequired",
                                 "layoutInfo": {
                                     "width": 500,
-                                    "use-content-height": true,
-                                    "position-horizontal-center": {},
-                                    "position-vertical-center": {}
+                                    "use-content-height": true
                                 }
                             }
 
@@ -69,7 +65,7 @@
                     },
                         {
                             "type" : "UISpace",
-                            "size" : [16, 16]
+                            "size" : [1, 8]
                         },
                     {
                         "type" : "RowLayout",
@@ -86,9 +82,7 @@
                                 "id" : "oreonKingResourceRequired",
                                 "layoutInfo": {
                                     "width": 500,
-                                    "use-content-height": true,
-                                    "position-horizontal-center": {},
-                                    "position-vertical-center": {}
+                                    "use-content-height": true
                                 }
                             }
 
@@ -96,7 +90,7 @@
                     },
                         {
                             "type" : "UISpace",
-                            "size" : [1, 16]
+                            "size" : [1, 8]
                         }
                     ],
 

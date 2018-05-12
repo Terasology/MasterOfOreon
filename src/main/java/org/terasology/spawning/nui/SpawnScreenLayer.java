@@ -108,8 +108,9 @@ public class SpawnScreenLayer extends CoreScreenLayer {
             int itemsRequired = items.size();
 
             for(String blockRequired : items.keySet()) {
-                text.append(blockRequired);
-                text.append(" Quantity: ");
+                String blockName = blockRequired.substring(12, blockRequired.length() - 1);
+                text.append(blockName);
+                text.append(" : ");
                 text.append(items.get(blockRequired) + ", ");
             }
 
@@ -117,8 +118,6 @@ public class SpawnScreenLayer extends CoreScreenLayer {
                 text.append("nothing");
             }
         }
-
-        text.append(" to spawn ");
 
         label.setText(text.toString());
     }
