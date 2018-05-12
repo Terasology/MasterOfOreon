@@ -20,9 +20,10 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class OreonSpawnComponent implements Component {
-    public HashMap<String, Integer> itemsToConsume = new HashMap<>();
+    public Map<String, Integer> itemsToConsume = new HashMap<>();
 
     public Prefab oreonPrefab;
 

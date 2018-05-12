@@ -34,6 +34,14 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     private static final Logger logger = LoggerFactory.getLogger(SpawnScreenLayer.class);
 
+    private static final String OREON_BUILDER_PREFAB = "Oreons:OreonBuilder";
+    private static final String OREON_GUARD_PREFAB = "Oreons:OreonGuard";
+    private static final String OREON_KING_PREFAB = "Oreons:OreonKing";
+
+    private static final String OREON_BUILDER_UI_ID = "summonOreonBuilderCommand";
+    private static final String OREON_GUARD_UI_ID = "summonOreonGuardCommand";
+    private static final String OREON_KING_UI_ID = "summonOreonKingCommand";
+
     @In
     private EntityManager entityManager;
     @In
@@ -49,20 +57,20 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     @Override
     public void initialise() {
-        summonOreonBuilderCommand = find("summonOreonBuilderCommand", UIButton.class);
-        summonOreonGuardCommand = find("summonOreonGuardCommand", UIButton.class);
-        summonOreonKingCommand = find("summonOreonKingCommand", UIButton.class);
+        summonOreonBuilderCommand = find(OREON_BUILDER_UI_ID, UIButton.class);
+        summonOreonGuardCommand = find(OREON_GUARD_UI_ID, UIButton.class);
+        summonOreonKingCommand = find(OREON_KING_UI_ID, UIButton.class);
 
         summonOreonBuilderCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab("Oreons:OreonBuilder"));
+            sendOreonSpawnEvent(prefabManager.getPrefab(OREON_BUILDER_PREFAB));
         });
 
         summonOreonGuardCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab("Oreons:OreonGuard"));
+            sendOreonSpawnEvent(prefabManager.getPrefab(OREON_GUARD_PREFAB));
         });
 
         summonOreonKingCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab("Oreons:OreonKing"));
+            sendOreonSpawnEvent(prefabManager.getPrefab(OREON_KING_PREFAB));
         });
     }
 

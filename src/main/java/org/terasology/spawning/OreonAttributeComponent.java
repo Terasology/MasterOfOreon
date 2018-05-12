@@ -22,10 +22,10 @@ public class OreonAttributeComponent implements Component {
      * Defines the current level of the Oreon.
      * Level of the Oreon decides the max value of a particular attribute that can be attained by Training.
      */
-    public int currLevel = 1;
+    public int currentLevel = 1;
 
-    public int maxIntelligence = 100 * currLevel;
-    public int maxStrength = 100 * currLevel;
+    public int maxIntelligence = 100 * currentLevel;
+    public int maxStrength = 100 * currentLevel;
 
     public int intelligence;
     public int strength;
