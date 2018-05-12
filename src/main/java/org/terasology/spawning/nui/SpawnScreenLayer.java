@@ -27,8 +27,12 @@ import org.terasology.portals.PortalComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.spawning.Constants;
+import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.spawning.OreonSpawnEvent;
+
+import java.util.Map;
 
 
 public class SpawnScreenLayer extends CoreScreenLayer {
@@ -46,6 +50,10 @@ public class SpawnScreenLayer extends CoreScreenLayer {
     private UIButton summonOreonGuardCommand;
     private UIButton summonOreonKingCommand;
 
+    private UILabel builderResourceRequired;
+    private UILabel guardResourceRequired;
+    private UILabel kingResourceRequired;
+
     private EntityRef portalEntity;
 
     @Override
@@ -53,6 +61,14 @@ public class SpawnScreenLayer extends CoreScreenLayer {
         summonOreonBuilderCommand = find(Constants.OREON_BUILDER_UI_ID, UIButton.class);
         summonOreonGuardCommand = find(Constants.OREON_GUARD_UI_ID, UIButton.class);
         summonOreonKingCommand = find(Constants.OREON_KING_UI_ID, UIButton.class);
+
+        builderResourceRequired = find(Constants.OREON_BUILDER_RESOURCES_LABEL_ID, UILabel.class);
+        guardResourceRequired = find(Constants.OREON_GUARD_RESOURCES_LABEL_ID, UILabel.class);
+        kingResourceRequired = find(Constants.OREON_KING_RESOURCES_LABEL_ID, UILabel.class);
+
+        populateUiLabels(Constants.OREON_BUILDER_PREFAB, builderResourceRequired);
+        populateUiLabels(Constants.OREON_GUARD_PREFAB, guardResourceRequired);
+        populateUiLabels(Constants.OREON_KING_PREFAB, kingResourceRequired);
 
         summonOreonBuilderCommand.subscribe(button -> {
             sendOreonSpawnEvent(prefabManager.getPrefab(Constants.OREON_BUILDER_PREFAB));
@@ -67,7 +83,7 @@ public class SpawnScreenLayer extends CoreScreenLayer {
         });
     }
 
-    public void sendOreonSpawnEvent(Prefab prefabToSpawn) {
+    private void sendOreonSpawnEvent(Prefab prefabToSpawn) {
         setPortalEntity();
         LocationComponent portalLocation = portalEntity.getComponent(LocationComponent.class);
         if (portalLocation != null) {
@@ -75,10 +91,36 @@ public class SpawnScreenLayer extends CoreScreenLayer {
         }
     }
 
-    public void setPortalEntity() {
+    private void setPortalEntity() {
         for(EntityRef portal : entityManager.getEntitiesWith(PortalComponent.class, LocationComponent.class)){
             portalEntity = portal;
+            break;
         }
+    }
+
+    private void populateUiLabels(String prefab, UILabel label) {
+        Prefab oreonPrefab = prefabManager.getPrefab(prefab);
+        OreonSpawnComponent oreonSpawnComponent = oreonPrefab.getComponent(OreonSpawnComponent.class);
+        StringBuilder text = new StringBuilder("Requires ");
+
+        if (oreonSpawnComponent != null) {
+            Map<String, Integer> items = oreonSpawnComponent.itemsToConsume;
+            int itemsRequired = items.size();
+
+            for(String blockRequired : items.keySet()) {
+                text.append(blockRequired);
+                text.append(" Quantity: ");
+                text.append(items.get(blockRequired) + ", ");
+            }
+
+            if(itemsRequired == 0) {
+                text.append("nothing");
+            }
+        }
+
+        text.append(" to spawn ");
+
+        label.setText(text.toString());
     }
 
 }

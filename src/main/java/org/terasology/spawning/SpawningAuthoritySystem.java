@@ -80,7 +80,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         }
     }
 
-    public boolean consumeItem(EntityRef player, Prefab prefab) {
+    private boolean consumeItem(EntityRef player, Prefab prefab) {
         OreonSpawnComponent oreonSpawnComponent = prefab.getComponent(OreonSpawnComponent.class);
 
         if(oreonSpawnComponent == null) {
@@ -120,7 +120,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         return true;
     }
 
-    public List<Integer> getSlotsForRequiredItems(Map<String, Integer> items, EntityRef player) {
+    private List<Integer> getSlotsForRequiredItems(Map<String, Integer> items, EntityRef player) {
         List<Integer> requiredSlots = new ArrayList<>();
 
         int inventorySize = inventoryManager.getNumSlots(player);
@@ -130,10 +130,19 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
             BlockItemComponent blockItemComponent = inventorySlot.getComponent(BlockItemComponent.class);
             if (blockItemComponent != null) {
-                String blockFamily = blockItemComponent.blockFamily.toString();
+                String blockFamilyName = blockItemComponent.blockFamily.toString();
                 //if this item is required
-                if (items.containsKey(blockFamily)) {
-                    requiredSlots.add(slotNumber);
+                if (items.containsKey(blockFamilyName)) {
+                    //check if required number is present in the inventory
+                    int requiredNumber = items.get(blockFamilyName);
+                    if (requiredNumber <= inventoryManager.getStackSize(inventorySlot)) {
+                        requiredSlots.add(slotNumber);
+                    }
+
+                    else {
+                        logger.info("You don't have enough({} required) {} blocks to spawn the Oreon" , requiredNumber, blockFamilyName);
+                        break;
+                    }
                 }
             }
         }
@@ -141,7 +150,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         return requiredSlots;
     }
 
-    public boolean removeNeededItem(Map<String, Integer> items, int slotNumber, EntityRef player) {
+    private boolean removeNeededItem(Map<String, Integer> items, int slotNumber, EntityRef player) {
         EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
         BlockItemComponent blockItemComponent = inventorySlot.getComponent(BlockItemComponent.class);
         String blockFamilyName = blockItemComponent.blockFamily.toString();
@@ -159,7 +168,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         return true;
     }
 
-    public void assignRandomAttributes(EntityRef oreon) {
+    private void assignRandomAttributes(EntityRef oreon) {
         OreonAttributeComponent oreonAttributes = new OreonAttributeComponent();
 
         MersenneRandom random = new MersenneRandom();

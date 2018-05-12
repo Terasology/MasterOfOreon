@@ -7,32 +7,107 @@
         "type" : "RelativeLayout",
         "contents" : [
             {
-                "type" : "ColumnLayout",
-                "columns": 1,
-                "contents" : [
-                    {
-                        "type" : "UIButton",
-                        "id" : "summonOreonBuilderCommand",
-                        "text" : "Oreon Builder"
-                    },
-                    {
-                        "type" : "UIButton",
-                        "id" : "summonOreonGuardCommand",
-                        "text" : "Oreon Guard"
-                    },
-                    {
-                        "type" : "UIButton",
-                        "id" : "summonOreonKingCommand",
-                        "text" : "Oreon King"
-                    }
-                ],
-
+                "type" : "UIBox",
                 "layoutInfo": {
-                          "width": 300,
-                          "height": 100,
-                          "position-horizontal-center": {},
-                          "position-vertical-center": {}
-                }
+                    "width": 500,
+                    "use-content-height": true,
+                    "position-horizontal-center": {},
+                    "position-vertical-center": {}
+                },
+                "content": {
+                    "type" : "ColumnLayout",
+                    "columns": 2,
+                    "verticalSpacing" : 8,
+                    "contents" : [
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
+                            {
+                                "type" : "UIButton",
+                                "id" : "summonOreonBuilderCommand",
+                                "text" : "Oreon Builder"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "oreonBuilderResourceRequired",
+                                "layoutInfo": {
+                                    "width": 500,
+                                    "use-content-height": true,
+                                    "position-horizontal-center": {},
+                                    "position-vertical-center": {}
+                                }
+                            }
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [16, 16]
+                        },
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
+
+                            {
+                                "type" : "UIButton",
+                                "id" : "summonOreonGuardCommand",
+                                "text" : "Oreon Guard"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "oreonGuardResourceRequired",
+                                "layoutInfo": {
+                                    "width": 500,
+                                    "use-content-height": true,
+                                    "position-horizontal-center": {},
+                                    "position-vertical-center": {}
+                                }
+                            }
+
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [16, 16]
+                        },
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
+
+                            {
+                                "type" : "UIButton",
+                                "id" : "summonOreonKingCommand",
+                                "text" : "Oreon King"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "oreonKingResourceRequired",
+                                "layoutInfo": {
+                                    "width": 500,
+                                    "use-content-height": true,
+                                    "position-horizontal-center": {},
+                                    "position-vertical-center": {}
+                                }
+                            }
+
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [1, 16]
+                        }
+                    ],
+
+                    "layoutInfo": {
+                              "width": 300,
+                              "height": 100,
+                              "position-horizontal-center": {},
+                              "position-vertical-center": {}
+                    }
+                    }
+
             }
         ]
     }

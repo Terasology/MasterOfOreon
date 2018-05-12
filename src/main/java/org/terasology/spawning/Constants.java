@@ -29,4 +29,8 @@ public class Constants {
 
     public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:selectionTool";
     public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
+
+    public static final String OREON_BUILDER_RESOURCES_LABEL_ID = "oreonBuilderResourceRequired";
+    public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourceRequired";
+    public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourceRequired";
 }
