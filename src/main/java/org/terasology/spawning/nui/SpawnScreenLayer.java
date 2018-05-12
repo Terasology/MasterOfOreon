@@ -35,14 +35,6 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     private static final Logger logger = LoggerFactory.getLogger(SpawnScreenLayer.class);
 
-    public static final String OREON_BUILDER_PREFAB = Constants.getOreonBuilderPrefab();
-    private static final String OREON_GUARD_PREFAB = Constants.getOreonGuardPrefab();
-    private static final String OREON_KING_PREFAB = Constants.getOreonKingPrefab();
-
-    private static final String OREON_BUILDER_UI_ID = Constants.getOreonBuilderUiId();
-    private static final String OREON_GUARD_UI_ID = Constants.getOreonGuardUiId();
-    private static final String OREON_KING_UI_ID = Constants.getOreonKingUiId();
-
     @In
     private EntityManager entityManager;
     @In
@@ -58,20 +50,20 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     @Override
     public void initialise() {
-        summonOreonBuilderCommand = find(OREON_BUILDER_UI_ID, UIButton.class);
-        summonOreonGuardCommand = find(OREON_GUARD_UI_ID, UIButton.class);
-        summonOreonKingCommand = find(OREON_KING_UI_ID, UIButton.class);
+        summonOreonBuilderCommand = find(Constants.OREON_BUILDER_UI_ID, UIButton.class);
+        summonOreonGuardCommand = find(Constants.OREON_GUARD_UI_ID, UIButton.class);
+        summonOreonKingCommand = find(Constants.OREON_KING_UI_ID, UIButton.class);
 
         summonOreonBuilderCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab(OREON_BUILDER_PREFAB));
+            sendOreonSpawnEvent(prefabManager.getPrefab(Constants.OREON_BUILDER_PREFAB));
         });
 
         summonOreonGuardCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab(OREON_GUARD_PREFAB));
+            sendOreonSpawnEvent(prefabManager.getPrefab(Constants.OREON_GUARD_PREFAB));
         });
 
         summonOreonKingCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab(OREON_KING_PREFAB));
+            sendOreonSpawnEvent(prefabManager.getPrefab(Constants.OREON_KING_PREFAB));
         });
     }
 

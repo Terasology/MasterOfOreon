@@ -43,11 +43,6 @@ import org.terasology.world.block.items.BlockItemFactory;
 public class ManagerInterfaceSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ManagerInterfaceSystem.class);
 
-    public static final String MOUSE_CAPTURING_SCREEN_UIELEMENT_ID = Constants.getMouseCapturingScreenUielementId();
-    public static final String TABBED_MENU_WIDGET_ID = Constants.getTabbedMenuWidgetId();
-    public static final String SELECTION_TOOL_PREFAB = Constants.getSelectionToolPrefab();
-    public static final String PORTAL_PREFAB = Constants.getPortalPrefab();
-
     enum ManagerCommandMode {
         None,
         Plant,
@@ -82,8 +77,8 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
-        inventoryManager.giveItem(player, player, entityManager.create(SELECTION_TOOL_PREFAB));
-        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(PORTAL_PREFAB), 10));
+        inventoryManager.giveItem(player, player, entityManager.create(Constants.SELECTION_TOOL_PREFAB));
+        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(Constants.PORTAL_PREFAB), 10));
     }
 
     @ReceiveEvent
@@ -111,24 +106,24 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     }
 
     private void toggleManagerInterface() {
-        if (nuiManager.isOpen(MOUSE_CAPTURING_SCREEN_UIELEMENT_ID)) {
-            ManagerInterfaceHUDElement tabbedMenuHUDElement = nuiManager.getHUD().getHUDElement(TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class);
+        if (nuiManager.isOpen(Constants.MOUSE_CAPTURING_SCREEN_UIELEMENT_ID)) {
+            ManagerInterfaceHUDElement tabbedMenuHUDElement = nuiManager.getHUD().getHUDElement(Constants.TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class);
             if (null != tabbedMenuHUDElement) {
                 nuiManager.getHUD().removeHUDElement(tabbedMenuHUDElement);
             }
         } else {
-            ManagerInterfaceHUDElement tabbedMenuHUDElement = nuiManager.getHUD().getHUDElement(TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class);
+            ManagerInterfaceHUDElement tabbedMenuHUDElement = nuiManager.getHUD().getHUDElement(Constants.TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class);
             if (null == tabbedMenuHUDElement) {
-                tabbedMenuHUDElement = nuiManager.getHUD().addHUDElement(TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
+                tabbedMenuHUDElement = nuiManager.getHUD().addHUDElement(Constants.TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class, Rect2f.createFromMinAndSize(0, 0, 1, 1));
             }
         }
-        nuiManager.toggleScreen(MOUSE_CAPTURING_SCREEN_UIELEMENT_ID);
+        nuiManager.toggleScreen(Constants.MOUSE_CAPTURING_SCREEN_UIELEMENT_ID);
     }
 
     // NOTE: this is not currently supported for HUD elements, and we would rather monitor when a minion component is created/destroyed in any case
     public void update(float delta) {
-        if (nuiManager.isOpen(MOUSE_CAPTURING_SCREEN_UIELEMENT_ID)) {
-            ManagerInterfaceHUDElement tabbedMenuHUDElement = nuiManager.getHUD().getHUDElement(TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class);
+        if (nuiManager.isOpen(Constants.MOUSE_CAPTURING_SCREEN_UIELEMENT_ID)) {
+            ManagerInterfaceHUDElement tabbedMenuHUDElement = nuiManager.getHUD().getHUDElement(Constants.TABBED_MENU_WIDGET_ID, ManagerInterfaceHUDElement.class);
             if (null != tabbedMenuHUDElement) {
                 tabbedMenuHUDElement.update(delta);
             }

@@ -43,8 +43,6 @@ import java.util.Map;
 public class SpawningAuthoritySystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(SpawningAuthoritySystem.class);
 
-    private static final String OREON_BUILDER_PREFAB = Constants.getOreonBuilderPrefab();
-
     @In
     private BlockManager blockManager;
 
@@ -166,7 +164,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
         MersenneRandom random = new MersenneRandom();
 
-        if(prefabToSpawn.getName().equals(OREON_BUILDER_PREFAB)) {
+        if(prefabToSpawn.getName().equals(Constants.OREON_BUILDER_PREFAB)) {
             oreonAttributes.intelligence = random.nextInt(oreonAttributes.maxIntelligence);
         }
         else {
