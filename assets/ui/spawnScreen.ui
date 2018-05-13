@@ -14,94 +14,93 @@
                     "position-horizontal-center": {},
                     "position-vertical-center": {}
                 },
-                "content" :
+                "content" : {
+                    "type" : "ColumnLayout",
+                    "columns" : 2,
+                    "verticalSpacing" : 8,
+                    "contents" : [
                     {
-                        "type" : "ColumnLayout",
-                        "columns" : 2,
-                        "verticalSpacing" : 8,
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
                         "contents" : [
-                        {
-                            "type" : "RowLayout",
-                            "horizontalSpacing" : 2,
-                            "contents" : [
-                                {
-                                    "type" : "UIButton",
-                                    "id" : "summonOreonBuilderCommand",
-                                    "text" : "Oreon Builder"
-                                },
-                                {
-                                    "type" : "UILabel",
-                                    "id" : "oreonBuilderResourcesRequired",
-                                    "layoutInfo" : {
-                                        "width": 500,
-                                        "use-content-height": true
-                                    }
-                                }
-                            ]
-                        },
                             {
-                                "type" : "UISpace",
-                                "size" : [1, 8]
+                                "type" : "UIButton",
+                                "id" : "summonOreonBuilderCommand",
+                                "text" : "Oreon Builder"
                             },
-                        {
-                            "type" : "RowLayout",
-                            "horizontalSpacing" : 2,
-                            "contents" : [
-
-                                {
-                                    "type" : "UIButton",
-                                    "id" : "summonOreonGuardCommand",
-                                    "text" : "Oreon Guard"
-                                },
-                                {
-                                    "type" : "UILabel",
-                                    "id" : "oreonGuardResourcesRequired",
-                                    "layoutInfo" : {
-                                        "width" : 500,
-                                        "use-content-height" : true
-                                    }
-                                }
-
-                            ]
-                        },
                             {
-                                "type" : "UISpace",
-                                "size" : [1, 8]
-                            },
-                        {
-                            "type" : "RowLayout",
-                            "horizontalSpacing" : 2,
-                            "contents" : [
-
-                                {
-                                    "type" : "UIButton",
-                                    "id" : "summonOreonKingCommand",
-                                    "text" : "Oreon King"
-                                },
-                                {
-                                    "type" : "UILabel",
-                                    "id" : "oreonKingResourcesRequired",
-                                    "layoutInfo" : {
-                                        "width" : 500,
-                                        "use-content-height" : true
-                                    }
+                                "type" : "UILabel",
+                                "id" : "oreonBuilderResourcesRequired",
+                                "layoutInfo" : {
+                                    "width": 500,
+                                    "use-content-height": true
                                 }
-
-                            ]
-                        },
-                            {
-                                "type" : "UISpace",
-                                "size" : [1, 8]
                             }
-                        ],
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [1, 8]
+                        },
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
 
-                        "layoutInfo" : {
-                                  "width" : 500,
-                                  "height" : 100,
-                                  "position-horizontal-center" : {},
-                                  "position-vertical-center" : {}
+                            {
+                                "type" : "UIButton",
+                                "id" : "summonOreonGuardCommand",
+                                "text" : "Oreon Guard"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "oreonGuardResourcesRequired",
+                                "layoutInfo" : {
+                                    "width" : 500,
+                                    "use-content-height" : true
+                                }
+                            }
+
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [1, 8]
+                        },
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
+
+                            {
+                                "type" : "UIButton",
+                                "id" : "summonOreonKingCommand",
+                                "text" : "Oreon King"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "oreonKingResourcesRequired",
+                                "layoutInfo" : {
+                                    "width" : 500,
+                                    "use-content-height" : true
+                                }
+                            }
+
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [1, 8]
                         }
+                    ],
+
+                    "layoutInfo" : {
+                              "width" : 500,
+                              "height" : 100,
+                              "position-horizontal-center" : {},
+                              "position-vertical-center" : {}
                     }
+                }
             }
         ]
     }
