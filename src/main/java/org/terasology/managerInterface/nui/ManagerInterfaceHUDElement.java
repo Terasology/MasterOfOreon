@@ -41,10 +41,9 @@ public class ManagerInterfaceHUDElement extends CoreHudWidget implements Control
 
     @In
     private EntityManager entityManager;
+
     @In
     private ManagerInterfaceSystem managerInterfaceSystem;
-    @In
-    private PrefabManager prefMan;
 
     private UIToggleButton designTabCommand;
     private UIToggleButton researchTabCommand;

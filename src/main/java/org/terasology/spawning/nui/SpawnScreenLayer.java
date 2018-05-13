@@ -34,15 +34,15 @@ import org.terasology.spawning.OreonSpawnEvent;
 
 import java.util.Map;
 
-
 public class SpawnScreenLayer extends CoreScreenLayer {
-
     private static final Logger logger = LoggerFactory.getLogger(SpawnScreenLayer.class);
 
     @In
     private EntityManager entityManager;
+
     @In
     private LocalPlayer localPlayer;
+
     @In
     private PrefabManager prefabManager;
 
@@ -92,7 +92,7 @@ public class SpawnScreenLayer extends CoreScreenLayer {
     }
 
     private void setPortalEntity() {
-        for(EntityRef portal : entityManager.getEntitiesWith(PortalComponent.class, LocationComponent.class)){
+        for (EntityRef portal : entityManager.getEntitiesWith(PortalComponent.class, LocationComponent.class)) {
             portalEntity = portal;
             break;
         }
@@ -107,14 +107,14 @@ public class SpawnScreenLayer extends CoreScreenLayer {
             Map<String, Integer> items = oreonSpawnComponent.itemsToConsume;
             int itemsRequired = items.size();
 
-            for(String blockRequired : items.keySet()) {
+            for (String blockRequired : items.keySet()) {
                 String blockName = blockRequired.substring(12, blockRequired.length() - 1);
                 text.append(blockName);
                 text.append(" : ");
                 text.append(items.get(blockRequired) + ", ");
             }
 
-            if(itemsRequired == 0) {
+            if (itemsRequired == 0) {
                 text.append("nothing");
             }
         }

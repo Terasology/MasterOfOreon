@@ -24,13 +24,13 @@ public class Constants {
     public static final String OREON_GUARD_UI_ID = "summonOreonGuardCommand";
     public static final String OREON_KING_UI_ID = "summonOreonKingCommand";
 
-    public static final String MOUSE_CAPTURING_SCREEN_UIELEMENT_ID = "masteroforeon:mouseCapturingScreen";
-    public static final String TABBED_MENU_WIDGET_ID = "masteroforeon:tabbedMenu";
+    public static final String MOUSE_CAPTURING_SCREEN_UIELEMENT_ID = "MasterOfOreon:mouseCapturingScreen";
+    public static final String TABBED_MENU_WIDGET_ID = "MasterOfOreon:tabbedMenu";
 
     public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:selectionTool";
     public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
 
-    public static final String OREON_BUILDER_RESOURCES_LABEL_ID = "oreonBuilderResourceRequired";
-    public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourceRequired";
-    public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourceRequired";
+    public static final String OREON_BUILDER_RESOURCES_LABEL_ID = "oreonBuilderResourcesRequired";
+    public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourcesRequired";
+    public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourcesRequired";
 }
