@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.terasology.common.nui.PickOneLayout;
 import org.terasology.common.nui.UIToggleButton;
 import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.managerInterface.ManagerInterfaceSystem;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.AbstractWidget;
