@@ -4,7 +4,7 @@
             guard: {
                 componentPresent: "MasterOfOreon:Task",
                 values: [
-                    "V assignedTask == none"
+                    "V assignedTaskType == none"
                 ],
                 child: {
                     sequence : [
