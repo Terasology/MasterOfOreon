@@ -15,10 +15,8 @@
  */
 package org.terasology.taskSystem;
 
-public class AssignedTaskType {
-    public static final String None = "none";
-    public static final String Plant = "plant";
-    public static final String Build = "build";
-    public static final String Harvest = "harvest";
-    public static final String Guard = "guard";
+public enum TaskStatusType {
+    Available,
+    InProgress,
+    Completed
 }

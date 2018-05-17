@@ -15,9 +15,39 @@
  */
 package org.terasology.taskSystem.actions;
 
+import org.terasology.holdingSystem.HoldingAuthoritySystem;
+import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
+import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
+import org.terasology.logic.behavior.core.BehaviorState;
+import org.terasology.registry.In;
+import org.terasology.taskSystem.TaskManagementSystem;
+import org.terasology.taskSystem.components.TaskComponent;
 
 @BehaviorAction(name = "look_for_task")
 public class LookForTaskNode extends BaseAction {
+    @In
+    HoldingAuthoritySystem holdingSystem;
+
+    @In
+    TaskManagementSystem taskManagementSystem;
+
+    HoldingComponent oreonHolding;
+    TaskComponent oreonTaskComponent;
+
+    @Override
+    public void construct (Actor actor) {
+        oreonHolding = holdingSystem.getOreonHolding(actor);
+        oreonTaskComponent = actor.getComponent(TaskComponent.class);
+    }
+
+    @Override
+    public BehaviorState modify (Actor actor, BehaviorState result) {
+        if (taskManagementSystem.getTaskForOreon(oreonHolding, actor)) {
+            return BehaviorState.SUCCESS;
+        }
+
+        return BehaviorState.FAILURE;
+    }
 }

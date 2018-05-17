@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.taskSystem;
+package org.terasology.holdingSystem.components;
 
-public class AssignedTaskType {
-    public static final String None = "none";
-    public static final String Plant = "plant";
-    public static final String Build = "build";
-    public static final String Harvest = "harvest";
-    public static final String Guard = "guard";
+import org.terasology.entitySystem.Component;
+import org.terasology.taskSystem.components.TaskComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HoldingComponent implements Component {
+    public List<TaskComponent> availableTasks = new ArrayList<TaskComponent>();
+
+
 }

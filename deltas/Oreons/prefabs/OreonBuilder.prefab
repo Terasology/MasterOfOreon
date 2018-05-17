@@ -3,6 +3,6 @@
         "tree" : "MasterOfOreon:taskAcquiringOreon"
     },
     "Task" : {
-        "assignedTask" : "none"
+        "assignedTaskType" : "none"
     }
 }

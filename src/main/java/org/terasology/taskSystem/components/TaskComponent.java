@@ -16,7 +16,10 @@
 package org.terasology.taskSystem.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.taskSystem.TaskStatusType;
 
 public class TaskComponent implements Component {
-    public String assignedTask;
+    public String assignedTaskType;
+    public long creationTime;
+    public TaskStatusType taskStatus;
 }

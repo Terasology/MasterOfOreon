@@ -23,6 +23,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
@@ -79,6 +80,7 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
         BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(player, player, entityManager.create(Constants.SELECTION_TOOL_PREFAB));
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(Constants.PORTAL_PREFAB), 10));
+        player.addComponent(new HoldingComponent());
     }
 
     @ReceiveEvent
