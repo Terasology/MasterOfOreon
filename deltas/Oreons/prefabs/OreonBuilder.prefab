@@ -1,0 +1,8 @@
+{
+    "Behavior" : {
+        "tree" : "MasterOfOreon:taskAcquiringOreon"
+    },
+    "Task" : {
+        "assignedTask" : "none"
+    }
+}

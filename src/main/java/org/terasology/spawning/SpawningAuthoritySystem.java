@@ -28,6 +28,8 @@ import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.navgraph.WalkableBlock;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.utilities.random.MersenneRandom;
@@ -52,7 +54,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
     private InventoryManager inventoryManager;
 
     private Prefab prefabToSpawn;
-    private Vector3f spawnPos;
+    private Vector3f spawnPosition;
 
 
     /**
@@ -61,13 +63,12 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
     @ReceiveEvent
     public void oreonSpawn(OreonSpawnEvent event, EntityRef player) {
         prefabToSpawn = event.getOreonPrefab();
-        spawnPos = event.getSpawnPos();
-        spawnPos.y -= 0.5f;
+        spawnPosition = event.getSpawnPosition();
 
         boolean shouldSpawn = consumeItem(player, prefabToSpawn);
         if (shouldSpawn) {
             // spawn the new oreon into the world
-            EntityRef newOreon = entityManager.create(prefabToSpawn, spawnPos);
+            EntityRef newOreon = entityManager.create(prefabToSpawn, spawnPosition);
             NetworkComponent networkComponent = new NetworkComponent();
             networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
             newOreon.addComponent(networkComponent);
@@ -75,7 +76,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
             assignRandomAttributes(newOreon);
 
-            logger.info("Player " + PlayerUtil.getColoredPlayerName(player.getOwner()) + " spawned a new Oreon of Type : " + prefabToSpawn.getName());
+            logger.info("Player " + PlayerUtil.getColoredPlayerName(player) + " spawned a new Oreon of Type : " + prefabToSpawn.getName());
         }
     }
 

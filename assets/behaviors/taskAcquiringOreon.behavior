@@ -1,0 +1,37 @@
+{
+    dynamic : [
+        {
+            guard: {
+                componentPresent: "MasterOfOreon:Task",
+                values: [
+                    "V assignedTask == none"
+                ],
+                child: {
+                    sequence : [
+                        {
+                            lookup: {
+                                tree: "Behaviors:critter"
+                            }
+                        },
+                        {
+                            timeout: {
+                                time: 3,
+                                child: {
+                                    sequence: [
+                                        look_for_task
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            sequence : [
+                move_to,
+                perform_task
+            ]
+        }
+    ]
+}

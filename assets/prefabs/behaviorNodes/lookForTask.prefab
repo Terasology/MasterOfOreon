@@ -1,0 +1,12 @@
+{
+  "BehaviorNode" : {
+    "action"    : "look_for_task",
+    "name"      : "look_for_task",
+    "displayName" : "LookForATask",
+    "category"  : "work",
+    "shape"     : "rect",
+    "description": "Finds a task for an Oreon if it has been idle.\nSUCCESS / FAILURE: if task is successfully found and assigned.",
+    "color"     : [180, 180, 180, 255],
+    "textColor" : [0, 0, 0, 255]
+  }
+}

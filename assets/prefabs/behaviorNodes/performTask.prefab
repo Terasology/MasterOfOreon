@@ -1,0 +1,12 @@
+{
+  "BehaviorNode" : {
+    "action"    : "perform_task",
+    "name"      : "perform_task",
+    "displayName" : "PerformATask",
+    "category"  : "work",
+    "shape"     : "rect",
+    "description": "Performs a particular assigned task.\nSUCCESS / FAILURE: Returns sucess when the task is completed.",
+    "color"     : [180, 180, 180, 255],
+    "textColor" : [0, 0, 0, 255]
+  }
+}

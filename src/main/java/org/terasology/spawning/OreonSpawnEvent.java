@@ -25,7 +25,8 @@ public class OreonSpawnEvent implements Event {
     private Prefab oreonPrefab;
     private Vector3f location;
 
-    public OreonSpawnEvent () {}
+    public OreonSpawnEvent () {
+    }
 
     public OreonSpawnEvent(Prefab prefab, Vector3f location) {
         this.oreonPrefab = prefab;
@@ -36,7 +37,7 @@ public class OreonSpawnEvent implements Event {
         return this.oreonPrefab;
     }
 
-    public Vector3f getSpawnPos() {
+    public Vector3f getSpawnPosition() {
         return this.location;
     }
 }
