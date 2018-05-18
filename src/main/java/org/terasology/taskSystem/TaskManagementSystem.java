@@ -33,6 +33,7 @@ import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.taskSystem.components.TaskComponent;
+import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
 
@@ -54,10 +55,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     public boolean getTaskForOreon(Actor oreon) {
-        logger.info("Looking for a task");
-
         List<EntityRef> availableTasks = oreonHolding.availableTasks;
-
+        logger.info("Looking for task in " + oreonHolding);
         if (!availableTasks.isEmpty()) {
             //TODO sort list by creationTime
 
@@ -78,6 +77,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             moveComponent.target = new Vector3f(target.x, target.y, target.z);
 
+            logger.info("Set Oreon target to : " + moveComponent.target);
+
             oreon.save(moveComponent);
 
             return true;
@@ -87,21 +88,30 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    private void recieveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
+    public void recieveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
         logger.info("Adding a new Task");
         TaskComponent task = new TaskComponent();
         task.taskRegion = blockSelectionEvent.getSelection();
         task.creationTime = timer.getGameTimeInMs();
+
+        EntityRef itemEntity = blockSelectionEvent.getSelectedItemEntity();
+        BlockSelectionComponent blockSelectionComponent = itemEntity.getComponent(BlockSelectionComponent.class);
+
+        blockSelectionComponent.shouldRender = true;
 
         //TODO different for different Tools
         task.assignedTaskType = AssignedTaskType.Plant;
 
         EntityRef taskEntity = entityManager.create(task);
 
-        addTask(taskEntity);
+        addTask(taskEntity, player);
     }
 
-    private void addTask (EntityRef task) {
+    private void addTask (EntityRef task, EntityRef player) {
+        if (oreonHolding == null) {
+            oreonHolding = player.getComponent(HoldingComponent.class);
+        }
+        logger.info("Adding task to " + oreonHolding);
         oreonHolding.availableTasks.add(task);
     }
 }

@@ -30,11 +30,6 @@ public class PerformTaskNode extends BaseAction {
     public BehaviorState modify (Actor actor, BehaviorState result) {
         logger.info("Perfoming Task");
 
-        try { Thread.sleep(1000);}
-        catch(InterruptedException e) {
-            logger.info("interrupted");
-        }
-
         return BehaviorState.SUCCESS;
     }
 }

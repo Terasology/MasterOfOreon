@@ -84,7 +84,7 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
         inventoryManager.giveItem(player, player, entityManager.create(Constants.COMMAND_SHOVEL_PREFAB));
     }
 
-    @ReceiveEvent
+    /*@ReceiveEvent
     public void onSelection(ApplyBlockSelectionEvent event, EntityRef entity) {
         switch (currentManagerCommandMode) {
             case None:
@@ -96,7 +96,7 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
             case Dig:
                 break;
         }
-    }
+    }*/
 
     // Higher priority than critical because NUI grabs all input when mouse is released
     @ReceiveEvent(components = ClientComponent.class, priority=250)

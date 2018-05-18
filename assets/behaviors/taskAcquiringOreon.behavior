@@ -7,24 +7,27 @@
                     "V assignedTaskType == none"
                 ],
                 child: {
-                    sequence : [
+                    dynamic : [
                         {
-                            log : {
-                                message : "No task assigned"
-                            },
-                            lookup: {
-                                tree: "Behaviors:critter"
+                            timeout : {
+                                time : 1,
+                                child : {
+                                    lookup: {
+                                        tree: "Behaviors:critter"
+                                    }
+                                }
                             }
                         },
                         {
-                            timeout: {
-                                time: 0,
-                                child: {
-                                    sequence: [
-                                        look_for_task
-                                    ]
-                                }
-                            }
+                            sequence : [
+                                {
+                                    log : {
+                                        message : "Looking for task"
+                                    }
+                                },
+                                look_for_task
+                            ]
+
                         }
                     ]
                 }

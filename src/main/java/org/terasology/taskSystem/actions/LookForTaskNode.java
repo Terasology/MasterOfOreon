@@ -23,22 +23,22 @@ import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.registry.In;
+import org.terasology.registry.CoreRegistry;
 import org.terasology.taskSystem.TaskManagementSystem;
 
 @BehaviorAction(name = "look_for_task")
 public class LookForTaskNode extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(LookForTaskNode.class);
-    @In
-    private HoldingAuthoritySystem holdingSystem;
 
-    @In
+    private HoldingAuthoritySystem holdingSystem;
     private TaskManagementSystem taskManagementSystem;
 
     private HoldingComponent oreonHolding;
 
     @Override
     public void construct (Actor oreon) {
+        this.holdingSystem = CoreRegistry.get(HoldingAuthoritySystem.class);
+        this.taskManagementSystem = CoreRegistry.get(TaskManagementSystem.class);
         oreonHolding = holdingSystem.getOreonHolding(oreon);
         taskManagementSystem.setOreonHolding(oreonHolding);
     }
