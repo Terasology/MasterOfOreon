@@ -81,6 +81,7 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
         inventoryManager.giveItem(player, player, entityManager.create(Constants.SELECTION_TOOL_PREFAB));
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(Constants.PORTAL_PREFAB), 10));
         player.addComponent(new HoldingComponent());
+        inventoryManager.giveItem(player, player, entityManager.create(Constants.COMMAND_SHOVEL_PREFAB));
     }
 
     @ReceiveEvent

@@ -1,0 +1,17 @@
+{
+    "parent": "engine:iconItem",
+    "DisplayName": {
+        "name": "Command Shovel"
+    },
+    "Item": {
+        "icon": "engine:items#shovel",
+        "usage": "ON_BLOCK"
+    },
+    "PlaySoundAction": {
+        "sounds": "engine:click"
+    },
+    "BlockSelection": {
+        "shouldRender": true
+    },
+    "OnItemActivateSelection": {}
+}

@@ -16,13 +16,11 @@
 package org.terasology.holdingSystem.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.taskSystem.components.TaskComponent;
+import org.terasology.entitySystem.entity.EntityRef;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HoldingComponent implements Component {
-    public List<TaskComponent> availableTasks = new ArrayList<TaskComponent>();
-
-
+    public List<EntityRef> availableTasks = new ArrayList<>();
 }

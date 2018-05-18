@@ -15,9 +15,26 @@
  */
 package org.terasology.taskSystem.actions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.logic.behavior.BehaviorAction;
+import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
+import org.terasology.logic.behavior.core.BehaviorState;
 
 @BehaviorAction(name = "perform_task")
 public class PerformTaskNode extends BaseAction {
+    private static final Logger logger = LoggerFactory.getLogger(PerformTaskNode.class);
+
+    @Override
+    public BehaviorState modify (Actor actor, BehaviorState result) {
+        logger.info("Perfoming Task");
+
+        try { Thread.sleep(1000);}
+        catch(InterruptedException e) {
+            logger.info("interrupted");
+        }
+
+        return BehaviorState.SUCCESS;
+    }
 }

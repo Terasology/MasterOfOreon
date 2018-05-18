@@ -28,8 +28,6 @@ import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.minion.move.MinionMoveComponent;
-import org.terasology.navgraph.WalkableBlock;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.utilities.random.MersenneRandom;

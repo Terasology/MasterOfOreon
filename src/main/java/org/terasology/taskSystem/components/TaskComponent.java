@@ -16,10 +16,13 @@
 package org.terasology.taskSystem.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.math.Region3i;
 import org.terasology.taskSystem.TaskStatusType;
 
 public class TaskComponent implements Component {
     public String assignedTaskType;
     public long creationTime;
     public TaskStatusType taskStatus;
+
+    public Region3i taskRegion;
 }

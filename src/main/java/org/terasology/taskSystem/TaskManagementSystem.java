@@ -15,11 +15,22 @@
  */
 package org.terasology.taskSystem;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.terasology.engine.Time;
+import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
+import org.terasology.logic.selection.ApplyBlockSelectionEvent;
+import org.terasology.math.geom.Vector3f;
+import org.terasology.math.geom.Vector3i;
+import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.taskSystem.components.TaskComponent;
 
@@ -28,27 +39,69 @@ import java.util.List;
 @Share(TaskManagementSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TaskManagementSystem extends BaseComponentSystem {
-    public boolean getTaskForOreon(HoldingComponent oreonHolding, Actor oreon) {
-        List<TaskComponent> availableTasks = oreonHolding.availableTasks;
-        //TODO sort List by creationTime
+    private static final Logger logger = LoggerFactory.getLogger(TaskManagementSystem.class);
 
-        if(!availableTasks.isEmpty()) {
+    @In
+    private EntityManager entityManager;
+
+    @In
+    private Time timer;
+
+    private HoldingComponent oreonHolding;
+
+    public void setOreonHolding(HoldingComponent holding) {
+        this.oreonHolding = holding;
+    }
+
+    public boolean getTaskForOreon(Actor oreon) {
+        logger.info("Looking for a task");
+
+        List<EntityRef> availableTasks = oreonHolding.availableTasks;
+
+        if (!availableTasks.isEmpty()) {
+            //TODO sort list by creationTime
+
+            EntityRef taskEntity = availableTasks.remove(0);
+            TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
-            TaskComponent availableTaskComponent = availableTasks.remove(0);
 
-            oreonTaskComponent.assignedTaskType = availableTaskComponent.assignedTaskType;
-            oreonTaskComponent.creationTime = availableTaskComponent.creationTime;
+            oreonTaskComponent.assignedTaskType = taskComponent.assignedTaskType;
+            oreonTaskComponent.creationTime = taskComponent.creationTime;
+            oreonTaskComponent.taskRegion = taskComponent.taskRegion;
+            oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
 
             oreon.save(oreonTaskComponent);
-            availableTaskComponent.taskStatus = TaskStatusType.InProgress;
+
+            MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
+            Vector3i target = oreonTaskComponent.taskRegion.min();
+
+            moveComponent.target = new Vector3f(target.x, target.y, target.z);
+
+            oreon.save(moveComponent);
+
             return true;
         }
 
         return false;
     }
 
-    public void addTask(HoldingComponent oreonHolding, TaskComponent taskComponent) {
-        taskComponent.taskStatus = TaskStatusType.Available;
-        oreonHolding.availableTasks.add(taskComponent);
+    @ReceiveEvent
+    private void recieveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
+        logger.info("Adding a new Task");
+        TaskComponent task = new TaskComponent();
+        task.taskRegion = blockSelectionEvent.getSelection();
+        task.creationTime = timer.getGameTimeInMs();
+
+        //TODO different for different Tools
+        task.assignedTaskType = AssignedTaskType.Plant;
+
+        EntityRef taskEntity = entityManager.create(task);
+
+        addTask(taskEntity);
+    }
+
+    private void addTask (EntityRef task) {
+        oreonHolding.availableTasks.add(task);
     }
 }

@@ -9,13 +9,16 @@
                 child: {
                     sequence : [
                         {
+                            log : {
+                                message : "No task assigned"
+                            },
                             lookup: {
                                 tree: "Behaviors:critter"
                             }
                         },
                         {
                             timeout: {
-                                time: 3,
+                                time: 0,
                                 child: {
                                     sequence: [
                                         look_for_task
