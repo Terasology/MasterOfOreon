@@ -21,6 +21,8 @@ import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
+import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.components.TaskComponent;
 
 @BehaviorAction(name = "perform_task")
 public class PerformTaskNode extends BaseAction {
@@ -28,7 +30,14 @@ public class PerformTaskNode extends BaseAction {
 
     @Override
     public BehaviorState modify (Actor actor, BehaviorState result) {
-        logger.info("Perfoming Task");
+        logger.debug("Perfoming Task");
+
+        //free the Oreon after perfoming task
+        TaskComponent oreonTaskComponent = actor.getComponent(TaskComponent.class);
+        oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
+        actor.save(oreonTaskComponent);
+
+        logger.debug("Task completed, the Oreon is now free!");
 
         return BehaviorState.SUCCESS;
     }
