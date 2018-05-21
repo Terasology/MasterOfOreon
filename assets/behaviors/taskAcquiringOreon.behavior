@@ -7,10 +7,10 @@
                     "V assignedTaskType == none"
                 ],
                 child: {
-                    dynamic : [
+                    selector : [
                         {
                             timeout : {
-                                time : 1,
+                                time : 10,
                                 child : {
                                     lookup: {
                                         tree: "Behaviors:critter"
