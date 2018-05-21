@@ -11,16 +11,16 @@
     },
     "Stand" : {
         "animationPool" : [
-            "BuilderIdle",
-            "BuilderShow",
-            "BuilderWave"
+            "KingWalk",
+            "KingWalk",
+            "KingWalk"
         ]
     },
     "Walk" : {
-        "animationPool" : ["BuilderWalk"]
+        "animationPool" : ["KingWalk"]
     },
     "Die" : {
-        "animationPool" : ["BuilderDead"]
+        "animationPool" : ["KingWalk"]
     },
     "CharacterMovement" : {
         "groundFriction" : 16,

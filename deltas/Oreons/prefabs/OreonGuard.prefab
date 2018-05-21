@@ -11,16 +11,18 @@
     },
     "Stand" : {
         "animationPool" : [
-            "BuilderIdle",
-            "BuilderShow",
-            "BuilderWave"
+            "GuardIdleSkygaze",
+            "GuardIdleSkygaze",
+            "GuardWave",
+            "GuardShow",
+            "GuardWakeup"
         ]
     },
     "Walk" : {
-        "animationPool" : ["BuilderWalk"]
+        "animationPool" : ["GuardWalk"]
     },
     "Die" : {
-        "animationPool" : ["BuilderDead"]
+        "animationPool" : ["GuardAfraidNonLoop"]
     },
     "CharacterMovement" : {
         "groundFriction" : 16,
