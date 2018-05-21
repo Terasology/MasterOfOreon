@@ -39,6 +39,7 @@ import org.terasology.taskSystem.events.SetTaskTypeEvent;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
+import java.util.Queue;
 
 @Share(TaskManagementSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -64,12 +65,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     public boolean getTaskForOreon(Actor oreon) {
-        List<EntityRef> availableTasks = oreonHolding.availableTasks;
+        Queue<EntityRef> availableTasks = oreonHolding.availableTasks;
         logger.debug("Looking for task in " + oreonHolding);
         if (!availableTasks.isEmpty()) {
-            //TODO sort list by creationTime
-
-            EntityRef taskEntity = availableTasks.remove(0);
+            EntityRef taskEntity = availableTasks.remove();
             TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
 
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
