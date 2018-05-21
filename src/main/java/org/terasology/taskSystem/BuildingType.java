@@ -13,18 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.taskSystem.components;
+package org.terasology.taskSystem;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.math.Region3i;
-import org.terasology.taskSystem.BuildingType;
-import org.terasology.taskSystem.TaskStatusType;
-
-public class TaskComponent implements Component {
-    public String assignedTaskType;
-    public long creationTime;
-    public TaskStatusType taskStatus;
-    public BuildingType buildingType;
-
-    public Region3i taskRegion;
+public enum BuildingType {
+    Hospital,
+    Diner,
+    Gym
 }

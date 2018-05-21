@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.spawning;
+package org.terasology;
 
 public class Constants {
     public static final String OREON_BUILDER_PREFAB = "Oreons:OreonBuilder";
@@ -34,4 +34,12 @@ public class Constants {
     public static final String OREON_BUILDER_RESOURCES_LABEL_ID = "oreonBuilderResourcesRequired";
     public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourcesRequired";
     public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourcesRequired";
+
+    public static final String PLANT_COMMAND_UI_ID = "plantCommandButton";
+    public static final String GUARD_COMMAND_UI_ID = "guardCommandButton";
+
+    public static final String HOSPITAL_BUTTON_ID = "hospitalButton";
+    public static final String DINER_BUTTON_ID = "dinerButton";
+
+    public static final String CANCEL_BUTTON_ID = "cancelButton";
 }

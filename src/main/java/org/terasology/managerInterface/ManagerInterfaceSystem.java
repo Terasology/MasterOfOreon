@@ -27,7 +27,6 @@ import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
-import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.managerInterface.nui.ManagerInterfaceHUDElement;
 import org.terasology.managerInterface.nui.ToggleMouseGrabberButton;
 import org.terasology.math.geom.Rect2f;
@@ -35,7 +34,7 @@ import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.spawning.Constants;
+import org.terasology.Constants;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 

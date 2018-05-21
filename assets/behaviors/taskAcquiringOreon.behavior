@@ -20,11 +20,6 @@
                         },
                         {
                             sequence : [
-                                {
-                                    log : {
-                                        message : "Looking for task"
-                                    }
-                                },
                                 look_for_task
                             ]
 

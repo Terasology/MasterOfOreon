@@ -32,7 +32,10 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.UIScreenLayer;
 import org.terasology.taskSystem.components.TaskComponent;
+import org.terasology.taskSystem.events.SetTaskTypeEvent;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
@@ -46,9 +49,15 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private EntityManager entityManager;
 
     @In
+    private NUIManager nuiManager;
+
+    @In
     private Time timer;
 
     private HoldingComponent oreonHolding;
+    private String newTaskType;
+    private TaskComponent task;
+    private UIScreenLayer taskSelectionScreenLayer;
 
     public void setOreonHolding(HoldingComponent holding) {
         this.oreonHolding = holding;
@@ -56,7 +65,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     public boolean getTaskForOreon(Actor oreon) {
         List<EntityRef> availableTasks = oreonHolding.availableTasks;
-        logger.info("Looking for task in " + oreonHolding);
+        logger.debug("Looking for task in " + oreonHolding);
         if (!availableTasks.isEmpty()) {
             //TODO sort list by creationTime
 
@@ -88,9 +97,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void recieveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
+    public void receiveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
         logger.info("Adding a new Task");
-        TaskComponent task = new TaskComponent();
+        task = new TaskComponent();
         task.taskRegion = blockSelectionEvent.getSelection();
         task.creationTime = timer.getGameTimeInMs();
 
@@ -98,13 +107,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
         BlockSelectionComponent blockSelectionComponent = itemEntity.getComponent(BlockSelectionComponent.class);
 
         blockSelectionComponent.shouldRender = true;
-
-        //TODO different for different Tools
-        task.assignedTaskType = AssignedTaskType.Plant;
-
-        EntityRef taskEntity = entityManager.create(task);
-
-        addTask(taskEntity, player);
+        taskSelectionScreenLayer = nuiManager.createScreen("taskSelectionScreen");
+        nuiManager.pushScreen(taskSelectionScreenLayer);
     }
 
     private void addTask (EntityRef task, EntityRef player) {
@@ -113,5 +117,27 @@ public class TaskManagementSystem extends BaseComponentSystem {
         }
         logger.info("Adding task to " + oreonHolding);
         oreonHolding.availableTasks.add(task);
+    }
+
+    @ReceiveEvent
+    public void receiveSetTaskTypeEvent (SetTaskTypeEvent event, EntityRef player) {
+        nuiManager.closeScreen(taskSelectionScreenLayer);
+
+        newTaskType = event.getTaskType();
+
+        //when cancel selection button is used
+        if (newTaskType == null) {
+            return;
+        }
+
+        task.assignedTaskType = newTaskType;
+
+        if (newTaskType.equals(AssignedTaskType.Build)) {
+            task.buildingType = event.getBuildingType();
+        }
+
+        EntityRef taskEntity = entityManager.create(task);
+
+        addTask(taskEntity, player);
     }
 }

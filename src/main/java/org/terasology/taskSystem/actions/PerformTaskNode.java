@@ -30,14 +30,14 @@ public class PerformTaskNode extends BaseAction {
 
     @Override
     public BehaviorState modify (Actor actor, BehaviorState result) {
-        logger.debug("Perfoming Task");
+        TaskComponent oreonTaskComponent = actor.getComponent(TaskComponent.class);
+        logger.info("Perfoming Task of type : " + oreonTaskComponent.assignedTaskType);
 
         //free the Oreon after perfoming task
-        TaskComponent oreonTaskComponent = actor.getComponent(TaskComponent.class);
         oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
         actor.save(oreonTaskComponent);
 
-        logger.debug("Task completed, the Oreon is now free!");
+        logger.info("Task completed, the Oreon is now free!");
 
         return BehaviorState.SUCCESS;
     }

@@ -28,7 +28,7 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
-import org.terasology.spawning.Constants;
+import org.terasology.Constants;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.spawning.OreonSpawnEvent;
 

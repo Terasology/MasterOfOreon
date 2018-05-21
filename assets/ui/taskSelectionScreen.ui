@@ -1,0 +1,85 @@
+{
+    "type" : "TaskSelectionScreenLayer",
+    "skin" : "engine:default",
+    "id" : "taskSelectionScreen",
+    "contents" : {
+        "type" : "RelativeLayout",
+        "contents" : [
+            {
+                "type" : "UIBox",
+                "layoutInfo" : {
+                    "width": 500,
+                    "use-content-height": true,
+                    "position-horizontal-center": {},
+                    "position-vertical-center": {}
+                },
+                "content" : {
+                    "type" : "ColumnLayout",
+                    "columns" : 1,
+                    "verticalSpacing" : 16,
+                    "contents" : [
+                        {
+                            "type" : "RowLayout",
+                            "horizontalSpacing" : 16,
+                            "contents" : [
+                                {
+                                    "type" : "ColumnLayout",
+                                    "contents" : [
+                                        {
+                                            "type" : "UILabel",
+                                            "text" : "Tasks",
+                                            "family" : "title"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "plantCommandButton",
+                                            "text" : "Plant"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "guardCommandButton",
+                                            "text" : "Guard"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type" : "ColumnLayout",
+                                    "contents" : [
+                                        {
+                                            "type" : "UILabel",
+                                            "text" : "Buildings",
+                                            "family" : "title"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "hospitalButton",
+                                            "text" : "Hospital"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "dinerButton",
+                                            "text" : "Diner"
+                                        }
+                                    ]
+                                }
+
+                            ]
+                        },
+                        {
+                            "type" : "RowLayout",
+                            "contents" : [
+                                {
+                                    "type" : "UIButton",
+                                    "id" : "cancelButton",
+                                    "text" : "Cancel Selection"
+                                }
+                            ]
+                        }
+                    ]
+                }
+
+            }
+        ]
+    }
+
+}
