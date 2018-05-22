@@ -18,9 +18,10 @@ package org.terasology.holdingSystem.components;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HoldingComponent implements Component {
-    public Queue<EntityRef> availableTasks = new LinkedList<>();
+    public List<EntityRef> availableTasks = new ArrayList<>();
+    public List<EntityRef> assignedAreas = new ArrayList<>();
 }

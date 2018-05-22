@@ -23,12 +23,17 @@ import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.CoreRegistry;
+import org.terasology.registry.In;
 import org.terasology.taskSystem.TaskManagementSystem;
 
 @BehaviorAction(name = "look_for_task")
 public class LookForTaskNode extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(LookForTaskNode.class);
+
+    @In
+    LocalPlayer localPlayer;
 
     private HoldingAuthoritySystem holdingSystem;
     private TaskManagementSystem taskManagementSystem;

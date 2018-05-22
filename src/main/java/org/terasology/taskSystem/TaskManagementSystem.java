@@ -24,22 +24,23 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.UIScreenLayer;
 import org.terasology.taskSystem.components.TaskComponent;
+import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
+import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
-import java.util.Queue;
 
 @Share(TaskManagementSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -50,33 +51,31 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private EntityManager entityManager;
 
     @In
-    private NUIManager nuiManager;
-
-    @In
     private Time timer;
 
     private HoldingComponent oreonHolding;
     private String newTaskType;
-    private TaskComponent task;
-    private UIScreenLayer taskSelectionScreenLayer;
+    private TaskComponent taskComponent;
+    private EntityRef taskEntity;
 
     public void setOreonHolding(HoldingComponent holding) {
         this.oreonHolding = holding;
     }
 
     public boolean getTaskForOreon(Actor oreon) {
-        Queue<EntityRef> availableTasks = oreonHolding.availableTasks;
-        logger.debug("Looking for task in " + oreonHolding);
+        List<EntityRef> availableTasks = oreonHolding.availableTasks;
+        logger.info("Looking for task in " + oreonHolding);
         if (!availableTasks.isEmpty()) {
-            EntityRef taskEntity = availableTasks.remove();
-            TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+            EntityRef taskEntityToAssign = availableTasks.remove(0);
+            TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
 
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
-            oreonTaskComponent.assignedTaskType = taskComponent.assignedTaskType;
-            oreonTaskComponent.creationTime = taskComponent.creationTime;
-            oreonTaskComponent.taskRegion = taskComponent.taskRegion;
+            oreonTaskComponent.assignedTaskType = taskComponentToAssign.assignedTaskType;
+            oreonTaskComponent.creationTime = taskComponentToAssign.creationTime;
+            oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
+            oreonTaskComponent.assignedAreaIndex = taskComponentToAssign.assignedAreaIndex;
 
             oreon.save(oreonTaskComponent);
 
@@ -89,6 +88,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             oreon.save(moveComponent);
 
+            //destroy the entity since this task is no longer required
+            taskEntityToAssign.destroy();
+
             return true;
         }
 
@@ -97,46 +99,98 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void receiveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
+        setOreonHolding(player.getComponent(HoldingComponent.class));
+
         logger.info("Adding a new Task");
-        task = new TaskComponent();
-        task.taskRegion = blockSelectionEvent.getSelection();
-        task.creationTime = timer.getGameTimeInMs();
+        taskComponent = new TaskComponent();
+        taskComponent.taskRegion = blockSelectionEvent.getSelection();
+        taskComponent.creationTime = timer.getGameTimeInMs();
 
-        EntityRef itemEntity = blockSelectionEvent.getSelectedItemEntity();
-        BlockSelectionComponent blockSelectionComponent = itemEntity.getComponent(BlockSelectionComponent.class);
+        BlockSelectionComponent newBlockSelectionComponent = new BlockSelectionComponent();
+        newBlockSelectionComponent.shouldRender = true;
+        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
 
-        blockSelectionComponent.shouldRender = true;
-        taskSelectionScreenLayer = nuiManager.createScreen("taskSelectionScreen");
-        nuiManager.pushScreen(taskSelectionScreenLayer);
+        //check if this area can be used
+        if (!checkArea(newBlockSelectionComponent)) {
+            return;
+        }
+
+        NetworkComponent networkComponent = new NetworkComponent();
+        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+
+        taskEntity = entityManager.create(networkComponent, newBlockSelectionComponent);
+
+        //mark this area so that no other task can be assigned here
+        markArea(newBlockSelectionComponent, player);
+
+        player.send(new OpenTaskSelectionScreenEvent());
     }
 
-    private void addTask (EntityRef task, EntityRef player) {
+    private void addTask (EntityRef player) {
         if (oreonHolding == null) {
             oreonHolding = player.getComponent(HoldingComponent.class);
         }
         logger.info("Adding task to " + oreonHolding);
-        oreonHolding.availableTasks.add(task);
+        oreonHolding.availableTasks.add(taskEntity);
+        player.saveComponent(oreonHolding);
     }
 
     @ReceiveEvent
     public void receiveSetTaskTypeEvent (SetTaskTypeEvent event, EntityRef player) {
-        nuiManager.closeScreen(taskSelectionScreenLayer);
+        player.send(new CloseTaskSelectionScreenEvent());
 
         newTaskType = event.getTaskType();
 
         //when cancel selection button is used
         if (newTaskType == null) {
+            taskEntity.getComponent(BlockSelectionComponent.class).shouldRender = false;
             return;
         }
 
-        task.assignedTaskType = newTaskType;
+        taskComponent.assignedTaskType = newTaskType;
 
         if (newTaskType.equals(AssignedTaskType.Build)) {
-            task.buildingType = event.getBuildingType();
+            taskComponent.buildingType = event.getBuildingType();
         }
 
-        EntityRef taskEntity = entityManager.create(task);
+        taskEntity.addComponent(taskComponent);
 
-        addTask(taskEntity, player);
+        addTask(player);
+    }
+
+    /**
+     * Saves the selected area for a particular task to check for clashes later.
+     * Attaches a {@link BlockSelectionComponent} to the assignedArea entity so that the assigned area remains colored
+     * until the task is finished.
+     * @param blockSelectionComponent
+     */
+    private void markArea(BlockSelectionComponent blockSelectionComponent, EntityRef player) {
+        AssignedAreaComponent assignedAreaComponent = new AssignedAreaComponent();
+
+        assignedAreaComponent.assignedRegion = blockSelectionComponent.currentSelection;
+
+        EntityRef assignedArea = entityManager.create(assignedAreaComponent, blockSelectionComponent);
+
+        oreonHolding.assignedAreas.add(assignedArea);
+
+        player.saveComponent(oreonHolding);
+
+        logger.info("Adding new area to index : " + oreonHolding.assignedAreas.size() + " " + oreonHolding);
+        taskComponent.assignedAreaIndex = oreonHolding.assignedAreas.size() - 1;
+    }
+
+    /**
+     * Checks if the selected area can be used i.e not already assigned to some other task
+     * @param blockSelectionComponent
+     * @return A boolean value specifying whether the area is valid
+     */
+    private boolean checkArea(BlockSelectionComponent blockSelectionComponent) {
+        //if oreonholding is null player is marking areas before spawning Oreons
+        if (oreonHolding == null) {
+            logger.info("Please spawn an Oreon before marking areas for tasks.");
+            return false;
+        }
+
+        return true;
     }
 }

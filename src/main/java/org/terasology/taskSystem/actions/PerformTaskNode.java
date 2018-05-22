@@ -17,28 +17,62 @@ package org.terasology.taskSystem.actions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
+import org.terasology.protobuf.EntityData;
+import org.terasology.registry.In;
+import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.components.TaskComponent;
+import org.terasology.utilities.concurrency.Task;
+import org.terasology.world.block.Block;
+import org.terasology.world.selection.BlockSelectionComponent;
 
 @BehaviorAction(name = "perform_task")
 public class PerformTaskNode extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(PerformTaskNode.class);
 
+    @In
+    EntityManager entityManager;
+
     @Override
-    public BehaviorState modify (Actor actor, BehaviorState result) {
-        TaskComponent oreonTaskComponent = actor.getComponent(TaskComponent.class);
+    public BehaviorState modify (Actor oreon, BehaviorState result) {
+        TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
         logger.info("Perfoming Task of type : " + oreonTaskComponent.assignedTaskType);
 
         //free the Oreon after perfoming task
         oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
-        actor.save(oreonTaskComponent);
+        oreon.save(oreonTaskComponent);
 
         logger.info("Task completed, the Oreon is now free!");
 
+        removeColorFromArea(oreon, oreonTaskComponent);
+
         return BehaviorState.SUCCESS;
+    }
+
+    /**
+     * Removes the {@link BlockSelectionComponent} from the assigned area so that it no longer renders once the task is complete.
+     * @param actor
+     */
+    private void removeColorFromArea(Actor oreon, TaskComponent taskComponent) {
+        OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
+
+        EntityRef player = oreonSpawnComponent.parent;
+
+        HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
+
+        EntityRef assignedArea = oreonHolding.assignedAreas.get(taskComponent.assignedAreaIndex);
+        //BlockSelectionComponent blockSelectionComponent = assignedArea.getComponent(BlockSelectionComponent.class);
+        //blockSelectionComponent.shouldRender = false;
+
+        logger.info("Removing color" + taskComponent.assignedAreaIndex + " " + oreonHolding);
+        assignedArea.removeComponent(BlockSelectionComponent.class);
+
     }
 }

@@ -10,7 +10,7 @@
                     selector : [
                         {
                             timeout : {
-                                time : 10,
+                                time : 1,
                                 child : {
                                     lookup: {
                                         tree: "Behaviors:critter"
