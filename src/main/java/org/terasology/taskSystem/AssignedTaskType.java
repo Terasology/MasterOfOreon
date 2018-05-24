@@ -21,4 +21,5 @@ public class AssignedTaskType {
     public static final String Build = "build";
     public static final String Harvest = "harvest";
     public static final String Guard = "guard";
+    public static final String Eat = "eat";
 }

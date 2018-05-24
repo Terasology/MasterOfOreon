@@ -86,12 +86,11 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     public boolean getTaskForOreon(Actor oreon) {
         Queue<EntityRef> availableTasks = oreonHolding.availableTasks;
-        logger.info("Looking for task in " + oreonHolding);
+        TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
+        //logger.info("Looking for task in " + oreonHolding);
         if (!availableTasks.isEmpty()) {
             EntityRef taskEntityToAssign = availableTasks.remove();
             TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
-
-            TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
             oreonTaskComponent.assignedTaskType = taskComponentToAssign.assignedTaskType;
             oreonTaskComponent.creationTime = taskComponentToAssign.creationTime;
@@ -111,11 +110,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
             // check if Oreon needs to perform any other task
             OreonAttributeComponent oreonAttributes = oreon.getComponent(OreonAttributeComponent.class);
             if (oreonAttributes.hunger > 50) {
-                Vector3i target = findRequiredBuilding(BuildingType.Diner);
+                Vector3i target = findRequiredBuilding(BuildingType.Diner, oreonTaskComponent);
                 if ( target == null) {
                     logger.info("Oreons are hungry, build a Diner");
                     return false;
                 }
+                oreonTaskComponent.assignedTaskType = AssignedTaskType.Eat;
+                oreonTaskComponent.creationTime = timer.getGameTimeInMs();
+                oreon.save(oreonTaskComponent);
                 setOreonTarget(oreon, target);
                 return true;
             }
@@ -239,15 +241,20 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param buildingType
      * @return Returns a target for the Oreon to go to.
      */
-    private Vector3i findRequiredBuilding(BuildingType buildingType) {
+    private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent taskComponent) {
         List<EntityRef> areas = oreonHolding.assignedAreas;
-
+        int index = 0;
         for(EntityRef area : areas) {
             AssignedAreaComponent areaComponent = area.getComponent(AssignedAreaComponent.class);
 
             if (areaComponent.buildingType.equals(buildingType)) {
+                taskComponent.taskRegion = areaComponent.assignedRegion;
+                taskComponent.assignedAreaIndex = index;
+
                 return areaComponent.assignedRegion.min();
             }
+
+            index++;
         }
 
         //could not find required building

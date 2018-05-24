@@ -46,15 +46,15 @@ public class PerformTaskNode extends BaseAction {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
         logger.info("Perfoming Task of type : " + oreonTaskComponent.assignedTaskType);
 
+        removeColorFromArea(oreon, oreonTaskComponent);
+
+        changeOreonAttributes(oreon, oreonTaskComponent);
+
         //free the Oreon after perfoming task
         oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
         oreon.save(oreonTaskComponent);
 
         logger.info("Task completed, the Oreon is now free!");
-
-        removeColorFromArea(oreon, oreonTaskComponent);
-
-        changeOreonAttributes(oreon);
 
         return BehaviorState.SUCCESS;
     }
@@ -80,9 +80,15 @@ public class PerformTaskNode extends BaseAction {
      * Changes a Oreon's attributes values after it completes a task.
      * @param oreon
      */
-    private void changeOreonAttributes(Actor oreon) {
+    private void changeOreonAttributes(Actor oreon, TaskComponent taskComponent) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
-        oreonAttributeComponent.hunger += 30;
+        if (taskComponent.assignedTaskType.equals(AssignedTaskType.Eat)) {
+            logger.info("eating task complete hunger {} to zero ", oreonAttributeComponent.hunger);
+            oreonAttributeComponent.hunger = 0;
+        }
+        else {
+            oreonAttributeComponent.hunger += 30;
+        }
         oreon.save(oreonAttributeComponent);
     }
 }
