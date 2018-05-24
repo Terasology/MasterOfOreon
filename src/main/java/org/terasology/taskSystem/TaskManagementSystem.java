@@ -17,6 +17,7 @@ package org.terasology.taskSystem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.Constants;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -27,13 +28,17 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
+import org.terasology.logic.chat.ChatMessageEvent;
+import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.network.ColorComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
@@ -59,6 +64,21 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private String newTaskType;
     private TaskComponent taskComponent;
     private EntityRef taskEntity;
+    private EntityRef notificationMessageEntity;
+
+    @Override
+    public void postBegin() {
+        notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
+
+        DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
+        displayNameComponent.name = "Task System";
+
+        ColorComponent colorComponent = notificationMessageEntity.getComponent(ColorComponent.class);
+        colorComponent.color = Color.BLACK;
+
+        notificationMessageEntity.saveComponent(displayNameComponent);
+        notificationMessageEntity.saveComponent(colorComponent);
+    }
 
     public void setOreonHolding(HoldingComponent holding) {
         this.oreonHolding = holding;
@@ -142,6 +162,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonHolding = player.getComponent(HoldingComponent.class);
         }
         logger.info("Adding task to " + oreonHolding);
+        player.getOwner().send(new ChatMessageEvent("Adding a new task of type : " + taskComponent.assignedTaskType, notificationMessageEntity));
         oreonHolding.availableTasks.add(taskEntity);
         player.saveComponent(oreonHolding);
     }

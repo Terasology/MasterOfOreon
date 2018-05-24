@@ -42,4 +42,6 @@ public class Constants {
     public static final String DINER_BUTTON_ID = "dinerButton";
 
     public static final String CANCEL_BUTTON_ID = "cancelButton";
+
+    public static final String NOTIFICATION_MESSAGE_PREFAB = "MasterOfOreon:notificationMessage";
 }
