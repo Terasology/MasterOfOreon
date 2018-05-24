@@ -29,4 +29,6 @@ public class OreonAttributeComponent implements Component {
 
     public int intelligence;
     public int strength;
+
+    public int hunger = 0;
 }

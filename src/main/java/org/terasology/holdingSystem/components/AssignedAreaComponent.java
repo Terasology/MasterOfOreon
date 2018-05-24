@@ -19,8 +19,16 @@ import org.terasology.entitySystem.Component;
 import org.terasology.math.Region3i;
 import org.terasology.network.FieldReplicateType;
 import org.terasology.network.Replicate;
+import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.BuildingType;
 
 public class AssignedAreaComponent implements Component {
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
     public Region3i assignedRegion;
+
+    @Replicate
+    public String assignedTaskType = AssignedTaskType.None;
+
+    @Replicate
+    public BuildingType buildingType = BuildingType.None;
 }

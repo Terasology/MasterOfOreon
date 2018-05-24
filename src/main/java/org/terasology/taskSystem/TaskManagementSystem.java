@@ -34,12 +34,14 @@ import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
 import org.terasology.world.selection.BlockSelectionComponent;
 
+import java.util.List;
 import java.util.Queue;
 
 @Share(TaskManagementSystem.class)
@@ -79,24 +81,34 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             oreon.save(oreonTaskComponent);
 
-            MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
-            Vector3i target = oreonTaskComponent.taskRegion.min();
-
-            moveComponent.target = new Vector3f(target.x, target.y, target.z);
-
-            logger.info("Set Oreon target to : " + moveComponent.target);
-
-            oreon.save(moveComponent);
+            setOreonTarget(oreon, oreonTaskComponent.taskRegion.min());
 
             //destroy the entity since this task is no longer required
             taskEntityToAssign.destroy();
 
             return true;
+        } else {
+            // check if Oreon needs to perform any other task
+            OreonAttributeComponent oreonAttributes = oreon.getComponent(OreonAttributeComponent.class);
+            if (oreonAttributes.hunger > 50) {
+                Vector3i target = findRequiredBuilding(BuildingType.Diner);
+                if ( target == null) {
+                    logger.info("Oreons are hungry, build a Diner");
+                    return false;
+                }
+                setOreonTarget(oreon, target);
+                return true;
+            }
         }
 
         return false;
     }
 
+    /**
+     * Receives the {@link ApplyBlockSelectionEvent} which is sent after a block selection end point is set.
+     * @param blockSelectionEvent
+     * @param player
+     */
     @ReceiveEvent
     public void receiveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
         setOreonHolding(player.getComponent(HoldingComponent.class));
@@ -134,6 +146,12 @@ public class TaskManagementSystem extends BaseComponentSystem {
         player.saveComponent(oreonHolding);
     }
 
+    /**
+     * Receives the {@link SetTaskTypeEvent} sent by the {@link org.terasology.taskSystem.nui.TaskSelectionScreenLayer}
+     * after the player assigns a task a selected area.
+     * @param event
+     * @param player
+     */
     @ReceiveEvent
     public void receiveSetTaskTypeEvent (SetTaskTypeEvent event, EntityRef player) {
         player.send(new CloseTaskSelectionScreenEvent());
@@ -148,14 +166,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
             return;
         }
 
-        //mark this area so that no other task can be assigned here
-        markArea(newBlockSelectionComponent, player);
-
         taskComponent.assignedTaskType = newTaskType;
 
         if (newTaskType.equals(AssignedTaskType.Build)) {
             taskComponent.buildingType = event.getBuildingType();
         }
+
+        //mark this area so that no other task can be assigned here
+        markArea(newBlockSelectionComponent, player);
 
         taskEntity.addComponent(taskComponent);
 
@@ -173,6 +191,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         assignedAreaComponent.assignedRegion = blockSelectionComponent.currentSelection;
 
+        assignedAreaComponent.assignedTaskType = taskComponent.assignedTaskType;
+        assignedAreaComponent.buildingType = taskComponent.buildingType;
+
         EntityRef assignedArea = entityManager.create(assignedAreaComponent, blockSelectionComponent);
 
         oreonHolding.assignedAreas.add(assignedArea);
@@ -189,12 +210,37 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @return A boolean value specifying whether the area is valid
      */
     private boolean checkArea(BlockSelectionComponent blockSelectionComponent) {
-        //if oreonholding is null player is marking areas before spawning Oreons
-        if (oreonHolding == null) {
-            logger.info("Please spawn an Oreon before marking areas for tasks.");
-            return false;
+        return true;
+    }
+
+    /**
+     * Looks for a building in the assignedAreas list.
+     * @param buildingType
+     * @return Returns a target for the Oreon to go to.
+     */
+    private Vector3i findRequiredBuilding(BuildingType buildingType) {
+        List<EntityRef> areas = oreonHolding.assignedAreas;
+
+        for(EntityRef area : areas) {
+            AssignedAreaComponent areaComponent = area.getComponent(AssignedAreaComponent.class);
+
+            if (areaComponent.buildingType.equals(buildingType)) {
+                return areaComponent.assignedRegion.min();
+            }
         }
 
-        return true;
+        //could not find required building
+        logger.info("Could not find required building");
+        return null;
+    }
+
+    private void setOreonTarget(Actor oreon, Vector3i target) {
+        MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
+
+        moveComponent.target = new Vector3f(target.x, target.y, target.z);
+
+        logger.info("Set Oreon target to : " + moveComponent.target);
+
+        oreon.save(moveComponent);
     }
 }

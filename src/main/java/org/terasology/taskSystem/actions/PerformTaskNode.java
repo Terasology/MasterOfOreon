@@ -26,6 +26,7 @@ import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
+import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.components.TaskComponent;
@@ -53,6 +54,8 @@ public class PerformTaskNode extends BaseAction {
 
         removeColorFromArea(oreon, oreonTaskComponent);
 
+        changeOreonAttributes(oreon);
+
         return BehaviorState.SUCCESS;
     }
 
@@ -68,11 +71,18 @@ public class PerformTaskNode extends BaseAction {
         HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
 
         EntityRef assignedArea = oreonHolding.assignedAreas.get(taskComponent.assignedAreaIndex);
-        //BlockSelectionComponent blockSelectionComponent = assignedArea.getComponent(BlockSelectionComponent.class);
-        //blockSelectionComponent.shouldRender = false;
 
-        logger.info("Removing color" + taskComponent.assignedAreaIndex + " " + oreonHolding);
+        logger.info("Removing color " + taskComponent.assignedAreaIndex + " " + oreonHolding);
         assignedArea.removeComponent(BlockSelectionComponent.class);
+    }
 
+    /**
+     * Changes a Oreon's attributes values after it completes a task.
+     * @param oreon
+     */
+    private void changeOreonAttributes(Actor oreon) {
+        OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
+        oreonAttributeComponent.hunger += 30;
+        oreon.save(oreonAttributeComponent);
     }
 }
