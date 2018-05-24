@@ -40,7 +40,7 @@ import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
 import org.terasology.world.selection.BlockSelectionComponent;
 
-import java.util.List;
+import java.util.Queue;
 
 @Share(TaskManagementSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -63,10 +63,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     public boolean getTaskForOreon(Actor oreon) {
-        List<EntityRef> availableTasks = oreonHolding.availableTasks;
+        Queue<EntityRef> availableTasks = oreonHolding.availableTasks;
         logger.info("Looking for task in " + oreonHolding);
         if (!availableTasks.isEmpty()) {
-            EntityRef taskEntityToAssign = availableTasks.remove(0);
+            EntityRef taskEntityToAssign = availableTasks.remove();
             TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
 
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
@@ -107,6 +107,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         taskComponent.creationTime = timer.getGameTimeInMs();
 
         BlockSelectionComponent newBlockSelectionComponent = new BlockSelectionComponent();
+        logger.info("Block selection true " + newBlockSelectionComponent);
         newBlockSelectionComponent.shouldRender = true;
         newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
 
@@ -118,10 +119,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
         NetworkComponent networkComponent = new NetworkComponent();
         networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-        taskEntity = entityManager.create(networkComponent, newBlockSelectionComponent);
-
-        //mark this area so that no other task can be assigned here
-        markArea(newBlockSelectionComponent, player);
+        taskEntity = entityManager.create(networkComponent);
+        taskEntity.addComponent(newBlockSelectionComponent);
 
         player.send(new OpenTaskSelectionScreenEvent());
     }
@@ -141,11 +140,16 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         newTaskType = event.getTaskType();
 
+        BlockSelectionComponent newBlockSelectionComponent = taskEntity.getComponent(BlockSelectionComponent.class);
+
         //when cancel selection button is used
         if (newTaskType == null) {
-            taskEntity.getComponent(BlockSelectionComponent.class).shouldRender = false;
+            taskEntity.destroy();
             return;
         }
+
+        //mark this area so that no other task can be assigned here
+        markArea(newBlockSelectionComponent, player);
 
         taskComponent.assignedTaskType = newTaskType;
 

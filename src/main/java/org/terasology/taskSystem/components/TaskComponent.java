@@ -17,15 +17,27 @@ package org.terasology.taskSystem.components;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.math.Region3i;
+import org.terasology.network.FieldReplicateType;
+import org.terasology.network.Replicate;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.TaskStatusType;
 
 public class TaskComponent implements Component {
+    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
     public String assignedTaskType;
-    public long creationTime;
-    public TaskStatusType taskStatus;
-    public BuildingType buildingType;
 
+    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
+    public long creationTime;
+
+    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
+    public TaskStatusType taskStatus = TaskStatusType.Available;
+
+    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
+    public BuildingType buildingType = BuildingType.None;
+
+    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
     public Region3i taskRegion;
+
+    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
     public int assignedAreaIndex;
 }

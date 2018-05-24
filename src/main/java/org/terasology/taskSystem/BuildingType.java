@@ -16,6 +16,7 @@
 package org.terasology.taskSystem;
 
 public enum BuildingType {
+    None,
     Hospital,
     Diner,
     Gym
