@@ -24,15 +24,14 @@ import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.components.TaskComponent;
-import org.terasology.utilities.concurrency.Task;
-import org.terasology.world.block.Block;
 import org.terasology.world.selection.BlockSelectionComponent;
+
+import java.util.List;
 
 @BehaviorAction(name = "perform_task")
 public class PerformTaskNode extends BaseAction {
@@ -42,7 +41,7 @@ public class PerformTaskNode extends BaseAction {
     EntityManager entityManager;
 
     @Override
-    public BehaviorState modify (Actor oreon, BehaviorState result) {
+    public BehaviorState modify(Actor oreon, BehaviorState result) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
         logger.info("Perfoming Task of type : " + oreonTaskComponent.assignedTaskType);
 
@@ -70,10 +69,14 @@ public class PerformTaskNode extends BaseAction {
 
         HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
 
-        EntityRef assignedArea = oreonHolding.assignedAreas.get(taskComponent.assignedAreaIndex);
-
-        logger.info("Removing color " + taskComponent.assignedAreaIndex + " " + oreonHolding);
-        assignedArea.removeComponent(BlockSelectionComponent.class);
+        List<EntityRef> assignedAreas = oreonHolding.assignedAreas;
+        if (!assignedAreas.isEmpty()) {
+            EntityRef assignedArea = assignedAreas.get(taskComponent.assignedAreaIndex);
+            if (assignedArea.hasComponent(BlockSelectionComponent.class)) {
+                logger.info("Removing color " + taskComponent.assignedAreaIndex + " " + oreonHolding);
+                assignedArea.removeComponent(BlockSelectionComponent.class);
+            }
+        }
     }
 
     /**
@@ -82,13 +85,22 @@ public class PerformTaskNode extends BaseAction {
      */
     private void changeOreonAttributes(Actor oreon, TaskComponent taskComponent) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
-        if (taskComponent.assignedTaskType.equals(AssignedTaskType.Eat)) {
-            logger.info("eating task complete hunger {} to zero ", oreonAttributeComponent.hunger);
-            oreonAttributeComponent.hunger = 0;
+
+        String assignedTaskType = taskComponent.assignedTaskType;
+        switch(assignedTaskType) {
+            case AssignedTaskType.Eat:
+                logger.info("eating task complete hunger {} to zero ", oreonAttributeComponent.hunger);
+                oreonAttributeComponent.hunger = 0;
+                break;
+
+            case AssignedTaskType.Sleep:
+                oreonAttributeComponent.health = 100;
+                break;
+
+            default:
+                oreonAttributeComponent.hunger += 30;
         }
-        else {
-            oreonAttributeComponent.hunger += 30;
-        }
+
         oreon.save(oreonAttributeComponent);
     }
 }

@@ -17,6 +17,7 @@ package org.terasology.taskSystem.actions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.context.Context;
 import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
@@ -24,13 +25,14 @@ import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.taskSystem.TaskManagementSystem;
 
 @BehaviorAction(name = "look_for_task")
 public class LookForTaskNode extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(LookForTaskNode.class);
+    @In
+    Context context;
 
     @In
     LocalPlayer localPlayer;
@@ -41,15 +43,15 @@ public class LookForTaskNode extends BaseAction {
     private HoldingComponent oreonHolding;
 
     @Override
-    public void construct (Actor oreon) {
-        this.holdingSystem = CoreRegistry.get(HoldingAuthoritySystem.class);
-        this.taskManagementSystem = CoreRegistry.get(TaskManagementSystem.class);
+    public void construct(Actor oreon) {
+        this.holdingSystem = context.get(HoldingAuthoritySystem.class);
+        this.taskManagementSystem = context.get(TaskManagementSystem.class);
         oreonHolding = holdingSystem.getOreonHolding(oreon);
         taskManagementSystem.setOreonHolding(oreonHolding);
     }
 
     @Override
-    public BehaviorState modify (Actor oreon, BehaviorState result) {
+    public BehaviorState modify(Actor oreon, BehaviorState result) {
         if (taskManagementSystem.getTaskForOreon(oreon)) {
             return BehaviorState.SUCCESS;
         }

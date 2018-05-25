@@ -22,4 +22,5 @@ public class AssignedTaskType {
     public static final String Harvest = "harvest";
     public static final String Guard = "guard";
     public static final String Eat = "eat";
+    public static final String Sleep = "sleep";
 }

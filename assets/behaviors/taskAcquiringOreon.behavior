@@ -12,15 +12,20 @@
                             timeout : {
                                 time : 1,
                                 child : {
-                                    lookup: {
+                                    lookup : {
                                         tree: "Behaviors:critter"
                                     }
                                 }
                             }
                         },
                         {
-                            sequence : [
-                                look_for_task
+                            selector : [
+                                look_for_task,
+                                {
+                                    lookup : {
+                                        tree : "MasterOfOreon:advancedTasksForOreon"
+                                    }
+                                }
                             ]
 
                         }

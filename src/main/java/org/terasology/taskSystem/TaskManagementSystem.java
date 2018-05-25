@@ -30,6 +30,7 @@ import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -46,6 +47,7 @@ import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
 import org.terasology.world.selection.BlockSelectionComponent;
 
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Queue;
 
@@ -106,21 +108,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
             taskEntityToAssign.destroy();
 
             return true;
-        } else {
-            // check if Oreon needs to perform any other task
-            OreonAttributeComponent oreonAttributes = oreon.getComponent(OreonAttributeComponent.class);
-            if (oreonAttributes.hunger > 50) {
-                Vector3i target = findRequiredBuilding(BuildingType.Diner, oreonTaskComponent);
-                if ( target == null) {
-                    logger.info("Oreons are hungry, build a Diner");
-                    return false;
-                }
-                oreonTaskComponent.assignedTaskType = AssignedTaskType.Eat;
-                oreonTaskComponent.creationTime = timer.getGameTimeInMs();
-                oreon.save(oreonTaskComponent);
-                setOreonTarget(oreon, target);
-                return true;
-            }
         }
 
         return false;
@@ -159,7 +146,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         player.send(new OpenTaskSelectionScreenEvent());
     }
 
-    private void addTask (EntityRef player) {
+    private void addTask(EntityRef player) {
         if (oreonHolding == null) {
             oreonHolding = player.getComponent(HoldingComponent.class);
         }
@@ -176,7 +163,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param player
      */
     @ReceiveEvent
-    public void receiveSetTaskTypeEvent (SetTaskTypeEvent event, EntityRef player) {
+    public void receiveSetTaskTypeEvent(SetTaskTypeEvent event, EntityRef player) {
         player.send(new CloseTaskSelectionScreenEvent());
 
         newTaskType = event.getTaskType();
@@ -241,15 +228,15 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param buildingType
      * @return Returns a target for the Oreon to go to.
      */
-    private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent taskComponent) {
+    private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent) {
         List<EntityRef> areas = oreonHolding.assignedAreas;
         int index = 0;
-        for(EntityRef area : areas) {
+        for (EntityRef area : areas) {
             AssignedAreaComponent areaComponent = area.getComponent(AssignedAreaComponent.class);
 
             if (areaComponent.buildingType.equals(buildingType)) {
-                taskComponent.taskRegion = areaComponent.assignedRegion;
-                taskComponent.assignedAreaIndex = index;
+                oreonTaskComponent.taskRegion = areaComponent.assignedRegion;
+                oreonTaskComponent.assignedAreaIndex = index;
 
                 return areaComponent.assignedRegion.min();
             }
@@ -270,5 +257,35 @@ public class TaskManagementSystem extends BaseComponentSystem {
         logger.info("Set Oreon target to : " + moveComponent.target);
 
         oreon.save(moveComponent);
+    }
+
+    public boolean assignAdvancedTaskToOreon(Actor oreon, String assignedTaskType) {
+            OreonAttributeComponent oreonAttributes = oreon.getComponent(OreonAttributeComponent.class);
+            TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
+
+            Vector3i target = null;
+
+            switch(assignedTaskType) {
+                case AssignedTaskType.Eat :
+                    target = findRequiredBuilding(BuildingType.Diner, oreonTaskComponent);
+                    break;
+
+                case AssignedTaskType.Sleep :
+                    Vector3f worldPosition = oreon.getComponent(LocationComponent.class).getWorldPosition();
+                    target = new Vector3i(worldPosition, RoundingMode.DOWN);
+                    break;
+            }
+
+            if (target == null) {
+                return false;
+            }
+
+            oreonTaskComponent.assignedTaskType = assignedTaskType;
+            oreonTaskComponent.creationTime = timer.getGameTimeInMs();
+            oreon.save(oreonTaskComponent);
+
+            setOreonTarget(oreon, target);
+
+            return true;
     }
 }
