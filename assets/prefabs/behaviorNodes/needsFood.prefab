@@ -1,0 +1,12 @@
+{
+    "BehaviorNode" : {
+        "action"    : "needs_food",
+        "name"      : "needs_food",
+        "displayName" : "NeedsFood",
+        "category"  : "work",
+        "shape"     : "rect",
+        "description": "Checks if the Oreon is hungry and assigns a Eat task to it.\n SUCCESS/FAILURE : If a diner is successfully found Eat task is assigned",
+        "color"     : [180, 180, 180, 255],
+        "textColor" : [0, 0, 0, 255]
+    }
+}

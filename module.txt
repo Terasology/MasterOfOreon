@@ -10,5 +10,6 @@
         {"id" : "ChangingBlocks", "minVersion" : "0.1.0"},
         {"id" : "Behaviors", "minVersion" : "0.2.0"}
     ],
-    "isServerSideOnly" : false
+    "isServerSideOnly" : false,
+    "isGameplay" : true
 }

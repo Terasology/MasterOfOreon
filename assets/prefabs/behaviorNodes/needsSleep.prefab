@@ -1,0 +1,12 @@
+{
+    "BehaviorNode" : {
+        "action"    : "needs_sleep",
+        "name"      : "needs_sleep",
+        "displayName" : "NeedsSleep",
+        "category"  : "work",
+        "shape"     : "rect",
+        "description": "Checks to see if the Oreon has no task to perform it is night.\nSUCCESS / FAILURE: If sleep task is successfully assigned",
+        "color"     : [180, 180, 180, 255],
+        "textColor" : [0, 0, 0, 255]
+    }
+}
