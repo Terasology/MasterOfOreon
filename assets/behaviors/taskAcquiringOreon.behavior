@@ -1,29 +1,29 @@
 {
-    dynamic : [
+    "dynamic" : [
         {
-            guard: {
-                componentPresent: "MasterOfOreon:Task",
-                values: [
+            "guard" : {
+                "componentPresent" : "MasterOfOreon:Task",
+                "values" : [
                     "V assignedTaskType == none"
                 ],
-                child: {
-                    selector : [
+                "child" : {
+                    "selector" : [
                         {
-                            timeout : {
-                                time : 1,
-                                child : {
-                                    lookup : {
-                                        tree: "Behaviors:critter"
+                            "timeout" : {
+                                "time" : 1,
+                                "child" : {
+                                    "lookup" : {
+                                        "tree" : "Behaviors:critter"
                                     }
                                 }
                             }
                         },
                         {
-                            selector : [
-                                look_for_task,
+                            "selector" : [
+                                "look_for_task",
                                 {
-                                    lookup : {
-                                        tree : "MasterOfOreon:advancedTasksForOreon"
+                                    "lookup" : {
+                                        "tree" : "MasterOfOreon:advancedTasksForOreon"
                                     }
                                 }
                             ]
@@ -34,9 +34,9 @@
             }
         },
         {
-            sequence : [
-                move_to,
-                perform_task
+            "sequence" : [
+                "move_to",
+                "perform_task"
             ]
         }
     ]

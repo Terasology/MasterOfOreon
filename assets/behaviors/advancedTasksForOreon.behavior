@@ -1,13 +1,13 @@
 {
-    selector : [
-        needs_food,
-        needs_sleep,
+   "selector" : [
+        "needs_food",
+        "needs_sleep",
         {
-            timeout : {
-                time : 200,
-                child : {
-                    log : {
-                        message : "Sleeping zzzzz"
+            "timeout" : {
+                "time" : 200,
+                "child" : {
+                    "log" : {
+                        "message" : "Sleeping zzzzz"
                     }
                 }
             }

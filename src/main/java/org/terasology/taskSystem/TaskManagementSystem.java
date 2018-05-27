@@ -167,8 +167,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
     /**
      * Receives the {@link SetTaskTypeEvent} sent by the {@link org.terasology.taskSystem.nui.TaskSelectionScreenLayer}
      * after the player assigns a task a selected area.
-     * @param event
-     * @param player
+     * @param event The event sent by the screen layer.
+     * @param player The player entity adding the new task.
      */
     @ReceiveEvent
     public void receiveSetTaskTypeEvent(SetTaskTypeEvent event, EntityRef player) {
@@ -201,7 +201,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * Saves the selected area for a particular task to check for clashes later.
      * Attaches a {@link BlockSelectionComponent} to the assignedArea entity so that the assigned area remains colored
      * until the task is finished.
-     * @param blockSelectionComponent
+     * @param blockSelectionComponent The component which has information related to the area selected.
      */
     private void markArea(BlockSelectionComponent blockSelectionComponent, EntityRef player) {
         AssignedAreaComponent assignedAreaComponent = new AssignedAreaComponent();
@@ -223,7 +223,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Checks if the selected area can be used i.e not already assigned to some other task
-     * @param blockSelectionComponent
+     * @param blockSelectionComponent The component which has information related to the area selected.
      * @return A boolean value specifying whether the area is valid
      */
     private boolean checkArea(BlockSelectionComponent blockSelectionComponent) {
@@ -232,7 +232,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Looks for a building in the assignedAreas list.
-     * @param buildingType
+     * @param buildingType The type of the building required by the Oreon
      * @return Returns a target for the Oreon to go to.
      */
     private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent) {
