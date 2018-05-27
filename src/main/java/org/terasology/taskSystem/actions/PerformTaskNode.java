@@ -33,6 +33,9 @@ import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
 
+/**
+ * Handles the actual task and its after effects like removal of the area render and changes to the Oreon attributes.
+ */
 @BehaviorAction(name = "perform_task")
 public class PerformTaskNode extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(PerformTaskNode.class);
@@ -60,7 +63,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Removes the {@link BlockSelectionComponent} from the assigned area so that it no longer renders once the task is complete.
-     * @param actor
+     * @param actor The Actor which calls this node
      */
     private void removeColorFromArea(Actor oreon, TaskComponent taskComponent) {
         OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
@@ -81,7 +84,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Changes a Oreon's attributes values after it completes a task.
-     * @param oreon
+     * @param oreon The Actor which calls this node
      */
     private void changeOreonAttributes(Actor oreon, TaskComponent taskComponent) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);

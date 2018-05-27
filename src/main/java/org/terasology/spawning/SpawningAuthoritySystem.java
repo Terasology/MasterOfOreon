@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The authority system which handles the spawning of Oreons into the world.
+ */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class SpawningAuthoritySystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(SpawningAuthoritySystem.class);
@@ -58,6 +61,8 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Spawns the desired Oreon at the location of Portal which sends the event
+     * @param event The {@link OreonSpawnEvent} which is sent by the {@link org.terasology.spawning.nui.SpawnScreenLayer} when a player selects the Oreon to be spawned
+     * @param player The player entity which is spawning the Oreon.
      */
     @ReceiveEvent
     public void oreonSpawn(OreonSpawnEvent event, EntityRef player) {
@@ -79,6 +84,12 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Checks if the Oreon to be spawned has an item requirement and calls {@code removeNeededItem} item method
+     * @param player The player entity spawning the Oreon
+     * @param prefab The prefab of the Oreon to be spawned
+     * @return A boolean value which signifies if the required items were found in inventory and successfully deducted
+     */
     private boolean consumeItem(EntityRef player, Prefab prefab) {
         OreonSpawnComponent oreonSpawnComponent = prefab.getComponent(OreonSpawnComponent.class);
 
@@ -119,6 +130,13 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         return true;
     }
 
+    /**
+     * Makes a pass through all items in a player's inventory and adds the slot number of all required items to a list.
+     * @param items The map which consists of all items and their quantity required for spawning
+     * @param player The player entity spawning the Oreon
+     * @return A list of slot number of all items required for spawning. If the size of this is list is not equal to the
+     * number of items required then a required item was not found in the inventory
+     */
     private List<Integer> getSlotsForRequiredItems(Map<String, Integer> items, EntityRef player) {
         List<Integer> requiredSlots = new ArrayList<>();
 
@@ -147,6 +165,14 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         return requiredSlots;
     }
 
+    /**
+     * Removes an item required for spawning from the player's inventory
+     * @param items The map which consists of all items and their quantity required for spawning
+     * @param slotNumber The slot number of the item to be removed
+     * @param player The player entity spawning the Oreon
+     * @return True - if the item removal from the inventory was successful.<br>
+     *     False - if the required amount was not found in the inventory
+     */
     private boolean removeNeededItem(Map<String, Integer> items, int slotNumber, EntityRef player) {
         EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
         BlockItemComponent blockItemComponent = inventorySlot.getComponent(BlockItemComponent.class);

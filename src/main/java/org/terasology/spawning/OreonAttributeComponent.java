@@ -17,6 +17,9 @@ package org.terasology.spawning;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Defines the levels of various stats related to an Oreon
+ */
 public class OreonAttributeComponent implements Component {
     /**
      * Defines the current level of the Oreon.

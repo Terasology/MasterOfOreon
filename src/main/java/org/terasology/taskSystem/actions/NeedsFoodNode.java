@@ -36,6 +36,9 @@ import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
 
+/**
+ * Checks if the Oreon is hungry, if yes calls the task management system to assign the Eat task.
+ */
 @BehaviorAction(name = "needs_food")
 public class NeedsFoodNode extends BaseAction {
     @In

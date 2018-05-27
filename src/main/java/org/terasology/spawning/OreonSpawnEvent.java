@@ -20,6 +20,9 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ServerEvent;
 
+/**
+ * Event sent by the {@link org.terasology.spawning.nui.SpawnScreenLayer} after the player selects an Oreon to spawn.
+ */
 @ServerEvent
 public class OreonSpawnEvent implements Event {
     private Prefab oreonPrefab;

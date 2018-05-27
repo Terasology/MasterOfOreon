@@ -36,6 +36,9 @@ import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.time.WorldTime;
 
+/**
+ * Checks if it is night time in the world and there are no pending tasks in the village, if yes calls the task management system to assign the Eat task.
+ */
 @BehaviorAction(name = "needs_sleep")
 public class NeedsSleepNode extends BaseAction {
     @In

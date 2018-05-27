@@ -24,6 +24,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * The component which is attached to the player and consits of info related to the happenings in the village.
+ * All changes made to this task are in the authority {@link org.terasology.taskSystem.TaskManagementSystem} so the fields replicated from the server to client.
+ */
 public class HoldingComponent implements Component {
     @Replicate
     public Queue<EntityRef> availableTasks = new LinkedList<>();

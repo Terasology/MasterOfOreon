@@ -22,10 +22,16 @@ import org.terasology.entitySystem.prefab.Prefab;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This component is attached to every Oreon(defined in its prefab)
+ */
 public class OreonSpawnComponent implements Component {
     public Map<String, Integer> itemsToConsume = new HashMap<>();
 
     public Prefab oreonPrefab;
 
+    /**
+     * The player entity which owns the Oreon i.e. the player who is spawning it
+     */
     public EntityRef parent = EntityRef.NULL;
 }

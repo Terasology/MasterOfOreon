@@ -34,6 +34,9 @@ import org.terasology.spawning.OreonSpawnEvent;
 
 import java.util.Map;
 
+/**
+ * The screen which is triggered when player interacts({@code e press}) with a Portal block.
+ */
 public class SpawnScreenLayer extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(SpawnScreenLayer.class);
 
@@ -98,6 +101,11 @@ public class SpawnScreenLayer extends CoreScreenLayer {
         }
     }
 
+    /**
+     * Popultes the text label fields in the screen with the items required for spawning.
+     * @param prefab The Oreon prefab for which the label is being set.
+     * @param label The label to be set.
+     */
     private void populateUiLabels(String prefab, UILabel label) {
         Prefab oreonPrefab = prefabManager.getPrefab(prefab);
         OreonSpawnComponent oreonSpawnComponent = oreonPrefab.getComponent(OreonSpawnComponent.class);

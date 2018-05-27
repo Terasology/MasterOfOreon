@@ -51,6 +51,10 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * The authority task management system which handles task creation, adding them to the correct Holding and assigning tasks
+ * to the Oreons.
+ */
 @Share(TaskManagementSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TaskManagementSystem extends BaseComponentSystem {
@@ -115,8 +119,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Receives the {@link ApplyBlockSelectionEvent} which is sent after a block selection end point is set.
-     * @param blockSelectionEvent
-     * @param player
+     * @param blockSelectionEvent Event triggered after a block selection has been completed
+     * @param player The player entity which triggers the event
      */
     @ReceiveEvent
     public void receiveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
@@ -146,6 +150,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
         player.send(new OpenTaskSelectionScreenEvent());
     }
 
+    /**
+     * Adds task to the corresponding player's Holding
+     * @param player The player entity which owns the Holding Component
+     */
     private void addTask(EntityRef player) {
         if (oreonHolding == null) {
             oreonHolding = player.getComponent(HoldingComponent.class);
@@ -181,7 +189,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
         if (newTaskType.equals(AssignedTaskType.Build)) {
             taskComponent.buildingType = event.getBuildingType();
         }
-
         //mark this area so that no other task can be assigned here
         markArea(newBlockSelectionComponent, player);
 
@@ -244,7 +251,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
             index++;
         }
 
-        //could not find required building
         logger.info("Could not find required building");
         return null;
     }
@@ -259,6 +265,12 @@ public class TaskManagementSystem extends BaseComponentSystem {
         oreon.save(moveComponent);
     }
 
+    /**
+     * Assigns advanced tasks like Eat and sleep to Oreon when it is free.
+     * @param oreon The oreon Actor to which the task will be assigned
+     * @param assignedTaskType The type of task to performed recieved based on priority of different tasks from its BT
+     * @return A boolean value which signifies if the task was successfully assigned.
+     */
     public boolean assignAdvancedTaskToOreon(Actor oreon, String assignedTaskType) {
             OreonAttributeComponent oreonAttributes = oreon.getComponent(OreonAttributeComponent.class);
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
@@ -276,6 +288,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                     break;
             }
 
+            // if a building required for the task like the Diner for Eat is not found
             if (target == null) {
                 return false;
             }
