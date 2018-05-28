@@ -1,7 +1,7 @@
 {
     "parent" : "engine:iconItem",
     "DisplayName" : {
-        "name" : "Selection Tool"
+        "name" : "Oreon Selection Tool"
     },
     "Item" : {
         "icon" : "masteroforeon:toolicons16#selectiontool",

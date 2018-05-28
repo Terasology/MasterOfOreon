@@ -30,6 +30,7 @@ import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
+import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.location.LocationComponent;
@@ -68,7 +69,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private Time timer;
 
     @In
-    Context context;
+    private Context context;
 
     private HoldingAuthoritySystem holdingSystem;
 
@@ -122,12 +123,39 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     /**
-     * Receives the {@link ApplyBlockSelectionEvent} which is sent after a block selection end point is set.
+     * Checks if the item used for selection of an area is an Oreon Selection Tool
+     * @param player
+     * @return True - If held item is an Oreon Selection Tool
+     */
+    private boolean checkHeldItem(EntityRef player) {
+        CharacterHeldItemComponent heldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
+
+        EntityRef selectedItem = heldItemComponent.selectedItem;
+
+        String selectedItemName = selectedItem.getComponent(DisplayNameComponent.class).name;
+
+        if (selectedItemName.equals("Oreon Selection Tool")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Receives the {@link ApplyBlockSelectionEvent} which is sent after a block selection end point is set. Also checks
+     * if the item used for selection is an Oreon Selection Tool, if not the area is intended for another purpose.
      * @param blockSelectionEvent Event triggered after a block selection has been completed
      * @param player The player entity which triggers the event
      */
     @ReceiveEvent
     public void receiveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
+        //check if held item is an Oreon Selection Tool
+        if (!checkHeldItem(player)) {
+            String message = "Use the Oreon selection Tool to mark areas for a task";
+            player.getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
+            return;
+        }
+
         logger.info("Adding a new Task");
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.taskRegion = blockSelectionEvent.getSelection();
