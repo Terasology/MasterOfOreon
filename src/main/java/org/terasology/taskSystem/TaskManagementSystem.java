@@ -18,6 +18,7 @@ package org.terasology.taskSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -25,6 +26,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
@@ -40,7 +42,6 @@ import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.Color;
-import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
@@ -66,9 +67,11 @@ public class TaskManagementSystem extends BaseComponentSystem {
     @In
     private Time timer;
 
-    private HoldingComponent oreonHolding;
-    private String newTaskType;
-    private TaskComponent taskComponent;
+    @In
+    Context context;
+
+    private HoldingAuthoritySystem holdingSystem;
+
     private EntityRef taskEntity;
     private EntityRef notificationMessageEntity;
 
@@ -84,16 +87,17 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         notificationMessageEntity.saveComponent(displayNameComponent);
         notificationMessageEntity.saveComponent(colorComponent);
-    }
 
-    public void setOreonHolding(HoldingComponent holding) {
-        this.oreonHolding = holding;
+        holdingSystem = context.get(HoldingAuthoritySystem.class);
     }
 
     public boolean getTaskForOreon(Actor oreon) {
+        HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
         Queue<EntityRef> availableTasks = oreonHolding.availableTasks;
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
-        //logger.info("Looking for task in " + oreonHolding);
+
+        logger.debug("Looking for task in " + oreonHolding);
+
         if (!availableTasks.isEmpty()) {
             EntityRef taskEntityToAssign = availableTasks.remove();
             TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
@@ -124,10 +128,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void receiveNewTask(ApplyBlockSelectionEvent blockSelectionEvent, EntityRef player) {
-        setOreonHolding(player.getComponent(HoldingComponent.class));
-
         logger.info("Adding a new Task");
-        taskComponent = new TaskComponent();
+        TaskComponent taskComponent = new TaskComponent();
         taskComponent.taskRegion = blockSelectionEvent.getSelection();
         taskComponent.creationTime = timer.getGameTimeInMs();
 
@@ -146,6 +148,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         taskEntity = entityManager.create(networkComponent);
         taskEntity.addComponent(newBlockSelectionComponent);
+        taskEntity.addComponent(taskComponent);
 
         player.send(new OpenTaskSelectionScreenEvent());
     }
@@ -155,9 +158,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param player The player entity which owns the Holding Component
      */
     private void addTask(EntityRef player) {
-        if (oreonHolding == null) {
-            oreonHolding = player.getComponent(HoldingComponent.class);
-        }
+        HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
+
+        TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+
         logger.info("Adding task to " + oreonHolding);
         player.getOwner().send(new ChatMessageEvent("Adding a new task of type : " + taskComponent.assignedTaskType, notificationMessageEntity));
         oreonHolding.availableTasks.add(taskEntity);
@@ -174,7 +178,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     public void receiveSetTaskTypeEvent(SetTaskTypeEvent event, EntityRef player) {
         player.send(new CloseTaskSelectionScreenEvent());
 
-        newTaskType = event.getTaskType();
+        String newTaskType = event.getTaskType();
 
         BlockSelectionComponent newBlockSelectionComponent = taskEntity.getComponent(BlockSelectionComponent.class);
 
@@ -184,15 +188,17 @@ public class TaskManagementSystem extends BaseComponentSystem {
             return;
         }
 
+        TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+
         taskComponent.assignedTaskType = newTaskType;
 
         if (newTaskType.equals(AssignedTaskType.Build)) {
             taskComponent.buildingType = event.getBuildingType();
         }
         //mark this area so that no other task can be assigned here
-        markArea(newBlockSelectionComponent, player);
+        markArea(newBlockSelectionComponent, taskComponent, player);
 
-        taskEntity.addComponent(taskComponent);
+        taskEntity.saveComponent(taskComponent);
 
         addTask(player);
     }
@@ -203,7 +209,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * until the task is finished.
      * @param blockSelectionComponent The component which has information related to the area selected.
      */
-    private void markArea(BlockSelectionComponent blockSelectionComponent, EntityRef player) {
+    private void markArea(BlockSelectionComponent blockSelectionComponent, TaskComponent taskComponent, EntityRef player) {
         AssignedAreaComponent assignedAreaComponent = new AssignedAreaComponent();
 
         assignedAreaComponent.assignedRegion = blockSelectionComponent.currentSelection;
@@ -213,6 +219,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         EntityRef assignedArea = entityManager.create(assignedAreaComponent, blockSelectionComponent);
 
+        HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
         oreonHolding.assignedAreas.add(assignedArea);
 
         player.saveComponent(oreonHolding);
@@ -235,7 +242,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param buildingType The type of the building required by the Oreon
      * @return Returns a target for the Oreon to go to.
      */
-    private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent) {
+    private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent, HoldingComponent oreonHolding) {
         List<EntityRef> areas = oreonHolding.assignedAreas;
         int index = 0;
         for (EntityRef area : areas) {
@@ -272,14 +279,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @return A boolean value which signifies if the task was successfully assigned.
      */
     public boolean assignAdvancedTaskToOreon(Actor oreon, String assignedTaskType) {
-            OreonAttributeComponent oreonAttributes = oreon.getComponent(OreonAttributeComponent.class);
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
+            HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
 
             Vector3i target = null;
 
             switch(assignedTaskType) {
                 case AssignedTaskType.Eat :
-                    target = findRequiredBuilding(BuildingType.Diner, oreonTaskComponent);
+                    target = findRequiredBuilding(BuildingType.Diner, oreonTaskComponent, oreonHolding);
                     break;
 
                 case AssignedTaskType.Sleep :

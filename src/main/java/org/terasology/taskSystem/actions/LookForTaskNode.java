@@ -18,8 +18,6 @@ package org.terasology.taskSystem.actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.context.Context;
-import org.terasology.holdingSystem.HoldingAuthoritySystem;
-import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
@@ -33,17 +31,11 @@ public class LookForTaskNode extends BaseAction {
     @In
     Context context;
 
-    private HoldingAuthoritySystem holdingSystem;
     private TaskManagementSystem taskManagementSystem;
-
-    private HoldingComponent oreonHolding;
 
     @Override
     public void construct(Actor oreon) {
-        this.holdingSystem = context.get(HoldingAuthoritySystem.class);
         this.taskManagementSystem = context.get(TaskManagementSystem.class);
-        oreonHolding = holdingSystem.getOreonHolding(oreon);
-        taskManagementSystem.setOreonHolding(oreonHolding);
     }
 
     @Override

@@ -19,8 +19,6 @@ import org.terasology.Constants;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.holdingSystem.HoldingAuthoritySystem;
-import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
@@ -51,10 +49,8 @@ public class NeedsSleepNode extends BaseAction {
     private WorldProvider worldProvider;
     private WorldTime worldTime;
 
-    private HoldingAuthoritySystem holdingSystem;
     private TaskManagementSystem taskManagementSystem;
 
-    private HoldingComponent oreonHolding;
     private EntityRef notificationMessageEntity;
 
     @Override
@@ -64,10 +60,7 @@ public class NeedsSleepNode extends BaseAction {
 
         localPlayer = context.get(LocalPlayer.class);
 
-        holdingSystem = context.get(HoldingAuthoritySystem.class);
-        oreonHolding = holdingSystem.getOreonHolding(oreon);
         taskManagementSystem = context.get(TaskManagementSystem.class);
-        taskManagementSystem.setOreonHolding(oreonHolding);
 
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 

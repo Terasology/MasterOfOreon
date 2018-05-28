@@ -19,8 +19,6 @@ import org.terasology.Constants;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.holdingSystem.HoldingAuthoritySystem;
-import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
@@ -32,7 +30,6 @@ import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
-import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
 
@@ -48,20 +45,15 @@ public class NeedsFoodNode extends BaseAction {
 
     private LocalPlayer localPlayer;
 
-    private HoldingAuthoritySystem holdingSystem;
     private TaskManagementSystem taskManagementSystem;
 
-    private HoldingComponent oreonHolding;
     private EntityRef notificationMessageEntity;
 
     @Override
     public void construct(Actor oreon) {
         localPlayer = context.get(LocalPlayer.class);
 
-        holdingSystem = context.get(HoldingAuthoritySystem.class);
-        oreonHolding = holdingSystem.getOreonHolding(oreon);
         taskManagementSystem = context.get(TaskManagementSystem.class);
-        taskManagementSystem.setOreonHolding(oreonHolding);
 
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 
