@@ -1,6 +1,7 @@
 {
    "selector" : [
         "needs_food",
+        "needs_training",
         "needs_sleep",
         {
             "timeout" : {

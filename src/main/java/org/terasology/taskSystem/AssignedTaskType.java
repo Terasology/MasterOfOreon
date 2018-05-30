@@ -23,4 +23,6 @@ public class AssignedTaskType {
     public static final String Guard = "guard";
     public static final String Eat = "eat";
     public static final String Sleep = "sleep";
+    public static final String Train_Strength = "train_strength";
+    public static final String Train_Intelligence = "train_intelligence";
 }

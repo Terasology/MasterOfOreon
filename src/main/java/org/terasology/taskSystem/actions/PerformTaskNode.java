@@ -76,7 +76,7 @@ public class PerformTaskNode extends BaseAction {
         if (!assignedAreas.isEmpty()) {
             EntityRef assignedArea = assignedAreas.get(taskComponent.assignedAreaIndex);
             if (assignedArea.hasComponent(BlockSelectionComponent.class)) {
-                logger.info("Removing color " + taskComponent.assignedAreaIndex + " " + oreonHolding);
+                logger.debug("Removing color " + taskComponent.assignedAreaIndex + " " + oreonHolding);
                 assignedArea.removeComponent(BlockSelectionComponent.class);
             }
         }
@@ -94,6 +94,16 @@ public class PerformTaskNode extends BaseAction {
             case AssignedTaskType.Eat:
                 logger.info("eating task complete hunger {} to zero ", oreonAttributeComponent.hunger);
                 oreonAttributeComponent.hunger = 0;
+                break;
+
+            case AssignedTaskType.Train_Strength:
+                oreonAttributeComponent.strength += 10;
+                logger.info("Strength training complete, strength is now : {}", oreonAttributeComponent.strength);
+                break;
+
+            case AssignedTaskType.Train_Intelligence:
+                oreonAttributeComponent.intelligence += 10;
+                logger.info("Intelligence training complete, intelligence is now : {}", oreonAttributeComponent.intelligence);
                 break;
 
             case AssignedTaskType.Sleep:

@@ -59,6 +59,16 @@
                                             "type" : "UIButton",
                                             "id" : "dinerButton",
                                             "text" : "Diner"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "gymButton",
+                                            "text" : "Gym"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "classroomButton",
+                                            "text" : "Classroom"
                                         }
                                     ]
                                 }

@@ -321,6 +321,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
                     Vector3f worldPosition = oreon.getComponent(LocationComponent.class).getWorldPosition();
                     target = new Vector3i(worldPosition, RoundingMode.DOWN);
                     break;
+
+                case AssignedTaskType.Train_Strength :
+                    target = findRequiredBuilding(BuildingType.Gym, oreonTaskComponent, oreonHolding);
+                    break;
+
+                case AssignedTaskType.Train_Intelligence :
+                    target = findRequiredBuilding(BuildingType.Classroom, oreonTaskComponent, oreonHolding);
+                    break;
             }
 
             // if a building required for the task like the Diner for Eat is not found

@@ -19,5 +19,6 @@ public enum BuildingType {
     None,
     Hospital,
     Diner,
-    Gym
+    Gym,
+    Classroom
 }
