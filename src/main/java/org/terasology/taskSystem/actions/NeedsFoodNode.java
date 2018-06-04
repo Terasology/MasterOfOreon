@@ -17,13 +17,13 @@ package org.terasology.taskSystem.actions;
 
 import org.terasology.Constants;
 import org.terasology.context.Context;
+import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ColorComponent;
@@ -31,6 +31,7 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.DelayedNotificationSystem;
 import org.terasology.taskSystem.TaskManagementSystem;
 
 /**
@@ -43,9 +44,16 @@ public class NeedsFoodNode extends BaseAction {
     @In
     EntityManager entityManager;
 
+    @In
+    Time time;
+
     private LocalPlayer localPlayer;
 
     private TaskManagementSystem taskManagementSystem;
+
+    private DelayedNotificationSystem delayedNotificationSystem;
+    private float lastNotification = 0;
+
 
     private EntityRef notificationMessageEntity;
 
@@ -54,6 +62,8 @@ public class NeedsFoodNode extends BaseAction {
         localPlayer = context.get(LocalPlayer.class);
 
         taskManagementSystem = context.get(TaskManagementSystem.class);
+
+        delayedNotificationSystem = context.get(DelayedNotificationSystem.class);
 
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 
@@ -76,7 +86,7 @@ public class NeedsFoodNode extends BaseAction {
                 return BehaviorState.SUCCESS;
             } else {
                 String message = "We are hungry, build a diner!";
-                localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
+                lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
             }
         }
 

@@ -17,13 +17,13 @@ package org.terasology.taskSystem.actions;
 
 import org.terasology.Constants;
 import org.terasology.context.Context;
+import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ColorComponent;
@@ -31,6 +31,7 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.DelayedNotificationSystem;
 import org.terasology.taskSystem.TaskManagementSystem;
 
 @BehaviorAction(name = "needs_training")
@@ -40,17 +41,25 @@ public class NeedsTrainingNode extends BaseAction {
     @In
     EntityManager entityManager;
 
+    @In
+    Time time;
+
     private LocalPlayer localPlayer;
 
     private TaskManagementSystem taskManagementSystem;
 
     private EntityRef notificationMessageEntity;
 
+    private DelayedNotificationSystem delayedNotificationSystem;
+    private float lastNotification = 0;
+
     @Override
     public void construct(Actor oreon) {
         localPlayer = context.get(LocalPlayer.class);
 
         taskManagementSystem = context.get(TaskManagementSystem.class);
+
+        delayedNotificationSystem = context.get(DelayedNotificationSystem.class);
 
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 
@@ -75,20 +84,21 @@ public class NeedsTrainingNode extends BaseAction {
 
         //find an attribute to train for
         if (strength < intelligence && strength < maxStrength) {
-            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Train_Strength)){
+            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Train_Strength)) {
                 return BehaviorState.SUCCESS;
             }
 
             String message = "Build a Gym for stronger Oreons";
-            localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
+            delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
+            lastNotification = time.getGameTime();
 
         } else if (intelligence < strength && intelligence < maxIntelligence) {
-            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Train_Intelligence)){
+            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Train_Intelligence)) {
                 return BehaviorState.SUCCESS;
             }
 
             String message = "Build a Classroom for smarter Oreons";
-            localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
+            lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
         }
 
         return BehaviorState.FAILURE;
