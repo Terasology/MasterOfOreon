@@ -89,8 +89,7 @@ public class NeedsTrainingNode extends BaseAction {
             }
 
             String message = "Build a Gym for stronger Oreons";
-            delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
-            lastNotification = time.getGameTime();
+            lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
 
         } else if (intelligence < strength && intelligence < maxIntelligence) {
             if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Train_Intelligence)) {
