@@ -34,5 +34,9 @@
         "jumpSpeed" : 12
     },
     "MinionMove" : {},
-    "NPCMovement" : {}
+    "NPCMovement" : {},
+    "OreonTooltip" : {
+        "icon" : "MasterOfOreon:oreonguard",
+        "name" : "Oreon Guard"
+    }
 }
