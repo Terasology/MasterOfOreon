@@ -98,11 +98,15 @@ public class PerformTaskNode extends BaseAction {
 
             case AssignedTaskType.Train_Strength:
                 oreonAttributeComponent.strength += 10;
+                oreonAttributeComponent.strength = oreonAttributeComponent.strength > oreonAttributeComponent.maxStrength
+                        ? oreonAttributeComponent.maxStrength : oreonAttributeComponent.strength;
                 logger.info("Strength training complete, strength is now : {}", oreonAttributeComponent.strength);
                 break;
 
             case AssignedTaskType.Train_Intelligence:
                 oreonAttributeComponent.intelligence += 10;
+                oreonAttributeComponent.intelligence = oreonAttributeComponent.intelligence > oreonAttributeComponent.maxIntelligence
+                        ? oreonAttributeComponent.maxIntelligence : oreonAttributeComponent.intelligence;
                 logger.info("Intelligence training complete, intelligence is now : {}", oreonAttributeComponent.intelligence);
                 break;
 
