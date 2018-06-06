@@ -16,6 +16,7 @@
 package org.terasology.spawning;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.network.Replicate;
 
 /**
  * Defines the levels of various stats related to an Oreon
@@ -25,15 +26,25 @@ public class OreonAttributeComponent implements Component {
      * Defines the current level of the Oreon.
      * Level of the Oreon decides the max value of a particular attribute that can be attained by Training.
      */
+    @Replicate
     public int currentLevel = 1;
 
+    @Replicate
     public int maxIntelligence = 100 * currentLevel;
+    @Replicate
     public int maxStrength = 100 * currentLevel;
 
+    @Replicate
     public int intelligence;
+    @Replicate
     public int strength;
 
+    @Replicate
     public int health = 100;
 
+    @Replicate
     public int hunger = 0;
+
+    @Replicate
+    public float lastHealthCheck = 0;
 }

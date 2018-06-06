@@ -47,4 +47,8 @@ public class DelayedNotificationSystem extends BaseComponentSystem {
 
         return lastNotification;
     }
+
+    public void sendNotificationNow(String message, EntityRef notificationMessageEntity) {
+        localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
+    }
 }

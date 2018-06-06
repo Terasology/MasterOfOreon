@@ -13,58 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.taskSystem.actions;
+package org.terasology.healthSystem;
 
 import org.terasology.Constants;
 import org.terasology.context.Context;
+import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.healthSystem.OreonHealthSystem;
-import org.terasology.logic.behavior.BehaviorAction;
+import org.terasology.entitySystem.systems.BaseComponentSystem;
+import org.terasology.entitySystem.systems.RegisterMode;
+import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.behavior.core.BaseAction;
-import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
-import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.DelayedNotificationSystem;
-import org.terasology.taskSystem.TaskManagementSystem;
 
-/**
- * Checks if the Oreon is hungry, if yes calls the task management system to assign the Eat task.
- */
-@BehaviorAction(name = "needs_food")
-public class NeedsFoodNode extends BaseAction {
+@RegisterSystem(RegisterMode.AUTHORITY)
+public class OreonHealthSystem extends BaseComponentSystem {
+    private static final float MAX_DELAY = 100;
+
     @In
-    Context context;
+    private Context context;
     @In
-    EntityManager entityManager;
-
-    private LocalPlayer localPlayer;
-
-    private TaskManagementSystem taskManagementSystem;
+    private Time time;
+    @In
+    private EntityManager entityManager;
 
     private DelayedNotificationSystem delayedNotificationSystem;
-    private float lastNotification = 0;
-
-    private OreonHealthSystem oreonHealthSystem;
-
     private EntityRef notificationMessageEntity;
 
     @Override
-    public void construct(Actor oreon) {
-        localPlayer = context.get(LocalPlayer.class);
-
-        taskManagementSystem = context.get(TaskManagementSystem.class);
-
+    public void postBegin() {
         delayedNotificationSystem = context.get(DelayedNotificationSystem.class);
-
-        oreonHealthSystem  = context.get(OreonHealthSystem.class);
-
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 
         DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
@@ -77,22 +60,24 @@ public class NeedsFoodNode extends BaseAction {
         notificationMessageEntity.saveComponent(colorComponent);
     }
 
-    @Override
-    public BehaviorState modify(Actor oreon, BehaviorState result) {
+    public void reduceHealth(Actor oreon, String cause) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
-
-        if (oreonAttributeComponent.hunger > 50) {
-            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Eat)) {
-                return BehaviorState.SUCCESS;
-            } else {
-                String message = "We are hungry, build a diner!";
-                lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
-
-                //reduce health if required
-                oreonHealthSystem.reduceHealth(oreon, "hunger");
-            }
+        float lastHealthCheck = oreonAttributeComponent.lastHealthCheck;
+        if (lastHealthCheck != 0 && time.getGameTime() - lastHealthCheck < MAX_DELAY) {
+            return;
         }
 
-        return BehaviorState.FAILURE;
+        switch (cause) {
+            case "hunger" :
+                oreonAttributeComponent.health -= 10;
+                String message = "We are losing health due to hunger.";
+                delayedNotificationSystem.sendNotificationNow(message, notificationMessageEntity);
+
+        }
+
+        oreonAttributeComponent.lastHealthCheck = time.getGameTime();
+        oreon.save(oreonAttributeComponent);
+
     }
+
 }
