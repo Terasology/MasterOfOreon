@@ -23,14 +23,17 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.behavior.BehaviorComponent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
+import org.terasology.registry.Share;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.DelayedNotificationSystem;
 
+@Share(OreonHealthSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class OreonHealthSystem extends BaseComponentSystem {
     private static final float MAX_DELAY = 100;
@@ -62,22 +65,37 @@ public class OreonHealthSystem extends BaseComponentSystem {
 
     public void reduceHealth(Actor oreon, String cause) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
-        float lastHealthCheck = oreonAttributeComponent.lastHealthCheck;
-        if (lastHealthCheck != 0 && time.getGameTime() - lastHealthCheck < MAX_DELAY) {
-            return;
-        }
 
         switch (cause) {
             case "hunger" :
+                float lastHungerCheck = oreonAttributeComponent.lastHungerCheck;
+                if (lastHungerCheck != 0 && time.getGameTime() - lastHungerCheck < MAX_DELAY) {
+                    return;
+                }
                 oreonAttributeComponent.health -= 10;
                 String message = "We are losing health due to hunger.";
                 delayedNotificationSystem.sendNotificationNow(message, notificationMessageEntity);
+                oreonAttributeComponent.lastHungerCheck = time.getGameTime();
 
         }
-
-        oreonAttributeComponent.lastHealthCheck = time.getGameTime();
         oreon.save(oreonAttributeComponent);
 
+        checkOreonHealth(oreon);
+
+    }
+
+    /**
+     * Checks if the Oreon's health is zero, and destroys the entity if yes.
+     * @param oreon The Oreon actor whose health is to be checked
+     */
+    private void checkOreonHealth(Actor oreon) {
+        OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
+
+        if(oreonAttributeComponent.health <= 0) {
+            //TODO: Implement DieEvent, DieComponent and its animation usage
+            oreon.getEntity().removeComponent(BehaviorComponent.class);
+            oreon.getEntity().destroy();
+        }
     }
 
 }

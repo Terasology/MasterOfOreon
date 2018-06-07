@@ -46,5 +46,5 @@ public class OreonAttributeComponent implements Component {
     public int hunger = 0;
 
     @Replicate
-    public float lastHealthCheck = 0;
+    public float lastHungerCheck = 0;
 }
