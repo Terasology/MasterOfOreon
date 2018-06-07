@@ -17,7 +17,6 @@ package org.terasology.taskSystem.actions;
 
 import org.terasology.Constants;
 import org.terasology.context.Context;
-import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.behavior.BehaviorAction;
@@ -40,9 +39,6 @@ public class NeedsTrainingNode extends BaseAction {
     Context context;
     @In
     EntityManager entityManager;
-
-    @In
-    Time time;
 
     private LocalPlayer localPlayer;
 
