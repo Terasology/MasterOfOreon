@@ -22,6 +22,7 @@ import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -31,6 +32,8 @@ import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
+import org.terasology.logic.characters.CharacterMovementComponent;
+import org.terasology.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.location.LocationComponent;
@@ -38,11 +41,13 @@ import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.navgraph.WalkableBlock;
 import org.terasology.network.ColorComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.Color;
+import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
@@ -75,6 +80,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     private EntityRef taskEntity;
     private EntityRef notificationMessageEntity;
+
+    private Vector3f lastCollisionLocation;
 
     @Override
     public void postBegin() {
@@ -343,5 +350,60 @@ public class TaskManagementSystem extends BaseComponentSystem {
             setOreonTarget(oreon, target);
 
             return true;
+    }
+
+    /**
+     * Receives the HorizontalCollisionEvent and decides whether the Oreon should abandon tasks
+     */
+    @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
+    public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon, MinionMoveComponent moveComponent) {
+        if (lastCollisionLocation == null) {
+            lastCollisionLocation = collisionEvent.getLocation();
+        }
+
+        else {
+            if (lastCollisionLocation.getX() == collisionEvent.getLocation().getX() && lastCollisionLocation.getZ() == collisionEvent.getLocation().getZ()) {
+                logger.info("oreon stuck");
+                moveComponent.target = null;
+                oreon.saveComponent(moveComponent);
+                abandonTask(oreon);
+            }
+            else {
+                //if collision just took place once
+                lastCollisionLocation = null;
+            }
+        }
+    }
+
+    private void abandonTask(EntityRef oreon) {
+        TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
+
+        if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.None)) {
+            oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new ChatMessageEvent("Oreon got stuck abandoning task", notificationMessageEntity));
+            //create entity for abandoned task
+            NetworkComponent networkComponent = new NetworkComponent();
+            networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+
+            taskEntity = entityManager.create(networkComponent);
+
+            TaskComponent taskComponent = new TaskComponent();
+            taskComponent.assignedTaskType = oreonTaskComponent.assignedTaskType;
+            taskComponent.assignedAreaIndex = oreonTaskComponent.assignedAreaIndex;
+            taskComponent.taskRegion = oreonTaskComponent.taskRegion;
+            taskComponent.creationTime = oreonTaskComponent.creationTime;
+            taskComponent.buildingType = oreonTaskComponent.buildingType;
+            taskComponent.taskStatus = oreonTaskComponent.taskStatus;
+
+            taskEntity.addComponent(taskComponent);
+
+            //add task to the holding
+            OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
+            addTask(oreonSpawnComponent.parent);
+
+            //free the Oreon
+            oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
+
+            oreon.saveComponent(oreonTaskComponent);
+        }
     }
 }
