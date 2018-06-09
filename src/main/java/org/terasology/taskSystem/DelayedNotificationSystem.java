@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class DelayedNotificationSystem extends BaseComponentSystem {
     private long maxDelay = 10;
 
     public float sendNotification(String message, EntityRef notificationMessageEntity, float lastNotification) {
-        if (time.getGameTime() - lastNotification > maxDelay || lastNotification == 0) {
+        if (lastNotification == 0 || time.getGameTime() - lastNotification > maxDelay) {
             localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
             return time.getGameTime();
         }

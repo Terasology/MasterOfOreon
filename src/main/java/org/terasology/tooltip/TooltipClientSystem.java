@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class TooltipClientSystem extends BaseComponentSystem {
     @ReceiveEvent(components = OreonAttributeComponent.class)
     public void addAttributesToTooltip(GetItemTooltip event, EntityRef entity, OreonAttributeComponent oreonAttributeComponent) {
         event.getTooltipLines().add(new TooltipLine("Level : " + oreonAttributeComponent.currentLevel));
-        event.getTooltipLines().add(new TooltipLine("Health : " + oreonAttributeComponent.health + " / " + oreonAttributeComponent.maxStrength ));
+        event.getTooltipLines().add(new TooltipLine("Health : " + oreonAttributeComponent.health + " / " + oreonAttributeComponent.maxHealth));
         event.getTooltipLines().add(new TooltipLine("Hunger : " + oreonAttributeComponent.hunger));
         event.getTooltipLines().add(new TooltipLine("Strength : " + oreonAttributeComponent.strength + " / " + oreonAttributeComponent.maxStrength ));
         event.getTooltipLines().add(new TooltipLine("Intelligence : " + oreonAttributeComponent.intelligence + " / " + oreonAttributeComponent.maxIntelligence ));
