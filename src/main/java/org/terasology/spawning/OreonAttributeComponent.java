@@ -29,6 +29,7 @@ public class OreonAttributeComponent implements Component {
 
     public int maxIntelligence = 100 * currentLevel;
     public int maxStrength = 100 * currentLevel;
+    public int maxHealth = 100 * currentLevel;
 
     public int intelligence;
     public int strength;
