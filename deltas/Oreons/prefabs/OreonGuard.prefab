@@ -22,7 +22,7 @@
         "animationPool" : ["GuardWalk"]
     },
     "Die" : {
-        "animationPool" : ["GuardAfraidNonLoop"]
+        "animationPool" : ["BuilderDead"]
     },
     "CharacterMovement" : {
         "groundFriction" : 16,

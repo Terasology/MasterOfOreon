@@ -17,13 +17,13 @@ package org.terasology.healthSystem;
 
 import org.terasology.Constants;
 import org.terasology.context.Context;
+import org.terasology.deathSystem.DeathSystem;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.behavior.BehaviorComponent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.network.ColorComponent;
@@ -47,10 +47,12 @@ public class OreonHealthSystem extends BaseComponentSystem {
 
     private DelayedNotificationSystem delayedNotificationSystem;
     private EntityRef notificationMessageEntity;
+    private DeathSystem deathSystem;
 
     @Override
     public void postBegin() {
         delayedNotificationSystem = context.get(DelayedNotificationSystem.class);
+        deathSystem = context.get(DeathSystem.class);
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 
         DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
@@ -91,10 +93,8 @@ public class OreonHealthSystem extends BaseComponentSystem {
     private void checkOreonHealth(Actor oreon) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
 
-        if(oreonAttributeComponent.health <= 0) {
-            //TODO: Implement DieEvent, DieComponent and its animation usage
-            oreon.getEntity().removeComponent(BehaviorComponent.class);
-            oreon.getEntity().destroy();
+        if (oreonAttributeComponent.health <= 0) {
+            deathSystem.destroyOreon(oreon.getEntity());
         }
     }
 
