@@ -25,15 +25,16 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.utilities.random.MersenneRandom;
 import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.items.BlockItemComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,17 +146,17 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
 
-            BlockItemComponent blockItemComponent = inventorySlot.getComponent(BlockItemComponent.class);
-            if (blockItemComponent != null) {
-                String blockFamilyName = blockItemComponent.blockFamily.toString();
+            DisplayNameComponent displayNameComponent = inventorySlot.getComponent(DisplayNameComponent.class);
+            if (displayNameComponent != null) {
+                String blockName = displayNameComponent.name;
                 //if this item is required
-                if (items.containsKey(blockFamilyName)) {
+                if (items.containsKey(blockName)) {
                     //check if required number is present in the inventory
-                    int requiredNumber = items.get(blockFamilyName);
+                    int requiredNumber = items.get(blockName);
                     if (requiredNumber <= inventoryManager.getStackSize(inventorySlot)) {
                         requiredSlots.add(slotNumber);
                     } else {
-                        logger.info("You don't have enough({} required) {} blocks to spawn the Oreon", requiredNumber, blockFamilyName);
+                        logger.info("You don't have enough({} required) {} blocks to spawn the Oreon", requiredNumber, blockName);
                         break;
                     }
                 }
@@ -175,13 +176,13 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
      */
     private boolean removeNeededItem(Map<String, Integer> items, int slotNumber, EntityRef player) {
         EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
-        BlockItemComponent blockItemComponent = inventorySlot.getComponent(BlockItemComponent.class);
-        String blockFamilyName = blockItemComponent.blockFamily.toString();
+        DisplayNameComponent displayNameComponent = inventorySlot.getComponent(DisplayNameComponent.class);
+        String blockName = displayNameComponent.name;
 
-        logger.info("This Oreon has an item demand for spawning: " + blockFamilyName);
-        logger.info("Found the item needed to spawn stuff! Decrementing by {}, then spawning", items.get(blockFamilyName));
+        logger.info("This Oreon has an item demand for spawning: " + blockName);
+        logger.info("Found the item needed to spawn stuff! Decrementing by {}, then spawning", items.get(blockName));
 
-        EntityRef result = inventoryManager.removeItem(player, player, inventorySlot, false, items.get(blockFamilyName));
+        EntityRef result = inventoryManager.removeItem(player, player, inventorySlot, false, items.get(blockName));
         if (result == null) {
             logger.info("Could not decrement the required amount from inventory, not spawning");
             return false;

@@ -36,5 +36,11 @@
     "OreonTooltip" : {
         "icon" : "MasterOfOreon:oreonguard",
         "name" : "Oreon King"
+    },
+    "OreonSpawn" : {
+        "itemsToConsume" : {
+            "Dirt" : [3],
+            "Sand" : [3]
+        }
     }
 }

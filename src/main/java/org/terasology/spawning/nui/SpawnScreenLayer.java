@@ -116,8 +116,7 @@ public class SpawnScreenLayer extends CoreScreenLayer {
             int itemsRequired = items.size();
 
             for (String blockRequired : items.keySet()) {
-                String blockName = blockRequired.substring(12, blockRequired.length() - 1);
-                text.append(blockName);
+                text.append(blockRequired);
                 text.append(" : ");
                 text.append(items.get(blockRequired) + ", ");
             }
