@@ -32,7 +32,6 @@ import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
-import org.terasology.logic.characters.CharacterMovementComponent;
 import org.terasology.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
@@ -41,7 +40,6 @@ import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
-import org.terasology.navgraph.WalkableBlock;
 import org.terasology.network.ColorComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
@@ -359,16 +357,13 @@ public class TaskManagementSystem extends BaseComponentSystem {
     public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon, MinionMoveComponent moveComponent) {
         if (lastCollisionLocation == null) {
             lastCollisionLocation = collisionEvent.getLocation();
-        }
-
-        else {
+        } else {
             if (lastCollisionLocation.getX() == collisionEvent.getLocation().getX() && lastCollisionLocation.getZ() == collisionEvent.getLocation().getZ()) {
                 logger.info("oreon stuck");
                 moveComponent.target = null;
                 oreon.saveComponent(moveComponent);
                 abandonTask(oreon);
-            }
-            else {
+            } else {
                 //if collision just took place once
                 lastCollisionLocation = null;
             }

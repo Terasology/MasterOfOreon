@@ -32,7 +32,6 @@ import org.terasology.logic.players.PlayerUtil;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.utilities.random.MersenneRandom;
 import org.terasology.world.block.BlockManager;
 
