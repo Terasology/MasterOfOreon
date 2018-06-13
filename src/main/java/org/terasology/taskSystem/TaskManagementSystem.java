@@ -358,16 +358,25 @@ public class TaskManagementSystem extends BaseComponentSystem {
         if (lastCollisionLocation == null) {
             lastCollisionLocation = collisionEvent.getLocation();
         } else {
-            if (lastCollisionLocation.getX() == collisionEvent.getLocation().getX() && lastCollisionLocation.getZ() == collisionEvent.getLocation().getZ()) {
+            if (isSameCollisionLocation(lastCollisionLocation, collisionEvent.getLocation())) {
                 logger.info("oreon stuck");
                 moveComponent.target = null;
                 oreon.saveComponent(moveComponent);
                 abandonTask(oreon);
             } else {
-                //if collision just took place once
+                // If collision just took place once
                 lastCollisionLocation = null;
             }
         }
+    }
+
+    private boolean isSameCollisionLocation(Vector3f lastLocation, Vector3f currentLocation) {
+        float lastX = Float.floatToIntBits(lastLocation.getX());
+        float lastZ = Float.floatToIntBits(lastLocation.getZ());
+        float currentX = Float.floatToIntBits(currentLocation.getX());
+        float currentZ = Float.floatToIntBits(currentLocation.getZ());
+
+        return lastX == currentX && lastZ == currentZ;
     }
 
     private void abandonTask(EntityRef oreon) {
@@ -375,7 +384,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.None)) {
             oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new ChatMessageEvent("Oreon got stuck abandoning task", notificationMessageEntity));
-            //create entity for abandoned task
+            // Create entity for abandoned task
             NetworkComponent networkComponent = new NetworkComponent();
             networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
@@ -391,11 +400,11 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             taskEntity.addComponent(taskComponent);
 
-            //add task to the holding
+            // Add task to the holding
             OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
             addTask(oreonSpawnComponent.parent);
 
-            //free the Oreon
+            // Free the Oreon
             oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
 
             oreon.saveComponent(oreonTaskComponent);
