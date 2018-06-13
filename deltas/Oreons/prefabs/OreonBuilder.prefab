@@ -42,5 +42,10 @@
             "Dirt" : [1],
             "Sand" : [2]
         }
+    },
+    "CreatureNameGenerator" : {
+        "genderRatio" : 0.1,
+        "nobility" : 0,
+        "theme" : "Dwarf"
     }
 }

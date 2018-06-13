@@ -20,6 +20,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.namegenerator.creature.CreatureNameComponent;
 import org.terasology.rendering.nui.layers.ingame.inventory.GetItemTooltip;
 import org.terasology.rendering.nui.widgets.TooltipLine;
 import org.terasology.spawning.OreonAttributeComponent;
@@ -30,8 +31,9 @@ import org.terasology.worldlyTooltipAPI.events.GetTooltipNameEvent;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class TooltipClientSystem extends BaseComponentSystem {
-    @ReceiveEvent(components = OreonAttributeComponent.class)
-    public void addAttributesToTooltip(GetItemTooltip event, EntityRef entity, OreonAttributeComponent oreonAttributeComponent) {
+    @ReceiveEvent(components = {OreonAttributeComponent.class, CreatureNameComponent.class})
+    public void addAttributesToTooltip(GetItemTooltip event, EntityRef entity, OreonAttributeComponent oreonAttributeComponent,  CreatureNameComponent oreonNameComponent) {
+        event.getTooltipLines().add(new TooltipLine("Name : " + oreonNameComponent.firstName + " " + oreonNameComponent.lastName));
         event.getTooltipLines().add(new TooltipLine("Level : " + oreonAttributeComponent.currentLevel));
         event.getTooltipLines().add(new TooltipLine("Health : " + oreonAttributeComponent.health + " / " + oreonAttributeComponent.maxHealth));
         event.getTooltipLines().add(new TooltipLine("Hunger : " + oreonAttributeComponent.hunger));
