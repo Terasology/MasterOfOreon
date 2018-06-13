@@ -21,7 +21,7 @@
     "Walk" : {
         "animationPool" : ["GuardWalk"]
     },
-    "Die" : {
+    "Dying" : {
         "animationPool" : ["BuilderDead"]
     },
     "CharacterMovement" : {
@@ -44,5 +44,10 @@
             "Dirt" : [2],
             "Sand" : [2]
         }
+    },
+    "CreatureNameGenerator" : {
+        "genderRatio" : 0.1,
+        "nobility" : 0,
+        "theme" : "Dwarf"
     }
 }

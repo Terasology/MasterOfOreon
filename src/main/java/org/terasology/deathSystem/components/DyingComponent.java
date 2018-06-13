@@ -21,6 +21,9 @@ import org.terasology.rendering.assets.animation.MeshAnimation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DieComponent implements Component {
+/**
+ * Consists of the animation pool defined in the prefab which must be used when the Death logic is triggered.
+ */
+public class DyingComponent implements Component {
     public List<MeshAnimation> animationPool = new ArrayList<>();
 }

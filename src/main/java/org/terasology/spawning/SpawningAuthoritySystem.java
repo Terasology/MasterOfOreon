@@ -28,10 +28,13 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.namegenerator.creature.CreatureNameComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
+import org.terasology.rendering.logic.FloatingTextComponent;
 import org.terasology.utilities.random.MersenneRandom;
 import org.terasology.world.block.BlockManager;
 
@@ -77,6 +80,12 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
             networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
             newOreon.addComponent(networkComponent);
             newOreon.getComponent(OreonSpawnComponent.class).parent = player;
+
+            CreatureNameComponent oreonNameComponent = newOreon.getComponent(CreatureNameComponent.class);
+            NameTagComponent nameTagComponent = new NameTagComponent();
+            nameTagComponent.text = oreonNameComponent.firstName;
+            nameTagComponent.yOffset = 0.5f;
+            newOreon.addComponent(nameTagComponent);
 
             assignRandomAttributes(newOreon);
 

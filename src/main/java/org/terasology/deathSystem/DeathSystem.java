@@ -15,8 +15,8 @@
  */
 package org.terasology.deathSystem;
 
-import org.terasology.deathSystem.components.DeathAnimationRunningComponent;
-import org.terasology.deathSystem.components.DieComponent;
+import org.terasology.deathSystem.components.DeathTimeComponent;
+import org.terasology.deathSystem.components.DyingComponent;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -44,11 +44,11 @@ public class DeathSystem extends BaseComponentSystem implements UpdateSubscriber
     public void update(float delta) {
         float currentTime = time.getGameTime();
 
-        for (EntityRef oreon : entityManager.getEntitiesWith(DeathAnimationRunningComponent.class)) {
-            DeathAnimationRunningComponent deathAnimationComponent = oreon.getComponent(DeathAnimationRunningComponent.class);
+        for (EntityRef oreon : entityManager.getEntitiesWith(DeathTimeComponent.class)) {
+            DeathTimeComponent deathTimeComponent = oreon.getComponent(DeathTimeComponent.class);
 
             //if the death time has already passed
-            if (deathAnimationComponent.deathTime < currentTime) {
+            if (deathTimeComponent.deathTime < currentTime) {
                 oreon.destroy();
             }
         }
@@ -60,11 +60,11 @@ public class DeathSystem extends BaseComponentSystem implements UpdateSubscriber
 
         //add the death animation
         SkeletalMeshComponent skeletalMeshComponent = oreon.getComponent(SkeletalMeshComponent.class);
-        DieComponent dieComponent = oreon.getComponent(DieComponent.class);
+        DyingComponent dyingComponent = oreon.getComponent(DyingComponent.class);
 
         skeletalMeshComponent.animation = null;
         skeletalMeshComponent.animationPool.clear();
-        skeletalMeshComponent.animationPool.addAll(dieComponent.animationPool);
+        skeletalMeshComponent.animationPool.addAll(dyingComponent.animationPool);
         skeletalMeshComponent.loop = false;
 
         //duration of animation
@@ -74,6 +74,6 @@ public class DeathSystem extends BaseComponentSystem implements UpdateSubscriber
         }
 
         //get the death time
-        oreon.addComponent(new DeathAnimationRunningComponent(time.getGameTime() + lifespan));
+        oreon.addComponent(new DeathTimeComponent(time.getGameTime() + lifespan));
     }
 }

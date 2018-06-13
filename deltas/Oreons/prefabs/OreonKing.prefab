@@ -19,7 +19,7 @@
     "Walk" : {
         "animationPool" : ["KingWalk"]
     },
-    "Die" : {
+    "Dying" : {
         "animationPool" : ["KingWalk"]
     },
     "CharacterMovement" : {
@@ -42,5 +42,10 @@
             "Dirt" : [3],
             "Sand" : [3]
         }
+    },
+    "CreatureNameGenerator" : {
+        "genderRatio" : 0.1,
+        "nobility" : 1,
+        "theme" : "Dwarf"
     }
 }

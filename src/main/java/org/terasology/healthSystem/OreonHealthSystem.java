@@ -26,6 +26,7 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.common.DisplayNameComponent;
+import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -36,7 +37,7 @@ import org.terasology.taskSystem.DelayedNotificationSystem;
 @Share(OreonHealthSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class OreonHealthSystem extends BaseComponentSystem {
-    private static final float MAX_DELAY = 100;
+    private static final float MAX_DELAY = 1;
 
     @In
     private Context context;
@@ -55,13 +56,9 @@ public class OreonHealthSystem extends BaseComponentSystem {
         deathSystem = context.get(DeathSystem.class);
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 
-        DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
-        displayNameComponent.name = "Oreons";
-
         ColorComponent colorComponent = notificationMessageEntity.getComponent(ColorComponent.class);
         colorComponent.color = Color.RED;
 
-        notificationMessageEntity.saveComponent(displayNameComponent);
         notificationMessageEntity.saveComponent(colorComponent);
     }
 
@@ -76,6 +73,12 @@ public class OreonHealthSystem extends BaseComponentSystem {
                 }
                 oreonAttributeComponent.health -= 10;
                 String message = "We are losing health due to hunger.";
+
+                // Set display name to the Oreon's name
+                DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
+                displayNameComponent.name = oreon.getComponent(NameTagComponent.class).text;
+                notificationMessageEntity.saveComponent(displayNameComponent);
+
                 delayedNotificationSystem.sendNotificationNow(message, notificationMessageEntity);
                 oreonAttributeComponent.lastHungerCheck = time.getGameTime();
 
