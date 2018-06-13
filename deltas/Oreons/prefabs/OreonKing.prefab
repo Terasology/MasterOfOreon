@@ -19,7 +19,7 @@
     "Walk" : {
         "animationPool" : ["KingWalk"]
     },
-    "Die" : {
+    "Death" : {
         "animationPool" : ["KingWalk"]
     },
     "CharacterMovement" : {

@@ -24,6 +24,6 @@ import java.util.List;
 /**
  * Consists of the animation pool defined in the prefab which must be used when the Death logic is triggered.
  */
-public class DieComponent implements Component {
+public class DeathComponent implements Component {
     public List<MeshAnimation> animationPool = new ArrayList<>();
 }

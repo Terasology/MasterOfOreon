@@ -21,7 +21,7 @@
     "Walk" : {
         "animationPool" : ["GuardWalk"]
     },
-    "Die" : {
+    "Death" : {
         "animationPool" : ["BuilderDead"]
     },
     "CharacterMovement" : {

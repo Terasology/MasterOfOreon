@@ -37,7 +37,7 @@ import org.terasology.taskSystem.DelayedNotificationSystem;
 @Share(OreonHealthSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class OreonHealthSystem extends BaseComponentSystem {
-    private static final float MAX_DELAY = 100;
+    private static final float MAX_DELAY = 1;
 
     @In
     private Context context;
