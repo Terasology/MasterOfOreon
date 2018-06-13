@@ -24,6 +24,7 @@ import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.common.DisplayNameComponent;
+import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
@@ -60,7 +61,7 @@ public class NeedsTrainingNode extends BaseAction {
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
 
         DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
-        displayNameComponent.name = "Oreons ";
+        displayNameComponent.name = oreon.getComponent(NameTagComponent.class).text;
 
         ColorComponent colorComponent = notificationMessageEntity.getComponent(ColorComponent.class);
         colorComponent.color = Color.RED;
