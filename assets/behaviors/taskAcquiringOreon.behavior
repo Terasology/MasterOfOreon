@@ -36,7 +36,43 @@
         {
             "sequence" : [
                 "move_to",
-                "perform_task"
+                {
+                    "selector" : [
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == plant"
+                                ],
+                                "child": {
+                                    "lookup":"MasterOfOreon:plant"
+                                }
+                            }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == build"
+                                ],
+                                "child": {
+                                    "lookup": "MasterOfOreon:build"
+                                }
+                            }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == guard"
+                                ],
+                                "child": {
+                                    "lookup": "MasterOfOreon:guard"
+                                }
+                            }
+                        }
+                    ]
+                }
             ]
         }
     ]

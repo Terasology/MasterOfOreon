@@ -1,0 +1,16 @@
+{
+    "sequence" : [
+        {
+            "log" : {
+                "message" : "performing task"
+            }
+        },
+        {
+            "animation" : {
+                "play" : "MasterOfOreon:Build.animationPool",
+                "loop" : "MasterOfOreon:Build.animationPool"
+            }
+        },
+        "perform_task"
+    ]
+}

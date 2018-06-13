@@ -22,6 +22,9 @@
     "Die" : {
         "animationPool" : ["BuilderDead"]
     },
+    "Build" : {
+        "animationPool" : ["BuilderBuild", "BuilderBuild", "BuilderBuild", "BuilderThor"]
+    },
     "CharacterMovement" : {
         "groundFriction" : 16,
         "speedMultiplier" : 0.3,
