@@ -36,6 +36,7 @@ import org.terasology.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -383,7 +384,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
         if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.None)) {
-            oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new ChatMessageEvent("Oreon got stuck abandoning task", notificationMessageEntity));
+            String message = "Oreon " + oreon.getComponent(NameTagComponent.class).text + " got stuck. Abandoning task " + oreonTaskComponent.assignedTaskType;
+            oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
             // Create entity for abandoned task
             NetworkComponent networkComponent = new NetworkComponent();
             networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;

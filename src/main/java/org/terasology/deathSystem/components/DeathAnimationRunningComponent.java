@@ -17,7 +17,14 @@ package org.terasology.deathSystem.components;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * This component is attached to an Oreon entity which has reached zero health and would be destroyed after the death
+ * animation is completed.
+ */
 public class DeathAnimationRunningComponent implements Component {
+    /**
+     * The time after which the Oreon entity must be destroyed.
+     */
     public float deathTime;
 
     public DeathAnimationRunningComponent(float time) {

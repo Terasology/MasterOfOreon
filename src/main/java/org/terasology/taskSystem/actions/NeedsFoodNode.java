@@ -86,7 +86,7 @@ public class NeedsFoodNode extends BaseAction {
             if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Eat)) {
                 return BehaviorState.SUCCESS;
             } else {
-                String message = "We are hungry, build a diner!";
+                String message = "We are hungry. Build a diner!";
                 lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
 
                 //reduce health if required
