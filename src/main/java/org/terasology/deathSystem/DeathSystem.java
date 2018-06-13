@@ -16,7 +16,7 @@
 package org.terasology.deathSystem;
 
 import org.terasology.deathSystem.components.DeathTimeComponent;
-import org.terasology.deathSystem.components.DeathComponent;
+import org.terasology.deathSystem.components.DyingComponent;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -60,11 +60,11 @@ public class DeathSystem extends BaseComponentSystem implements UpdateSubscriber
 
         //add the death animation
         SkeletalMeshComponent skeletalMeshComponent = oreon.getComponent(SkeletalMeshComponent.class);
-        DeathComponent deathComponent = oreon.getComponent(DeathComponent.class);
+        DyingComponent dyingComponent = oreon.getComponent(DyingComponent.class);
 
         skeletalMeshComponent.animation = null;
         skeletalMeshComponent.animationPool.clear();
-        skeletalMeshComponent.animationPool.addAll(deathComponent.animationPool);
+        skeletalMeshComponent.animationPool.addAll(dyingComponent.animationPool);
         skeletalMeshComponent.loop = false;
 
         //duration of animation
