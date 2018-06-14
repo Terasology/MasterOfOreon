@@ -10,7 +10,7 @@
                     "selector" : [
                         {
                             "timeout" : {
-                                "time" : 1,
+                                "time" : 10,
                                 "child" : {
                                     "lookup" : {
                                         "tree" : "Behaviors:critter"
@@ -45,7 +45,9 @@
                                     "V assignedTaskType == plant"
                                 ],
                                 "child": {
-                                    "lookup":"MasterOfOreon:plant"
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:plant"
+                                    }
                                 }
                             }
                         },
@@ -56,7 +58,9 @@
                                     "V assignedTaskType == build"
                                 ],
                                 "child": {
-                                    "lookup": "MasterOfOreon:build"
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:build"
+                                    }
                                 }
                             }
                         },
@@ -67,7 +71,9 @@
                                     "V assignedTaskType == guard"
                                 ],
                                 "child": {
-                                    "lookup": "MasterOfOreon:guard"
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:guard"
+                                    }
                                 }
                             }
                         }

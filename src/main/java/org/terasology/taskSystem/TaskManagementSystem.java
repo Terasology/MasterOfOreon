@@ -115,6 +115,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
             oreonTaskComponent.assignedAreaIndex = taskComponentToAssign.assignedAreaIndex;
 
+            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.assignedTaskType);
+
             oreon.save(oreonTaskComponent);
 
             setOreonTarget(oreon, oreonTaskComponent.taskRegion.min());
@@ -410,6 +412,24 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
 
             oreon.saveComponent(oreonTaskComponent);
+        }
+    }
+
+    /**
+     * Calculates the time at which the assigned task will be completed based on the assigned task type and current game
+     * time.
+     * @param assignedTaskType The type of task that is being assigned to the Oreon
+     * @return The time at which the task will be completed
+     */
+    private float getTaskCompletionTime(String assignedTaskType) {
+        float currentTime = timer.getGameTime();
+
+        switch(assignedTaskType) {
+            case AssignedTaskType.Plant :
+                return currentTime + 100;
+
+            default :
+                return currentTime + 10;
         }
     }
 }
