@@ -8,7 +8,11 @@
             }
 
         },
-        "check_task_status",
+        {
+            "check_task_status" : {
+                "child" : "move_to"
+            }
+        },
         "perform_task"
     ]
 }
