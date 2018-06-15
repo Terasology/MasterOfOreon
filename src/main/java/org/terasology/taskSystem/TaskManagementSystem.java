@@ -426,7 +426,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         switch(assignedTaskType) {
             case AssignedTaskType.Plant :
-                return currentTime + 100;
+                return currentTime + 50;
 
             default :
                 return currentTime + 10;

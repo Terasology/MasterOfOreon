@@ -1,0 +1,14 @@
+{
+    "ChangingBlocks" : {
+        "blockFamilyStages" : {
+            "MasterOfOreon:OreonPlant0" : 7000,
+            "MasterOfOreon:OreonPlant1" : 9000,
+            "MasterOfOreon:OreonPlant2" : 8000,
+            "MasterOfOreon:OreonPlant3" : 6000,
+            "MasterOfOreon:OreonPlant4" : 2000,
+            "MasterOfOreon:OreonPlant5" : 5000,
+            "MasterOfOreon:OreonPlant6" : 5000
+        },
+        "loops" : false
+    }
+}
