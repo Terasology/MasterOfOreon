@@ -10,7 +10,8 @@
         {"id" : "ChangingBlocks", "minVersion" : "0.1.0"},
         {"id" : "Behaviors", "minVersion" : "0.2.0"},
         {"id" : "WorldlyTooltip", "minVersion" : "1.1.1"},
-        {"id" : "NameGenerator", "minVersion" : "0.4.3"}
+        {"id" : "NameGenerator", "minVersion" : "0.4.3"},
+        {"id" : "DynamicCities", "minVersion" : "0.2.1"}
     ],
     "isServerSideOnly" : false,
     "isGameplay" : true
