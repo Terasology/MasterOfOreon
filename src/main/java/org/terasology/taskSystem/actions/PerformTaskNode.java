@@ -64,6 +64,13 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
+import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
+import org.terasology.structureTemplates.events.SpawnStructureEvent;
+import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
+import org.terasology.structureTemplates.util.BlockRegionUtilities;
+import org.terasology.structureTemplates.util.transform.BlockRegionMovement;
+import org.terasology.structureTemplates.util.transform.BlockRegionTransformationList;
+import org.terasology.structureTemplates.util.transform.HorizontalBlockRegionRotation;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.components.TaskComponent;
@@ -78,6 +85,9 @@ import java.util.*;
 
 import static org.terasology.commonworld.Orientation.EAST;
 import static org.terasology.commonworld.Orientation.WEST;
+
+//import static org.terasology.commonworld.Orientation.EAST;
+//import static org.terasology.commonworld.Orientation.WEST;
 
 /**
  * Handles the actual task and its after effects like removal of the area render and changes to the Oreon attributes.
@@ -101,12 +111,15 @@ public class PerformTaskNode extends BaseAction {
     @In
     private WorldProvider worldProvider;
 
+    private StructureTemplateProvider structureTemplateProvider;
+
     private BlockEntityRegistry blockEntityRegistry;
 
     @Override
     public void construct(Actor oreon) {
         worldProvider = context.get(WorldProvider.class);
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
+        structureTemplateProvider = context.get(StructureTemplateProvider.class);
     }
 
     @Override
@@ -207,7 +220,8 @@ public class PerformTaskNode extends BaseAction {
                 break;
 
             case AssignedTaskType.Build :
-                constructBuilding(selectedRegion, taskComponent.buildingType);
+                //constructBuilding(selectedRegion, taskComponent.buildingType);
+                constructBuildingUsingStructureTemplates(selectedRegion, taskComponent.buildingType);
         }
     }
 
@@ -512,5 +526,27 @@ public class PerformTaskNode extends BaseAction {
                 RasterUtil.fillRect(pen, area);
             }
         }
+    }
+
+    private void constructBuildingUsingStructureTemplates(Region3i selectedRegion, BuildingType buildingType) {
+
+        int minX = selectedRegion.minX();
+        int maxX = selectedRegion.maxX();
+        int minY = selectedRegion.minY();
+
+        Rect2i shape = Rect2i.createFromMinAndMax(minX, selectedRegion.minY(), maxX, selectedRegion.maxY() + 100);
+        EntityRef template = structureTemplateProvider.getRandomTemplateOfType("MasterOfOreon:diner");
+
+        BlockRegionTransformationList transformationList = new BlockRegionTransformationList();
+        transformationList.addTransformation(new BlockRegionMovement(BlockRegionUtilities.determineBottomCenter(template.getComponent(SpawnBlockRegionsComponent.class))));
+
+        int rotationAmount = 0;
+
+        transformationList.addTransformation(new HorizontalBlockRegionRotation(rotationAmount));
+        transformationList.addTransformation(new BlockRegionMovement(new Vector3i(shape.minX() + Math.round(shape.sizeX() / 2f),
+                shape.maxY(), shape.minY() + Math.round(shape.sizeY() / 2f))));
+
+        template.send(new SpawnStructureEvent(transformationList));
+
     }
 }

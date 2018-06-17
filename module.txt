@@ -11,7 +11,8 @@
         {"id" : "Behaviors", "minVersion" : "0.2.0"},
         {"id" : "WorldlyTooltip", "minVersion" : "1.1.1"},
         {"id" : "NameGenerator", "minVersion" : "0.4.3"},
-        {"id" : "Cities", "minVersion" : "0.6.2"}
+        {"id" : "Cities", "minVersion" : "0.6.2"},
+        {"id" : "StructureTemplates", "minVersion" : "0.2.1"}
     ],
     "isServerSideOnly" : false,
     "isGameplay" : true
