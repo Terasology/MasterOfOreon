@@ -38,7 +38,10 @@ import org.terasology.cities.model.roof.HipRoof;
 import org.terasology.cities.model.roof.PentRoof;
 import org.terasology.cities.model.roof.Roof;
 import org.terasology.cities.model.roof.SaddleRoof;
-import org.terasology.cities.raster.*;
+import org.terasology.cities.raster.BuildingPens;
+import org.terasology.cities.raster.Pen;
+import org.terasology.cities.raster.Pens;
+import org.terasology.cities.raster.RasterUtil;
 import org.terasology.cities.window.RectWindow;
 import org.terasology.cities.window.SimpleWindow;
 import org.terasology.cities.window.Window;
@@ -64,10 +67,8 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
-import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
-import org.terasology.structureTemplates.util.BlockRegionUtilities;
 import org.terasology.structureTemplates.util.transform.BlockRegionMovement;
 import org.terasology.structureTemplates.util.transform.BlockRegionTransformationList;
 import org.terasology.structureTemplates.util.transform.HorizontalBlockRegionRotation;
@@ -81,13 +82,14 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.terasology.commonworld.Orientation.EAST;
 import static org.terasology.commonworld.Orientation.WEST;
 
-//import static org.terasology.commonworld.Orientation.EAST;
-//import static org.terasology.commonworld.Orientation.WEST;
 
 /**
  * Handles the actual task and its after effects like removal of the area render and changes to the Oreon attributes.
@@ -533,18 +535,22 @@ public class PerformTaskNode extends BaseAction {
         int minX = selectedRegion.minX();
         int maxX = selectedRegion.maxX();
         int minY = selectedRegion.minY();
+        int minZ = selectedRegion.minZ();
+        int maxZ = selectedRegion.maxZ();
 
-        Rect2i shape = Rect2i.createFromMinAndMax(minX, selectedRegion.minY(), maxX, selectedRegion.maxY() + 100);
         EntityRef template = structureTemplateProvider.getRandomTemplateOfType("MasterOfOreon:diner");
 
+        logger.info("Placing Builiding : " + template.getParentPrefab().getName());
+
         BlockRegionTransformationList transformationList = new BlockRegionTransformationList();
-        transformationList.addTransformation(new BlockRegionMovement(BlockRegionUtilities.determineBottomCenter(template.getComponent(SpawnBlockRegionsComponent.class))));
+
+        Vector3i centerBlockPosition = new Vector3i((minX + maxX) / 2, minY, (minZ + maxZ) / 2);
+        logger.info("Center" + centerBlockPosition);
+        transformationList.addTransformation(new BlockRegionMovement(centerBlockPosition));
 
         int rotationAmount = 0;
 
         transformationList.addTransformation(new HorizontalBlockRegionRotation(rotationAmount));
-        transformationList.addTransformation(new BlockRegionMovement(new Vector3i(shape.minX() + Math.round(shape.sizeX() / 2f),
-                shape.maxY(), shape.minY() + Math.round(shape.sizeY() / 2f))));
 
         template.send(new SpawnStructureEvent(transformationList));
 

@@ -1,0 +1,7 @@
+{
+    "basedOn" : "Core:rock",
+    "shadowCasting" : false,
+    "luminance" : 30,
+    "hardness" : 10,
+    "penetrable" : false
+}

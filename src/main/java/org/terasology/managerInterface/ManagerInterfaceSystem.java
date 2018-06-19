@@ -82,6 +82,10 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
         if (!player.hasComponent(HoldingComponent.class)) {
             player.addComponent(new HoldingComponent());
         }
+
+        // Added for testing purposes
+        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Sand"), 99));
+        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Dirt"), 99));
     }
 
     /*@ReceiveEvent
