@@ -19,6 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
+import org.terasology.buildings.events.CloseUpgradeScreenEvent;
+import org.terasology.buildings.events.OpenUpgradeScreenEvent;
+import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -31,14 +34,17 @@ import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.registry.Share;
 
 import java.util.List;
 
+@Share(BuildingUpgradeSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class BuildingUpgradeSystem extends BaseComponentSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(BuildingUpgradeSystem.class);
 
+    private EntityRef buildingToUpgrade;
     @ReceiveEvent
     public void onActivateEvent(ActivateEvent event, EntityRef entityRef) {
         logger.info("event received activate");
@@ -54,10 +60,15 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
         Vector3f hitBlockPos = event.getTargetLocation();
 
-        EntityRef building = checkIfPartOfBuilding(hitBlockPos, player);
+        checkIfPartOfBuilding(hitBlockPos, player);
     }
 
-    private EntityRef checkIfPartOfBuilding(Vector3f blockPos, EntityRef player) {
+    /**
+     * Checks if the block activated using the upgrade tool is part of a building
+     * @param blockPos The position of the block to be checked
+     * @param player The entity which sends the event
+     */
+    private void checkIfPartOfBuilding(Vector3f blockPos, EntityRef player) {
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
         List<EntityRef> buildings = holdingComponent.constructedBuildings;
 
@@ -67,16 +78,26 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
             for (Region3i buildingRegion : buildingRegions) {
                 Vector3i target = new Vector3i(blockPos);
-                if (target == null) {
-                    return null;
-                }
                 if (buildingRegion.encompasses(target)) {
                     logger.info("hit building" + buildingComponent.buildingType);
-                    return building;
+                    this.buildingToUpgrade = building;
+                    building.send(new OpenUpgradeScreenEvent());
                 }
             }
         }
+    }
 
-        return null;
+    public EntityRef getBuildingToUpgrade() {
+        return buildingToUpgrade;
+    }
+
+    /**
+     * Receives the {@link UpgradeBuildingEvent} triggered by the Upgrade Button on the BuildingUpgradeScreen
+     * @param upgradeBuildingEvent The event received
+     */
+    @ReceiveEvent
+    public void onReceiveBuildingUpgradeEvent(UpgradeBuildingEvent upgradeBuildingEvent, EntityRef building) {
+        building.send(new CloseUpgradeScreenEvent());
+        logger.info("building upgrade started");
     }
 }

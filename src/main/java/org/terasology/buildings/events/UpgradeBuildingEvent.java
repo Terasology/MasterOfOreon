@@ -13,24 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.buildings.components;
+package org.terasology.buildings.events;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.math.Region3i;
-import org.terasology.network.Replicate;
-import org.terasology.taskSystem.BuildingType;
+import org.terasology.entitySystem.event.Event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ConstructedBuildingComponent implements Component {
-    @Replicate
-    public List<Region3i> boundingRegions = new ArrayList<>();
-
-    @Replicate
-    public BuildingType buildingType;
-
-    @Replicate
-    public int currentLevel;
-
+public class UpgradeBuildingEvent implements Event {
 }

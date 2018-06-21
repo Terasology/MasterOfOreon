@@ -45,6 +45,10 @@ public class Constants {
     public static final String GYM_BUTTON_ID = "gymButton";
     public static final String CLASSROOM_BUTTON_ID = "classroomButton";
 
+    public static final String BUILDING_NAME_UI_LABEL_ID = "buildingName";
+    public static final String BUILDING_LEVEL_UI_LABEL_ID = "buildingLevel";
+    public static final String BUILDING_UPGRADE_COMMAND_UI_ID = "upgradeBuildingCommand";
+
     public static final String OREON_CROP_PREFAB = "MasterOfOreon:OreonPlant0";
 
     public static final String CANCEL_BUTTON_ID = "cancelButton";
