@@ -47,4 +47,6 @@ public class Constants {
     public static final String CANCEL_BUTTON_ID = "cancelButton";
 
     public static final String NOTIFICATION_MESSAGE_PREFAB = "MasterOfOreon:notificationMessage";
+
+    public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
 }

@@ -110,6 +110,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
 
             oreonTaskComponent.assignedTaskType = taskComponentToAssign.assignedTaskType;
+            oreonTaskComponent.buildingType = taskComponentToAssign.buildingType;
             oreonTaskComponent.creationTime = taskComponentToAssign.creationTime;
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
