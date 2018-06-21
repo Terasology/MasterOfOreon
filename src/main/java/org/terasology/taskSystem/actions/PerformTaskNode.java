@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
@@ -106,11 +107,14 @@ public class PerformTaskNode extends BaseAction {
         HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
 
         List<EntityRef> assignedAreas = oreonHolding.assignedAreas;
-        if (!assignedAreas.isEmpty()) {
-            EntityRef assignedArea = assignedAreas.get(taskComponent.assignedAreaIndex);
-            if (assignedArea.hasComponent(BlockSelectionComponent.class)) {
-                logger.debug("Removing color " + taskComponent.assignedAreaIndex + " " + oreonHolding);
-                assignedArea.removeComponent(BlockSelectionComponent.class);
+        for (EntityRef assignedArea : assignedAreas) {
+            AssignedAreaComponent areaComponent = assignedArea.getComponent(AssignedAreaComponent.class);
+
+            //check for the area where task got completed
+            if (areaComponent.assignedRegion.equals(taskComponent.taskRegion)) {
+                assignedAreas.remove(assignedArea);
+                assignedArea.destroy();
+                break;
             }
         }
     }

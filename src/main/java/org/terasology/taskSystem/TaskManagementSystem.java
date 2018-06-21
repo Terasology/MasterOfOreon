@@ -18,10 +18,13 @@ package org.terasology.taskSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.buildings.components.ConstructedBuildingComponent;
+import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
 import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ConsumableEvent;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -280,19 +283,15 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @return Returns a target for the Oreon to go to.
      */
     private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent, HoldingComponent oreonHolding) {
-        List<EntityRef> areas = oreonHolding.assignedAreas;
-        int index = 0;
-        for (EntityRef area : areas) {
-            AssignedAreaComponent areaComponent = area.getComponent(AssignedAreaComponent.class);
+        List<EntityRef> buildings = oreonHolding.constructedBuildings;
+        for (EntityRef building : buildings) {
+            ConstructedBuildingComponent constructedBuildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
-            if (areaComponent.buildingType.equals(buildingType)) {
-                oreonTaskComponent.taskRegion = areaComponent.assignedRegion;
-                oreonTaskComponent.assignedAreaIndex = index;
+            if (constructedBuildingComponent.buildingType.equals(buildingType)) {
+                oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(86);
 
-                return areaComponent.assignedRegion.min();
+                return constructedBuildingComponent.boundingRegions.get(86).min();
             }
-
-            index++;
         }
 
         logger.info("Could not find required building");
@@ -432,5 +431,24 @@ public class TaskManagementSystem extends BaseComponentSystem {
             default :
                 return currentTime + 10;
         }
+    }
+
+    @ReceiveEvent
+    public void addBuildingToHolding(BuildingConstructionCompletedEvent constructionCompletedEvent, EntityRef player) {
+        ConstructedBuildingComponent constructedBuildingComponent = new ConstructedBuildingComponent();
+        constructedBuildingComponent.boundingRegions = constructionCompletedEvent.absoluteRegions;
+        constructedBuildingComponent.buildingType = constructionCompletedEvent.buildingType;
+
+        EntityRef buildingEntity = entityManager.create(constructedBuildingComponent);
+
+        NetworkComponent networkComponent = new NetworkComponent();
+        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+
+        buildingEntity.addComponent(networkComponent);
+
+        HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
+        holdingComponent.constructedBuildings.add(buildingEntity);
+
+        constructionCompletedEvent.consume();
     }
 }

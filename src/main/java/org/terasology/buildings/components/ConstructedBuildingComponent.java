@@ -13,28 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.holdingSystem.components;
+package org.terasology.buildings.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.math.Region3i;
 import org.terasology.network.Replicate;
+import org.terasology.taskSystem.BuildingType;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
-/**
- * The component which is attached to the player and consits of info related to the happenings in the village.
- * All changes made to this task are in the authority {@link org.terasology.taskSystem.TaskManagementSystem} so the fields replicated from the server to client.
- */
-public class HoldingComponent implements Component {
+public class ConstructedBuildingComponent implements Component {
     @Replicate
-    public Queue<EntityRef> availableTasks = new LinkedList<>();
+    public List<Region3i> boundingRegions = new ArrayList<>();
 
     @Replicate
-    public List<EntityRef> assignedAreas = new ArrayList<>();
+    public BuildingType buildingType;
 
-    @Replicate
-    public List<EntityRef> constructedBuildings = new ArrayList<>();
 }
