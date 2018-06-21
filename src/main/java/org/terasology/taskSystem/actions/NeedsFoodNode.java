@@ -90,7 +90,7 @@ public class NeedsFoodNode extends BaseAction {
                 lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
 
                 //reduce health if required
-                oreonHealthSystem.reduceHealth(oreon, "hunger");
+                oreonHealthSystem.reduceHealth(oreon, HealthReductionCause.Hunger);
             }
         }
 

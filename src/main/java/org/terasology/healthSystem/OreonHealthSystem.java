@@ -33,6 +33,7 @@ import org.terasology.registry.Share;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.DelayedNotificationSystem;
+import org.terasology.taskSystem.actions.HealthReductionCause;
 
 @Share(OreonHealthSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -62,11 +63,11 @@ public class OreonHealthSystem extends BaseComponentSystem {
         notificationMessageEntity.saveComponent(colorComponent);
     }
 
-    public void reduceHealth(Actor oreon, String cause) {
+    public void reduceHealth(Actor oreon, HealthReductionCause cause) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
 
         switch (cause) {
-            case "hunger" :
+            case Hunger :
                 float lastHungerCheck = oreonAttributeComponent.lastHungerCheck;
                 if (lastHungerCheck != 0 && time.getGameTime() - lastHungerCheck < MAX_DELAY) {
                     return;
