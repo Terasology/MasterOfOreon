@@ -28,7 +28,10 @@ public class Constants {
     public static final String TABBED_MENU_WIDGET_ID = "MasterOfOreon:tabbedMenu";
 
     public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:oreonSelectionTool";
+    public static final String BUILDING_UPGRADE_TOOL = "MasterOfOreon:upgradeTool";
     public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
+
+    public static final String UPGRADE_TOOL_NAME = "Building Upgrade Tool";
 
     public static final String OREON_BUILDER_RESOURCES_LABEL_ID = "oreonBuilderResourcesRequired";
     public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourcesRequired";

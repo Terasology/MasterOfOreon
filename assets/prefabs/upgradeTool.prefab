@@ -1,0 +1,11 @@
+{
+    "parent" : "engine:iconItem",
+    "DisplayName" : {
+        "name" : "Building Upgrade Tool"
+    },
+    "Item" : {
+        "icon" : "StructureTemplates:Toolbox32x32",
+        "usage" : "ON_BLOCK",
+        "consumedOnUse" : false
+    }
+}
