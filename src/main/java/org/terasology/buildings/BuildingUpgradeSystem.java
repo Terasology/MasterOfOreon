@@ -22,6 +22,7 @@ import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.CloseUpgradeScreenEvent;
 import org.terasology.buildings.events.OpenUpgradeScreenEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
+import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -34,7 +35,9 @@ import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.taskSystem.taskCompletion.ConstructFromStructureTemplate;
 
 import java.util.List;
 
@@ -44,7 +47,18 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(BuildingUpgradeSystem.class);
 
+    @In
+    private Context context;
+
+    private ConstructFromStructureTemplate constructFromStructureTemplate;
+
     private EntityRef buildingToUpgrade;
+
+    @Override
+    public void postBegin() {
+        constructFromStructureTemplate = context.get(ConstructFromStructureTemplate.class);
+    }
+
     @ReceiveEvent
     public void onActivateEvent(ActivateEvent event, EntityRef entityRef) {
         logger.info("event received activate");
@@ -99,5 +113,14 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     public void onReceiveBuildingUpgradeEvent(UpgradeBuildingEvent upgradeBuildingEvent, EntityRef building) {
         building.send(new CloseUpgradeScreenEvent());
         logger.info("building upgrade started");
+
+        ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+        Vector3i centerLocation = buildingComponent.centerLocation;
+
+        buildingComponent.currentLevel += 1;
+
+        building.saveComponent(buildingComponent);
+
+        constructFromStructureTemplate.constructBuilding(centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel);
     }
 }

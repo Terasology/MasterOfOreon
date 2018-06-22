@@ -63,6 +63,8 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         logger.info("Center" + centerBlockPosition);
 
         constructBuilding(centerBlockPosition, buildingType, 0);
+
+        sendConstructionCompleteEvent(centerBlockPosition, buildingType);
     }
 
     public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level) {
@@ -78,15 +80,12 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         transformationList.addTransformation(new HorizontalBlockRegionRotation(rotationAmount));
 
         buildingTemplate.send(new SpawnStructureEvent(transformationList));
-
-        sendConstructionCompleteEvent(centerBlockPosition, buildingType);
-
     }
 
     public void selectBuilding(BuildingType buildingType, int level) {
         switch (buildingType) {
             case Diner :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER);
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
         }
     }
 
