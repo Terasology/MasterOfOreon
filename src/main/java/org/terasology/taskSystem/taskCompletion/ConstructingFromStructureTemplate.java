@@ -59,14 +59,18 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         int minZ = selectedRegion.minZ();
         int maxZ = selectedRegion.maxZ();
 
-        selectBuilding(buildingType);
+        Vector3i centerBlockPosition = new Vector3i((minX + maxX) / 2, minY, (minZ + maxZ) / 2);
+        logger.info("Center" + centerBlockPosition);
+
+        constructBuilding(centerBlockPosition, buildingType, 0);
+    }
+
+    public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level) {
+        selectBuilding(buildingType, level);
 
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
         BlockRegionTransformationList transformationList = new BlockRegionTransformationList();
-
-        Vector3i centerBlockPosition = new Vector3i((minX + maxX) / 2, minY, (minZ + maxZ) / 2);
-        logger.info("Center" + centerBlockPosition);
         transformationList.addTransformation(new BlockRegionMovement(centerBlockPosition));
 
         int rotationAmount = 0;
@@ -79,7 +83,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
     }
 
-    public void selectBuilding(BuildingType buildingType) {
+    public void selectBuilding(BuildingType buildingType, int level) {
         switch (buildingType) {
             case Diner :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER);

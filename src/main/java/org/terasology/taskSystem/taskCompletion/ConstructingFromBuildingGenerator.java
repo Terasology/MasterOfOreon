@@ -92,14 +92,14 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
         HeightMap heightMap = HeightMaps.constant(minY);
 
-        selectBuilding(buildingType);
+        selectBuilding(buildingType, 0);
 
         Building compositeBuilding = compositeBuildingGenerator.generate(buildingParcel, heightMap);
 
         buildParts(compositeBuilding, shape, heightMap);
     }
 
-    public void selectBuilding(BuildingType buildingType) {
+    public void selectBuilding(BuildingType buildingType, int level) {
         switch (buildingType) {
             case Diner:
                 SimpleChurchGenerator simpleChurchGenerator = new SimpleChurchGenerator(100);
