@@ -117,8 +117,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
             oreonTaskComponent.assignedAreaIndex = taskComponentToAssign.assignedAreaIndex;
-
             oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.assignedTaskType);
+            oreonTaskComponent.buildingToUpgrade = taskComponentToAssign.buildingToUpgrade;
 
             oreon.save(oreonTaskComponent);
 
