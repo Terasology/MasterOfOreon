@@ -17,6 +17,7 @@ package org.terasology.buildings.events;
 
 import org.terasology.entitySystem.event.ConsumableEvent;
 import org.terasology.math.Region3i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.taskSystem.BuildingType;
 
 import java.util.List;
@@ -25,10 +26,12 @@ public class BuildingConstructionCompletedEvent implements ConsumableEvent {
 
     public List<Region3i> absoluteRegions;
     public BuildingType buildingType;
+    public Vector3i centerBlockPosition;
 
-    public BuildingConstructionCompletedEvent(List<Region3i> regions, BuildingType building) {
+    public BuildingConstructionCompletedEvent(List<Region3i> regions, BuildingType building, Vector3i center) {
         this.absoluteRegions = regions;
         this.buildingType = building;
+        this.centerBlockPosition = center;
     }
 
     @Override

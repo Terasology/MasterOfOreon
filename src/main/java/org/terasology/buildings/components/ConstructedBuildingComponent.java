@@ -17,6 +17,7 @@ package org.terasology.buildings.components;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.math.Region3i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.network.Replicate;
 import org.terasology.taskSystem.BuildingType;
 
@@ -32,5 +33,8 @@ public class ConstructedBuildingComponent implements Component {
 
     @Replicate
     public int currentLevel;
+
+    @Replicate
+    public Vector3i centerLocation;
 
 }

@@ -437,6 +437,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         ConstructedBuildingComponent constructedBuildingComponent = new ConstructedBuildingComponent();
         constructedBuildingComponent.boundingRegions = constructionCompletedEvent.absoluteRegions;
         constructedBuildingComponent.buildingType = constructionCompletedEvent.buildingType;
+        constructedBuildingComponent.centerLocation = constructionCompletedEvent.centerBlockPosition;
 
         EntityRef buildingEntity = entityManager.create(constructedBuildingComponent);
 
