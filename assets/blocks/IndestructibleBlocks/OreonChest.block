@@ -2,18 +2,18 @@
     "basedOn": "core:wood",
     "attachmentAllowed": false,
     "family": "horizontal",
+    "hardness": 0,
     // Graphics
     "tiles": {
-        "sides": "ChestSides",
-        "front": "ChestFront",
-        "topBottom": "ChestTopBottom"
+        "sides": "MasterOfOreon:ChestSides",
+        "front": "MasterOfOreon:ChestFront",
+        "topBottom": "MasterOfOreon:ChestTopBottom"
     },
     "entity": {
-        "prefab": "chest"
+        "prefab": "MasterOfOreon:oreonChest"
     },
     "inventory": {
         "stackable": false,
         "directPickup": true
-    },
-    "hardness" : 0
+    }
 }

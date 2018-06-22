@@ -39,6 +39,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
     private UIButton dinerButton;
     private UIButton gymButton;
     private UIButton classroomButton;
+    private UIButton storageButton;
 
     private UIButton cancelButton;
 
@@ -51,6 +52,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         dinerButton = find(Constants.DINER_BUTTON_ID, UIButton.class);
         gymButton = find(Constants.GYM_BUTTON_ID, UIButton.class);
         classroomButton = find(Constants.CLASSROOM_BUTTON_ID, UIButton.class);
+        storageButton = find(Constants.STORAGE_BUTTON_ID, UIButton.class);
 
         cancelButton = find(Constants.CANCEL_BUTTON_ID, UIButton.class);
 
@@ -76,6 +78,10 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
 
         classroomButton.subscribe(button -> {
             sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Classroom);
+        });
+
+        storageButton.subscribe(button -> {
+            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Storage);
         });
 
         cancelButton.subscribe(button -> {

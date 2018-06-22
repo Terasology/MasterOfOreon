@@ -4,7 +4,7 @@
     },
     "SpawnBlockRegions": {
         "regionsToFill": [
-            { "blockType": "MasterOfOreon:Chest.LEFT", "region": { "min": [5, 5, -4], "size": [1, 1, 1]}},
+            { "blockType": "Core:Chest.LEFT", "region": { "min": [5, 5, -4], "size": [1, 1, 1]}},
             { "blockType": "MasterOfOreon:Brick", "region": { "min": [-7, 6, -6], "size": [4, 2, 1]}},
             { "blockType": "MasterOfOreon:Brick", "region": { "min": [-7, 6, -5], "size": [14, 1, 1]}},
             { "blockType": "MasterOfOreon:Brick", "region": { "min": [-7, 7, -5], "size": [1, 1, 5]}},

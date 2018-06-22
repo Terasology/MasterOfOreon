@@ -44,6 +44,7 @@ public class Constants {
     public static final String DINER_BUTTON_ID = "dinerButton";
     public static final String GYM_BUTTON_ID = "gymButton";
     public static final String CLASSROOM_BUTTON_ID = "classroomButton";
+    public static final String STORAGE_BUTTON_ID = "storageButton";
 
     public static final String BUILDING_NAME_UI_LABEL_ID = "buildingName";
     public static final String BUILDING_LEVEL_UI_LABEL_ID = "buildingLevel";
@@ -56,4 +57,5 @@ public class Constants {
     public static final String NOTIFICATION_MESSAGE_PREFAB = "MasterOfOreon:notificationMessage";
 
     public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
+    public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
 }

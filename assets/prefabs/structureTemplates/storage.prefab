@@ -1,9 +1,10 @@
 {
     "StructureTemplate": {
+        "type": "MasterOfOreon:storage0"
     },
     "SpawnBlockRegions": {
         "regionsToFill": [
-            { "blockType": "Core:Chest.FRONT", "region": { "min": [0, 2, 3], "size": [1, 1, 1]}},
+            { "blockType": "MasterOfOreon:OreonChest.FRONT", "region": { "min": [0, 2, 3], "size": [1, 1, 1]}},
             { "blockType": "Core:CobbleStone", "region": { "min": [-3, 1, -4], "size": [2, 4, 1]}},
             { "blockType": "Core:CobbleStone", "region": { "min": [2, 1, -4], "size": [2, 4, 1]}},
             { "blockType": "Core:CobbleStone", "region": { "min": [-3, 1, -3], "size": [1, 3, 7]}},
