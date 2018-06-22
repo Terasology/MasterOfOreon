@@ -16,6 +16,7 @@
 package org.terasology.taskSystem.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;
 import org.terasology.network.FieldReplicateType;
 import org.terasology.network.Replicate;
@@ -46,4 +47,6 @@ public class TaskComponent implements Component {
     public int assignedAreaIndex;
 
     public float taskCompletionTime;
+
+    public EntityRef buildingToUpgrade;
 }

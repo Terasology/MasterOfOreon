@@ -23,6 +23,7 @@ import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
@@ -33,6 +34,9 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
 
     @In
     private Context context;
+
+    @In
+    LocalPlayer localPlayer;
 
     private UILabel buildingName;
     private UILabel buildingLevel;
@@ -51,7 +55,7 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
         populateLabels();
 
         upgradeBuildingButton.subscribe(button -> {
-            buildingUpgradeSystem.getBuildingToUpgrade().send(new UpgradeBuildingEvent());
+            localPlayer.getCharacterEntity().send(new UpgradeBuildingEvent());
         });
     }
 

@@ -208,6 +208,16 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     /**
+     * Adds task to the player's holding.
+     * This method can be used by external systems to add tasks to the holding.
+     * @param player The player entity which has the holding
+     * @param task The task entity to be added
+     */
+    public void addTask(EntityRef player, EntityRef task) {
+        this.taskEntity = task;
+        addTask(player);
+    }
+    /**
      * Receives the {@link SetTaskTypeEvent} sent by the {@link org.terasology.taskSystem.nui.TaskSelectionScreenLayer}
      * after the player assigns a task a selected area.
      * @param event The event sent by the screen layer.

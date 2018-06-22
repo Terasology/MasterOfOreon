@@ -23,6 +23,7 @@ import org.terasology.buildings.events.CloseUpgradeScreenEvent;
 import org.terasology.buildings.events.OpenUpgradeScreenEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.context.Context;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -37,6 +38,9 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.TaskManagementSystem;
+import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructFromStructureTemplate;
 
 import java.util.List;
@@ -50,13 +54,16 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     @In
     private Context context;
 
-    private ConstructFromStructureTemplate constructFromStructureTemplate;
+    @In
+    private EntityManager entityManager;
+
+    private TaskManagementSystem taskMangementSystem;
 
     private EntityRef buildingToUpgrade;
 
     @Override
     public void postBegin() {
-        constructFromStructureTemplate = context.get(ConstructFromStructureTemplate.class);
+        taskMangementSystem = context.get(TaskManagementSystem.class);
     }
 
     @ReceiveEvent
@@ -110,17 +117,24 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
      * @param upgradeBuildingEvent The event received
      */
     @ReceiveEvent
-    public void onReceiveBuildingUpgradeEvent(UpgradeBuildingEvent upgradeBuildingEvent, EntityRef building) {
-        building.send(new CloseUpgradeScreenEvent());
+    public void onReceiveBuildingUpgradeEvent(UpgradeBuildingEvent upgradeBuildingEvent, EntityRef player) {
+        buildingToUpgrade.send(new CloseUpgradeScreenEvent());
         logger.info("building upgrade started");
 
-        ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+        ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
         Vector3i centerLocation = buildingComponent.centerLocation;
 
         buildingComponent.currentLevel += 1;
 
-        building.saveComponent(buildingComponent);
+        buildingToUpgrade.saveComponent(buildingComponent);
 
-        constructFromStructureTemplate.constructBuilding(centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel);
+        TaskComponent taskComponent = new TaskComponent();
+        taskComponent.assignedTaskType = AssignedTaskType.Upgrade;
+        // TODO: Assign a random region or a region based on blocks to be upgraded
+        taskComponent.taskRegion = buildingComponent.boundingRegions.get(86);
+        taskComponent.buildingToUpgrade = buildingToUpgrade;
+        EntityRef task = entityManager.create(taskComponent);
+
+        taskMangementSystem.addTask(player, task);
     }
 }
