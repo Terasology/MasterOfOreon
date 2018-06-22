@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
+import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.buildings.events.CloseUpgradeScreenEvent;
 import org.terasology.buildings.events.OpenUpgradeScreenEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
@@ -41,7 +42,7 @@ import org.terasology.registry.Share;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.components.TaskComponent;
-import org.terasology.taskSystem.taskCompletion.ConstructFromStructureTemplate;
+import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
 
 import java.util.List;
 
@@ -113,18 +114,16 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     }
 
     /**
-     * Receives the {@link UpgradeBuildingEvent} triggered by the Upgrade Button on the BuildingUpgradeScreen
+     * Receives the {@link UpgradeBuildingEvent} triggered by the Upgrade Button on the BuildingUpgradeScreen and adds a
+     * upgrade task to the holding
      * @param upgradeBuildingEvent The event received
      */
     @ReceiveEvent
     public void onReceiveBuildingUpgradeEvent(UpgradeBuildingEvent upgradeBuildingEvent, EntityRef player) {
         buildingToUpgrade.send(new CloseUpgradeScreenEvent());
-        logger.info("building upgrade started");
+        logger.info("adding building upgrade task");
 
         ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
-        Vector3i centerLocation = buildingComponent.centerLocation;
-
-        buildingComponent.currentLevel += 1;
 
         buildingToUpgrade.saveComponent(buildingComponent);
 
@@ -133,8 +132,14 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         // TODO: Assign a random region or a region based on blocks to be upgraded
         taskComponent.taskRegion = buildingComponent.boundingRegions.get(86);
         taskComponent.buildingToUpgrade = buildingToUpgrade;
+        taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(AssignedTaskType.Upgrade);
         EntityRef task = entityManager.create(taskComponent);
 
         taskMangementSystem.addTask(player, task);
+    }
+
+    @ReceiveEvent(components = {TaskComponent.class})
+    public void onUpgradeStart(BuildingUpgradeStartEvent event, EntityRef oreon) {
+        logger.info("upgrade event start");
     }
 }

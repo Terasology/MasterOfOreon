@@ -76,6 +76,19 @@
                                     }
                                 }
                             }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == upgrade"
+                                ],
+                                "child": {
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:upgrade"
+                                    }
+                                }
+                            }
                         }
                     ]
                 }

@@ -430,7 +430,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param assignedTaskType The type of task that is being assigned to the Oreon
      * @return The time at which the task will be completed
      */
-    private float getTaskCompletionTime(String assignedTaskType) {
+    public float getTaskCompletionTime(String assignedTaskType) {
         float currentTime = timer.getGameTime();
 
         switch(assignedTaskType) {

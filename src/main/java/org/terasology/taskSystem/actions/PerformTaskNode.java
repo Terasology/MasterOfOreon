@@ -18,6 +18,7 @@ package org.terasology.taskSystem.actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
@@ -84,7 +85,7 @@ public class PerformTaskNode extends BaseAction {
 
         changeOreonAttributes(oreon, oreonTaskComponent);
 
-        completeTask(oreonTaskComponent);
+        completeTask(oreon, oreonTaskComponent);
 
         // Free the Oreon after performing task
         oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
@@ -165,7 +166,7 @@ public class PerformTaskNode extends BaseAction {
      * @param oreon The Oreon entity working on the task
      * @param taskComponent The component with task information which just completed
      */
-    private void completeTask(TaskComponent taskComponent) {
+    private void completeTask(Actor oreon, TaskComponent taskComponent) {
         Region3i selectedRegion = taskComponent.taskRegion;
         String taskType = taskComponent.assignedTaskType;
 
@@ -178,6 +179,10 @@ public class PerformTaskNode extends BaseAction {
             case AssignedTaskType.Build :
                 constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.buildingType);
                 //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
+                break;
+
+            case AssignedTaskType.Upgrade :
+                oreon.getEntity().send(new BuildingUpgradeStartEvent());
         }
     }
 
