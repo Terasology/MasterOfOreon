@@ -15,33 +15,20 @@
  */
 package org.terasology.taskSystem.taskCompletion;
 
-import org.terasology.context.Context;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 
-@Share(PlantTaskCompletionSystem.class)
-@RegisterSystem(RegisterMode.CLIENT)
-public class PlantTaskCompletionSystem extends BaseComponentSystem {
-
-    @In
-    private Context context;
-
-    @In
+public class PlantingTaskCompletion {
     private BlockManager blockManager;
 
     private BlockEntityRegistry blockEntityRegistry;
 
-    @Override
-    public void postBegin() {
-        this.blockEntityRegistry = context.get(BlockEntityRegistry.class);
+    public PlantingTaskCompletion(BlockManager manager, BlockEntityRegistry blockRegistry) {
+        this.blockManager = manager;
+        this.blockEntityRegistry = blockRegistry;
     }
 
     public void placeCrops(Region3i selectedRegion, String cropToPlace) {

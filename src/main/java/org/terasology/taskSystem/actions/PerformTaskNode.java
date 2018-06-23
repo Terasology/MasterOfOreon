@@ -29,11 +29,15 @@ import org.terasology.math.Region3i;
 import org.terasology.registry.In;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
+import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.components.TaskComponent;
-import org.terasology.taskSystem.taskCompletion.ConstructFromBuildingGenerator;
-import org.terasology.taskSystem.taskCompletion.ConstructFromStructureTemplate;
-import org.terasology.taskSystem.taskCompletion.PlantTaskCompletionSystem;
+import org.terasology.taskSystem.taskCompletion.ConstructingFromBuildingGenerator;
+import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
+import org.terasology.taskSystem.taskCompletion.PlantingTaskCompletion;
+import org.terasology.world.BlockEntityRegistry;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.BlockManager;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
@@ -49,15 +53,25 @@ public class PerformTaskNode extends BaseAction {
     @In
     private Context context;
 
-    private PlantTaskCompletionSystem plantTaskCompletion;
-    private ConstructFromStructureTemplate constructFromStructureTemplate;
-    private ConstructFromBuildingGenerator constructFromBuildingGenerator;
+    @In
+    private BlockManager blockManager;
+
+    private WorldProvider worldProvider;
+    private BlockEntityRegistry blockEntityRegistry;
+    private StructureTemplateProvider structureTemplateProvider;
+
+    private PlantingTaskCompletion plantingTaskCompletion;
+    private ConstructingFromStructureTemplate constructingFromStructureTemplate;
+    private ConstructingFromBuildingGenerator constructingFromBuildingGenerator;
 
     @Override
     public void construct(Actor oreon) {
-        plantTaskCompletion = context.get(PlantTaskCompletionSystem.class);
-        constructFromStructureTemplate = context.get(ConstructFromStructureTemplate.class);
-        constructFromBuildingGenerator = context.get(ConstructFromBuildingGenerator.class);
+        worldProvider = context.get(WorldProvider.class);
+        structureTemplateProvider = context.get(StructureTemplateProvider.class);
+        blockEntityRegistry = context.get(BlockEntityRegistry.class);
+        setPlantingTaskCompletion();
+        setConstructingFromStructureTemplate();
+        //setConstructingFromBuildingGenerator();
     }
 
     @Override
@@ -154,12 +168,24 @@ public class PerformTaskNode extends BaseAction {
 
         switch (taskType) {
             case AssignedTaskType.Plant :
-                plantTaskCompletion.placeCrops(selectedRegion, Constants.OREON_CROP_PREFAB);
+                plantingTaskCompletion.placeCrops(selectedRegion, Constants.OREON_CROP_PREFAB);
                 break;
 
             case AssignedTaskType.Build :
-                constructFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.buildingType);
-                //constructFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
+                constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.buildingType);
+                //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
         }
+    }
+
+    private void setPlantingTaskCompletion() {
+        this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
+    }
+
+    private void setConstructingFromStructureTemplate() {
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider);
+    }
+
+    private void setConstructingFromBuildingGenerator() {
+        this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
     }
 }

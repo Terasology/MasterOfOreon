@@ -47,18 +47,12 @@ import org.terasology.cities.window.Window;
 import org.terasology.commonworld.Orientation;
 import org.terasology.commonworld.heightmap.HeightMap;
 import org.terasology.commonworld.heightmap.HeightMaps;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.ImmutableVector3i;
 import org.terasology.math.geom.Rect2i;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
@@ -72,24 +66,17 @@ import static org.terasology.commonworld.Orientation.EAST;
 import static org.terasology.commonworld.Orientation.WEST;
 
 // TODO: This class should be moved to the Cities module
-@Share(ConstructFromBuildingGenerator.class)
-@RegisterSystem(RegisterMode.CLIENT)
-public class ConstructFromBuildingGenerator extends BaseComponentSystem implements BuildTaskCompletion {
+public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
-    @In
-    private Context context;
-
-    @In
     private BlockManager blockManager;
 
-    @In
     private WorldProvider worldProvider;
 
     private BuildingGenerator compositeBuildingGenerator;
 
-    @Override
-    public void postBegin() {
-        worldProvider = context.get(WorldProvider.class);
+    public ConstructingFromBuildingGenerator(WorldProvider world, BlockManager manager) {
+        this.worldProvider = world;
+        this.blockManager = manager;
     }
 
     public void constructBuilding(Region3i selectedRegion, BuildingType buildingType) {
@@ -126,7 +113,7 @@ public class ConstructFromBuildingGenerator extends BaseComponentSystem implemen
      * @return The genrated theme
      */
     private BlockTheme buildBlockTheme() {
-        BlockTheme theme = BlockTheme.builder(blockManager)
+        return BlockTheme.builder(blockManager)
                 .register(DefaultBlockType.ROAD_FILL, "core:dirt")
                 .register(DefaultBlockType.ROAD_SURFACE, "core:Gravel")
                 .register(DefaultBlockType.LOT_EMPTY, "core:dirt")
@@ -155,8 +142,6 @@ public class ConstructFromBuildingGenerator extends BaseComponentSystem implemen
                 .registerFamily(DefaultBlockType.PILLAR_TOP, "core:CobbleStone:StructuralResources:pillarTop")
                 .registerFamily(DefaultBlockType.TORCH, "Core:Torch")
                 .build();
-
-        return theme;
     }
 
     /**
