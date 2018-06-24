@@ -49,4 +49,5 @@ public class TaskComponent implements Component {
     public float taskCompletionTime;
 
     public EntityRef buildingToUpgrade;
+    public EntityRef buildingToVisit;
 }

@@ -50,7 +50,8 @@ public class Constants {
     public static final String BUILDING_LEVEL_UI_LABEL_ID = "buildingLevel";
     public static final String BUILDING_UPGRADE_COMMAND_UI_ID = "upgradeBuildingCommand";
 
-    public static final String OREON_CROP_PREFAB = "MasterOfOreon:OreonPlant0";
+    public static final String OREON_CROP_0_BLOCK = "MasterOfOreon:OreonPlant0";
+    public static final String COOKIE_CROP = "Cookiecrop";
 
     public static final String CANCEL_BUTTON_ID = "cancelButton";
 

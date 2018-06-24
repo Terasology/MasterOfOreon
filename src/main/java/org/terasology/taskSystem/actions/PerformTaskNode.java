@@ -72,7 +72,7 @@ public class PerformTaskNode extends BaseAction {
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
         setPlantingTaskCompletion();
-        setConstructingFromStructureTemplate();
+        setConstructingFromStructureTemplate(oreon);
         //setConstructingFromBuildingGenerator();
     }
 
@@ -173,7 +173,7 @@ public class PerformTaskNode extends BaseAction {
 
         switch (taskType) {
             case AssignedTaskType.Plant :
-                plantingTaskCompletion.placeCrops(selectedRegion, Constants.OREON_CROP_PREFAB);
+                plantingTaskCompletion.placeCrops(selectedRegion, Constants.OREON_CROP_0_BLOCK);
                 break;
 
             case AssignedTaskType.Build :
@@ -190,8 +190,9 @@ public class PerformTaskNode extends BaseAction {
         this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
     }
 
-    private void setConstructingFromStructureTemplate() {
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider);
+    private void setConstructingFromStructureTemplate(Actor oreon) {
+        EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
     }
 
     private void setConstructingFromBuildingGenerator() {

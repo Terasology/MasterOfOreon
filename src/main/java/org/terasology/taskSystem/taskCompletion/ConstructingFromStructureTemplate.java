@@ -22,8 +22,6 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.In;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
@@ -31,7 +29,6 @@ import org.terasology.structureTemplates.util.transform.BlockRegionMovement;
 import org.terasology.structureTemplates.util.transform.BlockRegionTransformationList;
 import org.terasology.structureTemplates.util.transform.HorizontalBlockRegionRotation;
 import org.terasology.taskSystem.BuildingType;
-import org.terasology.world.BlockEntityRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,17 +36,13 @@ import java.util.List;
 public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     private static final Logger logger = LoggerFactory.getLogger(ConstructingFromStructureTemplate.class);
 
-    @In
-    private LocalPlayer localPlayer;
-
-    private BlockEntityRegistry blockEntityRegistry;
-
     private StructureTemplateProvider structureTemplateProvider;
-
     private EntityRef buildingTemplate;
+    private EntityRef player;
 
-    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider) {
+    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity) {
         this.structureTemplateProvider = templateProvider;
+        this.player = playerEntity;
     }
 
     public void constructBuilding(Region3i selectedRegion, BuildingType buildingType) {
@@ -86,6 +79,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         switch (buildingType) {
             case Diner :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
+                break;
 
             case Storage:
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_STORAGE + Integer.toString(level));
@@ -105,6 +99,6 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         }
 
         // Add this building's regions to the Holding
-        localPlayer.getCharacterEntity().send(new BuildingConstructionCompletedEvent(absoluteRegions, buildingType, centerBlock));
+        player.send(new BuildingConstructionCompletedEvent(absoluteRegions, buildingType, centerBlock));
     }
 }

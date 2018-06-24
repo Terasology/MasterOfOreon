@@ -34,11 +34,13 @@ import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.common.DisplayNameComponent;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.components.TaskComponent;
@@ -58,15 +60,21 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
+    @In
+    private LocalPlayer localPlayer;
+
     private TaskManagementSystem taskMangementSystem;
-    private ConstructFromStructureTemplate constructFromStructureTemplate;
+    private ConstructingFromStructureTemplate constructingFromStructureTemplate;
+    private StructureTemplateProvider structureTemplateProvider;
 
     private EntityRef buildingToUpgrade;
 
     @Override
     public void postBegin() {
         taskMangementSystem = context.get(TaskManagementSystem.class);
-        constructFromStructureTemplate = context.get(ConstructFromStructureTemplate.class);
+        structureTemplateProvider = context.get(StructureTemplateProvider.class);
+
+        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity());
     }
 
     @ReceiveEvent
@@ -144,6 +152,6 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         EntityRef building = taskComponent.buildingToUpgrade;
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
-        constructFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel + 1);
+        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel + 1);
     }
 }

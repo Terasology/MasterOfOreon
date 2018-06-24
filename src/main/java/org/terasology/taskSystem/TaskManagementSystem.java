@@ -298,7 +298,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             if (constructedBuildingComponent.buildingType.equals(buildingType)) {
                 oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(86);
-
+                oreonTaskComponent.buildingToVisit = building;
                 return constructedBuildingComponent.boundingRegions.get(86).min();
             }
         }

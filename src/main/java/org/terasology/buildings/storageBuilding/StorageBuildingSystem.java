@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.context.Context;
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -26,17 +27,16 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.logic.common.lifespan.LifespanComponent;
-import org.terasology.logic.inventory.InventoryComponent;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.logic.inventory.PickupComponent;
 import org.terasology.logic.inventory.events.DropItemEvent;
-import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
+import org.terasology.resources.system.BuildingResourceSystem;
+import org.terasology.resources.system.ResourceSystem;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.world.BlockEntityRegistry;
 
@@ -48,11 +48,19 @@ public class StorageBuildingSystem extends BaseComponentSystem {
 
     @In
     Context context;
+
+    @In
+    private InventoryManager inventoryManager;
+
     private BlockEntityRegistry blockEntityRegistry;
+    private ResourceSystem buildingResourceSystem;
 
     @Override
     public void postBegin() {
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
+
+        buildingResourceSystem = new BuildingResourceSystem();
+        buildingResourceSystem.initialize(blockEntityRegistry, inventoryManager);
     }
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
@@ -87,8 +95,7 @@ public class StorageBuildingSystem extends BaseComponentSystem {
 
                 for (Region3i region : regions) {
                     if (region.encompasses(new Vector3i(location.x, location.y - 1, location.z))) {
-                        // TODO: Should not assume that Chest will be the first item in the ST prefab
-                        addItemToChest(item, regions.get(0));
+                        addItemToChest(item, building);
                         break;
                     }
                 }
@@ -96,25 +103,15 @@ public class StorageBuildingSystem extends BaseComponentSystem {
         }
     }
 
-    private void addItemToChest(EntityRef item, Region3i region) {
-        int x = region.maxX();
-        int y = region.maxY();
-        int z = region.maxZ();
+    private void addItemToChest(EntityRef item, EntityRef building) {
+        buildingResourceSystem.addAResource(building, item);
+        ItemComponent itemComponent = item.getComponent(ItemComponent.class);
 
-        logger.info("looking for chest");
-        EntityRef block = blockEntityRegistry.getBlockEntityAt(new Vector3i(x, y, z));
-
-        logger.info("block location" + item.toFullDescription());
-
-        if (block.getParentPrefab().getName().equals("MasterOfOreon:oreonChest")) {
-            // Remove components so that the item is not destroyed after a while
-            item.removeComponent(PickupComponent.class);
-            item.removeComponent(LifespanComponent.class);
-
-            // Remove item from world
-            // TODO: resolve RigidBody NPE by adding some delay between drop and addition to chest
-            item.removeComponent(LocationComponent.class);
-            block.getComponent(InventoryComponent.class).itemSlots.add(item);
+        // Remove the components so that the item cannot be picked up
+        if (itemComponent != null) {
+            for (Component component : itemComponent.pickupPrefab.iterateComponents()) {
+                item.removeComponent(component.getClass());
+            }
         }
     }
 }
