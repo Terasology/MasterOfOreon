@@ -26,8 +26,4 @@ public class DeathTimeComponent implements Component {
      * The time after which the Oreon entity must be destroyed.
      */
     public float deathTime;
-
-    public DeathTimeComponent(float time) {
-        this.deathTime = time;
-    }
 }

@@ -67,13 +67,15 @@ public class DeathSystem extends BaseComponentSystem implements UpdateSubscriber
         skeletalMeshComponent.animationPool.addAll(dyingComponent.animationPool);
         skeletalMeshComponent.loop = false;
 
-        //duration of animation
+        // Duration of animation
         float lifespan = 0;
         for (MeshAnimation meshAnimation : skeletalMeshComponent.animationPool) {
             lifespan += meshAnimation.getTimePerFrame() * (meshAnimation.getFrameCount() - 1);
         }
 
-        //get the death time
-        oreon.addComponent(new DeathTimeComponent(time.getGameTime() + lifespan));
+        // Set the death time
+        DeathTimeComponent deathTimeComponent = new DeathTimeComponent();
+        deathTimeComponent.deathTime = time.getGameTime() + lifespan;
+        oreon.addComponent(deathTimeComponent);
     }
 }
