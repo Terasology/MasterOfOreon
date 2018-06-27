@@ -47,12 +47,15 @@ import org.terasology.network.ColorComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.rendering.assets.texture.Texture;
+import org.terasology.rendering.assets.texture.TextureUtil;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
+import org.terasology.utilities.Assets;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.math.RoundingMode;
@@ -244,12 +247,44 @@ public class TaskManagementSystem extends BaseComponentSystem {
         if (newTaskType.equals(AssignedTaskType.Build)) {
             taskComponent.buildingType = event.getBuildingType();
         }
+
+        setAreaTexture(newBlockSelectionComponent, newTaskType);
+
         //mark this area so that no other task can be assigned here
         markArea(newBlockSelectionComponent, taskComponent, player);
 
         taskEntity.saveComponent(taskComponent);
 
         addTask(player);
+    }
+
+    private void setAreaTexture(BlockSelectionComponent blockSelectionComponent, String taskType) {
+        Color taskColor;
+        switch(taskType) {
+            case AssignedTaskType.Plant :
+                taskColor = Color.GREEN;
+                break;
+
+            case AssignedTaskType.Build :
+                taskColor = Color.GREY;
+                break;
+
+            case AssignedTaskType.Guard :
+                taskColor = Color.RED;
+                break;
+
+            case AssignedTaskType.Upgrade :
+                taskColor = Color.GREY;
+                break;
+
+            default :
+                taskColor = Color.BLUE;
+        }
+
+        taskColor.alterAlpha(90);
+        blockSelectionComponent.texture = Assets.get(TextureUtil.getTextureUriForColor(taskColor), Texture.class).get();
+
+        taskEntity.saveComponent(blockSelectionComponent);
     }
 
     /**
