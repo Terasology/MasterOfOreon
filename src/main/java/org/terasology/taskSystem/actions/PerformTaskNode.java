@@ -71,9 +71,13 @@ public class PerformTaskNode extends BaseAction {
         worldProvider = context.get(WorldProvider.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
-        setPlantingTaskCompletion();
-        setConstructingFromStructureTemplate(oreon);
-        //setConstructingFromBuildingGenerator();
+
+        this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
+
+        EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
+
+        //this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
     }
 
     @Override
@@ -184,18 +188,5 @@ public class PerformTaskNode extends BaseAction {
             case AssignedTaskType.Upgrade :
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
         }
-    }
-
-    private void setPlantingTaskCompletion() {
-        this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
-    }
-
-    private void setConstructingFromStructureTemplate(Actor oreon) {
-        EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
-    }
-
-    private void setConstructingFromBuildingGenerator() {
-        this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.terasology.buildings;
 
+import org.terasology.Constants;
 import org.terasology.buildings.events.CloseUpgradeScreenEvent;
 import org.terasology.buildings.events.OpenUpgradeScreenEvent;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -35,7 +36,7 @@ public class BuildingUpgradeClientSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void openTaskSelectionScreen(OpenUpgradeScreenEvent event, EntityRef player) {
-        this.upgradeScreenLayer = nuiManager.createScreen("buildingUpgradeScreen");
+        this.upgradeScreenLayer = nuiManager.createScreen(Constants.BUILDING_UPGRADE_SCREEN_URI);
         nuiManager.pushScreen(this.upgradeScreenLayer);
     }
 

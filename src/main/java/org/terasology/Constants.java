@@ -59,4 +59,10 @@ public class Constants {
 
     public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
     public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
+
+    public static final int DINER_CHAIR_REGION_INDEX = 86;
+    public static final int CHEST_BLOCK_INDEX = 0;
+
+    public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";
+    public static final String BUILDING_UPGRADE_SCREEN_URI = "buildingUpgradeScreen";
 }

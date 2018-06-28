@@ -63,7 +63,7 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
         EntityRef building = buildingUpgradeSystem.getBuildingToUpgrade();
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
         if (buildingComponent == null) {
-            logger.info("component null");
+            logger.info("ConstructedBuildingComponent null");
             return;
         }
         buildingName.setText(buildingComponent.buildingType.toString());
