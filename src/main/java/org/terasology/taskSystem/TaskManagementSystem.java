@@ -281,7 +281,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 taskColor = Color.BLUE;
         }
 
-        taskColor.alterAlpha(90);
+        taskColor = taskColor.alterAlpha(90);
         blockSelectionComponent.texture = Assets.get(TextureUtil.getTextureUriForColor(taskColor), Texture.class).get();
 
         taskEntity.saveComponent(blockSelectionComponent);
