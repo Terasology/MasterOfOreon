@@ -29,8 +29,9 @@ public interface BuildTaskCompletion {
 
     /**
      * Selects a building based on the type of building to be constructed
-     * @param buildingType
+     * @param buildingType The type of building to be constructed
+     * @param level The level of the building to be constructed
      */
-    void selectBuilding(BuildingType buildingType);
+    void selectBuilding(BuildingType buildingType, int level);
 
 }

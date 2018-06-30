@@ -18,8 +18,10 @@ package org.terasology.taskSystem.actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
@@ -69,9 +71,13 @@ public class PerformTaskNode extends BaseAction {
         worldProvider = context.get(WorldProvider.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
-        setPlantingTaskCompletion();
-        setConstructingFromStructureTemplate();
-        //setConstructingFromBuildingGenerator();
+
+        this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
+
+        EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
+
+        //this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
     }
 
     @Override
@@ -83,7 +89,7 @@ public class PerformTaskNode extends BaseAction {
 
         changeOreonAttributes(oreon, oreonTaskComponent);
 
-        completeTask(oreonTaskComponent);
+        completeTask(oreon, oreonTaskComponent);
 
         // Free the Oreon after performing task
         oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
@@ -106,11 +112,14 @@ public class PerformTaskNode extends BaseAction {
         HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
 
         List<EntityRef> assignedAreas = oreonHolding.assignedAreas;
-        if (!assignedAreas.isEmpty()) {
-            EntityRef assignedArea = assignedAreas.get(taskComponent.assignedAreaIndex);
-            if (assignedArea.hasComponent(BlockSelectionComponent.class)) {
-                logger.debug("Removing color " + taskComponent.assignedAreaIndex + " " + oreonHolding);
-                assignedArea.removeComponent(BlockSelectionComponent.class);
+        for (EntityRef assignedArea : assignedAreas) {
+            AssignedAreaComponent areaComponent = assignedArea.getComponent(AssignedAreaComponent.class);
+
+            //check for the area where task got completed
+            if (areaComponent.assignedRegion.equals(taskComponent.taskRegion)) {
+                assignedAreas.remove(assignedArea);
+                assignedArea.destroy();
+                break;
             }
         }
     }
@@ -161,31 +170,23 @@ public class PerformTaskNode extends BaseAction {
      * @param oreon The Oreon entity working on the task
      * @param taskComponent The component with task information which just completed
      */
-    private void completeTask(TaskComponent taskComponent) {
+    private void completeTask(Actor oreon, TaskComponent taskComponent) {
         Region3i selectedRegion = taskComponent.taskRegion;
         String taskType = taskComponent.assignedTaskType;
 
 
         switch (taskType) {
             case AssignedTaskType.Plant :
-                plantingTaskCompletion.placeCrops(selectedRegion, Constants.OREON_CROP_PREFAB);
+                plantingTaskCompletion.placeCrops(selectedRegion, Constants.OREON_CROP_0_BLOCK);
                 break;
 
             case AssignedTaskType.Build :
                 constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.buildingType);
                 //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
+                break;
+
+            case AssignedTaskType.Upgrade :
+                oreon.getEntity().send(new BuildingUpgradeStartEvent());
         }
-    }
-
-    private void setPlantingTaskCompletion() {
-        this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
-    }
-
-    private void setConstructingFromStructureTemplate() {
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider);
-    }
-
-    private void setConstructingFromBuildingGenerator() {
-        this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.terasology.taskSystem;
 
+import org.terasology.Constants;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -35,7 +36,7 @@ public class TaskManagementClientSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void openTaskSelectionScreen(OpenTaskSelectionScreenEvent event, EntityRef player) {
-        this.taskSelectionScreenLayer = nuiManager.createScreen("taskSelectionScreen");
+        this.taskSelectionScreenLayer = nuiManager.createScreen(Constants.TASK_SELECTION_SCREEN_URI);
         nuiManager.pushScreen(this.taskSelectionScreenLayer);
     }
 

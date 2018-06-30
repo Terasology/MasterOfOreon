@@ -28,7 +28,10 @@ public class Constants {
     public static final String TABBED_MENU_WIDGET_ID = "MasterOfOreon:tabbedMenu";
 
     public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:oreonSelectionTool";
+    public static final String BUILDING_UPGRADE_TOOL = "MasterOfOreon:upgradeTool";
     public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
+
+    public static final String UPGRADE_TOOL_NAME = "Building Upgrade Tool";
 
     public static final String OREON_BUILDER_RESOURCES_LABEL_ID = "oreonBuilderResourcesRequired";
     public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourcesRequired";
@@ -41,12 +44,25 @@ public class Constants {
     public static final String DINER_BUTTON_ID = "dinerButton";
     public static final String GYM_BUTTON_ID = "gymButton";
     public static final String CLASSROOM_BUTTON_ID = "classroomButton";
+    public static final String STORAGE_BUTTON_ID = "storageButton";
 
-    public static final String OREON_CROP_PREFAB = "MasterOfOreon:OreonPlant0";
+    public static final String BUILDING_NAME_UI_LABEL_ID = "buildingName";
+    public static final String BUILDING_LEVEL_UI_LABEL_ID = "buildingLevel";
+    public static final String BUILDING_UPGRADE_COMMAND_UI_ID = "upgradeBuildingCommand";
+
+    public static final String OREON_CROP_0_BLOCK = "MasterOfOreon:OreonPlant0";
+    public static final String COOKIE_CROP = "Cookiecrop";
 
     public static final String CANCEL_BUTTON_ID = "cancelButton";
 
     public static final String NOTIFICATION_MESSAGE_PREFAB = "MasterOfOreon:notificationMessage";
 
     public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
+    public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
+
+    public static final int DINER_CHAIR_REGION_INDEX = 86;
+    public static final int CHEST_BLOCK_INDEX = 0;
+
+    public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";
+    public static final String BUILDING_UPGRADE_SCREEN_URI = "buildingUpgradeScreen";
 }

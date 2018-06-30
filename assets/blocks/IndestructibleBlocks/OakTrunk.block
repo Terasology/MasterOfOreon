@@ -1,0 +1,9 @@
+{
+    "basedOn": "core:wood",
+    "displayName": "Oak Log",
+    // Graphics
+    "tiles": {
+        "sides": "Core:OakBark",
+        "topBottom": "Core:OakTrunk"
+    }
+}

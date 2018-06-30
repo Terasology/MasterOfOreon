@@ -1,0 +1,10 @@
+{
+    "basedOn" : "Core:rock",
+    "hardness" : 0,
+    "tiles" : {
+        "sides": "bricks_mosaic",
+        "front": "bricks_mosaic",
+        "back": "bricks_mosaic",
+        "topBottom": "bricks_mosaic"
+      }
+}

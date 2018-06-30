@@ -1,0 +1,4 @@
+{
+    "basedOn": "core:rock",
+    "hardness" : 0
+}

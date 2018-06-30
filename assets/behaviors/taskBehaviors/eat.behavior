@@ -1,0 +1,23 @@
+{
+    "sequence" : [
+        {
+            "check_required_resources" : {
+                "checkIn" : "building"
+            }
+        },
+        {
+
+            "animation": {
+                "play": "MasterOfOreon:Build.animationPool",
+                "loop": "MasterOfOreon:Build.animationPool"
+            }
+
+        },
+        {
+            "check_task_status" : {
+                "child" : "move_to"
+            }
+        },
+        "perform_task"
+    ]
+}

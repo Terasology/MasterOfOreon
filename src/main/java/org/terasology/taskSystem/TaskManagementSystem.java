@@ -18,6 +18,8 @@ package org.terasology.taskSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.buildings.components.ConstructedBuildingComponent;
+import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
 import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -115,8 +117,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
             oreonTaskComponent.assignedAreaIndex = taskComponentToAssign.assignedAreaIndex;
-
             oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.assignedTaskType);
+            oreonTaskComponent.buildingToUpgrade = taskComponentToAssign.buildingToUpgrade;
 
             oreon.save(oreonTaskComponent);
 
@@ -206,6 +208,16 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     /**
+     * Adds task to the player's holding.
+     * This method can be used by external systems to add tasks to the holding.
+     * @param player The player entity which has the holding
+     * @param task The task entity to be added
+     */
+    public void addTask(EntityRef player, EntityRef task) {
+        this.taskEntity = task;
+        addTask(player);
+    }
+    /**
      * Receives the {@link SetTaskTypeEvent} sent by the {@link org.terasology.taskSystem.nui.TaskSelectionScreenLayer}
      * after the player assigns a task a selected area.
      * @param event The event sent by the screen layer.
@@ -280,19 +292,15 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @return Returns a target for the Oreon to go to.
      */
     private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent, HoldingComponent oreonHolding) {
-        List<EntityRef> areas = oreonHolding.assignedAreas;
-        int index = 0;
-        for (EntityRef area : areas) {
-            AssignedAreaComponent areaComponent = area.getComponent(AssignedAreaComponent.class);
+        List<EntityRef> buildings = oreonHolding.constructedBuildings;
+        for (EntityRef building : buildings) {
+            ConstructedBuildingComponent constructedBuildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
-            if (areaComponent.buildingType.equals(buildingType)) {
-                oreonTaskComponent.taskRegion = areaComponent.assignedRegion;
-                oreonTaskComponent.assignedAreaIndex = index;
-
-                return areaComponent.assignedRegion.min();
+            if (constructedBuildingComponent.buildingType.equals(buildingType)) {
+                oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
+                oreonTaskComponent.buildingToVisit = building;
+                return constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX).min();
             }
-
-            index++;
         }
 
         logger.info("Could not find required building");
@@ -422,7 +430,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param assignedTaskType The type of task that is being assigned to the Oreon
      * @return The time at which the task will be completed
      */
-    private float getTaskCompletionTime(String assignedTaskType) {
+    public float getTaskCompletionTime(String assignedTaskType) {
         float currentTime = timer.getGameTime();
 
         switch(assignedTaskType) {
@@ -432,5 +440,25 @@ public class TaskManagementSystem extends BaseComponentSystem {
             default :
                 return currentTime + 10;
         }
+    }
+
+    @ReceiveEvent
+    public void addBuildingToHolding(BuildingConstructionCompletedEvent constructionCompletedEvent, EntityRef player) {
+        ConstructedBuildingComponent constructedBuildingComponent = new ConstructedBuildingComponent();
+        constructedBuildingComponent.boundingRegions = constructionCompletedEvent.absoluteRegions;
+        constructedBuildingComponent.buildingType = constructionCompletedEvent.buildingType;
+        constructedBuildingComponent.centerLocation = constructionCompletedEvent.centerBlockPosition;
+
+        EntityRef buildingEntity = entityManager.create(constructedBuildingComponent);
+
+        NetworkComponent networkComponent = new NetworkComponent();
+        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+
+        buildingEntity.addComponent(networkComponent);
+
+        HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
+        holdingComponent.constructedBuildings.add(buildingEntity);
+
+        constructionCompletedEvent.consume();
     }
 }

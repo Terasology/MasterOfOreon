@@ -1,0 +1,21 @@
+{
+    "family": "attachedToSurface",
+    "sides": {
+        "shape": "TorchWall"
+    },
+    "topBottom": {
+        "shape": "TorchGrounded"
+    },
+    "penetrable": true,
+    "attachmentAllowed": false,
+    "shadowCasting": false,
+    "luminance": 20,
+    "hardness": 0,
+    "inventory": {
+        "directPickup": true
+    },
+    "entity": {
+        "prefab": "Core:Torch"
+    },
+    "mass": 10
+}

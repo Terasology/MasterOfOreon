@@ -34,4 +34,7 @@ public class HoldingComponent implements Component {
 
     @Replicate
     public List<EntityRef> assignedAreas = new ArrayList<>();
+
+    @Replicate
+    public List<EntityRef> constructedBuildings = new ArrayList<>();
 }

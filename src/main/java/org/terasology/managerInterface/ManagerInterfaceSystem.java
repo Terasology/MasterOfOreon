@@ -78,6 +78,7 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(player, player, entityManager.create(Constants.SELECTION_TOOL_PREFAB));
+        inventoryManager.giveItem(player, player, entityManager.create(Constants.BUILDING_UPGRADE_TOOL));
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(Constants.PORTAL_PREFAB), 10));
         if (!player.hasComponent(HoldingComponent.class)) {
             player.addComponent(new HoldingComponent());

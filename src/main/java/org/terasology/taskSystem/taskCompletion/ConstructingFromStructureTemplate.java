@@ -21,6 +21,8 @@ import org.terasology.Constants;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
+import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.structureTemplates.util.transform.BlockRegionMovement;
@@ -28,15 +30,19 @@ import org.terasology.structureTemplates.util.transform.BlockRegionTransformatio
 import org.terasology.structureTemplates.util.transform.HorizontalBlockRegionRotation;
 import org.terasology.taskSystem.BuildingType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     private static final Logger logger = LoggerFactory.getLogger(ConstructingFromStructureTemplate.class);
 
     private StructureTemplateProvider structureTemplateProvider;
-
     private EntityRef buildingTemplate;
+    private EntityRef player;
 
-    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider) {
+    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity) {
         this.structureTemplateProvider = templateProvider;
+        this.player = playerEntity;
     }
 
     public void constructBuilding(Region3i selectedRegion, BuildingType buildingType) {
@@ -46,14 +52,20 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         int minZ = selectedRegion.minZ();
         int maxZ = selectedRegion.maxZ();
 
-        selectBuilding(buildingType);
+        Vector3i centerBlockPosition = new Vector3i((minX + maxX) / 2, minY, (minZ + maxZ) / 2);
+        logger.info("Center" + centerBlockPosition);
+
+        constructBuilding(centerBlockPosition, buildingType, 0);
+
+        sendConstructionCompleteEvent(centerBlockPosition, buildingType);
+    }
+
+    public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level) {
+        selectBuilding(buildingType, level);
 
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
         BlockRegionTransformationList transformationList = new BlockRegionTransformationList();
-
-        Vector3i centerBlockPosition = new Vector3i((minX + maxX) / 2, minY, (minZ + maxZ) / 2);
-        logger.info("Center" + centerBlockPosition);
         transformationList.addTransformation(new BlockRegionMovement(centerBlockPosition));
 
         int rotationAmount = 0;
@@ -61,13 +73,32 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         transformationList.addTransformation(new HorizontalBlockRegionRotation(rotationAmount));
 
         buildingTemplate.send(new SpawnStructureEvent(transformationList));
-
     }
 
-    public void selectBuilding(BuildingType buildingType) {
+    public void selectBuilding(BuildingType buildingType, int level) {
         switch (buildingType) {
             case Diner :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER);
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
+                break;
+
+            case Storage:
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_STORAGE + Integer.toString(level));
         }
+    }
+
+    private void sendConstructionCompleteEvent(Vector3i centerBlock, BuildingType buildingType) {
+        SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
+        List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
+
+        List<Region3i> absoluteRegions = new ArrayList<>();
+
+        for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
+            Region3i relativeRegion = regionToFill.region;
+            Region3i absoluteRegion = relativeRegion.move(centerBlock);
+            absoluteRegions.add(absoluteRegion);
+        }
+
+        // Add this building's regions to the Holding
+        player.send(new BuildingConstructionCompletedEvent(absoluteRegions, buildingType, centerBlock));
     }
 }
