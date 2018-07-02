@@ -5,12 +5,12 @@
     "hardness": 0,
     // Graphics
     "tiles": {
-        "sides": "MasterOfOreon:ChestSides",
-        "front": "MasterOfOreon:ChestFront",
-        "topBottom": "MasterOfOreon:ChestTopBottom"
+        "sides": "Core:ChestSides",
+        "front": "Core:ChestFront",
+        "topBottom": "Core:ChestTopBottom"
     },
     "entity": {
-        "prefab": "MasterOfOreon:oreonChest"
+        "prefab": "Core:chest"
     },
     "inventory": {
         "stackable": false,

@@ -5,5 +5,6 @@
     "tiles": {
         "sides": "Core:OakBark",
         "topBottom": "Core:OakTrunk"
-    }
+    },
+    "hardness" :0
 }

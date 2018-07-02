@@ -1,10 +1,10 @@
 {
     "family": "attachedToSurface",
     "sides": {
-        "shape": "TorchWall"
+        "shape": "Core:TorchWall"
     },
     "topBottom": {
-        "shape": "TorchGrounded"
+        "shape": "Core:TorchGrounded"
     },
     "penetrable": true,
     "attachmentAllowed": false,
@@ -17,5 +17,8 @@
     "entity": {
         "prefab": "Core:Torch"
     },
-    "mass": 10
+    "mass": 10,
+    "tiles" : {
+        "all": "Core:torch"
+    }
 }

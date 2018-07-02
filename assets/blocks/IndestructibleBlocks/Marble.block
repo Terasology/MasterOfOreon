@@ -1,4 +1,7 @@
 {
     "basedOn" : "Core:rock",
-    "hardness" : 0
+    "hardness" : 0,
+    "tiles" : {
+        "all" : "marble_tiles-large-ctm"
+    }
 }
