@@ -54,6 +54,7 @@ import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
+import org.terasology.taskSystem.tasks.BuildTask;
 import org.terasology.taskSystem.tasks.PlantTask;
 import org.terasology.utilities.Assets;
 import org.terasology.world.selection.BlockSelectionComponent;
@@ -210,6 +211,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
         switch (newTaskType) {
             case AssignedTaskType.Plant :
                 newTask = new PlantTask();
+                break;
+
+            case AssignedTaskType.Build :
+                newTask = new BuildTask(buildingType);
                 break;
 
             default :
