@@ -33,7 +33,6 @@ import org.terasology.registry.Share;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.DelayedNotificationSystem;
-import org.terasology.taskSystem.actions.HealthReductionCause;
 
 @Share(OreonHealthSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)

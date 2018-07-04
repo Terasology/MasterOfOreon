@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.taskSystem.actions;
+package org.terasology.healthSystem;
 
 public enum HealthReductionCause {
     Hunger

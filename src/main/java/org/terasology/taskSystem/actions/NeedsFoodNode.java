@@ -19,6 +19,7 @@ import org.terasology.Constants;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.healthSystem.HealthReductionCause;
 import org.terasology.healthSystem.OreonHealthSystem;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
