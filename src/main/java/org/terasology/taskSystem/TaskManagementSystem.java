@@ -40,6 +40,7 @@ import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
+import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
@@ -52,9 +53,7 @@ import org.terasology.rendering.assets.texture.TextureUtil;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.components.TaskComponent;
-import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
-import org.terasology.taskSystem.events.SetTaskTypeEvent;
 import org.terasology.utilities.Assets;
 import org.terasology.world.selection.BlockSelectionComponent;
 
@@ -82,7 +81,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     private HoldingAuthoritySystem holdingSystem;
 
-    private EntityRef taskEntity;
     private EntityRef notificationMessageEntity;
 
     private Vector3f lastCollisionLocation;
@@ -170,36 +168,21 @@ public class TaskManagementSystem extends BaseComponentSystem {
             return;
         }
 
-        logger.info("Adding a new Task");
-        TaskComponent taskComponent = new TaskComponent();
-        taskComponent.taskRegion = blockSelectionEvent.getSelection();
-        taskComponent.creationTime = timer.getGameTimeInMs();
-
-        BlockSelectionComponent newBlockSelectionComponent = new BlockSelectionComponent();
-        logger.info("Block selection true " + newBlockSelectionComponent);
-        newBlockSelectionComponent.shouldRender = true;
-        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
-
         //check if this area can be used
-        if (!checkArea(newBlockSelectionComponent)) {
+        if (!checkArea(blockSelectionEvent.getSelection())) {
             return;
         }
 
-        NetworkComponent networkComponent = new NetworkComponent();
-        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
-
-        taskEntity = entityManager.create(networkComponent);
-        taskEntity.addComponent(newBlockSelectionComponent);
-        taskEntity.addComponent(taskComponent);
-
-        player.send(new OpenTaskSelectionScreenEvent());
+        player.send(new OpenTaskSelectionScreenEvent(blockSelectionEvent.getSelection()));
     }
 
     /**
-     * Adds task to the corresponding player's Holding
-     * @param player The player entity which owns the Holding Component
+     * Adds task to the player's holding.
+     * This method can be used by external systems to add tasks to the holding.
+     * @param player The player entity which has the holding
+     * @param task The task entity to be added
      */
-    private void addTask(EntityRef player) {
+    public void addTask(EntityRef player, EntityRef taskEntity) {
         HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
 
         TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
@@ -210,55 +193,37 @@ public class TaskManagementSystem extends BaseComponentSystem {
         player.saveComponent(oreonHolding);
     }
 
-    /**
-     * Adds task to the player's holding.
-     * This method can be used by external systems to add tasks to the holding.
-     * @param player The player entity which has the holding
-     * @param task The task entity to be added
-     */
-    public void addTask(EntityRef player, EntityRef task) {
-        this.taskEntity = task;
-        addTask(player);
-    }
-    /**
-     * Receives the {@link SetTaskTypeEvent} sent by the {@link org.terasology.taskSystem.nui.TaskSelectionScreenLayer}
-     * after the player assigns a task a selected area.
-     * @param event The event sent by the screen layer.
-     * @param player The player entity adding the new task.
-     */
-    @ReceiveEvent
-    public void receiveSetTaskTypeEvent(SetTaskTypeEvent event, EntityRef player) {
-        player.send(new CloseTaskSelectionScreenEvent());
+    public void setTaskType(String newTaskType, BuildingType buildingType, Region3i region, EntityRef player) {
+        logger.info("Adding a new Task");
+        TaskComponent taskComponent = new TaskComponent();
+        taskComponent.taskRegion = region;
+        taskComponent.creationTime = timer.getGameTimeInMs();
 
-        String newTaskType = event.getTaskType();
-
-        BlockSelectionComponent newBlockSelectionComponent = taskEntity.getComponent(BlockSelectionComponent.class);
-
-        //when cancel selection button is used
-        if (newTaskType == null) {
-            taskEntity.destroy();
-            return;
-        }
-
-        TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+        BlockSelectionComponent newBlockSelectionComponent = new BlockSelectionComponent();
+        newBlockSelectionComponent.shouldRender = true;
+        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
 
         taskComponent.assignedTaskType = newTaskType;
 
         if (newTaskType.equals(AssignedTaskType.Build)) {
-            taskComponent.buildingType = event.getBuildingType();
+            taskComponent.buildingType = buildingType;
         }
-
-        setAreaTexture(newBlockSelectionComponent, newTaskType);
 
         //mark this area so that no other task can be assigned here
         markArea(newBlockSelectionComponent, taskComponent, player);
 
-        taskEntity.saveComponent(taskComponent);
+        NetworkComponent networkComponent = new NetworkComponent();
+        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-        addTask(player);
+        EntityRef task = entityManager.create(taskComponent, networkComponent);
+
+        setAreaTexture(newBlockSelectionComponent, newTaskType, task);
+
+        addTask(player, task);
     }
 
-    private void setAreaTexture(BlockSelectionComponent blockSelectionComponent, String taskType) {
+    private void setAreaTexture(BlockSelectionComponent blockSelectionComponent, String taskType, EntityRef taskEntity) {
+        logger.info("changing texture hole");
         Color taskColor;
         switch(taskType) {
             case AssignedTaskType.Plant :
@@ -314,10 +279,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Checks if the selected area can be used i.e not already assigned to some other task
-     * @param blockSelectionComponent The component which has information related to the area selected.
+     * @param selectedRegion The region to be checked
      * @return A boolean value specifying whether the area is valid
      */
-    private boolean checkArea(BlockSelectionComponent blockSelectionComponent) {
+    private boolean checkArea(Region3i selectedRegion) {
         return true;
     }
 
@@ -436,7 +401,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             NetworkComponent networkComponent = new NetworkComponent();
             networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-            taskEntity = entityManager.create(networkComponent);
+            EntityRef taskEntity = entityManager.create(networkComponent);
 
             TaskComponent taskComponent = new TaskComponent();
             taskComponent.assignedTaskType = oreonTaskComponent.assignedTaskType;
@@ -450,7 +415,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             // Add task to the holding
             OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
-            addTask(oreonSpawnComponent.parent);
+            addTask(oreonSpawnComponent.parent, taskEntity);
 
             // Free the Oreon
             oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
