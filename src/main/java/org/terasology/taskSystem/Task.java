@@ -27,6 +27,7 @@ public abstract class Task {
     public int hunger;
 
     // Task specifications
+    public String assignedTaskType;
     public float taskDuration;
     public Color taskColor;
     public BuildingType buildingType;

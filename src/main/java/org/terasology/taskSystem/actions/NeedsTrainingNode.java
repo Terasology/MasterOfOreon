@@ -30,9 +30,10 @@ import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
-import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.DelayedNotificationSystem;
 import org.terasology.taskSystem.TaskManagementSystem;
+import org.terasology.taskSystem.tasks.TrainIntelligenceTask;
+import org.terasology.taskSystem.tasks.TrainStrengthTask;
 
 @BehaviorAction(name = "needs_training")
 public class NeedsTrainingNode extends BaseAction {
@@ -81,7 +82,7 @@ public class NeedsTrainingNode extends BaseAction {
 
         //find an attribute to train for
         if (strength < intelligence && strength < maxStrength) {
-            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Train_Strength)) {
+            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, new TrainStrengthTask())) {
                 return BehaviorState.SUCCESS;
             }
 
@@ -89,7 +90,7 @@ public class NeedsTrainingNode extends BaseAction {
             lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
 
         } else if (intelligence < strength && intelligence < maxIntelligence) {
-            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Train_Intelligence)) {
+            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, new TrainIntelligenceTask())) {
                 return BehaviorState.SUCCESS;
             }
 

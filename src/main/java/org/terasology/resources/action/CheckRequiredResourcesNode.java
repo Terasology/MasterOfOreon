@@ -60,7 +60,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
     public BehaviorState modify(Actor actor, BehaviorState result) {
         TaskComponent taskComponent = actor.getComponent(TaskComponent.class);
         if (checkIn.equals("building")) {
-            EntityRef building = taskComponent.buildingToVisit;
+            EntityRef building = taskComponent.task.requiredBuildingEntity;
 
             boolean resourceDeducted = buildingResourceSystem.checkForAResource(building, Constants.COOKIE_CROP, 1);
 

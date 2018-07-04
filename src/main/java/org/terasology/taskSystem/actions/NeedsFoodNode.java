@@ -32,9 +32,9 @@ import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
-import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.DelayedNotificationSystem;
 import org.terasology.taskSystem.TaskManagementSystem;
+import org.terasology.taskSystem.tasks.EatTask;
 
 /**
  * Checks if the Oreon is hungry, if yes calls the task management system to assign the Eat task.
@@ -84,7 +84,7 @@ public class NeedsFoodNode extends BaseAction {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
 
         if (oreonAttributeComponent.hunger > 50) {
-            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, AssignedTaskType.Eat)) {
+            if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, new EatTask())) {
                 return BehaviorState.SUCCESS;
             } else {
                 String message = "We are hungry. Build a diner!";

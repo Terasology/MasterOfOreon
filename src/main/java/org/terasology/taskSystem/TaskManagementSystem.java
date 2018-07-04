@@ -54,6 +54,7 @@ import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
+import org.terasology.taskSystem.tasks.PlantTask;
 import org.terasology.utilities.Assets;
 import org.terasology.world.selection.BlockSelectionComponent;
 
@@ -112,14 +113,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
             EntityRef taskEntityToAssign = availableTasks.remove();
             TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
 
+            oreonTaskComponent.task = taskComponentToAssign.task;
+
             oreonTaskComponent.assignedTaskType = taskComponentToAssign.assignedTaskType;
-            oreonTaskComponent.buildingType = taskComponentToAssign.buildingType;
             oreonTaskComponent.creationTime = taskComponentToAssign.creationTime;
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
             oreonTaskComponent.assignedAreaIndex = taskComponentToAssign.assignedAreaIndex;
-            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.assignedTaskType);
-            oreonTaskComponent.buildingToUpgrade = taskComponentToAssign.buildingToUpgrade;
+            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.task);
 
             oreon.save(oreonTaskComponent);
 
@@ -204,52 +205,36 @@ public class TaskManagementSystem extends BaseComponentSystem {
         newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
 
         taskComponent.assignedTaskType = newTaskType;
+        Task newTask;
 
-        if (newTaskType.equals(AssignedTaskType.Build)) {
-            taskComponent.buildingType = buildingType;
+        switch (newTaskType) {
+            case AssignedTaskType.Plant :
+                newTask = new PlantTask();
+                break;
+
+            default :
+                newTask = new PlantTask();
         }
 
+        taskComponent.task = newTask;
+
+        newBlockSelectionComponent.texture = getAreaTexture(newTask);
+
         //mark this area so that no other task can be assigned here
-        markArea(newBlockSelectionComponent, taskComponent, player);
+        markArea(newBlockSelectionComponent, newTask, taskComponent, player);
 
         NetworkComponent networkComponent = new NetworkComponent();
         networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
         EntityRef task = entityManager.create(taskComponent, networkComponent);
 
-        setAreaTexture(newBlockSelectionComponent, newTaskType, task);
-
         addTask(player, task);
     }
 
-    private void setAreaTexture(BlockSelectionComponent blockSelectionComponent, String taskType, EntityRef taskEntity) {
+    private Texture getAreaTexture(Task newTask) {
         logger.info("changing texture hole");
-        Color taskColor;
-        switch(taskType) {
-            case AssignedTaskType.Plant :
-                taskColor = Color.GREEN;
-                break;
-
-            case AssignedTaskType.Build :
-                taskColor = Color.GREY;
-                break;
-
-            case AssignedTaskType.Guard :
-                taskColor = Color.RED;
-                break;
-
-            case AssignedTaskType.Upgrade :
-                taskColor = Color.GREY;
-                break;
-
-            default :
-                taskColor = Color.BLUE;
-        }
-
-        taskColor = taskColor.alterAlpha(90);
-        blockSelectionComponent.texture = Assets.get(TextureUtil.getTextureUriForColor(taskColor), Texture.class).get();
-
-        taskEntity.saveComponent(blockSelectionComponent);
+        Color taskColor = newTask.taskColor;
+        return Assets.get(TextureUtil.getTextureUriForColor(taskColor), Texture.class).get();
     }
 
     /**
@@ -258,13 +243,13 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * until the task is finished.
      * @param blockSelectionComponent The component which has information related to the area selected.
      */
-    private void markArea(BlockSelectionComponent blockSelectionComponent, TaskComponent taskComponent, EntityRef player) {
+    private void markArea(BlockSelectionComponent blockSelectionComponent, Task newTask, TaskComponent taskComponent, EntityRef player) {
         AssignedAreaComponent assignedAreaComponent = new AssignedAreaComponent();
 
         assignedAreaComponent.assignedRegion = blockSelectionComponent.currentSelection;
 
-        assignedAreaComponent.assignedTaskType = taskComponent.assignedTaskType;
-        assignedAreaComponent.buildingType = taskComponent.buildingType;
+        assignedAreaComponent.assignedTaskType = newTask.assignedTaskType;
+        assignedAreaComponent.buildingType = newTask.buildingType;
 
         EntityRef assignedArea = entityManager.create(assignedAreaComponent, blockSelectionComponent);
 
@@ -298,7 +283,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             if (constructedBuildingComponent.buildingType.equals(buildingType)) {
                 oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
-                oreonTaskComponent.buildingToVisit = building;
+                oreonTaskComponent.task.requiredBuildingEntity = building;
                 return constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX).min();
             }
         }
@@ -323,37 +308,19 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param assignedTaskType The type of task to performed recieved based on priority of different tasks from its BT
      * @return A boolean value which signifies if the task was successfully assigned.
      */
-    public boolean assignAdvancedTaskToOreon(Actor oreon, String assignedTaskType) {
+    public boolean assignAdvancedTaskToOreon(Actor oreon, Task newTask) {
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
             HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
 
-            Vector3i target = null;
+            oreonTaskComponent.task = newTask;
 
-            switch(assignedTaskType) {
-                case AssignedTaskType.Eat :
-                    target = findRequiredBuilding(BuildingType.Diner, oreonTaskComponent, oreonHolding);
-                    break;
-
-                case AssignedTaskType.Sleep :
-                    Vector3f worldPosition = oreon.getComponent(LocationComponent.class).getWorldPosition();
-                    target = new Vector3i(worldPosition, RoundingMode.DOWN);
-                    break;
-
-                case AssignedTaskType.Train_Strength :
-                    target = findRequiredBuilding(BuildingType.Gym, oreonTaskComponent, oreonHolding);
-                    break;
-
-                case AssignedTaskType.Train_Intelligence :
-                    target = findRequiredBuilding(BuildingType.Classroom, oreonTaskComponent, oreonHolding);
-                    break;
-            }
+            Vector3i target = findRequiredBuilding(newTask.buildingType, oreonTaskComponent, oreonHolding);
 
             // if a building required for the task like the Diner for Eat is not found
             if (target == null) {
                 return false;
             }
 
-            oreonTaskComponent.assignedTaskType = assignedTaskType;
             oreonTaskComponent.creationTime = timer.getGameTimeInMs();
             oreon.save(oreonTaskComponent);
 
@@ -408,7 +375,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             taskComponent.assignedAreaIndex = oreonTaskComponent.assignedAreaIndex;
             taskComponent.taskRegion = oreonTaskComponent.taskRegion;
             taskComponent.creationTime = oreonTaskComponent.creationTime;
-            taskComponent.buildingType = oreonTaskComponent.buildingType;
+            taskComponent.task = oreonTaskComponent.task;
             taskComponent.taskStatus = oreonTaskComponent.taskStatus;
 
             taskEntity.addComponent(taskComponent);
@@ -430,16 +397,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param assignedTaskType The type of task that is being assigned to the Oreon
      * @return The time at which the task will be completed
      */
-    public float getTaskCompletionTime(String assignedTaskType) {
+    public float getTaskCompletionTime(Task newTask) {
         float currentTime = timer.getGameTime();
 
-        switch(assignedTaskType) {
-            case AssignedTaskType.Plant :
-                return currentTime + 50;
-
-            default :
-                return currentTime + 10;
-        }
+        return currentTime + newTask.taskDuration;
     }
 
     @ReceiveEvent

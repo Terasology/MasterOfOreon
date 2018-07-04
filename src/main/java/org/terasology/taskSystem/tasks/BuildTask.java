@@ -17,19 +17,19 @@ package org.terasology.taskSystem.tasks;
 
 import org.terasology.rendering.nui.Color;
 import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.Task;
 
-public class PlantTask extends Task {
-
+public class BuildTask extends Task {
     private static final int HEALTH = 10;
     private static final int INTELLIGENCE = 0;
     private static final int STRENGTH = 0;
     private static final int HUNGER = 0;
 
     private static final float DURATION = 10;
-    private static final Color COLOR = Color.GREEN.alterAlpha(90);
+    private static final Color COLOR = Color.GREY.alterAlpha(90);
 
-    public PlantTask() {
+    public BuildTask(BuildingType buildingType) {
         this.health = HEALTH;
         this.intelligence = INTELLIGENCE;
         this.strength = STRENGTH;
@@ -37,6 +37,8 @@ public class PlantTask extends Task {
 
         this.taskDuration = DURATION;
         this.taskColor = COLOR;
-        this.assignedTaskType = AssignedTaskType.Plant;
+        this.assignedTaskType = AssignedTaskType.Build;
+
+        this.buildingType = buildingType;
     }
 }

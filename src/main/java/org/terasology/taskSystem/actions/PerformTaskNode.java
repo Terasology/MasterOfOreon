@@ -33,6 +33,7 @@ import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.Task;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromBuildingGenerator;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
@@ -131,36 +132,21 @@ public class PerformTaskNode extends BaseAction {
     private void changeOreonAttributes(Actor oreon, TaskComponent taskComponent) {
         OreonAttributeComponent oreonAttributeComponent = oreon.getComponent(OreonAttributeComponent.class);
 
-        String assignedTaskType = taskComponent.assignedTaskType;
-        switch(assignedTaskType) {
-            case AssignedTaskType.Eat:
-                logger.info("eating task complete hunger {} to zero ", oreonAttributeComponent.hunger);
-                oreonAttributeComponent.hunger = 0;
-                break;
+        Task completedTask = taskComponent.task;
 
-            case AssignedTaskType.Train_Strength:
-                oreonAttributeComponent.strength += 10;
-                if (oreonAttributeComponent.strength > oreonAttributeComponent.maxStrength) {
-                    oreonAttributeComponent.strength = oreonAttributeComponent.maxStrength;
-                }
-                logger.info("Strength training complete, strength is now : {}", oreonAttributeComponent.strength);
-                break;
+        oreonAttributeComponent.strength += completedTask.strength;
+        oreonAttributeComponent.health += completedTask.health;
+        oreonAttributeComponent.intelligence += completedTask.intelligence;
+        oreonAttributeComponent.hunger += completedTask.hunger;
 
-            case AssignedTaskType.Train_Intelligence:
-                oreonAttributeComponent.intelligence += 10;
-                if (oreonAttributeComponent.intelligence > oreonAttributeComponent.maxIntelligence) {
-                    oreonAttributeComponent.intelligence = oreonAttributeComponent.maxIntelligence;
-                }
-                logger.info("Intelligence training complete, intelligence is now : {}", oreonAttributeComponent.intelligence);
-                break;
+        oreonAttributeComponent.strength = oreonAttributeComponent.strength > oreonAttributeComponent.maxStrength
+                ? oreonAttributeComponent.maxStrength : oreonAttributeComponent.strength;
 
-            case AssignedTaskType.Sleep:
-                oreonAttributeComponent.health = 100;
-                break;
+        oreonAttributeComponent.health = oreonAttributeComponent.health > oreonAttributeComponent.maxHealth
+                ? oreonAttributeComponent.maxHealth : oreonAttributeComponent.health;
 
-            default:
-                oreonAttributeComponent.hunger += 30;
-        }
+        oreonAttributeComponent.intelligence = oreonAttributeComponent.intelligence > oreonAttributeComponent.maxIntelligence
+                ? oreonAttributeComponent.maxIntelligence : oreonAttributeComponent.intelligence;
 
         oreon.save(oreonAttributeComponent);
     }
@@ -181,7 +167,7 @@ public class PerformTaskNode extends BaseAction {
                 break;
 
             case AssignedTaskType.Build :
-                constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.buildingType);
+                constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.task.buildingType);
                 //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
                 break;
 

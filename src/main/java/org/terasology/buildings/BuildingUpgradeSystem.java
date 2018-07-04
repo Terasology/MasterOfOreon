@@ -45,6 +45,7 @@ import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
+import org.terasology.taskSystem.tasks.BuildingUpgradeTask;
 
 import java.util.List;
 
@@ -139,8 +140,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskComponent.assignedTaskType = AssignedTaskType.Upgrade;
         // TODO: Assign a random region or a region based on blocks to be upgraded
         taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
-        taskComponent.buildingToUpgrade = buildingToUpgrade;
-        taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(AssignedTaskType.Upgrade);
+        taskComponent.task = new BuildingUpgradeTask(buildingToUpgrade);
+        taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(taskComponent.task);
         EntityRef task = entityManager.create(taskComponent);
 
         taskMangementSystem.addTask(player, task);
@@ -149,7 +150,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {TaskComponent.class})
     public void onUpgradeStart(BuildingUpgradeStartEvent event, EntityRef oreon, TaskComponent taskComponent) {
         logger.info("upgrade event start");
-        EntityRef building = taskComponent.buildingToUpgrade;
+        EntityRef building = taskComponent.task.requiredBuildingEntity;
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
         constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel + 1);

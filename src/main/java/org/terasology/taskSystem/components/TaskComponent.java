@@ -21,6 +21,7 @@ import org.terasology.math.Region3i;
 import org.terasology.network.FieldReplicateType;
 import org.terasology.network.Replicate;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.taskSystem.Task;
 import org.terasology.taskSystem.TaskStatusType;
 
 /**
@@ -38,9 +39,6 @@ public class TaskComponent implements Component {
     public TaskStatusType taskStatus = TaskStatusType.Available;
 
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
-    public BuildingType buildingType = BuildingType.None;
-
-    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
     public Region3i taskRegion;
 
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
@@ -48,6 +46,5 @@ public class TaskComponent implements Component {
 
     public float taskCompletionTime;
 
-    public EntityRef buildingToUpgrade;
-    public EntityRef buildingToVisit;
+    public Task task;
 }
