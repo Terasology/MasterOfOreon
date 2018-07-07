@@ -18,7 +18,7 @@ package org.terasology.taskSystem;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.rendering.nui.Color;
 
-public abstract class Task {
+public class Task {
 
     // Effects on different Oreon attributes after task completion
     public int health;
@@ -29,7 +29,7 @@ public abstract class Task {
     // Task specifications
     public String assignedTaskType;
     public float taskDuration;
-    public Color taskColor;
-    public BuildingType buildingType;
-    public EntityRef requiredBuildingEntity;
+    public Color taskColor = Color.MAGENTA.alterAlpha(90);
+    public BuildingType buildingType = BuildingType.None;
+    public long requiredBuildingEntityID = 0;
 }
