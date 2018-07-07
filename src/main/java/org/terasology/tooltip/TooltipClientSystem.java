@@ -24,6 +24,7 @@ import org.terasology.namegenerator.creature.CreatureNameComponent;
 import org.terasology.rendering.nui.layers.ingame.inventory.GetItemTooltip;
 import org.terasology.rendering.nui.widgets.TooltipLine;
 import org.terasology.spawning.OreonAttributeComponent;
+import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.tooltip.components.OreonTooltipComponent;
 import org.terasology.world.selection.BlockSelectionComponent;
 import org.terasology.worldlyTooltipAPI.events.GetTooltipIconEvent;
@@ -39,6 +40,7 @@ public class TooltipClientSystem extends BaseComponentSystem {
         event.getTooltipLines().add(new TooltipLine("Hunger : " + oreonAttributeComponent.hunger));
         event.getTooltipLines().add(new TooltipLine("Strength : " + oreonAttributeComponent.strength + " / " + oreonAttributeComponent.maxStrength ));
         event.getTooltipLines().add(new TooltipLine("Intelligence : " + oreonAttributeComponent.intelligence + " / " + oreonAttributeComponent.maxIntelligence ));
+        event.getTooltipLines().add(new TooltipLine("AssignedTask : " + entity.getComponent(TaskComponent.class).assignedTaskType));
     }
 
     @ReceiveEvent(components = BlockSelectionComponent.class)
