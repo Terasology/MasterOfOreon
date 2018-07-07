@@ -24,11 +24,15 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.math.Region3i;
 import org.terasology.registry.In;
+import org.terasology.rendering.assets.texture.Texture;
+import org.terasology.rendering.assets.texture.TextureUtil;
+import org.terasology.rendering.nui.Color;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.UIScreenLayer;
 import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
+import org.terasology.utilities.Assets;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 @RegisterSystem(RegisterMode.CLIENT)
@@ -55,6 +59,9 @@ public class TaskManagementClientSystem extends BaseComponentSystem {
         BlockSelectionComponent newBlockSelectionComponent = new BlockSelectionComponent();
         newBlockSelectionComponent.shouldRender = true;
         newBlockSelectionComponent.currentSelection = taskRegion;
+
+        // A default color for tasks
+        newBlockSelectionComponent.texture = Assets.get(TextureUtil.getTextureUriForColor(Color.BLUE.alterAlpha(100)), Texture.class).get();
         tempTaskEntity = entityManager.create(newBlockSelectionComponent);
 
         nuiManager.pushScreen(this.taskSelectionScreenLayer);
