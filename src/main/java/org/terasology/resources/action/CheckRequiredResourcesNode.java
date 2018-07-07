@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.context.Context;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
@@ -43,6 +44,9 @@ public class CheckRequiredResourcesNode extends BaseAction {
     @In
     private Context context;
 
+    @In
+    private EntityManager entityManager;
+
     private InventoryManager inventoryManager;
     private BlockEntityRegistry blockEntityRegistry;
     private ResourceSystem buildingResourceSystem;
@@ -60,7 +64,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
     public BehaviorState modify(Actor actor, BehaviorState result) {
         TaskComponent taskComponent = actor.getComponent(TaskComponent.class);
         if (checkIn.equals("building")) {
-            EntityRef building = taskComponent.task.requiredBuildingEntity;
+            EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
 
             boolean resourceDeducted = buildingResourceSystem.checkForAResource(building, Constants.COOKIE_CROP, 1);
 

@@ -150,7 +150,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {TaskComponent.class})
     public void onUpgradeStart(BuildingUpgradeStartEvent event, EntityRef oreon, TaskComponent taskComponent) {
         logger.info("upgrade event start");
-        EntityRef building = taskComponent.task.requiredBuildingEntity;
+        EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
         constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel + 1);

@@ -120,7 +120,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonTaskComponent.creationTime = taskComponentToAssign.creationTime;
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
-            oreonTaskComponent.assignedAreaIndex = taskComponentToAssign.assignedAreaIndex;
             oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.task);
 
             oreon.save(oreonTaskComponent);
@@ -237,7 +236,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     private Texture getAreaTexture(Task newTask) {
-        logger.info("changing texture hole");
         Color taskColor = newTask.taskColor;
         return Assets.get(TextureUtil.getTextureUriForColor(taskColor), Texture.class).get();
     }
@@ -262,9 +260,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
         oreonHolding.assignedAreas.add(assignedArea);
 
         player.saveComponent(oreonHolding);
-
-        logger.info("Adding new area to index : " + oreonHolding.assignedAreas.size() + " " + oreonHolding);
-        taskComponent.assignedAreaIndex = oreonHolding.assignedAreas.size() - 1;
     }
 
     /**
@@ -288,7 +283,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             if (constructedBuildingComponent.buildingType.equals(buildingType)) {
                 oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
-                oreonTaskComponent.task.requiredBuildingEntity = building;
+                oreonTaskComponent.task.requiredBuildingEntityID = building.getId();
                 return constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX).min();
             }
         }
@@ -310,7 +305,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     /**
      * Assigns advanced tasks like Eat and sleep to Oreon when it is free.
      * @param oreon The oreon Actor to which the task will be assigned
-     * @param assignedTaskType The type of task to performed recieved based on priority of different tasks from its BT
+     * @param newTask The type of task to performed received based on priority of different tasks from its BT
      * @return A boolean value which signifies if the task was successfully assigned.
      */
     public boolean assignAdvancedTaskToOreon(Actor oreon, Task newTask) {
@@ -318,13 +313,15 @@ public class TaskManagementSystem extends BaseComponentSystem {
             HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
 
             oreonTaskComponent.task = newTask;
-
             Vector3i target = findRequiredBuilding(newTask.buildingType, oreonTaskComponent, oreonHolding);
 
             // if a building required for the task like the Diner for Eat is not found
             if (target == null) {
                 return false;
             }
+
+            oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
+            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
 
             oreonTaskComponent.creationTime = timer.getGameTimeInMs();
             oreon.save(oreonTaskComponent);
@@ -377,7 +374,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             TaskComponent taskComponent = new TaskComponent();
             taskComponent.assignedTaskType = oreonTaskComponent.assignedTaskType;
-            taskComponent.assignedAreaIndex = oreonTaskComponent.assignedAreaIndex;
             taskComponent.taskRegion = oreonTaskComponent.taskRegion;
             taskComponent.creationTime = oreonTaskComponent.creationTime;
             taskComponent.task = oreonTaskComponent.task;
