@@ -94,6 +94,7 @@ public class PerformTaskNode extends BaseAction {
 
         // Free the Oreon after performing task
         oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
+        oreonTaskComponent.task = null;
         oreon.save(oreonTaskComponent);
 
         logger.info("Task completed, the Oreon is now free!");

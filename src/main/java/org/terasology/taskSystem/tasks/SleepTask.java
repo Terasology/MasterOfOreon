@@ -19,10 +19,10 @@ import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 
 public class SleepTask extends Task {
-    private static final int HEALTH = 20;
+    private static final int HEALTH = -20;
     private static final int INTELLIGENCE = 0;
     private static final int STRENGTH = 0;
-    private static final int HUNGER = 20;
+    private static final int HUNGER = -20;
 
     private static final float DURATION = 20;
 

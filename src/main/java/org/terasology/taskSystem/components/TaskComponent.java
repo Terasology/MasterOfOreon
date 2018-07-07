@@ -41,9 +41,6 @@ public class TaskComponent implements Component {
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
     public Region3i taskRegion;
 
-    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
-    public int assignedAreaIndex;
-
     public float taskCompletionTime;
 
     public Task task;
