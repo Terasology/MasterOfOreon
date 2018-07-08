@@ -37,7 +37,6 @@ import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.Region3i;
@@ -57,6 +56,9 @@ import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.tasks.BuildTask;
 import org.terasology.taskSystem.tasks.PlantTask;
 import org.terasology.utilities.Assets;
+import org.terasology.world.BlockEntityRegistry;
+import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockManager;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.math.RoundingMode;
@@ -81,10 +83,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
     @In
     private Context context;
 
+    private BlockManager blockManager;
+    private BlockEntityRegistry blockEntityRegistry;
     private HoldingAuthoritySystem holdingSystem;
-
     private EntityRef notificationMessageEntity;
-
     private Vector3f lastCollisionLocation;
 
     @Override
@@ -101,6 +103,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
         notificationMessageEntity.saveComponent(colorComponent);
 
         holdingSystem = context.get(HoldingAuthoritySystem.class);
+
+        blockManager = context.get(BlockManager.class);
+        blockEntityRegistry = context.get(BlockEntityRegistry.class);
     }
 
     public boolean getTaskForOreon(Actor oreon) {
@@ -202,7 +207,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         BlockSelectionComponent newBlockSelectionComponent = new BlockSelectionComponent();
         newBlockSelectionComponent.shouldRender = true;
-        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
 
         taskComponent.assignedTaskType = newTaskType;
         Task newTask;
@@ -214,13 +218,18 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             case AssignedTaskType.Build :
                 newTask = new BuildTask(buildingType);
+                taskComponent.taskRegion = getBuildingExtents(buildingType, region);
                 break;
 
             default :
                 newTask = new PlantTask();
         }
 
+        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
+
         taskComponent.task = newTask;
+
+        placeFenceAroundRegion(taskComponent.taskRegion);
 
         newBlockSelectionComponent.texture = getAreaTexture(newTask);
 
@@ -233,6 +242,55 @@ public class TaskManagementSystem extends BaseComponentSystem {
         EntityRef task = entityManager.create(taskComponent, networkComponent);
 
         addTask(player, task);
+    }
+
+    private void placeFenceAroundRegion(Region3i region) {
+        int minX = region.minX();
+        int maxX = region.maxX();
+        int minZ = region.minZ();
+        int maxZ = region.maxZ();
+        int Y = region.minY();
+
+        Region3i leftRegion = Region3i.createFromMinMax(new Vector3i(minX - 2, Y, minZ - 2), new Vector3i(minX - 2, Y, maxZ + 2));
+        Region3i rightRegion = Region3i.createFromMinMax(new Vector3i(maxX + 2, Y, minZ - 2), new Vector3i(maxX + 2, Y, maxZ));
+        Region3i topRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, maxZ + 2), new Vector3i(maxX + 1, Y, maxZ + 2));
+        Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1, Y, minZ - 2));
+
+        placeFenceBlocks(leftRegion);
+        placeFenceBlocks(rightRegion);
+        placeFenceBlocks(topRegion);
+        placeFenceBlocks(bottomRegion);
+    }
+
+    private void placeFenceBlocks(Region3i region) {
+        int minX = region.minX();
+        int maxX = region.maxX();
+        int minZ = region.minZ();
+        int maxZ = region.maxZ();
+        int y = region.minY();
+
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                Block block = blockManager.getBlock("Fences:fence.0");
+                blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, y + 1, z), block);
+            }
+        }
+    }
+
+    private Region3i getBuildingExtents(BuildingType buildingType, Region3i region) {
+        EntityRef tempEntity;
+
+        switch (buildingType) {
+            case Diner :
+                tempEntity = entityManager.create("MasterOfOreon:inn");
+                break;
+
+            default :
+                tempEntity = entityManager.create("MasterOfOreon:inn");
+        }
+
+        Vector3f center = region.center();
+        return Region3i.createFromMinMax(new Vector3i(center.add(-10, 0, -8)), new Vector3i(center.add(9, 0, 9)));
     }
 
     private Texture getAreaTexture(Task newTask) {
