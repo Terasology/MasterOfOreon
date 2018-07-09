@@ -14,7 +14,8 @@
         {"id" : "Cities", "minVersion" : "0.6.2"},
         {"id" : "StructureTemplates", "minVersion" : "0.2.1"},
         {"id" : "ChiselBlocks", "minVersion" : "0.1.0"},
-        {"id" : "Fences", "minVersion" : "0.1.1"}
+        {"id" : "Fences", "minVersion" : "0.1.1"},
+        {"id" : "Books", "minVersion" : "1.0.2"}
     ],
     "isServerSideOnly" : false,
     "isGameplay" : true

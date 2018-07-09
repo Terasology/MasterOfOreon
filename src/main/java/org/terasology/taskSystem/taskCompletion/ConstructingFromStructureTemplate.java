@@ -81,8 +81,12 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
                 break;
 
-            case Storage:
+            case Storage :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_STORAGE + Integer.toString(level));
+                break;
+
+            case Laboratory :
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
         }
     }
 

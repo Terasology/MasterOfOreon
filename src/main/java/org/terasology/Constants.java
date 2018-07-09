@@ -45,6 +45,7 @@ public class Constants {
     public static final String GYM_BUTTON_ID = "gymButton";
     public static final String CLASSROOM_BUTTON_ID = "classroomButton";
     public static final String STORAGE_BUTTON_ID = "storageButton";
+    public static final String LABORATORY_BUTTON_ID = "laboratoryButton";
 
     public static final String BUILDING_NAME_UI_LABEL_ID = "buildingName";
     public static final String BUILDING_LEVEL_UI_LABEL_ID = "buildingLevel";
@@ -59,6 +60,7 @@ public class Constants {
 
     public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
     public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
+    public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
 
     public static final int DINER_CHAIR_REGION_INDEX = 86;
     public static final int CHEST_BLOCK_INDEX = 0;
