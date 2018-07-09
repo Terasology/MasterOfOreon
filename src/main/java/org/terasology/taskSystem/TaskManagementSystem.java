@@ -24,6 +24,7 @@ import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -462,7 +463,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         return currentTime + newTask.taskDuration;
     }
 
-    @ReceiveEvent
+    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void addBuildingToHolding(BuildingConstructionCompletedEvent constructionCompletedEvent, EntityRef player) {
         ConstructedBuildingComponent constructedBuildingComponent = new ConstructedBuildingComponent();
         constructedBuildingComponent.boundingRegions = constructionCompletedEvent.absoluteRegions;
@@ -478,7 +479,5 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
         holdingComponent.constructedBuildings.add(buildingEntity);
-
-        constructionCompletedEvent.consume();
     }
 }

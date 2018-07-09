@@ -1,0 +1,22 @@
+{
+    "parent" : "engine:iconItem",
+    "Item" : {
+        "icon" : "engine:items#BlueBook",
+        "usage" : "NONE"
+    },
+    "DisplayName" : {
+        "name" : "Research Book"
+    },
+    "Book" : {
+        "pages" : ["This is a research recipe book. ",
+            "You can find out about the required blocks for a research in this book. Add these to a storage building and your research will be accomplished by one of the smart Oreons in the village",
+            "Following are some recipes <recipe MasterOfOreon:cookieCropResearchRecipe>",
+            "Go ahead find those resources!"],
+        "tint" : [0, 0, 255, 255],
+        "title" : "Cookie Crop Research"
+    },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "Books:BookScreen"
+    }
+}

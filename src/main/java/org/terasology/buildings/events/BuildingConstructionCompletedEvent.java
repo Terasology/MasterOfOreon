@@ -15,14 +15,14 @@
  */
 package org.terasology.buildings.events;
 
-import org.terasology.entitySystem.event.ConsumableEvent;
+import org.terasology.entitySystem.event.Event;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.taskSystem.BuildingType;
 
 import java.util.List;
 
-public class BuildingConstructionCompletedEvent implements ConsumableEvent {
+public class BuildingConstructionCompletedEvent implements Event {
 
     public List<Region3i> absoluteRegions;
     public BuildingType buildingType;
@@ -32,15 +32,5 @@ public class BuildingConstructionCompletedEvent implements ConsumableEvent {
         this.absoluteRegions = regions;
         this.buildingType = building;
         this.centerBlockPosition = center;
-    }
-
-    @Override
-    public void consume() {
-
-    }
-
-    @Override
-    public boolean isConsumed() {
-        return true;
     }
 }
