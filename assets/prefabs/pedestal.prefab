@@ -22,5 +22,7 @@
         ],
         "itemSize": 0.25,
         "rotateWithBlock": false
-    }
+    },
+    "Network" : {},
+    "Laboratory" : {}
 }

@@ -15,8 +15,10 @@
  */
 package org.terasology.taskSystem;
 
-import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.rendering.nui.Color;
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class Task {
 
@@ -32,4 +34,6 @@ public class Task {
     public Color taskColor = Color.MAGENTA.alterAlpha(90);
     public BuildingType buildingType = BuildingType.None;
     public long requiredBuildingEntityID = 0;
+    public List<String> requiredBlocks = new ArrayList<>();
+    public String blockResult = "";
 }

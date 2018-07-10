@@ -470,16 +470,16 @@ public class TaskManagementSystem extends BaseComponentSystem {
         constructedBuildingComponent.buildingType = constructionCompletedEvent.buildingType;
         constructedBuildingComponent.centerLocation = constructionCompletedEvent.centerBlockPosition;
 
-        EntityRef buildingEntity = entityManager.create(constructedBuildingComponent);
+        constructionCompletedEvent.constructedBuildingEntity = entityManager.create(constructedBuildingComponent);
 
         NetworkComponent networkComponent = new NetworkComponent();
         networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-        buildingEntity.addComponent(networkComponent);
+        constructionCompletedEvent.constructedBuildingEntity.addComponent(networkComponent);
 
-        buildingEntity.setOwner(player);
+        constructionCompletedEvent.constructedBuildingEntity.setOwner(player);
 
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
-        holdingComponent.constructedBuildings.add(buildingEntity);
+        holdingComponent.constructedBuildings.add(constructionCompletedEvent.constructedBuildingEntity);
     }
 }

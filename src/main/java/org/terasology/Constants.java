@@ -76,6 +76,7 @@ public class Constants {
     public static final int DINER_CHAIR_REGION_INDEX = 86;
     public static final int CHEST_BLOCK_INDEX = 0;
     public static final int BOOKCASE_REGION_INDEX = 0;
+    public static final int PEDESTAL_REGION_INDEX = 1;
 
 
     public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";
@@ -85,4 +86,6 @@ public class Constants {
     public static final String RESEARCH_BOOK_NAME = "Research Book";
     // Books' prefab
     public static final String COOKIE_CROP_RESEARCH_BOOK = "MasterOfOreon:cookieCropResearchBook";
+
+    public static final String EXCLAMATION_PREFAB = "MasterOfOreon:exclamationMark";
 }

@@ -103,6 +103,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         }
 
         // Add this building's regions to the Holding
-        player.send(new BuildingConstructionCompletedEvent(absoluteRegions, buildingType, centerBlock));
+        EntityRef building = EntityRef.NULL;
+        player.send(new BuildingConstructionCompletedEvent(absoluteRegions, buildingType, centerBlock, building));
     }
 }

@@ -15,8 +15,13 @@
         "tint" : [0, 0, 255, 255],
         "title" : "Cookie Crop Research"
     },
-    "InteractionTarget": {},
-    "InteractionScreen": {
-        "screen": "Books:BookScreen"
+    "AnimateRotation": {
+        "yawSpeed": 0.5,
+        "isSynchronized": false
+    },
+    "Network": {},
+    "CapsuleShape" : {
+        "radius" : 2,
+        "height" : 5
     }
 }
