@@ -454,7 +454,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     /**
      * Calculates the time at which the assigned task will be completed based on the assigned task type and current game
      * time.
-     * @param assignedTaskType The type of task that is being assigned to the Oreon
+     * @param newTask The type of task that is being assigned to the Oreon
      * @return The time at which the task will be completed
      */
     public float getTaskCompletionTime(Task newTask) {
@@ -476,6 +476,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
         networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
         buildingEntity.addComponent(networkComponent);
+
+        buildingEntity.setOwner(player);
 
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
         holdingComponent.constructedBuildings.add(buildingEntity);

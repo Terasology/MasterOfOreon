@@ -1,0 +1,26 @@
+{
+    "mesh" : {
+        "mesh" : "QuestionMark",
+        "material" : "QuestionMark",
+        "color" : [255, 255, 20, 255]
+    },
+    "Location" : {
+    },
+    "AnimateRotation": {
+        "yawSpeed": 0.5,
+        "isSynchronized": false
+    },
+    "AnimateBounce": {
+        "maxHeight" : 0.5,
+        "period" : 2.0
+    },
+    "Trigger" : {
+        "detectGroups" : ["engine:sensor"]
+    },
+    "Network" : {
+    },
+    "CapsuleShape" : {
+        "radius" : 2,
+        "height" : 5
+    }
+}
