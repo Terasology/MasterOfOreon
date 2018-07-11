@@ -62,7 +62,6 @@ import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.selection.BlockSelectionComponent;
 
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Queue;
 
@@ -187,7 +186,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * Adds task to the player's holding.
      * This method can be used by external systems to add tasks to the holding.
      * @param player The player entity which has the holding
-     * @param task The task entity to be added
+     * @param taskEntity The task entity to be added
      */
     public void addTask(EntityRef player, EntityRef taskEntity) {
         HoldingComponent oreonHolding = player.getComponent(HoldingComponent.class);
@@ -304,6 +303,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * Attaches a {@link BlockSelectionComponent} to the assignedArea entity so that the assigned area remains colored
      * until the task is finished.
      * @param blockSelectionComponent The component which has information related to the area selected.
+     * @param newTask The new Task object which is being created
+     * @param taskComponent The TaskComponent which will be added to the task entity
+     * @param player The player entity which triggered the task creation.
      */
     private void markArea(BlockSelectionComponent blockSelectionComponent, Task newTask, TaskComponent taskComponent, EntityRef player) {
         AssignedAreaComponent assignedAreaComponent = new AssignedAreaComponent();
