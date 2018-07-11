@@ -88,7 +88,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         EntityRef selectedItem = heldItemComponent.selectedItem;
         DisplayNameComponent displayNameComponent = selectedItem.getComponent(DisplayNameComponent.class);
 
-        if (displayNameComponent != null && !displayNameComponent.name.equals(Constants.UPGRADE_TOOL_NAME)) {
+        if (displayNameComponent == null || !displayNameComponent.name.equals(Constants.UPGRADE_TOOL_NAME)) {
             return;
         }
 
