@@ -94,11 +94,11 @@
                             "guard": {
                                 "componentPresent": "MasterOfOreon:Task",
                                 "values": [
-                                    "V assignedTaskType == eat"
+                                    "V assignedTaskType == research"
                                 ],
                                 "child": {
                                     "lookup": {
-                                        "tree" : "MasterOfOreon:eat"
+                                        "tree" : "MasterOfOreon:research"
                                     }
                                 }
                             }
