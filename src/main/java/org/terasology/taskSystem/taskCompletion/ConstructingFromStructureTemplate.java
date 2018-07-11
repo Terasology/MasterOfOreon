@@ -20,14 +20,13 @@ import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;
+import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
-import org.terasology.structureTemplates.util.transform.BlockRegionMovement;
-import org.terasology.structureTemplates.util.transform.BlockRegionTransformationList;
-import org.terasology.structureTemplates.util.transform.HorizontalBlockRegionRotation;
+import org.terasology.structureTemplates.util.BlockRegionTransform;
 import org.terasology.taskSystem.BuildingType;
 
 import java.util.ArrayList;
@@ -65,14 +64,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
-        BlockRegionTransformationList transformationList = new BlockRegionTransformationList();
-        transformationList.addTransformation(new BlockRegionMovement(centerBlockPosition));
-
-        int rotationAmount = 0;
-
-        transformationList.addTransformation(new HorizontalBlockRegionRotation(rotationAmount));
-
-        buildingTemplate.send(new SpawnStructureEvent(transformationList));
+        buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, centerBlockPosition)));
     }
 
     public void selectBuilding(BuildingType buildingType, int level) {
