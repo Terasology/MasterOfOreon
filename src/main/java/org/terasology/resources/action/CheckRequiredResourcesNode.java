@@ -66,17 +66,24 @@ public class CheckRequiredResourcesNode extends BaseAction {
         if (checkIn.equals("building")) {
             EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
 
-            boolean resourceDeducted = buildingResourceSystem.checkForAResource(building, Constants.COOKIE_CROP, 1);
+            boolean resourceDeducted = false;
+            for (String requiredResource : taskComponent.task.requiredBlocks) {
+                resourceDeducted = buildingResourceSystem.checkForAResource(building, requiredResource, 1);
 
-            if (resourceDeducted) {
-                return BehaviorState.SUCCESS;
+                if (!resourceDeducted) {
+                    // Free the Oreon because the required resources not found in building
+                    taskComponent.assignedTaskType = AssignedTaskType.None;
+                    logger.info("Can't find a building with the required resources. Abandoning task");
+
+                    return BehaviorState.FAILURE;
+                }
+
             }
+
+            return BehaviorState.SUCCESS;
         }
 
-        // Free the Oreon because the required resources not found in building
-        taskComponent.assignedTaskType = AssignedTaskType.None;
-        logger.info("Can't find a building with the required resources. Abandoning task");
-
+        logger.debug("Specify a correct checkIn type. Can be building.");
         return BehaviorState.FAILURE;
     }
 }

@@ -62,7 +62,7 @@ public class Constants {
     public static final String OREON_CROP_0_BLOCK = "MasterOfOreon:OreonPlant0";
 
     // Crop to be checked for in the Diner before eat task
-    public static final String COOKIE_CROP = "Cookiecrop";
+    public static final String COOKIE_CROP_URI = "MasterOfOreon:CookieCrop";
 
     // Prefab for notification messages
     public static final String NOTIFICATION_MESSAGE_PREFAB = "MasterOfOreon:notificationMessage";
@@ -75,8 +75,8 @@ public class Constants {
     // Required regions' index in a constructed building
     public static final int DINER_CHAIR_REGION_INDEX = 86;
     public static final int CHEST_BLOCK_INDEX = 0;
-    public static final int BOOKCASE_REGION_INDEX = 0;
-    public static final int PEDESTAL_REGION_INDEX = 1;
+    public static final int BOOKCASE_REGION_INDEX = 1;
+    public static final int PEDESTAL_REGION_INDEX = 2;
 
 
     public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";

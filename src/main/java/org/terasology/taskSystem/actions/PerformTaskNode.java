@@ -29,6 +29,7 @@ import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.math.Region3i;
 import org.terasology.registry.In;
+import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
@@ -174,6 +175,10 @@ public class PerformTaskNode extends BaseAction {
 
             case AssignedTaskType.Upgrade :
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
+                break;
+
+            case AssignedTaskType.Research :
+                oreon.getEntity().send(new ResearchStartEvent());
         }
     }
 }

@@ -23,6 +23,7 @@ import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
+import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
@@ -41,6 +42,8 @@ import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.research.components.LaboratoryComponent;
+import org.terasology.research.events.ResearchStartEvent;
+import org.terasology.resources.system.BuildingResourceSystem;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.Task;
@@ -49,6 +52,8 @@ import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.tasks.ResearchTask;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.items.BlockItemFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +62,8 @@ import java.util.List;
 public class ResearchSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ResearchSystem.class);
 
+    @In
+    Context context;
     @In
     BlockEntityRegistry blockEntityRegistry;
     @In
@@ -67,6 +74,19 @@ public class ResearchSystem extends BaseComponentSystem {
     PrefabManager prefabManager;
     @In
     TaskManagementSystem taskManagementSystem;
+
+    BlockItemFactory blockItemFactory;
+    BlockManager blockManager;
+    BuildingResourceSystem buildingResourceSystem;
+
+    @Override
+    public void postBegin() {
+        blockItemFactory = new BlockItemFactory(entityManager);
+        blockManager = context.get(BlockManager.class);
+
+        buildingResourceSystem = new BuildingResourceSystem();
+        buildingResourceSystem.initialize(blockEntityRegistry, inventoryManager);
+    }
 
     /**
      * This method adds books to a newly constructed Laboratory's bookcase
@@ -125,8 +145,6 @@ public class ResearchSystem extends BaseComponentSystem {
         switch (level) {
             case 0 :
                 EntityRef book = entityManager.create(Constants.COOKIE_CROP_RESEARCH_BOOK);
-                book.setOwner(player);
-                logger.debug("book owner" + book.getOwner());
                 booksToAdd.add(book);
         }
 
@@ -157,7 +175,7 @@ public class ResearchSystem extends BaseComponentSystem {
                         if (i != -1) {
                             text = text.substring(i);
                             i = text.indexOf(">");
-                            recipePrefabName = text.substring("<recipe".length(), i).replaceAll("\\s","");
+                            recipePrefabName = text.substring("<recipe".length(), i).replaceAll("\\s", "");
                             logger.info(recipePrefabName);
                             break;
                         }
@@ -167,7 +185,11 @@ public class ResearchSystem extends BaseComponentSystem {
                     BookRecipeComponent recipeComponent = recipe.getComponent(BookRecipeComponent.class);
 
                     LaboratoryComponent laboratoryComponent = inventoryEntity.getComponent(LaboratoryComponent.class);
-                    addResearchTask(recipeComponent.blockIngredientsList, recipeComponent.blockResult, item.getOwner().getOwner(), laboratoryComponent.laboratoryEntity);
+                    logger.info("owner" + laboratoryComponent.laboratoryEntity.getOwner());
+
+                    addResearchTask(recipeComponent.blockIngredientsList, recipeComponent.blockResult,
+                            laboratoryComponent.laboratoryEntity.getOwner(),
+                            laboratoryComponent.laboratoryEntity);
 
                     // add exclamation point
                     EntityRef exclamationPoint = entityManager.create(Constants.EXCLAMATION_PREFAB);
@@ -191,15 +213,32 @@ public class ResearchSystem extends BaseComponentSystem {
         }
 
         Task researchTask = new ResearchTask(blockNameList, result.getURI().toString());
+        researchTask.requiredBuildingEntityID = laboratory.getId();
 
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.Research;
         taskComponent.task = researchTask;
 
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
-        taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.PEDESTAL_REGION_INDEX);
+        taskComponent.taskRegion = buildingComponent.boundingRegions.get(16);
 
         taskManagementSystem.addTask(player, entityManager.create(taskComponent));
 
+    }
+
+    /**
+     * Adds the resulting block of a research to the building chest.
+     * @param researchEvent The event received after Oreon performs Research Task.
+     * @param oreon The Oreon which performed the task.
+     * @param taskComponent The TaskComponent attached to the Oreon.
+     */
+    @ReceiveEvent
+    public void addResearchBlockToInventory(ResearchStartEvent researchEvent, EntityRef oreon, TaskComponent taskComponent) {
+        Task completedTask = taskComponent.task;
+        EntityRef laboratory = entityManager.getEntity(completedTask.requiredBuildingEntityID);
+
+        EntityRef result = blockItemFactory.newInstance(blockManager.getBlock(completedTask.blockResult).getBlockFamily());
+
+        buildingResourceSystem.addAResource(laboratory, result);
     }
 }

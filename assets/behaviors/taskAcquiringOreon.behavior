@@ -94,6 +94,19 @@
                             "guard": {
                                 "componentPresent": "MasterOfOreon:Task",
                                 "values": [
+                                    "V assignedTaskType == eat"
+                                ],
+                                "child": {
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:eat"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
                                     "V assignedTaskType == research"
                                 ],
                                 "child": {

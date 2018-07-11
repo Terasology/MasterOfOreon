@@ -15,6 +15,7 @@
  */
 package org.terasology.taskSystem.tasks;
 
+import org.terasology.Constants;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.Task;
@@ -35,7 +36,8 @@ public class EatTask extends Task {
 
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.Eat;
-
         this.buildingType = BuildingType.Diner;
+
+        this.requiredBlocks.add(Constants.COOKIE_CROP_URI);
     }
 }
