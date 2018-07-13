@@ -24,9 +24,10 @@ import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -52,6 +53,7 @@ import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.assets.texture.TextureUtil;
 import org.terasology.rendering.nui.Color;
 import org.terasology.spawning.OreonSpawnComponent;
+import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.tasks.BuildTask;
@@ -63,6 +65,7 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -82,6 +85,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     @In
     private Context context;
+
+    @In
+    private PrefabManager prefabManager;
 
     private BlockManager blockManager;
     private BlockEntityRegistry blockEntityRegistry;
@@ -252,45 +258,69 @@ public class TaskManagementSystem extends BaseComponentSystem {
         int Y = region.minY();
 
         Region3i leftRegion = Region3i.createFromMinMax(new Vector3i(minX - 2, Y, minZ - 2), new Vector3i(minX - 2, Y, maxZ + 2));
-        Region3i rightRegion = Region3i.createFromMinMax(new Vector3i(maxX + 2, Y, minZ - 2), new Vector3i(maxX + 2, Y, maxZ));
-        Region3i topRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, maxZ + 2), new Vector3i(maxX + 1, Y, maxZ + 2));
+        Region3i rightRegion = Region3i.createFromMinMax(new Vector3i(maxX + 2, Y, minZ - 2), new Vector3i(maxX + 2, Y, maxZ + 2));
+        Region3i topRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, maxZ + 2), new Vector3i(maxX, Y, maxZ + 2));
         Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1, Y, minZ - 2));
 
-        placeFenceBlocks(leftRegion);
-        placeFenceBlocks(rightRegion);
-        placeFenceBlocks(topRegion);
-        placeFenceBlocks(bottomRegion);
+        placeFenceBlocks(topRegion, false);
+        placeFenceBlocks(bottomRegion, false);
+        placeFenceBlocks(leftRegion, true);
+        placeFenceBlocks(rightRegion, true);
     }
 
-    private void placeFenceBlocks(Region3i region) {
+    private void placeFenceBlocks(Region3i region, boolean placeTorch) {
         int minX = region.minX();
         int maxX = region.maxX();
         int minZ = region.minZ();
         int maxZ = region.maxZ();
         int y = region.minY();
 
+        Block block = blockManager.getBlock("Fences:fence.0");
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
-                Block block = blockManager.getBlock("Fences:fence.0");
                 blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, y + 1, z), block);
             }
+        }
+
+        // Place torches on corners
+        if (placeTorch) {
+            block = blockManager.getBlock("Core:Torch.TOP");
+            blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(minX, y + 2, minZ), block);
+            blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(maxX, y + 2, maxZ), block);
         }
     }
 
     private Region3i getBuildingExtents(BuildingType buildingType, Region3i region) {
-        EntityRef tempEntity;
+        Prefab buildingPrefab;
 
         switch (buildingType) {
-            case Diner :
-                tempEntity = entityManager.create("MasterOfOreon:inn");
+            case Diner:
+                buildingPrefab = prefabManager.getPrefab("MasterOfOreon:inn");
                 break;
 
-            default :
-                tempEntity = entityManager.create("MasterOfOreon:inn");
+            default:
+                buildingPrefab = prefabManager.getPrefab("MasterOfOreon:storage");
+
+        }
+
+        SpawnBlockRegionsComponent blockRegionsComponent = buildingPrefab.getComponent(SpawnBlockRegionsComponent.class);
+        List<SpawnBlockRegionsComponent.RegionToFill> regionsToFill = blockRegionsComponent.regionsToFill;
+
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+
+        for (SpawnBlockRegionsComponent.RegionToFill regionToFill : regionsToFill) {
+            minX = Math.min(minX, regionToFill.region.minX());
+            maxX = Math.max(maxX, regionToFill.region.maxX());
+            minZ = Math.min(minZ, regionToFill.region.minZ());
+            maxZ = Math.max(maxZ, regionToFill.region.maxZ());
         }
 
         Vector3f center = region.center();
-        return Region3i.createFromMinMax(new Vector3i(center.add(-10, 0, -8)), new Vector3i(center.add(9, 0, 9)));
+        Vector3f extents = new Vector3f((maxX - minX) / 2, 0, (maxZ - minZ) / 2);
+        return Region3i.createFromCenterExtents(center, extents);
     }
 
     private Texture getAreaTexture(Task newTask) {

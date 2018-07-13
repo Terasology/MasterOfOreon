@@ -140,25 +140,7 @@
             { "blockType": "MasterOfOreon:food", "region": { "min": [6, 7, -1], "size": [1, 1, 1]}},
             { "blockType": "MasterOfOreon:food", "region": { "min": [-7, 7, 0], "size": [1, 1, 1]}},
             { "blockType": "MasterOfOreon:food", "region": { "min": [0, 6, 5], "size": [1, 1, 1]}},
-            { "blockType": "MasterOfOreon:HardOakTrunk", "region": { "min": [2, 2, -5], "size": [2, 2, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-6, 1, -6], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-4, 1, 2], "size": [4, 2, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-3, 2, 3], "size": [2, 1, 2]}},
-            { "blockType": "engine:air", "region": { "min": [1, 5, 3], "size": [2, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [4, 2, 3], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-1, 1, 4], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-3, 1, 6], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [4, 2, 6], "size": [1, 2, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-3, 2, 7], "size": [2, 1, 2]}},
-            { "blockType": "engine:air", "region": { "min": [-1, 1, 7], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [4, 4, 7], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [1, 1, 8], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [2, 2, 8], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [3, 3, 8], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-42, 0, 20], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-30, 0, 31], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-9, 0, 34], "size": [1, 1, 1]}},
-            { "blockType": "engine:air", "region": { "min": [-19, 0, 40], "size": [1, 1, 1]}}
+            { "blockType": "MasterOfOreon:HardOakTrunk", "region": { "min": [2, 2, -5], "size": [2, 2, 1]}}
         ]
     }
 }
