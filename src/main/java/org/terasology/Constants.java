@@ -89,9 +89,11 @@ public class Constants {
 
     public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";
     public static final String BUILDING_UPGRADE_SCREEN_URI = "buildingUpgradeScreen";
+    public static final String OVERVIEW_SCREEN_URI = "MasterOfOreon:overviewScreen";
 
     public static final String PEDESTAL_PREFAB = "MasterOfOreon:pedestal";
     public static final String RESEARCH_BOOK_NAME = "Research Book";
+
     // Books' prefab
     public static final String COOKIE_CROP_RESEARCH_BOOK = "MasterOfOreon:cookieCropResearchBook";
 
