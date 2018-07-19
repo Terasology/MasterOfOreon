@@ -72,11 +72,19 @@ public class Constants {
     public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
     public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
 
+    // Structure Template prefabs
+    public static final String DINER_PREFAB = "MasterOfOreon:inn";
+    public static final String STORAGE_PREFAB = "MasterOfOreon:storage";
+
+    public static final String FENCE_BLOCK_URI = "Fences:Fence.0";
+    public static final String TORCH_BLOCK_URI = "Core:Torch.TOP";
+
     // Required regions' index in a constructed building
     public static final int DINER_CHAIR_REGION_INDEX = 86;
     public static final int CHEST_BLOCK_INDEX = 0;
     public static final int BOOKCASE_REGION_INDEX = 1;
     public static final int PEDESTAL_REGION_INDEX = 2;
+    public static final int LABORATORY_SLAB_REGION = 16;
 
 
     public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";

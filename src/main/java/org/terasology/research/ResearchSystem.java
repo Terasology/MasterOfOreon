@@ -40,6 +40,7 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.research.components.LaboratoryComponent;
 import org.terasology.research.events.ResearchStartEvent;
@@ -166,39 +167,7 @@ public class ResearchSystem extends BaseComponentSystem {
 
                 // Check if item is research Book
                 if (nameComponent != null && nameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
-                    BookComponent bookComponent = item.getComponent(BookComponent.class);
-                    List<String> textList = bookComponent.pages;
-
-                    String recipePrefabName = "";
-                    for (String text : textList) {
-                        int i = text.indexOf("<recipe");
-                        if (i != -1) {
-                            text = text.substring(i);
-                            i = text.indexOf(">");
-                            recipePrefabName = text.substring("<recipe".length(), i).replaceAll("\\s", "");
-                            logger.info(recipePrefabName);
-                            break;
-                        }
-                    }
-
-                    Prefab recipe = prefabManager.getPrefab(recipePrefabName);
-                    BookRecipeComponent recipeComponent = recipe.getComponent(BookRecipeComponent.class);
-
-                    LaboratoryComponent laboratoryComponent = inventoryEntity.getComponent(LaboratoryComponent.class);
-                    logger.info("owner" + laboratoryComponent.laboratoryEntity.getOwner());
-
-                    addResearchTask(recipeComponent.blockIngredientsList, recipeComponent.blockResult,
-                            laboratoryComponent.laboratoryEntity.getOwner(),
-                            laboratoryComponent.laboratoryEntity);
-
-                    // add exclamation point
-                    EntityRef exclamationPoint = entityManager.create(Constants.EXCLAMATION_PREFAB);
-                    LocationComponent locationComponent = exclamationPoint.getComponent(LocationComponent.class);
-                    LocationComponent pedestalLocationComponent = inventoryEntity.getComponent(LocationComponent.class);
-                    locationComponent.setWorldPosition(pedestalLocationComponent.getWorldPosition().addY(1f));
-
-                    inventoryManager.giveItem(inventoryEntity, inventoryEntity, exclamationPoint);
-
+                    getResearchRecipe(item, inventoryEntity);
                     break;
                 }
             }
@@ -220,7 +189,7 @@ public class ResearchSystem extends BaseComponentSystem {
         taskComponent.task = researchTask;
 
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
-        taskComponent.taskRegion = buildingComponent.boundingRegions.get(16);
+        taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.LABORATORY_SLAB_REGION);
 
         taskManagementSystem.addTask(player, entityManager.create(taskComponent));
 
@@ -240,5 +209,41 @@ public class ResearchSystem extends BaseComponentSystem {
         EntityRef result = blockItemFactory.newInstance(blockManager.getBlock(completedTask.blockResult).getBlockFamily());
 
         buildingResourceSystem.addAResource(laboratory, result);
+    }
+
+    private void getResearchRecipe(EntityRef item, EntityRef inventoryEntity) {
+        BookComponent bookComponent = item.getComponent(BookComponent.class);
+        List<String> textList = bookComponent.pages;
+
+        String recipePrefabName = "";
+        for (String text : textList) {
+            int i = text.indexOf("<recipe");
+            if (i != -1) {
+                text = text.substring(i);
+                i = text.indexOf(">");
+                recipePrefabName = text.substring("<recipe".length(), i).replaceAll("\\s", "");
+                logger.info(recipePrefabName);
+                break;
+            }
+        }
+
+        Prefab recipe = prefabManager.getPrefab(recipePrefabName);
+        BookRecipeComponent recipeComponent = recipe.getComponent(BookRecipeComponent.class);
+
+        LaboratoryComponent laboratoryComponent = inventoryEntity.getComponent(LaboratoryComponent.class);
+        logger.info("owner" + laboratoryComponent.laboratoryEntity.getOwner());
+
+        // add research task
+        addResearchTask(recipeComponent.blockIngredientsList, recipeComponent.blockResult,
+                laboratoryComponent.laboratoryEntity.getOwner(),
+                laboratoryComponent.laboratoryEntity);
+
+        // add exclamation point
+        EntityRef exclamationPoint = entityManager.create(Constants.EXCLAMATION_PREFAB);
+        LocationComponent locationComponent = exclamationPoint.getComponent(LocationComponent.class);
+        LocationComponent pedestalLocationComponent = inventoryEntity.getComponent(LocationComponent.class);
+        locationComponent.setWorldPosition(pedestalLocationComponent.getWorldPosition().addY(1f));
+
+        inventoryManager.giveItem(inventoryEntity, inventoryEntity, exclamationPoint);
     }
 }

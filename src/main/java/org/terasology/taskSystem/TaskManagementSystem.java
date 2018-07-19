@@ -275,7 +275,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         int maxZ = region.maxZ();
         int y = region.minY();
 
-        Block block = blockManager.getBlock("Fences:fence.0");
+        Block block = blockManager.getBlock(Constants.FENCE_BLOCK_URI);
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
                 blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, y + 1, z), block);
@@ -284,7 +284,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         // Place torches on corners
         if (placeTorch) {
-            block = blockManager.getBlock("Core:Torch.TOP");
+            block = blockManager.getBlock(Constants.TORCH_BLOCK_URI);
             blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(minX, y + 2, minZ), block);
             blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(maxX, y + 2, maxZ), block);
         }
@@ -295,11 +295,11 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         switch (buildingType) {
             case Diner:
-                buildingPrefab = prefabManager.getPrefab("MasterOfOreon:inn");
+                buildingPrefab = prefabManager.getPrefab(Constants.DINER_PREFAB);
                 break;
 
             default:
-                buildingPrefab = prefabManager.getPrefab("MasterOfOreon:storage");
+                buildingPrefab = prefabManager.getPrefab(Constants.STORAGE_PREFAB);
 
         }
 
