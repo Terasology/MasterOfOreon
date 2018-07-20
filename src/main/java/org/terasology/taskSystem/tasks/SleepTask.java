@@ -34,5 +34,6 @@ public class SleepTask extends Task {
 
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.Sleep;
+        this.isAdvanced = true;
     }
 }

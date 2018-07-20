@@ -37,5 +37,6 @@ public class TrainIntelligenceTask extends Task {
         this.assignedTaskType = AssignedTaskType.Train_Intelligence;
 
         this.buildingType = BuildingType.Classroom;
+        this.isAdvanced = true;
     }
 }

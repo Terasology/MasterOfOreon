@@ -39,5 +39,6 @@ public class EatTask extends Task {
         this.buildingType = BuildingType.Diner;
 
         this.requiredBlocks.add(Constants.COOKIE_CROP_URI);
+        this.isAdvanced = true;
     }
 }

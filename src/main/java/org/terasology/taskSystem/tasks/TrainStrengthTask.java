@@ -37,5 +37,6 @@ public class TrainStrengthTask extends Task {
         this.assignedTaskType = AssignedTaskType.Train_Strength;
 
         this.buildingType = BuildingType.Gym;
+        this.isAdvanced = true;
     }
 }

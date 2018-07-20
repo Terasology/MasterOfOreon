@@ -36,4 +36,5 @@ public class Task {
     public long requiredBuildingEntityID = 0;
     public List<String> requiredBlocks = new ArrayList<>();
     public String blockResult = "";
+    public boolean isAdvanced;
 }

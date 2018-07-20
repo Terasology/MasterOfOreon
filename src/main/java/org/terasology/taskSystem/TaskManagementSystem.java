@@ -459,7 +459,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private void abandonTask(EntityRef oreon) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
-        if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.None)) {
+        if (!oreonTaskComponent.task.isAdvanced) {
             String message = "Oreon " + oreon.getComponent(NameTagComponent.class).text + " got stuck. Abandoning task " + oreonTaskComponent.assignedTaskType;
             oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
             // Create entity for abandoned task
