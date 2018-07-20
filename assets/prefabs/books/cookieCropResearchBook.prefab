@@ -23,5 +23,9 @@
     "CapsuleShape" : {
         "radius" : 2,
         "height" : 5
+    },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "Books:BookScreen"
     }
 }
