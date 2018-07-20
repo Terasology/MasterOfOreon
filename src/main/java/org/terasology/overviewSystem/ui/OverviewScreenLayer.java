@@ -18,9 +18,11 @@ package org.terasology.overviewSystem.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.databinding.Binding;
@@ -44,12 +46,14 @@ public class OverviewScreenLayer extends CoreScreenLayer {
     private UIList availableTasks;
     private UIList inProgressTasks;
     private UIList oreons;
+    private UIList buildings;
 
     @Override
     public void initialise() {
         availableTasks = find(Constants.AVAILABLE_TASKS_LIST_ID, UIList.class);
         inProgressTasks = find(Constants.ON_GOING_TASKS_LIST_ID, UIList.class);
         oreons = find(Constants.OREONS_LIST_ID, UIList.class);
+        buildings = find(Constants.BUILDINGS_LIST_ID, UIList.class);
 
         populateLists();
     }
@@ -129,8 +133,57 @@ public class OverviewScreenLayer extends CoreScreenLayer {
             }
         };
 
+        Binding<List> buildingsList = new ReadOnlyBinding<List>() {
+            @Override
+            public List get() {
+                List<String> result = new ArrayList<>();
+
+                int numberOfDiners = 0;
+                int numberOfStorage = 0;
+                int numberOfLaboratories = 0;
+                int numberOfClassrooms = 0;
+                int numberOfGyms = 0;
+                int numberOfHospitals = 0;
+
+                for (EntityRef building : entityManager.getEntitiesWith(ConstructedBuildingComponent.class)) {
+                    ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+
+                    switch (buildingComponent.buildingType) {
+                        case Diner :
+                            numberOfDiners++;
+                            break;
+                        case Storage :
+                            numberOfStorage++;
+                            break;
+                        case Laboratory :
+                            numberOfLaboratories++;
+                            break;
+                        case Classroom :
+                            numberOfClassrooms++;
+                            break;
+                        case Gym :
+                            numberOfGyms++;
+                            break;
+                        case Hospital :
+                            numberOfHospitals++;
+                            break;
+                    }
+                }
+
+                result.add("Diners : " + numberOfDiners);
+                result.add("Storage : " + numberOfStorage);
+                result.add("Laboratories : " + numberOfLaboratories);
+                result.add("Classrooms : " + numberOfClassrooms);
+                result.add("Gyms : " + numberOfGyms);
+                result.add("Hospitals : " + numberOfHospitals);
+
+                return result;
+            }
+        };
+
         availableTasks.bindList(availableTasksList);
         inProgressTasks.bindList(inProgressTasksList);
         oreons.bindList(oreonsList);
+        buildings.bindList(buildingsList);
     }
 }

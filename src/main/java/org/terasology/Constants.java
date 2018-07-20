@@ -95,6 +95,7 @@ public class Constants {
     public static final String AVAILABLE_TASKS_LIST_ID = "availableTasksList";
     public static final String ON_GOING_TASKS_LIST_ID = "inProgressTasksList";
     public static final String OREONS_LIST_ID = "oreons";
+    public static final String BUILDINGS_LIST_ID = "buildingsList";
 
     public static final String PEDESTAL_PREFAB = "MasterOfOreon:pedestal";
     public static final String RESEARCH_BOOK_NAME = "Research Book";

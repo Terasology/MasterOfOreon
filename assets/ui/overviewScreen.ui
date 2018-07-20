@@ -69,6 +69,25 @@
                                     ]
                                 }
                             ]
+                        },
+                        {
+                            "type" : "RowLayout",
+                            "contents" : [
+                                {
+                                    "type" : "ColumnLayout",
+                                    "contents" : [
+                                        {
+                                            "type" : "UILabel",
+                                            "text" : "Buildings",
+                                            "family" : "title"
+                                        },
+                                        {
+                                            "type" : "UIList",
+                                            "id" : "buildingsList"
+                                        }
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 }
