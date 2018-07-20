@@ -20,6 +20,24 @@
                     "contents" : [
                         {
                             "type" : "RowLayout",
+                            "contents" : [
+                                {
+                                    "type" : "ColumnLayout",
+                                    "contents" : [
+                                        {
+                                            "type": "UILabel",
+                                            "text": "Number Of Oreons : "
+                                        },
+                                        {
+                                            "type" : "UIList",
+                                            "id" : "oreons"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type" : "RowLayout",
                             "horizontalSpacing" : 16,
                             "contents" : [
                                 {
