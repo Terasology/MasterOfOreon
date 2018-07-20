@@ -60,9 +60,9 @@ public class TaskTypeHandler extends SimpleTypeHandler<Task> {
         task.buildingType = BuildingType.valueOf(dataMap.getAsString("buildingType"));
         task.requiredBuildingEntityID = dataMap.getAsLong("requiredBuildingEntityID");
 
-        if (dataMap.getAsArray("blocksRequired") != null) {
+        if (dataMap.getAsArray("requiredBlocks") != null) {
             List<String> blocksRequired = new ArrayList<>();
-            for (PersistedData block : dataMap.getAsArray("blocksRequired")) {
+            for (PersistedData block : dataMap.getAsArray("requiredBlocks")) {
                 blocksRequired.add(block.getAsString());
             }
             task.requiredBlocks = blocksRequired;
