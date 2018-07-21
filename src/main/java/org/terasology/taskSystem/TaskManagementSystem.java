@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
+import org.terasology.buildings.events.BuildingConstructionStartedEvent;
 import org.terasology.context.Context;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -39,6 +40,8 @@ import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
+import org.terasology.logic.delay.DelayManager;
+import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.Region3i;
@@ -65,7 +68,6 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -76,7 +78,7 @@ import java.util.Queue;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TaskManagementSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TaskManagementSystem.class);
-
+    private static final String CONSTRUCTION_COMPLETE_EVENT_ID = "taskManagementSystem:constructionComplete";
     @In
     private EntityManager entityManager;
 
@@ -88,6 +90,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     @In
     private PrefabManager prefabManager;
+
+    @In
+    private DelayManager delayManager;
 
     private BlockManager blockManager;
     private BlockEntityRegistry blockEntityRegistry;
@@ -496,22 +501,32 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
-    public void addBuildingToHolding(BuildingConstructionCompletedEvent constructionCompletedEvent, EntityRef player) {
+    public void addBuildingToHolding(BuildingConstructionStartedEvent constructionStartedEvent, EntityRef player) {
         ConstructedBuildingComponent constructedBuildingComponent = new ConstructedBuildingComponent();
-        constructedBuildingComponent.boundingRegions = constructionCompletedEvent.absoluteRegions;
-        constructedBuildingComponent.buildingType = constructionCompletedEvent.buildingType;
-        constructedBuildingComponent.centerLocation = constructionCompletedEvent.centerBlockPosition;
+        constructedBuildingComponent.boundingRegions = constructionStartedEvent.absoluteRegions;
+        constructedBuildingComponent.buildingType = constructionStartedEvent.buildingType;
+        constructedBuildingComponent.centerLocation = constructionStartedEvent.centerBlockPosition;
 
-        constructionCompletedEvent.constructedBuildingEntity = entityManager.create(constructedBuildingComponent);
+        constructionStartedEvent.constructedBuildingEntity = entityManager.create(constructedBuildingComponent);
 
         NetworkComponent networkComponent = new NetworkComponent();
         networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-        constructionCompletedEvent.constructedBuildingEntity.addComponent(networkComponent);
+        constructionStartedEvent.constructedBuildingEntity.addComponent(networkComponent);
 
-        constructionCompletedEvent.constructedBuildingEntity.setOwner(player);
+        constructionStartedEvent.constructedBuildingEntity.setOwner(player);
 
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
-        holdingComponent.constructedBuildings.add(constructionCompletedEvent.constructedBuildingEntity);
+        holdingComponent.constructedBuildings.add(constructionStartedEvent.constructedBuildingEntity);
+
+        delayManager.addDelayedAction(constructionStartedEvent.constructedBuildingEntity, CONSTRUCTION_COMPLETE_EVENT_ID, constructionStartedEvent.completionDelay);
+    }
+
+    @ReceiveEvent
+    public void onDelayedStructureCompletionTrigger(DelayedActionTriggeredEvent event, EntityRef constructedBuilding) {
+        ConstructedBuildingComponent constructedBuildingComponent = constructedBuilding.getComponent(ConstructedBuildingComponent.class);
+
+        constructedBuilding.getOwner().send(new BuildingConstructionCompletedEvent(constructedBuildingComponent.boundingRegions,
+                constructedBuildingComponent.buildingType, constructedBuildingComponent.centerLocation, constructedBuilding));
     }
 }

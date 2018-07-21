@@ -18,10 +18,12 @@ package org.terasology.taskSystem.taskCompletion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.buildings.events.BuildingConstructionStartedEvent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
+import org.terasology.buildings.events.BuildingConstructionStartedEvent;
+import org.terasology.structureTemplates.components.CompletionTimeComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
@@ -90,7 +92,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         }
     }
 
-    private void sendConstructionCompleteEvent(Vector3i centerBlock, BuildingType buildingType) {
+    private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType) {
         SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
@@ -102,8 +104,10 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
             absoluteRegions.add(absoluteRegion);
         }
 
+        long delay = buildingTemplate.getComponent(CompletionTimeComponent.class).completionDelay;
+
         // Add this building's regions to the Holding
         EntityRef building = EntityRef.NULL;
-        player.send(new BuildingConstructionCompletedEvent(absoluteRegions, buildingType, centerBlock, building));
+        player.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay));
     }
 }
