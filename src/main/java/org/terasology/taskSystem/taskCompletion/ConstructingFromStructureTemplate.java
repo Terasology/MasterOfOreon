@@ -18,11 +18,13 @@ package org.terasology.taskSystem.taskCompletion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
+import org.terasology.buildings.events.BuildingConstructionStartedEvent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
+import org.terasology.buildings.events.BuildingConstructionStartedEvent;
+import org.terasology.structureTemplates.components.CompletionTimeComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
@@ -56,7 +58,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
         constructBuilding(centerBlockPosition, buildingType, 0);
 
-        sendConstructionCompleteEvent(centerBlockPosition, buildingType);
+        sendConstructionStartEvent(centerBlockPosition, buildingType);
     }
 
     public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level) {
@@ -73,12 +75,16 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
                 break;
 
-            case Storage:
+            case Storage :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_STORAGE + Integer.toString(level));
+                break;
+
+            case Laboratory :
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
         }
     }
 
-    private void sendConstructionCompleteEvent(Vector3i centerBlock, BuildingType buildingType) {
+    private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType) {
         SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
@@ -90,7 +96,10 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
             absoluteRegions.add(absoluteRegion);
         }
 
+        long delay = buildingTemplate.getComponent(CompletionTimeComponent.class).completionDelay;
+
         // Add this building's regions to the Holding
-        player.send(new BuildingConstructionCompletedEvent(absoluteRegions, buildingType, centerBlock));
+        EntityRef building = EntityRef.NULL;
+        player.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay));
     }
 }

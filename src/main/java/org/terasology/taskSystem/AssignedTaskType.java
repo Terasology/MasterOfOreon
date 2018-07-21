@@ -26,4 +26,5 @@ public class AssignedTaskType {
     public static final String Train_Strength = "train_strength";
     public static final String Train_Intelligence = "train_intelligence";
     public static final String Upgrade = "upgrade";
+    public static final String Research = "research";
 }

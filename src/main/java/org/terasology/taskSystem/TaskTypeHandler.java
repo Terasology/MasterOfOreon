@@ -19,6 +19,8 @@ import com.google.common.collect.ImmutableMap;
 import org.terasology.persistence.typeHandling.*;
 import org.terasology.rendering.nui.Color;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RegisterTypeHandler
@@ -36,6 +38,8 @@ public class TaskTypeHandler extends SimpleTypeHandler<Task> {
                 .put("taskColor", context.create(task.taskColor.rgba()))
                 .put("buildingType", context.create(task.buildingType.toString()))
                 .put("requiredBuildingEntityID", context.create(task.requiredBuildingEntityID))
+                .put("requiredBlocks", context.createStrings(task.requiredBlocks))
+                .put("blockResult", context.create(task.blockResult))
                 .build();
 
         return context.create(dataMap);
@@ -55,6 +59,16 @@ public class TaskTypeHandler extends SimpleTypeHandler<Task> {
         task.taskColor = new Color(dataMap.getAsInteger("taskColor"));
         task.buildingType = BuildingType.valueOf(dataMap.getAsString("buildingType"));
         task.requiredBuildingEntityID = dataMap.getAsLong("requiredBuildingEntityID");
+
+        if (dataMap.getAsArray("requiredBlocks") != null) {
+            List<String> blocksRequired = new ArrayList<>();
+            for (PersistedData block : dataMap.getAsArray("requiredBlocks")) {
+                blocksRequired.add(block.getAsString());
+            }
+            task.requiredBlocks = blocksRequired;
+        }
+
+        task.blockResult = dataMap.getAsString("blockResult");
 
         return task;
     }

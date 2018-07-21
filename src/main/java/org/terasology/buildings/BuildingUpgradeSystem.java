@@ -26,6 +26,7 @@ import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -87,7 +88,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         EntityRef selectedItem = heldItemComponent.selectedItem;
         DisplayNameComponent displayNameComponent = selectedItem.getComponent(DisplayNameComponent.class);
 
-        if (displayNameComponent != null && !displayNameComponent.name.equals(Constants.UPGRADE_TOOL_NAME)) {
+        if (displayNameComponent == null || !displayNameComponent.name.equals(Constants.UPGRADE_TOOL_NAME)) {
             return;
         }
 
@@ -147,12 +148,22 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskMangementSystem.addTask(player, task);
     }
 
-    @ReceiveEvent(components = {TaskComponent.class})
+    /**
+     * This method handles the construction of the upgraded version of a building. The event is sent by {@link PerformTaskNode}
+     * after the Oreon has completed an Upgrade task.
+     *
+     * @param event The upgrade event sent.
+     * @param oreon The Oreon entity which completed the task.
+     * @param taskComponent The task component attached to the Oreon.
+     */
+    @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_HIGH)
     public void onUpgradeStart(BuildingUpgradeStartEvent event, EntityRef oreon, TaskComponent taskComponent) {
         logger.info("upgrade event start");
         EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
-        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel + 1);
+        buildingComponent.currentLevel += 1;
+        building.saveComponent(buildingComponent);
+        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel);
     }
 }

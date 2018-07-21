@@ -15,29 +15,29 @@
  */
 package org.terasology.taskSystem.tasks;
 
-import org.terasology.Constants;
 import org.terasology.taskSystem.AssignedTaskType;
-import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.Task;
 
-public class EatTask extends Task {
+import java.util.List;
+
+public class ResearchTask extends Task {
     private static final int HEALTH = 10;
     private static final int INTELLIGENCE = 0;
     private static final int STRENGTH = 0;
-    private static final int HUNGER = -20;
+    private static final int HUNGER = 20;
 
-    private static final float DURATION = 20;
+    private static final float DURATION = 10;
 
-    public EatTask() {
+    public ResearchTask(List<String> requiredBlocks, String blockResult) {
         this.health = HEALTH;
         this.intelligence = INTELLIGENCE;
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.Eat;
-        this.buildingType = BuildingType.Diner;
+        this.assignedTaskType = AssignedTaskType.Research;
 
-        this.requiredBlocks.add(Constants.COOKIE_CROP_URI);
+        this.requiredBlocks = requiredBlocks;
+        this.blockResult = blockResult;
     }
 }

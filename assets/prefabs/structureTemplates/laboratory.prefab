@@ -1,0 +1,35 @@
+{
+    "StructureTemplate": {
+        "type": "MasterOfOreon:laboratory0"
+    },
+    "SpawnBlockRegions": {
+        "regionsToFill": [
+            { "blockType": "MasterOfOreon:OreonChest.FRONT", "region": { "min": [0, 2, 3], "size": [1, 1, 1]}},
+            { "blockType": "Books:Bookcase", "region": { "min": [-2, 1, -1], "size": [1, 1, 1]}},
+            { "blockType": "MasterOfOreon:pedestal", "region": { "min": [-2, 1, -3], "size": [1, 1, 1]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [-3, 1, -4], "size": [2, 4, 1]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [2, 1, -4], "size": [2, 4, 1]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [-3, 1, -3], "size": [1, 3, 7]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [-3, 4, -3], "size": [7, 1, 2]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [3, 1, -3], "size": [1, 3, 7]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [-3, 4, -1], "size": [3, 1, 3]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [1, 4, -1], "size": [3, 1, 3]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [-3, 4, 2], "size": [7, 1, 3]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [-3, 1, 4], "size": [7, 2, 1]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [-3, 3, 4], "size": [2, 1, 1]}},
+            { "blockType": "Core:CobbleStone", "region": { "min": [2, 3, 4], "size": [2, 1, 1]}},
+            { "blockType": "Core:CobbleStone:engine:eighthBlock", "region": { "min": [-2, 2, 1], "size": [4, 1, 1]}},
+            { "blockType": "Core:CobbleStone:engine:stair.RIGHT", "region": { "min": [-2, 1, 1], "size": [4, 1, 1]}},
+            { "blockType": "Core:Dirt", "region": { "min": [-1, 0, -4], "size": [3, 1, 1]}},
+            { "blockType": "Core:Dirt", "region": { "min": [-2, 0, -3], "size": [5, 1, 3]}},
+            { "blockType": "Core:Dirt", "region": { "min": [-2, 0, 0], "size": [2, 1, 1]}},
+            { "blockType": "Core:Dirt", "region": { "min": [1, 0, 0], "size": [2, 1, 1]}},
+            { "blockType": "Core:Dirt", "region": { "min": [-2, 0, 1], "size": [5, 1, 3]}},
+            { "blockType": "Core:glass", "region": { "min": [0, 4, -1], "size": [1, 1, 3]}},
+            { "blockType": "Core:glass", "region": { "min": [-1, 3, 4], "size": [3, 1, 1]}},
+            { "blockType": "Core:torch.FRONT", "region": { "min": [-1, 4, -4], "size": [3, 1, 1]}},
+            { "blockType": "Core:torch.LEFT", "region": { "min": [2, 3, -3], "size": [1, 1, 7]}},
+            { "blockType": "Core:torch.RIGHT", "region": { "min": [-2, 3, -3], "size": [1, 1, 7]}}
+        ]
+    }
+}

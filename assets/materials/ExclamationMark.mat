@@ -1,0 +1,6 @@
+{
+    "shader" : "engine:genericMeshMaterial",
+    "params" : {
+        "textured" : false
+    }
+}

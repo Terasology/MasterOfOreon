@@ -28,11 +28,11 @@ import java.util.List;
  */
 public class BuildingResourceSystem extends ResourceSystem {
 
-    public boolean checkForAResource(EntityRef building, String resourceName, int quantity) {
+    public boolean checkForAResource(EntityRef building, String resourceURI, int quantity) {
         EntityRef chestEntity = getChestEntity(building);
         List<EntityRef> slots = chestEntity.getComponent(InventoryComponent.class).itemSlots;
 
-        return deductFromInventory(chestEntity, slots, resourceName, quantity);
+        return deductFromInventory(chestEntity, slots, resourceURI, quantity);
     }
 
     public boolean addAResource(EntityRef building, EntityRef item) {

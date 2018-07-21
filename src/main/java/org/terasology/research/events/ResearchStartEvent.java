@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.taskSystem;
+package org.terasology.research.events;
 
-public enum BuildingType {
-    None,
-    Hospital,
-    Diner,
-    Gym,
-    Classroom,
-    Storage,
-    Laboratory
+import org.terasology.entitySystem.event.Event;
+
+public class ResearchStartEvent implements Event {
 }

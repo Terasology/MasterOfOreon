@@ -70,11 +70,15 @@
                                             "id" : "classroomButton",
                                             "text" : "Classroom"
                                         },
-                                        ,
                                         {
                                             "type" : "UIButton",
                                             "id" : "storageButton",
                                             "text" : "Storage"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "laboratoryButton",
+                                            "text" : "Laboratory"
                                         }
                                     ]
                                 }

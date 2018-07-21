@@ -15,10 +15,12 @@
  */
 package org.terasology.resources.system;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.world.BlockEntityRegistry;
+import org.terasology.world.BlockEntityRegistry;;
+import org.terasology.world.block.items.BlockItemComponent;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ import java.util.List;
  * The system which consists of the logic common between the {@link PlayerResourceSystem} and {@link BuildingResourceSystem}
  */
 public abstract class ResourceSystem {
-
+    private static final Logger logger = LoggerFactory.getLogger(ResourceSystem.class);
     BlockEntityRegistry blockEntityRegistry;
     InventoryManager inventoryManager;
 
@@ -52,7 +54,7 @@ public abstract class ResourceSystem {
      */
     public abstract boolean addAResource(EntityRef entity, EntityRef item);
 
-    boolean deductFromInventory(EntityRef inventory, List<EntityRef> slots, String resourceName, int quantity) {
+    boolean deductFromInventory(EntityRef inventory, List<EntityRef> slots, String resourceURI, int quantity) {
 
         int size = inventoryManager.getNumSlots(inventory);
 
@@ -63,8 +65,8 @@ public abstract class ResourceSystem {
                 continue;
             }
 
-            DisplayNameComponent displayNameComponent = item.getComponent(DisplayNameComponent.class);
-            if (displayNameComponent.name.equals(resourceName) && inventoryManager.getStackSize(item) >= quantity) {
+            BlockItemComponent blockItemComponent = item.getComponent(BlockItemComponent.class);
+            if (blockItemComponent.blockFamily.getURI().toString().equals(resourceURI) && inventoryManager.getStackSize(item) >= quantity) {
                 inventoryManager.removeItem(inventory, inventory, slotNumber, false, quantity);
                 return true;
             }

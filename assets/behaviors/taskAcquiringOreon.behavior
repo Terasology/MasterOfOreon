@@ -102,6 +102,19 @@
                                     }
                                 }
                             }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == research"
+                                ],
+                                "child": {
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:research"
+                                    }
+                                }
+                            }
                         }
                     ]
                 }

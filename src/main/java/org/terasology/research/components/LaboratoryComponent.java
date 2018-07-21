@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.taskSystem;
+package org.terasology.research.components;
 
-public enum BuildingType {
-    None,
-    Hospital,
-    Diner,
-    Gym,
-    Classroom,
-    Storage,
-    Laboratory
+import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
+
+public class LaboratoryComponent implements Component {
+    public EntityRef laboratoryEntity;
 }
