@@ -59,7 +59,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
         constructBuilding(centerBlockPosition, buildingType, 0);
 
-        sendConstructionCompleteEvent(centerBlockPosition, buildingType);
+        sendConstructionStartEvent(centerBlockPosition, buildingType);
     }
 
     public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level) {

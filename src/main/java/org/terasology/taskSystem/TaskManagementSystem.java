@@ -524,6 +524,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onDelayedStructureCompletionTrigger(DelayedActionTriggeredEvent event, EntityRef constructedBuilding) {
+        if (!event.getActionId().equals(CONSTRUCTION_COMPLETE_EVENT_ID)) {
+            return;
+        }
         ConstructedBuildingComponent constructedBuildingComponent = constructedBuilding.getComponent(ConstructedBuildingComponent.class);
 
         constructedBuilding.getOwner().send(new BuildingConstructionCompletedEvent(constructedBuildingComponent.boundingRegions,
