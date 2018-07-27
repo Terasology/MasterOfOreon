@@ -1,0 +1,19 @@
+{
+    "sequence" : [
+        {
+
+            "animation": {
+                "play": "MasterOfOreon:Build.animationPool",
+                "loop": "MasterOfOreon:Build.animationPool"
+            }
+
+        },
+        {
+            "check_task_status" : {
+                "child" : "move_to"
+            }
+        },
+        "add_crop_transfer_to_storage_task",
+        "perform_task"
+    ]
+}

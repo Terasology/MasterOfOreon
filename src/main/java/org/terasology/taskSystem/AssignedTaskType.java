@@ -27,4 +27,5 @@ public class AssignedTaskType {
     public static final String Train_Intelligence = "train_intelligence";
     public static final String Upgrade = "upgrade";
     public static final String Research = "research";
+    public static final String PlaceBlockInStorage = "placeBlockInStorage";
 }

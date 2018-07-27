@@ -28,6 +28,9 @@ public class HarvestTask extends Task {
     private static final float DURATION = 10;
     private static final Color COLOR = Color.GREEN.alterAlpha(90);
 
+    public String harvestedCrop;
+    public int numberOfCropBlocksHarvested;
+
     public HarvestTask() {
         this.health = HEALTH;
         this.intelligence = INTELLIGENCE;
@@ -37,5 +40,7 @@ public class HarvestTask extends Task {
         this.taskDuration = DURATION;
         this.taskColor = COLOR;
         this.assignedTaskType = AssignedTaskType.Harvest;
+
+        this.subsequentTaskType = AssignedTaskType.PlaceBlockInStorage;
     }
 }
