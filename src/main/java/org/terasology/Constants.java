@@ -86,6 +86,7 @@ public class Constants {
     public static final int PEDESTAL_REGION_INDEX = 2;
     public static final int LABORATORY_SLAB_REGION = 16;
 
+    public static final String AIR_BLOCK_URI = "engine:air";
 
     public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";
     public static final String BUILDING_UPGRADE_SCREEN_URI = "buildingUpgradeScreen";

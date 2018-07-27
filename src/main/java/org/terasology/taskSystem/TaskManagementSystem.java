@@ -226,7 +226,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         switch (newTaskType) {
             case AssignedTaskType.Plant :
-                newTask = new PlantTask();
+                newTask = new PlantTask(Constants.OREON_CROP_0_BLOCK);
                 break;
 
             case AssignedTaskType.Build :
@@ -235,7 +235,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 break;
 
             default :
-                newTask = new PlantTask();
+                newTask = new PlantTask(Constants.OREON_CROP_0_BLOCK);
         }
 
         newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;

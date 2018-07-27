@@ -28,6 +28,10 @@ import org.terasology.registry.Share;
 @Share(DelayedNotificationSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class DelayedNotificationSystem extends BaseComponentSystem {
+    // TODO : Modify implementation to use DelayManager
+    // TODO : Use this in TaskManagementSystem for notifications
+    // TODO : Modify method implementations to generate message entity on demand and then destroy them
+
     @In
     private Time time;
 

@@ -41,6 +41,6 @@ public class HarvestTask extends Task {
         this.taskColor = COLOR;
         this.assignedTaskType = AssignedTaskType.Harvest;
 
-        this.subsequentTaskType = AssignedTaskType.PlaceBlockInStorage;
+        this.subsequentTaskType = AssignedTaskType.PlaceBlocksInStorage;
     }
 }

@@ -15,36 +15,33 @@
  */
 package org.terasology.taskSystem.tasks;
 
-import org.terasology.rendering.nui.Color;
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 
-public class PlantTask extends Task {
-
+public class PlaceBlocksInStorageTask extends Task {
     private static final int HEALTH = 10;
     private static final int INTELLIGENCE = 0;
     private static final int STRENGTH = 0;
     private static final int HUNGER = 50;
 
     private static final float DURATION = 10;
-    private static final Color COLOR = Color.GREEN.alterAlpha(90);
 
-    public String cropToPlant;
+    public String blocksToStorage;
+    public int numberOfBlocks;
+    public EntityRef chestEntity;
 
-    public PlantTask(String cropBlockURI) {
+    public PlaceBlocksInStorageTask(String blockToAdd, int number, EntityRef chestBlockEntity) {
         this.health = HEALTH;
         this.intelligence = INTELLIGENCE;
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.taskColor = COLOR;
-        this.assignedTaskType = AssignedTaskType.Plant;
+        this.assignedTaskType = AssignedTaskType.PlaceBlocksInStorage;
 
-        this.subsequentTask = new HarvestTask();
-        this.subsequentTaskType = AssignedTaskType.Harvest;
-        this.delayBeforeNextTask = 50000;
-
-        this.cropToPlant = cropBlockURI;
+        this.blocksToStorage = blockToAdd;
+        this.numberOfBlocks = number;
+        this.chestEntity = chestBlockEntity;
     }
 }

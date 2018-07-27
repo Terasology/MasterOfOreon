@@ -115,6 +115,19 @@
                                     }
                                 }
                             }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == harvest"
+                                ],
+                                "child": {
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:harvest"
+                                    }
+                                }
+                            }
                         }
                     ]
                 }
