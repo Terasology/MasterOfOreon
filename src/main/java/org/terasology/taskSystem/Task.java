@@ -41,5 +41,6 @@ public class Task {
 
     // next task to be performed and the delay in ms
     public Task subsequentTask;
-    public float delayBeforeNextTask;
+    public String subsequentTaskType;
+    public long delayBeforeNextTask;
 }

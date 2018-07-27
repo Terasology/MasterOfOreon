@@ -79,6 +79,8 @@ import java.util.Queue;
 public class TaskManagementSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TaskManagementSystem.class);
     private static final String CONSTRUCTION_COMPLETE_EVENT_ID = "taskManagementSystem:constructionComplete";
+    private static final String ADD_TASK_DELAYED_ACTION_ID = "taskManagementSystem:addTask";
+
     @In
     private EntityManager entityManager;
 
@@ -531,5 +533,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         constructedBuilding.getOwner().send(new BuildingConstructionCompletedEvent(constructedBuildingComponent.boundingRegions,
                 constructedBuildingComponent.buildingType, constructedBuildingComponent.centerLocation, constructedBuilding));
+    }
+
+    @ReceiveEvent(components = TaskComponent.class)
+    public void addTaskToHolding(DelayedActionTriggeredEvent event, EntityRef taskEntity) {
+        if (!event.getActionId().equals(ADD_TASK_DELAYED_ACTION_ID)) {
+            return;
+        }
+
+        addTask(taskEntity.getOwner(), taskEntity);
     }
 }

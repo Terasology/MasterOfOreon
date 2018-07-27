@@ -40,6 +40,7 @@ public class PlantTask extends Task {
         this.assignedTaskType = AssignedTaskType.Plant;
 
         this.subsequentTask = new HarvestTask();
+        this.subsequentTaskType = AssignedTaskType.Harvest;
         this.delayBeforeNextTask = 40000;
     }
 }

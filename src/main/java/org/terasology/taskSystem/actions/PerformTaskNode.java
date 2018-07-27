@@ -20,13 +20,17 @@ import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.context.Context;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
+import org.terasology.logic.delay.DelayManager;
+import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.math.Region3i;
 import org.terasology.registry.In;
 import org.terasology.research.events.ResearchStartEvent;
@@ -35,6 +39,8 @@ import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
+import org.terasology.taskSystem.TaskManagementSystem;
+import org.terasology.taskSystem.TaskStatusType;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromBuildingGenerator;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
@@ -53,12 +59,19 @@ import java.util.List;
 @BehaviorAction(name = "perform_task")
 public class PerformTaskNode extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(PerformTaskNode.class);
+    private static final String ADD_TASK_DELAYED_ACTION_ID = "taskManagementSystem:addTask";
 
     @In
     private Context context;
 
     @In
     private BlockManager blockManager;
+
+    @In
+    private EntityManager entityManager;
+
+    @In
+    private DelayManager delayManager;
 
     private WorldProvider worldProvider;
     private BlockEntityRegistry blockEntityRegistry;
@@ -73,6 +86,7 @@ public class PerformTaskNode extends BaseAction {
         worldProvider = context.get(WorldProvider.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
+        delayManager = context.get(DelayManager.class);
 
         this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
 
@@ -179,6 +193,22 @@ public class PerformTaskNode extends BaseAction {
 
             case AssignedTaskType.Research :
                 oreon.getEntity().send(new ResearchStartEvent());
+        }
+
+        if (taskComponent.task.subsequentTask != null) {
+            Task oldTask = taskComponent.task;
+
+            TaskComponent newTaskComponent = new TaskComponent();
+            newTaskComponent.assignedTaskType = oldTask.subsequentTaskType;
+            newTaskComponent.taskRegion = taskComponent.taskRegion;
+            newTaskComponent.task = oldTask.subsequentTask;
+            newTaskComponent.taskStatus = TaskStatusType.Available;
+
+            EntityRef taskEntity = entityManager.create(newTaskComponent);
+            OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
+            taskEntity.setOwner(oreonSpawnComponent.parent);
+
+            delayManager.addDelayedAction(taskEntity, ADD_TASK_DELAYED_ACTION_ID, oldTask.delayBeforeNextTask);
         }
     }
 }
