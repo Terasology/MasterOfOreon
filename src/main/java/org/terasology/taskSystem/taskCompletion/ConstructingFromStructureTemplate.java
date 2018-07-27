@@ -23,7 +23,6 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.buildings.events.BuildingConstructionStartedEvent;
 import org.terasology.structureTemplates.components.CompletionTimeComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;

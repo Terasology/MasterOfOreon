@@ -19,8 +19,7 @@ import org.terasology.rendering.nui.Color;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 
-public class PlantTask extends Task {
-
+public class HarvestTask extends Task {
     private static final int HEALTH = 10;
     private static final int INTELLIGENCE = 0;
     private static final int STRENGTH = 0;
@@ -29,7 +28,7 @@ public class PlantTask extends Task {
     private static final float DURATION = 10;
     private static final Color COLOR = Color.GREEN.alterAlpha(90);
 
-    public PlantTask() {
+    public HarvestTask() {
         this.health = HEALTH;
         this.intelligence = INTELLIGENCE;
         this.strength = STRENGTH;
@@ -37,9 +36,6 @@ public class PlantTask extends Task {
 
         this.taskDuration = DURATION;
         this.taskColor = COLOR;
-        this.assignedTaskType = AssignedTaskType.Plant;
-
-        this.subsequentTask = new HarvestTask();
-        this.delayBeforeNextTask = 40000;
+        this.assignedTaskType = AssignedTaskType.Harvest;
     }
 }

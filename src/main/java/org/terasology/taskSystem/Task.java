@@ -36,5 +36,10 @@ public class Task {
     public long requiredBuildingEntityID = 0;
     public List<String> requiredBlocks = new ArrayList<>();
     public String blockResult = "";
+
     public boolean isAdvanced;
+
+    // next task to be performed and the delay in ms
+    public Task subsequentTask;
+    public float delayBeforeNextTask;
 }
