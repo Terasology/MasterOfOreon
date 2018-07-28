@@ -27,7 +27,7 @@ public class PlaceBlocksInStorageTask extends Task {
 
     private static final float DURATION = 10;
 
-    public String blocksToStorage;
+    public String blocksToTransfer;
     public int numberOfBlocks;
     public EntityRef chestEntity;
 
@@ -40,7 +40,7 @@ public class PlaceBlocksInStorageTask extends Task {
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.PlaceBlocksInStorage;
 
-        this.blocksToStorage = blockToAdd;
+        this.blocksToTransfer = blockToAdd;
         this.numberOfBlocks = number;
         this.chestEntity = chestBlockEntity;
     }

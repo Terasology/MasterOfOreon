@@ -128,6 +128,19 @@
                                     }
                                 }
                             }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == placeBlocksInStorage"
+                                ],
+                                "child": {
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:placeBlocksInStorage"
+                                    }
+                                }
+                            }
                         }
                     ]
                 }

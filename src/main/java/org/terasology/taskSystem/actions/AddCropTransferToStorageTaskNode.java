@@ -82,9 +82,9 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
     public BehaviorState modify(Actor oreon, BehaviorState result) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
-        Region3i storageBuilding = getStorageBuildingRegion(oreon);
+        List<Region3i> storageBuildingRegions = getStorageBuildingRegion(oreon);
 
-        if (storageBuilding == null) {
+        if (storageBuildingRegions == null) {
             String message = "Build a Storage for the harvested crops";
             delayedNotificationSystem.sendNotificationNow(message, notificationMessageEntity);
 
@@ -104,20 +104,20 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
         BlockComponent blockComponent = plantBlockEntity.getComponent(BlockComponent.class);
         harvestTask.harvestedCrop = blockComponent.getBlock().getURI().toString();
 
-        Vector3i chestBlockLocation = storageBuilding.min();
+        Vector3i chestBlockLocation = storageBuildingRegions.get(Constants.CHEST_BLOCK_INDEX).min();
         harvestTask.subsequentTask = new PlaceBlocksInStorageTask(harvestTask.harvestedCrop,
                 harvestTask.numberOfCropBlocksHarvested,
                 blockEntityRegistry.getBlockEntityAt(chestBlockLocation));
         harvestTask.subsequentTaskType = AssignedTaskType.PlaceBlocksInStorage;
 
         removeCropBlocks(oreon);
-        oreonTaskComponent.taskRegion = storageBuilding;
+        oreonTaskComponent.taskRegion = storageBuildingRegions.get(Constants.STORAGE_ENTRANCE_REGION);
         oreon.save(oreonTaskComponent);
 
         return BehaviorState.SUCCESS;
     }
 
-    private Region3i getStorageBuildingRegion(Actor oreon) {
+    private List<Region3i> getStorageBuildingRegion(Actor oreon) {
         OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
         HoldingComponent oreonHolding = oreonSpawnComponent.parent.getComponent(HoldingComponent.class);
 
@@ -127,7 +127,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
             ConstructedBuildingComponent constructedBuildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
             if (constructedBuildingComponent.buildingType.equals(BuildingType.Storage)) {
-                return constructedBuildingComponent.boundingRegions.get(0);
+                return constructedBuildingComponent.boundingRegions;
             }
         }
 
