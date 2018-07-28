@@ -408,7 +408,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
             TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
             HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
 
-            oreonTaskComponent.task = newTask;
             Vector3i target = findRequiredBuilding(newTask.buildingType, oreonTaskComponent, oreonHolding);
 
             // if a building required for the task like the Diner for Eat is not found
@@ -416,6 +415,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 return false;
             }
 
+            oreonTaskComponent.task = newTask;
             oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
             oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
 
