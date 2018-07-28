@@ -43,5 +43,7 @@ public class PlaceBlocksInStorageTask extends Task {
         this.blocksToTransfer = blockToAdd;
         this.numberOfBlocks = number;
         this.chestEntity = chestBlockEntity;
+
+        this.blockToRender = blockToAdd;
     }
 }

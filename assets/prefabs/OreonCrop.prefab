@@ -14,5 +14,9 @@
     },
     "DisplayName" : {
         "name" : "Cookie Crop"
-    }
+    },
+    "AnimateRotation": {
+        "yawSpeed": 0.5,
+        "isSynchronized": false
+     }
 }

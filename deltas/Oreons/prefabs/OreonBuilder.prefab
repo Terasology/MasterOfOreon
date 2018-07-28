@@ -50,5 +50,24 @@
         "genderRatio" : 0.1,
         "nobility" : 0,
         "theme" : "Dwarf"
-    }
+    },
+    "Inventory": {
+        "privateToOwner": false,
+        "itemSlots": [
+            0
+        ]
+    },
+    "RenderInventorySlots": {
+        "slots": [
+            0
+        ],
+        "translate": [
+            0,
+            1,
+            0
+        ],
+        "itemSize": 0.25,
+        "rotateWithBlock": false
+    },
+    "Network" : {}
 }

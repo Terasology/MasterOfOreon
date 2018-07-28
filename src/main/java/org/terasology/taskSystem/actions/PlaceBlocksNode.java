@@ -15,10 +15,8 @@
  */
 package org.terasology.taskSystem.actions;
 
-import org.terasology.Constants;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.behavior.BehaviorAction;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
@@ -28,7 +26,6 @@ import org.terasology.registry.In;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.tasks.PlaceBlocksInStorageTask;
 import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.family.BlockFamily;
 import org.terasology.world.block.items.BlockItemFactory;
 
 @BehaviorAction(name = "place_blocks")

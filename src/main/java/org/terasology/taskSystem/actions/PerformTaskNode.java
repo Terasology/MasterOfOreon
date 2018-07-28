@@ -17,12 +17,10 @@ package org.terasology.taskSystem.actions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.BehaviorAction;
@@ -30,7 +28,7 @@ import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.DelayedActionTriggeredEvent;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.Region3i;
 import org.terasology.registry.In;
 import org.terasology.research.events.ResearchStartEvent;
@@ -39,7 +37,6 @@ import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
-import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.TaskStatusType;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromBuildingGenerator;
@@ -74,6 +71,7 @@ public class PerformTaskNode extends BaseAction {
     @In
     private DelayManager delayManager;
 
+    private InventoryManager inventoryManager;
     private WorldProvider worldProvider;
     private BlockEntityRegistry blockEntityRegistry;
     private StructureTemplateProvider structureTemplateProvider;
@@ -88,6 +86,7 @@ public class PerformTaskNode extends BaseAction {
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
         delayManager = context.get(DelayManager.class);
+        inventoryManager = context.get(InventoryManager.class);
 
         this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
 
@@ -105,6 +104,8 @@ public class PerformTaskNode extends BaseAction {
         removeColorFromArea(oreon, oreonTaskComponent);
 
         changeOreonAttributes(oreon, oreonTaskComponent);
+
+        removeRenderedBlock(oreon, oreonTaskComponent);
 
         completeTask(oreon, oreonTaskComponent);
 
@@ -212,5 +213,14 @@ public class PerformTaskNode extends BaseAction {
 
             delayManager.addDelayedAction(taskEntity, ADD_TASK_DELAYED_ACTION_ID, oldTask.delayBeforeNextTask);
         }
+    }
+
+    /**
+     * Removes the block from the Oreon's inventory
+     * @param oreon
+     * @param oreonTaskComponent
+     */
+    private void removeRenderedBlock(Actor oreon, TaskComponent oreonTaskComponent) {
+        inventoryManager.removeItem(oreon.getEntity(), oreon.getEntity(), 0, true, 1);
     }
 }

@@ -42,6 +42,7 @@ import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.DelayedActionTriggeredEvent;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.math.Region3i;
@@ -65,6 +66,7 @@ import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.List;
@@ -95,6 +97,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     @In
     private DelayManager delayManager;
+
+    @In
+    private InventoryManager inventoryManager;
 
     private BlockManager blockManager;
     private BlockEntityRegistry blockEntityRegistry;
@@ -139,6 +144,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
             oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.task);
+
+            if (oreonTaskComponent.task.blockToRender != null) {
+                placeBlockToRenderInInventory(oreon, oreonTaskComponent.task);
+            }
 
             oreon.save(oreonTaskComponent);
 
@@ -542,5 +551,17 @@ public class TaskManagementSystem extends BaseComponentSystem {
         }
 
         addTask(taskEntity.getOwner(), taskEntity);
+    }
+
+    /**
+     * Adds a block to the Oreon's inventory which is rendered as an indication for the task being being performed
+     * @param oreon Oreon entity performing the task
+     * @param task Task being performed
+     */
+    private void placeBlockToRenderInInventory(Actor oreon, Task task) {
+        BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
+        inventoryManager.giveItem(oreon.getEntity(), oreon.getEntity(),
+                blockItemFactory.newInstance(blockManager.getBlockFamily(task.blockToRender),
+                        1));
     }
 }

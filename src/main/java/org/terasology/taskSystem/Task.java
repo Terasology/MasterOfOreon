@@ -43,4 +43,7 @@ public class Task {
     public Task subsequentTask;
     public String subsequentTaskType;
     public long delayBeforeNextTask;
+
+    // URI of the block to render as an indication for the task being performed
+    public String blockToRender;
 }
