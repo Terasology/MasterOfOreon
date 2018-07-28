@@ -13,7 +13,7 @@
                 "child" : "move_to"
             }
         },
-        "place_blocks",
+        "place_blocks_in_chest",
         "perform_task"
     ]
 }

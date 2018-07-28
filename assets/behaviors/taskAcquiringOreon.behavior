@@ -133,11 +133,11 @@
                             "guard": {
                                 "componentPresent": "MasterOfOreon:Task",
                                 "values": [
-                                    "V assignedTaskType == placeBlocksInStorage"
+                                    "V assignedTaskType == placeBlocksInChest"
                                 ],
                                 "child": {
                                     "lookup": {
-                                        "tree" : "MasterOfOreon:placeBlocksInStorage"
+                                        "tree" : "MasterOfOreon:placeBlocksInChest"
                                     }
                                 }
                             }

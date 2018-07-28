@@ -19,6 +19,9 @@ import org.terasology.rendering.nui.Color;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 
+/**
+ * This task is automatically added to the Holding after a Plant task is complete and the crops have grown fully.
+ */
 public class HarvestTask extends Task {
     private static final int HEALTH = 10;
     private static final int INTELLIGENCE = 0;
@@ -41,6 +44,6 @@ public class HarvestTask extends Task {
         this.taskColor = COLOR;
         this.assignedTaskType = AssignedTaskType.Harvest;
 
-        this.subsequentTaskType = AssignedTaskType.PlaceBlocksInStorage;
+        this.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
     }
 }

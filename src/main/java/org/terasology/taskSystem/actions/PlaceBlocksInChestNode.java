@@ -24,12 +24,12 @@ import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.registry.In;
 import org.terasology.taskSystem.components.TaskComponent;
-import org.terasology.taskSystem.tasks.PlaceBlocksInStorageTask;
+import org.terasology.taskSystem.tasks.PlaceBlocksInChestTask;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
-@BehaviorAction(name = "place_blocks")
-public class PlaceBlocksNode extends BaseAction {
+@BehaviorAction(name = "place_blocks_in_chest")
+public class PlaceBlocksInChestNode extends BaseAction {
     @In
     private Context context;
 
@@ -49,7 +49,7 @@ public class PlaceBlocksNode extends BaseAction {
     @Override
     public BehaviorState modify(Actor oreon, BehaviorState result) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
-        PlaceBlocksInStorageTask oreonTask = (PlaceBlocksInStorageTask) oreonTaskComponent.task;
+        PlaceBlocksInChestTask oreonTask = (PlaceBlocksInChestTask) oreonTaskComponent.task;
 
         BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(oreonTask.chestEntity, oreonTask.chestEntity,

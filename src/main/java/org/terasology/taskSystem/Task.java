@@ -33,7 +33,7 @@ public class Task {
     public float taskDuration;
     public Color taskColor = Color.MAGENTA.alterAlpha(90);
     public BuildingType buildingType = BuildingType.None;
-    public long requiredBuildingEntityID = 0;
+    public long requiredBuildingEntityID;
     public List<String> requiredBlocks = new ArrayList<>();
     public String blockResult = "";
 

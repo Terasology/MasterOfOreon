@@ -19,7 +19,11 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 
-public class PlaceBlocksInStorageTask extends Task {
+/**
+ * This task when assigned to the Oreons moves the specified blocks and the number into the chest entity.
+ * For example : Currently after harvesting the crops are placed into the Storage building's chest.
+ */
+public class PlaceBlocksInChestTask extends Task {
     private static final int HEALTH = 10;
     private static final int INTELLIGENCE = 0;
     private static final int STRENGTH = 0;
@@ -31,14 +35,14 @@ public class PlaceBlocksInStorageTask extends Task {
     public int numberOfBlocks;
     public EntityRef chestEntity;
 
-    public PlaceBlocksInStorageTask(String blockToAdd, int number, EntityRef chestBlockEntity) {
+    public PlaceBlocksInChestTask(String blockToAdd, int number, EntityRef chestBlockEntity) {
         this.health = HEALTH;
         this.intelligence = INTELLIGENCE;
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.PlaceBlocksInStorage;
+        this.assignedTaskType = AssignedTaskType.PlaceBlocksInChest;
 
         this.blocksToTransfer = blockToAdd;
         this.numberOfBlocks = number;

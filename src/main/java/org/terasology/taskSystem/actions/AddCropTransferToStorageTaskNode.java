@@ -37,7 +37,7 @@ import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.DelayedNotificationSystem;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.tasks.HarvestTask;
-import org.terasology.taskSystem.tasks.PlaceBlocksInStorageTask;
+import org.terasology.taskSystem.tasks.PlaceBlocksInChestTask;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
@@ -84,6 +84,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
 
         List<Region3i> storageBuildingRegions = getStorageBuildingRegion(oreon);
 
+        // Abandon task if storage not found
         if (storageBuildingRegions == null) {
             String message = "Build a Storage for the harvested crops";
             delayedNotificationSystem.sendNotificationNow(message, notificationMessageEntity);
@@ -98,19 +99,23 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
 
         HarvestTask harvestTask = (HarvestTask) oreonTaskComponent.task;
 
+        // Calculate number of crop blocks harvested from the area selected
         harvestTask.numberOfCropBlocksHarvested = plantRegion.sizeX() * plantRegion.sizeZ();
 
+        // Get the type of crop harvested
         EntityRef plantBlockEntity = blockEntityRegistry.getBlockEntityAt(new Vector3i(plantRegion.minX(), plantRegion.minY() + 1, plantRegion.minZ()));
         BlockComponent blockComponent = plantBlockEntity.getComponent(BlockComponent.class);
         harvestTask.harvestedCrop = blockComponent.getBlock().getURI().toString();
 
         Vector3i chestBlockLocation = storageBuildingRegions.get(Constants.CHEST_BLOCK_INDEX).min();
-        harvestTask.subsequentTask = new PlaceBlocksInStorageTask(harvestTask.harvestedCrop,
+
+        harvestTask.subsequentTask = new PlaceBlocksInChestTask(harvestTask.harvestedCrop,
                 harvestTask.numberOfCropBlocksHarvested,
                 blockEntityRegistry.getBlockEntityAt(chestBlockLocation));
-        harvestTask.subsequentTaskType = AssignedTaskType.PlaceBlocksInStorage;
+        harvestTask.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
 
         removeCropBlocks(oreon);
+
         oreonTaskComponent.taskRegion = storageBuildingRegions.get(Constants.STORAGE_ENTRANCE_REGION);
         oreon.save(oreonTaskComponent);
 
@@ -145,9 +150,9 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
 
         int y = selectedRegion.minY();
 
+        Block block = blockManager.getBlock(BlockManager.AIR_ID);
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
-                Block block = blockManager.getBlock(Constants.AIR_BLOCK_URI);
                 blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, y + 1, z), block);
             }
         }
