@@ -456,7 +456,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         return lastX == currentX && lastZ == currentZ;
     }
 
-    private void abandonTask(EntityRef oreon) {
+    public void abandonTask(EntityRef oreon) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
         if (!oreonTaskComponent.task.isAdvanced) {
@@ -473,7 +473,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             taskComponent.taskRegion = oreonTaskComponent.taskRegion;
             taskComponent.creationTime = oreonTaskComponent.creationTime;
             taskComponent.task = oreonTaskComponent.task;
-            taskComponent.taskStatus = oreonTaskComponent.taskStatus;
+            taskComponent.taskStatus = TaskStatusType.Available;
 
             taskEntity.addComponent(taskComponent);
 

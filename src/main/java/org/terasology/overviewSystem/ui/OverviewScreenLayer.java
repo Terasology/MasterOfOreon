@@ -113,7 +113,6 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 int numberOfGuards = 0;
                 int numberOfKings = 0;
                 for (EntityRef oreonEntity : entityManager.getEntitiesWith(OreonSpawnComponent.class)) {
-                    logger.info(oreonEntity.getParentPrefab().getName());
                     switch (oreonEntity.getParentPrefab().getName()) {
                         case Constants.OREON_BUILDER_PREFAB :
                             numberOfBuilders++;

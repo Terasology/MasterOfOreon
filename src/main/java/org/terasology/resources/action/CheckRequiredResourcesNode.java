@@ -31,6 +31,7 @@ import org.terasology.rendering.nui.properties.TextField;
 import org.terasology.resources.system.BuildingResourceSystem;
 import org.terasology.resources.system.ResourceSystem;
 import org.terasology.taskSystem.AssignedTaskType;
+import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.world.BlockEntityRegistry;
 
@@ -50,11 +51,13 @@ public class CheckRequiredResourcesNode extends BaseAction {
     private InventoryManager inventoryManager;
     private BlockEntityRegistry blockEntityRegistry;
     private ResourceSystem buildingResourceSystem;
+    private TaskManagementSystem taskManagementSystem;
 
     @Override
     public void construct(Actor actor) {
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
         inventoryManager = context.get(InventoryManager.class);
+        taskManagementSystem = context.get(TaskManagementSystem.class);
 
         buildingResourceSystem = new BuildingResourceSystem();
         buildingResourceSystem.initialize(blockEntityRegistry, inventoryManager);
@@ -71,10 +74,15 @@ public class CheckRequiredResourcesNode extends BaseAction {
                 resourceDeducted = buildingResourceSystem.checkForAResource(building, requiredResource, 1);
 
                 if (!resourceDeducted) {
-                    // Free the Oreon because the required resources not found in building
-                    taskComponent.assignedTaskType = AssignedTaskType.None;
+                    // Free the Oreon because the required resources not found in building and add task to holding if not an advanced task
+                    if (!taskComponent.task.isAdvanced) {
+                        taskManagementSystem.abandonTask(actor.getEntity());
+                    }
+                    else {
+                        taskComponent.assignedTaskType = AssignedTaskType.None;
+                        taskComponent.task = null;
+                    }
                     logger.info("Can't find a building with the required resources. Abandoning task");
-
                     return BehaviorState.FAILURE;
                 }
 
