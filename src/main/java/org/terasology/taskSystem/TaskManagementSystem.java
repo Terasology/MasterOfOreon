@@ -528,9 +528,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         constructionStartedEvent.constructedBuildingEntity.setOwner(player);
 
-        HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
-        holdingComponent.constructedBuildings.add(constructionStartedEvent.constructedBuildingEntity);
-
         delayManager.addDelayedAction(constructionStartedEvent.constructedBuildingEntity, CONSTRUCTION_COMPLETE_EVENT_ID, constructionStartedEvent.completionDelay);
     }
 
@@ -540,6 +537,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
             return;
         }
         ConstructedBuildingComponent constructedBuildingComponent = constructedBuilding.getComponent(ConstructedBuildingComponent.class);
+
+        HoldingComponent holdingComponent = constructedBuilding.getOwner().getComponent(HoldingComponent.class);
+        holdingComponent.constructedBuildings.add(constructedBuilding);
 
         constructedBuilding.getOwner().send(new BuildingConstructionCompletedEvent(constructedBuildingComponent.boundingRegions,
                 constructedBuildingComponent.buildingType, constructedBuildingComponent.centerLocation, constructedBuilding));

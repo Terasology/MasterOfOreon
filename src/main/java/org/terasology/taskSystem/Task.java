@@ -15,6 +15,7 @@
  */
 package org.terasology.taskSystem;
 
+import org.terasology.math.Region3i;
 import org.terasology.rendering.nui.Color;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class Task {
     // next task to be performed and the delay in ms
     public Task subsequentTask;
     public String subsequentTaskType;
+    public Region3i subsequentTaskRegion;
     public long delayBeforeNextTask;
 
     // URI of the block to render as an indication for the task being performed

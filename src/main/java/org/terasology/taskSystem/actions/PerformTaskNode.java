@@ -204,6 +204,9 @@ public class PerformTaskNode extends BaseAction {
             TaskComponent newTaskComponent = new TaskComponent();
             newTaskComponent.assignedTaskType = oldTask.subsequentTaskType;
             newTaskComponent.taskRegion = taskComponent.taskRegion;
+            if (oldTask.subsequentTaskRegion != null) {
+                newTaskComponent.taskRegion = oldTask.subsequentTaskRegion;
+            }
             newTaskComponent.task = oldTask.subsequentTask;
             newTaskComponent.taskStatus = TaskStatusType.Available;
 

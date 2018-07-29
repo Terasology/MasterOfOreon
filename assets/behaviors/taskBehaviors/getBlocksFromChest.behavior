@@ -1,0 +1,19 @@
+{
+    "sequence" : [
+        {
+
+            "animation": {
+                "play": "MasterOfOreon:Build.animationPool",
+                "loop": "MasterOfOreon:Build.animationPool"
+            }
+
+        },
+        {
+            "check_task_status" : {
+                "child" : "move_to"
+            }
+        },
+        "get_blocks_from_chest",
+        "perform_task"
+    ]
+}

@@ -28,4 +28,5 @@ public class AssignedTaskType {
     public static final String Upgrade = "upgrade";
     public static final String Research = "research";
     public static final String PlaceBlocksInChest = "placeBlocksInChest";
+    public static final String GetBlocksFromChest = "getBlocksFromChest";
 }

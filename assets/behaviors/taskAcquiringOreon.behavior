@@ -141,6 +141,19 @@
                                     }
                                 }
                             }
+                        },
+                        {
+                            "guard": {
+                                "componentPresent": "MasterOfOreon:Task",
+                                "values": [
+                                    "V assignedTaskType == getBlocksFromChest"
+                                ],
+                                "child": {
+                                    "lookup": {
+                                        "tree" : "MasterOfOreon:getBlocksFromChest"
+                                    }
+                                }
+                            }
                         }
                     ]
                 }
