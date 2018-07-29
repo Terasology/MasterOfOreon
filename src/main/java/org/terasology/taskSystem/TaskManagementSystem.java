@@ -494,6 +494,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             // Free the Oreon
             oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
+            inventoryManager.removeItem(oreon, oreon, 0, true, 1);
 
             oreon.saveComponent(oreonTaskComponent);
         }

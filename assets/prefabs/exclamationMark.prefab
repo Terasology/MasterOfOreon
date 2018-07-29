@@ -1,8 +1,9 @@
 {
+    "parent" : "engine:iconItem",
     "mesh" : {
         "mesh" : "ExclamationMark",
         "material" : "ExclamationMark",
-        "color" : [255, 255, 20, 255]
+        "color" : [255, 255, 255, 255]
     },
     "Location" : {
     },

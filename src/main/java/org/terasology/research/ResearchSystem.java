@@ -158,17 +158,20 @@ public class ResearchSystem extends BaseComponentSystem {
      * @param inventoryEntity The entity whose InventoryComponent is changed.
      * @param inventoryComponent The changed component
      */
-    @ReceiveEvent
+    @ReceiveEvent(components = LaboratoryComponent.class)
     public void onBookPlacedInInventory(OnChangedComponent event, EntityRef inventoryEntity, InventoryComponent inventoryComponent) {
 
         if (inventoryEntity.getParentPrefab().getName().equals(Constants.PEDESTAL_PREFAB)) {
             for (EntityRef item : inventoryComponent.itemSlots) {
                 DisplayNameComponent nameComponent = item.getComponent(DisplayNameComponent.class);
 
-                // Check if item is research Book
-                if (nameComponent != null && nameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
-                    getResearchRecipe(item, inventoryEntity);
-                    break;
+                // TODO: this is a dirty way to prevent the research task being added twice when the Exclamation point is placed in inventory
+                if (inventoryComponent.itemSlots.get(1) == EntityRef.NULL) {
+                    // Check if item is research Book
+                    if (nameComponent != null && nameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
+                        getResearchRecipe(item, inventoryEntity);
+                        break;
+                    }
                 }
             }
         }
@@ -209,6 +212,8 @@ public class ResearchSystem extends BaseComponentSystem {
         EntityRef result = blockItemFactory.newInstance(blockManager.getBlock(completedTask.blockResult).getBlockFamily());
 
         buildingResourceSystem.addAResource(laboratory, result);
+
+        removeBookFromPedestal(laboratory);
     }
 
     private void getResearchRecipe(EntityRef item, EntityRef inventoryEntity) {
@@ -240,10 +245,32 @@ public class ResearchSystem extends BaseComponentSystem {
 
         // add exclamation point
         EntityRef exclamationPoint = entityManager.create(Constants.EXCLAMATION_PREFAB);
-        LocationComponent locationComponent = exclamationPoint.getComponent(LocationComponent.class);
-        LocationComponent pedestalLocationComponent = inventoryEntity.getComponent(LocationComponent.class);
-        locationComponent.setWorldPosition(pedestalLocationComponent.getWorldPosition().addY(1f));
-
         inventoryManager.giveItem(inventoryEntity, inventoryEntity, exclamationPoint);
+    }
+
+    /**
+     * Removes the book and exclamation point from the Pedestal after Research is completed. Also places the book back
+     * into the Bookcase
+     * @param laboratory The building entity where the task was performed
+     */
+    private void removeBookFromPedestal(EntityRef laboratory) {
+        ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
+
+        EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(Constants.PEDESTAL_REGION_INDEX).max());
+        EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(Constants.BOOKCASE_REGION_INDEX).max());
+
+        InventoryComponent pedestalInventory = pedestalEntity.getComponent(InventoryComponent.class);
+
+        for (EntityRef item : pedestalInventory.itemSlots) {
+            EntityRef removedItem = inventoryManager.removeItem(pedestalEntity, pedestalEntity, item, false);
+            logger.info(removedItem + "");
+            DisplayNameComponent displayNameComponent = removedItem.getComponent(DisplayNameComponent.class);
+            if (displayNameComponent != null && displayNameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
+                inventoryManager.giveItem(bookcaseEntity, bookcaseEntity, removedItem);
+            }
+            else {
+                removedItem.destroy();
+            }
+        }
     }
 }
