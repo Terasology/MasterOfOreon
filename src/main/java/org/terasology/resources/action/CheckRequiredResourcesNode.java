@@ -91,7 +91,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
                     }
                     else {
                         taskComponent.assignedTaskType = AssignedTaskType.None;
-                        taskComponent.task = null;
+                        taskComponent.task = new Task();
                     }
                     logger.info("Can't find a building with the required resources. Abandoning task");
 
@@ -135,11 +135,13 @@ public class CheckRequiredResourcesNode extends BaseAction {
         // Add place blocks into the required building as a subsequent task.
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
         EntityRef targetChestEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(Constants.CHEST_BLOCK_INDEX).max());
-        getBlocksTask.subsequentTask = new PlaceBlocksInChestTask(requiredResource, 1, targetChestEntity);
-        getBlocksTask.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
-        getBlocksTask.subsequentTaskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
+        taskComponent.subsequentTask = new PlaceBlocksInChestTask(requiredResource, 1, targetChestEntity);
+        taskComponent.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
+        taskComponent.subsequentTaskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
 
         taskComponent.task = getBlocksTask;
+
+        oreon.save(taskComponent);
 
         EntityRef taskEntity = entityManager.create(taskComponent);
         taskManagementSystem.addTask(spawnComponent.parent, taskEntity);

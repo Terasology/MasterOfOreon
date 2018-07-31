@@ -111,7 +111,7 @@ public class PerformTaskNode extends BaseAction {
 
         // Free the Oreon after performing task
         oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
-        oreonTaskComponent.task = null;
+        oreonTaskComponent.taskStatus = TaskStatusType.Completed;
         oreon.save(oreonTaskComponent);
 
         logger.info("Task completed, the Oreon is now free!");
@@ -198,23 +198,22 @@ public class PerformTaskNode extends BaseAction {
                 oreon.getEntity().send(new ResearchStartEvent());
         }
 
-        if (taskComponent.task.subsequentTask != null) {
-            Task oldTask = taskComponent.task;
+        if (taskComponent.subsequentTaskType != null) {
 
             TaskComponent newTaskComponent = new TaskComponent();
-            newTaskComponent.assignedTaskType = oldTask.subsequentTaskType;
+            newTaskComponent.assignedTaskType = taskComponent.subsequentTaskType;
             newTaskComponent.taskRegion = taskComponent.taskRegion;
-            if (oldTask.subsequentTaskRegion != null) {
-                newTaskComponent.taskRegion = oldTask.subsequentTaskRegion;
+            if (taskComponent.subsequentTaskRegion != null) {
+                newTaskComponent.taskRegion = taskComponent.subsequentTaskRegion;
             }
-            newTaskComponent.task = oldTask.subsequentTask;
+            newTaskComponent.task = taskComponent.subsequentTask;
             newTaskComponent.taskStatus = TaskStatusType.Available;
 
             EntityRef taskEntity = entityManager.create(newTaskComponent);
             OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
             taskEntity.setOwner(oreonSpawnComponent.parent);
 
-            delayManager.addDelayedAction(taskEntity, ADD_TASK_DELAYED_ACTION_ID, oldTask.delayBeforeNextTask);
+            delayManager.addDelayedAction(taskEntity, ADD_TASK_DELAYED_ACTION_ID, taskComponent.delayBeforeNextTask);
         }
     }
 

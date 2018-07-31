@@ -30,7 +30,7 @@ public class Task {
     public int hunger;
 
     // Task specifications
-    public String assignedTaskType;
+    public String assignedTaskType = AssignedTaskType.None;
     public float taskDuration;
     public Color taskColor = Color.MAGENTA.alterAlpha(90);
     public BuildingType buildingType = BuildingType.None;
@@ -40,12 +40,6 @@ public class Task {
 
     public boolean isAdvanced;
 
-    // next task to be performed and the delay in ms
-    public Task subsequentTask;
-    public String subsequentTaskType;
-    public Region3i subsequentTaskRegion;
-    public long delayBeforeNextTask;
-
     // URI of the block to render as an indication for the task being performed
-    public String blockToRender;
+    public String blockToRender = "";
 }

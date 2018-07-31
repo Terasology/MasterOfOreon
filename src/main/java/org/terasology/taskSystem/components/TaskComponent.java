@@ -43,5 +43,11 @@ public class TaskComponent implements Component {
 
     public float taskCompletionTime;
 
-    public Task task;
+    public Task task = new Task();
+
+    // next task to be performed and the delay in ms
+    public Task subsequentTask = new Task();
+    public String subsequentTaskType;
+    public Region3i subsequentTaskRegion;
+    public long delayBeforeNextTask;
 }

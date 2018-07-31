@@ -109,14 +109,14 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
 
         Vector3i chestBlockLocation = storageBuildingRegions.get(Constants.CHEST_BLOCK_INDEX).min();
 
-        harvestTask.subsequentTask = new PlaceBlocksInChestTask(harvestTask.harvestedCrop,
+        oreonTaskComponent.subsequentTask = new PlaceBlocksInChestTask(harvestTask.harvestedCrop,
                 harvestTask.numberOfCropBlocksHarvested,
                 blockEntityRegistry.getBlockEntityAt(chestBlockLocation));
-        harvestTask.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
+        oreonTaskComponent.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
 
         removeCropBlocks(oreon);
 
-        oreonTaskComponent.taskRegion = storageBuildingRegions.get(Constants.STORAGE_ENTRANCE_REGION);
+        oreonTaskComponent.subsequentTaskRegion = storageBuildingRegions.get(Constants.STORAGE_ENTRANCE_REGION);
         oreon.save(oreonTaskComponent);
 
         return BehaviorState.SUCCESS;

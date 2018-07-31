@@ -61,6 +61,7 @@ import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.tasks.BuildTask;
+import org.terasology.taskSystem.tasks.HarvestTask;
 import org.terasology.taskSystem.tasks.PlantTask;
 import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
@@ -144,6 +145,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
             oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.task);
+            oreonTaskComponent.subsequentTaskType = taskComponentToAssign.subsequentTaskType;
+            oreonTaskComponent.subsequentTask = taskComponentToAssign.subsequentTask;
+            oreonTaskComponent.delayBeforeNextTask = taskComponentToAssign.delayBeforeNextTask;
+            oreonTaskComponent.subsequentTaskRegion = taskComponentToAssign.subsequentTaskRegion;
 
             if (oreonTaskComponent.task.blockToRender != null) {
                 placeBlockToRenderInInventory(oreon, oreonTaskComponent.task);
@@ -236,6 +241,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
         switch (newTaskType) {
             case AssignedTaskType.Plant :
                 newTask = new PlantTask(Constants.OREON_CROP_0_BLOCK);
+                taskComponent.subsequentTask = new HarvestTask();
+                taskComponent.subsequentTaskType = AssignedTaskType.Harvest;
+                taskComponent.delayBeforeNextTask = 50000;
                 break;
 
             case AssignedTaskType.Build :
@@ -426,9 +434,11 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 return false;
             }
 
+            newTask.requiredBuildingEntityID = oreonTaskComponent.task.requiredBuildingEntityID;
             oreonTaskComponent.task = newTask;
             oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
             oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
+
 
             oreonTaskComponent.creationTime = timer.getGameTimeInMs();
             oreon.save(oreonTaskComponent);
@@ -470,27 +480,31 @@ public class TaskManagementSystem extends BaseComponentSystem {
     public void abandonTask(EntityRef oreon) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
-        if (!oreonTaskComponent.task.isAdvanced) {
+        if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.None)) {
+
             String message = "Oreon " + oreon.getComponent(NameTagComponent.class).text + " got stuck. Abandoning task " + oreonTaskComponent.assignedTaskType;
             oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
-            // Create entity for abandoned task
-            NetworkComponent networkComponent = new NetworkComponent();
-            networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-            EntityRef taskEntity = entityManager.create(networkComponent);
+            if (!oreonTaskComponent.task.isAdvanced) {
+                // Create entity for abandoned task
+                NetworkComponent networkComponent = new NetworkComponent();
+                networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-            TaskComponent taskComponent = new TaskComponent();
-            taskComponent.assignedTaskType = oreonTaskComponent.assignedTaskType;
-            taskComponent.taskRegion = oreonTaskComponent.taskRegion;
-            taskComponent.creationTime = oreonTaskComponent.creationTime;
-            taskComponent.task = oreonTaskComponent.task;
-            taskComponent.taskStatus = TaskStatusType.Available;
+                EntityRef taskEntity = entityManager.create(networkComponent);
 
-            taskEntity.addComponent(taskComponent);
+                TaskComponent taskComponent = new TaskComponent();
+                taskComponent.assignedTaskType = oreonTaskComponent.assignedTaskType;
+                taskComponent.taskRegion = oreonTaskComponent.taskRegion;
+                taskComponent.creationTime = oreonTaskComponent.creationTime;
+                taskComponent.task = oreonTaskComponent.task;
+                taskComponent.taskStatus = TaskStatusType.Available;
 
-            // Add task to the holding
-            OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
-            addTask(oreonSpawnComponent.parent, taskEntity);
+                taskEntity.addComponent(taskComponent);
+
+                // Add task to the holding
+                OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
+                addTask(oreonSpawnComponent.parent, taskEntity);
+            }
 
             // Free the Oreon
             oreonTaskComponent.assignedTaskType = AssignedTaskType.None;

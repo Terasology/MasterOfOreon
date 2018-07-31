@@ -45,6 +45,8 @@ public class TaskTypeHandler implements TypeHandler<Task> {
                 .put("requiredBuildingEntityID", context.create(task.requiredBuildingEntityID))
                 .put("requiredBlocks", context.createStrings(task.requiredBlocks))
                 .put("blockResult", context.create(task.blockResult))
+                .put("isAdvanced", context.create(task.isAdvanced))
+                .put("blockToRender", context.create(task.blockToRender))
                 .build();
 
         return context.create(dataMap);
@@ -75,6 +77,8 @@ public class TaskTypeHandler implements TypeHandler<Task> {
 
         task.blockResult = dataMap.getAsString("blockResult");
 
+        task.isAdvanced = dataMap.getAsBoolean("isAdvanced");
+        task.blockToRender = dataMap.getAsString("blockToRender");
         return task;
     }
 }

@@ -41,10 +41,6 @@ public class PlantTask extends Task {
         this.taskColor = COLOR;
         this.assignedTaskType = AssignedTaskType.Plant;
 
-        this.subsequentTask = new HarvestTask();
-        this.subsequentTaskType = AssignedTaskType.Harvest;
-        this.delayBeforeNextTask = 50000;
-
         this.cropToPlant = cropBlockURI;
     }
 }

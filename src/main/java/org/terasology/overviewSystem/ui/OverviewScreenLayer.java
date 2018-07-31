@@ -29,6 +29,7 @@ import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.spawning.OreonSpawnComponent;
+import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskStatusType;
 import org.terasology.taskSystem.components.TaskComponent;
 
@@ -75,9 +76,9 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 List<String> result = new ArrayList<>();
                 for (EntityRef taskEntity : entityManager.getEntitiesWith(TaskComponent.class)) {
                     TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
-                        if (taskComponent.task != null && taskComponent.taskStatus.equals(TaskStatusType.Available)) {
-                            result.add(taskComponent.task.assignedTaskType);
-                        }
+                    if (!taskComponent.assignedTaskType.equals(AssignedTaskType.None) && taskComponent.taskStatus.equals(TaskStatusType.Available)) {
+                        result.add(taskComponent.task.assignedTaskType);
+                    }
                 }
 
                 if (result.isEmpty()) {

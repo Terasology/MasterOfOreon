@@ -76,7 +76,7 @@ public class Constants {
     public static final String DINER_PREFAB = "MasterOfOreon:inn";
     public static final String STORAGE_PREFAB = "MasterOfOreon:storage";
 
-    public static final String FENCE_BLOCK_URI = "Fences:Fence";
+    public static final String FENCE_BLOCK_URI = "Fences:Fence.0";
     public static final String TORCH_BLOCK_URI = "Core:Torch.TOP";
 
     // Required regions' index in a constructed building
