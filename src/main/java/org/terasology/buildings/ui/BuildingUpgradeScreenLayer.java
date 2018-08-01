@@ -20,12 +20,15 @@ import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.buildings.BuildingUpgradeSystem;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
+import org.terasology.buildings.events.GuardBuildingEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.databinding.Binding;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 
@@ -41,6 +44,7 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
     private UILabel buildingName;
     private UILabel buildingLevel;
     private UIButton upgradeBuildingButton;
+    private UIButton guardBuildingButton;
 
     private BuildingUpgradeSystem buildingUpgradeSystem;
 
@@ -51,11 +55,16 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
         buildingName = find(Constants.BUILDING_NAME_UI_LABEL_ID, UILabel.class);
         buildingLevel = find(Constants.BUILDING_LEVEL_UI_LABEL_ID, UILabel.class);
         upgradeBuildingButton = find(Constants.BUILDING_UPGRADE_COMMAND_UI_ID, UIButton.class);
+        guardBuildingButton = find(Constants.GUARD_BUILDING_COMMAND_UI_ID, UIButton.class);
 
         populateLabels();
 
         upgradeBuildingButton.subscribe(button -> {
             localPlayer.getCharacterEntity().send(new UpgradeBuildingEvent());
+        });
+
+        guardBuildingButton.subscribe(button -> {
+            localPlayer.getCharacterEntity().send(new GuardBuildingEvent());
         });
     }
 
@@ -66,7 +75,22 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
             logger.info("ConstructedBuildingComponent null");
             return;
         }
-        buildingName.setText(buildingComponent.buildingType.toString());
-        buildingLevel.setText("" + buildingComponent.currentLevel);
+
+        Binding<String> buildingNameBinding = new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return buildingComponent.buildingType.toString();
+            }
+        };
+
+        Binding<String> buildingLevelBinding = new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.valueOf(buildingComponent.currentLevel);
+            }
+        };
+
+        buildingName.bindText(buildingNameBinding);
+        buildingLevel.bindText(buildingLevelBinding);
     }
 }
