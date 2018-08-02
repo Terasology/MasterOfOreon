@@ -24,9 +24,9 @@ public class GuardTask extends Task {
     private static final int STRENGTH = 0;
     private static final int HUNGER = 20;
 
-    private static final float DURATION = 20;
+    private static final float DURATION = 40;
 
-    public GuardTask() {
+    public GuardTask(long buildingEntityId) {
         this.health = HEALTH;
         this.intelligence = INTELLIGENCE;
         this.strength = STRENGTH;
@@ -35,5 +35,7 @@ public class GuardTask extends Task {
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.Guard;
         this.isAdvanced = false;
+
+        this.requiredBuildingEntityID = buildingEntityId;
     }
 }

@@ -175,7 +175,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.LABORATORY_SLAB_REGION);
         taskComponent.taskStatus = TaskStatusType.Available;
 
-        taskComponent.task = new GuardTask();
+        taskComponent.task = new GuardTask(buildingToUpgrade.getId());
         taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(taskComponent.task);
 
         EntityRef taskEntity = entityManager.create(taskComponent);
