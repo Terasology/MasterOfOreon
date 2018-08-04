@@ -57,6 +57,7 @@ public class Constants {
     public static final String BUILDING_NAME_UI_LABEL_ID = "buildingName";
     public static final String BUILDING_LEVEL_UI_LABEL_ID = "buildingLevel";
     public static final String BUILDING_UPGRADE_COMMAND_UI_ID = "upgradeBuildingCommand";
+    public static final String GUARD_BUILDING_COMMAND_UI_ID = "guardBuildingCommand";
 
     // Crop to be placed after plant task
     public static final String OREON_CROP_0_BLOCK = "MasterOfOreon:OreonPlant0";

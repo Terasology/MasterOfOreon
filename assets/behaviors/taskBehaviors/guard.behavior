@@ -1,0 +1,22 @@
+{
+    "sequence" : [
+        {
+
+            "animation": {
+                "play": "MasterOfOreon:Build.animationPool",
+                "loop": "MasterOfOreon:Build.animationPool"
+            }
+
+        },
+        {
+            "find_next_block_on_boundary" : {
+                "child" : {
+                    "move_to" : {
+                        "distance" : 0.0
+                    }
+                }
+            }
+        },
+        "perform_task"
+    ]
+}

@@ -21,6 +21,7 @@ import org.terasology.Constants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.buildings.events.CloseUpgradeScreenEvent;
+import org.terasology.buildings.events.GuardBuildingEvent;
 import org.terasology.buildings.events.OpenUpgradeScreenEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.context.Context;
@@ -44,9 +45,11 @@ import org.terasology.registry.Share;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
+import org.terasology.taskSystem.TaskStatusType;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
 import org.terasology.taskSystem.tasks.BuildingUpgradeTask;
+import org.terasology.taskSystem.tasks.GuardTask;
 
 import java.util.List;
 
@@ -165,5 +168,21 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         buildingComponent.currentLevel += 1;
         building.saveComponent(buildingComponent);
         constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel);
+    }
+
+    @ReceiveEvent
+    public void addGuardTask(GuardBuildingEvent event, EntityRef player) {
+        TaskComponent taskComponent = new TaskComponent();
+        taskComponent.assignedTaskType = AssignedTaskType.Guard;
+
+        ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
+        taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.LABORATORY_SLAB_REGION);
+        taskComponent.taskStatus = TaskStatusType.Available;
+
+        taskComponent.task = new GuardTask(buildingToUpgrade.getId());
+        taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(taskComponent.task);
+
+        EntityRef taskEntity = entityManager.create(taskComponent);
+        taskMangementSystem.addTask(player, taskEntity);
     }
 }
