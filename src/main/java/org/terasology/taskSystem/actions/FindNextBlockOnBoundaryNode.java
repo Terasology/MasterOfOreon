@@ -101,9 +101,6 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
 
         int y = taskComponent.taskRegion.minY();
 
-        logger.info("====== x " + worldPosition.x + "======= y " + worldPosition.y + "========== z " + worldPosition.z);
-        logger.info("====== maxX " + maxX + "======= maxZ " + maxZ + "======= minX " + minX + "======= minZ " + minZ);
-
         if (Math.round(worldPosition.x) == maxX) {
             if (Math.round(worldPosition.z) != maxZ) {
                 moveComponent.target = new Vector3f(maxX + 1, y, maxZ + 1);
