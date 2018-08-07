@@ -263,7 +263,7 @@ public class ResearchSystem extends BaseComponentSystem {
 
         for (EntityRef item : pedestalInventory.itemSlots) {
             EntityRef removedItem = inventoryManager.removeItem(pedestalEntity, pedestalEntity, item, false);
-            logger.info(removedItem + "");
+            logger.info(removedItem.toString());
             DisplayNameComponent displayNameComponent = removedItem.getComponent(DisplayNameComponent.class);
             if (displayNameComponent != null && displayNameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
                 inventoryManager.giveItem(bookcaseEntity, bookcaseEntity, removedItem);

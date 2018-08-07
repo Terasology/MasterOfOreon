@@ -1,0 +1,30 @@
+{
+    "parent" : "engine:iconItem",
+    "Item" : {
+        "icon" : "engine:items#BlueBook",
+        "usage" : "NONE"
+    },
+    "DisplayName" : {
+        "name" : "Initiation"
+    },
+    "Book" : {
+        "pages" : ["This book walks you through the various things that you can play around the mystical land of the Oreons.",
+            ""
+        ],
+        "tint" : [0, 0, 255, 255],
+        "title" : "Getting started with MOO"
+    },
+    "AnimateRotation": {
+        "yawSpeed": 0.5,
+        "isSynchronized": false
+    },
+    "Network": {},
+    "CapsuleShape" : {
+        "radius" : 2,
+        "height" : 5
+    },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "Books:BookScreen"
+    }
+}
