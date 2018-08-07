@@ -30,6 +30,7 @@ public class Constants {
     public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:oreonSelectionTool";
     public static final String BUILDING_UPGRADE_TOOL = "MasterOfOreon:upgradeTool";
     public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
+    public static final String INITIATION_BOOK_PREFAB = "MasterOfOreon:initiationBook";
 
     public static final String UPGRADE_TOOL_NAME = "Building Upgrade Tool";
 

@@ -32,7 +32,7 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
-public class ManagerInterfaceSystem extends BaseComponentSystem {
+public class InitializerSystem extends BaseComponentSystem {
 
     @In
     private NUIManager nuiManager;
@@ -56,8 +56,10 @@ public class ManagerInterfaceSystem extends BaseComponentSystem {
             player.addComponent(new HoldingComponent());
         }
 
-        // Added for testing purposes
+        // TODO : Added for testing purposes, remove after adding some Oreon centric resources
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Sand"), 99));
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Dirt"), 99));
+
+        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(Constants.INITIATION_BOOK_PREFAB), 1));
     }
 }
