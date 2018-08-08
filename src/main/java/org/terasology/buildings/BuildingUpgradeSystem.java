@@ -138,7 +138,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
 
         TaskComponent taskComponent = new TaskComponent();
-        taskComponent.assignedTaskType = AssignedTaskType.Upgrade;
+        taskComponent.assignedTaskType = AssignedTaskType.UPGRADE;
         // TODO: Assign a random region or a region based on blocks to be upgraded
         switch(buildingComponent.buildingType) {
             case Diner:
@@ -177,7 +177,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void addGuardTask(GuardBuildingEvent event, EntityRef player) {
         TaskComponent taskComponent = new TaskComponent();
-        taskComponent.assignedTaskType = AssignedTaskType.Guard;
+        taskComponent.assignedTaskType = AssignedTaskType.GUARD;
 
         ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
         taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.LABORATORY_SLAB_REGION);

@@ -90,7 +90,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
                         taskManagementSystem.abandonTask(actor.getEntity());
                     }
                     else {
-                        taskComponent.assignedTaskType = AssignedTaskType.None;
+                        taskComponent.assignedTaskType = AssignedTaskType.NONE;
                         taskComponent.task = new Task();
                     }
                     logger.info("Can't find a building with the required resources. Abandoning task");
@@ -126,7 +126,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
         EntityRef chestEntity = blockEntityRegistry.getBlockEntityAt(storageRegion.get(Constants.CHEST_BLOCK_INDEX).max());
 
         TaskComponent taskComponent = new TaskComponent();
-        taskComponent.assignedTaskType = AssignedTaskType.GetBlocksFromChest;
+        taskComponent.assignedTaskType = AssignedTaskType.GET_BLOCKS_FROM_CHEST;
         taskComponent.taskRegion = storageRegion.get(Constants.STORAGE_ENTRANCE_REGION);
         taskComponent.taskStatus = TaskStatusType.Available;
 
@@ -136,7 +136,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
         EntityRef targetChestEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(Constants.CHEST_BLOCK_INDEX).max());
         taskComponent.subsequentTask = new PlaceBlocksInChestTask(requiredResource, 1, targetChestEntity);
-        taskComponent.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
+        taskComponent.subsequentTaskType = AssignedTaskType.PLACE_BLOCKS_IN_CHEST;
         taskComponent.subsequentTaskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
 
         taskComponent.task = getBlocksTask;

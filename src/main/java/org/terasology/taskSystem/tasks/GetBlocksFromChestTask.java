@@ -42,7 +42,7 @@ public class GetBlocksFromChestTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.GetBlocksFromChest;
+        this.assignedTaskType = AssignedTaskType.GET_BLOCKS_FROM_CHEST;
 
         this.blocksToTransfer = blockToGet;
         this.numberOfBlocks = number;

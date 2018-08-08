@@ -34,7 +34,7 @@ public class TrainStrengthTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.Train_Strength;
+        this.assignedTaskType = AssignedTaskType.TRAIN_STRENGTH;
 
         this.buildingType = BuildingType.Gym;
         this.isAdvanced = true;

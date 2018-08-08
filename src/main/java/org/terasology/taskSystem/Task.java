@@ -30,7 +30,7 @@ public class Task {
     public int hunger;
 
     // Task specifications
-    public String assignedTaskType = AssignedTaskType.None;
+    public String assignedTaskType = AssignedTaskType.NONE;
     public float taskDuration;
     public Color taskColor = Color.MAGENTA.alterAlpha(90);
     public BuildingType buildingType = BuildingType.None;

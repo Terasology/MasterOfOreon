@@ -34,7 +34,7 @@ public class BuildingUpgradeTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.Upgrade;
+        this.assignedTaskType = AssignedTaskType.UPGRADE;
 
         this.requiredBuildingEntityID = building.getId();
     }

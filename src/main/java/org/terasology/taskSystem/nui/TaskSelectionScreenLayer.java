@@ -61,35 +61,35 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         cancelButton = find(Constants.CANCEL_BUTTON_ID, UIButton.class);
 
         plantCommand.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Plant);
+            sendSetTaskTypeEvent(AssignedTaskType.PLANT);
         });
 
         guardCommand.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Guard);
+            sendSetTaskTypeEvent(AssignedTaskType.GUARD);
         });
 
         hospitalButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Hospital);
+            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Hospital);
         });
 
         dinerButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Diner);
+            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Diner);
         });
 
         gymButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Gym);
+            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Gym);
         });
 
         classroomButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Classroom);
+            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Classroom);
         });
 
         storageButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Storage);
+            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Storage);
         });
 
         laboratoryButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Laboratory);
+            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Laboratory);
         });
 
         jailButton.subscribe(button -> {
