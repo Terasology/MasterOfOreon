@@ -89,7 +89,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
             String message = "Build a Storage for the harvested crops";
             delayedNotificationSystem.sendNotificationNow(message, notificationMessageEntity);
 
-            oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
+            oreonTaskComponent.assignedTaskType = AssignedTaskType.NONE;
             oreon.save(oreonTaskComponent);
 
             return BehaviorState.FAILURE;
@@ -112,7 +112,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
         oreonTaskComponent.subsequentTask = new PlaceBlocksInChestTask(harvestTask.harvestedCrop,
                 harvestTask.numberOfCropBlocksHarvested,
                 blockEntityRegistry.getBlockEntityAt(chestBlockLocation));
-        oreonTaskComponent.subsequentTaskType = AssignedTaskType.PlaceBlocksInChest;
+        oreonTaskComponent.subsequentTaskType = AssignedTaskType.PLACE_BLOCKS_IN_CHEST;
 
         removeCropBlocks(oreon);
 

@@ -39,7 +39,7 @@ public class PlantTask extends Task {
 
         this.taskDuration = DURATION;
         this.taskColor = COLOR;
-        this.assignedTaskType = AssignedTaskType.Plant;
+        this.assignedTaskType = AssignedTaskType.PLANT;
 
         this.cropToPlant = cropBlockURI;
     }

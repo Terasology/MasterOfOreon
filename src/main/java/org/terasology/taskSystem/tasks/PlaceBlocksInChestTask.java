@@ -42,7 +42,7 @@ public class PlaceBlocksInChestTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.PlaceBlocksInChest;
+        this.assignedTaskType = AssignedTaskType.PLACE_BLOCKS_IN_CHEST;
 
         this.blocksToTransfer = blockToAdd;
         this.numberOfBlocks = number;

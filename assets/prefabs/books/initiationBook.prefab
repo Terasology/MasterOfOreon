@@ -8,10 +8,11 @@
         "name" : "Initiation"
     },
     "Book" : {
-        "pages" : ["This book walks you through the various things that you can play around the mystical land of the Oreons.",
+        "pages" : ["This book walks you through the various things that you can play around with in the mystical land of the Oreons.",
+            "Spawning Oreons \\n You can spawn Oreons by activating a placed Portal block, which triggers a screen with the three available options and their requirements.",
             ""
         ],
-        "tint" : [0, 0, 255, 255],
+        "tint" : [0, 0, 129, 255],
         "title" : "Getting started with MOO"
     },
     "AnimateRotation": {

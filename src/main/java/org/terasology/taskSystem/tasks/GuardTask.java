@@ -33,7 +33,7 @@ public class GuardTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.Guard;
+        this.assignedTaskType = AssignedTaskType.GUARD;
         this.isAdvanced = false;
 
         this.requiredBuildingEntityID = buildingEntityId;

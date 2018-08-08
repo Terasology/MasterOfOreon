@@ -60,6 +60,6 @@ public class InitializerSystem extends BaseComponentSystem {
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Sand"), 99));
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Dirt"), 99));
 
-        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(Constants.INITIATION_BOOK_PREFAB), 1));
+        inventoryManager.giveItem(player, player, entityManager.create(Constants.INITIATION_BOOK_PREFAB));
     }
 }

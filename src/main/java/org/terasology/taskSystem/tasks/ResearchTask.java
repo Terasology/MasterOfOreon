@@ -35,7 +35,7 @@ public class ResearchTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.Research;
+        this.assignedTaskType = AssignedTaskType.RESEARCH;
 
         this.requiredBlocks = requiredBlocks;
         this.blockResult = blockResult;

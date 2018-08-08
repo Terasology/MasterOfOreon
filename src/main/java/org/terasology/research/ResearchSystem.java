@@ -188,7 +188,7 @@ public class ResearchSystem extends BaseComponentSystem {
         researchTask.requiredBuildingEntityID = laboratory.getId();
 
         TaskComponent taskComponent = new TaskComponent();
-        taskComponent.assignedTaskType = AssignedTaskType.Research;
+        taskComponent.assignedTaskType = AssignedTaskType.RESEARCH;
         taskComponent.task = researchTask;
 
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);

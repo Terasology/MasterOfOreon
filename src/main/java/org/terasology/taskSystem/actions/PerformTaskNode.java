@@ -120,7 +120,7 @@ public class PerformTaskNode extends BaseAction {
         completeTask(oreon, oreonTaskComponent);
 
         // Free the Oreon after performing task
-        oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
+        oreonTaskComponent.assignedTaskType = AssignedTaskType.NONE;
         oreonTaskComponent.taskStatus = TaskStatusType.Completed;
         oreon.save(oreonTaskComponent);
 
@@ -190,17 +190,17 @@ public class PerformTaskNode extends BaseAction {
 
 
         switch (taskType) {
-            case AssignedTaskType.Plant :
+            case AssignedTaskType.PLANT :
                 PlantTask task = (PlantTask) taskComponent.task;
                 plantingTaskCompletion.placeCrops(selectedRegion, task.cropToPlant);
                 break;
 
-            case AssignedTaskType.Build :
+            case AssignedTaskType.BUILD :
                 constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.task.buildingType);
                 //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
                 break;
 
-            case AssignedTaskType.Upgrade :
+            case AssignedTaskType.UPGRADE :
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
 
                 EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
@@ -233,7 +233,7 @@ public class PerformTaskNode extends BaseAction {
 
                 break;
 
-            case AssignedTaskType.Research :
+            case AssignedTaskType.RESEARCH :
                 oreon.getEntity().send(new ResearchStartEvent());
         }
 

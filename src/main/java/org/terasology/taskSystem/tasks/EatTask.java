@@ -35,7 +35,7 @@ public class EatTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.Eat;
+        this.assignedTaskType = AssignedTaskType.EAT;
         this.buildingType = BuildingType.Diner;
 
         this.requiredBlocks.add(Constants.COOKIE_CROP_URI);

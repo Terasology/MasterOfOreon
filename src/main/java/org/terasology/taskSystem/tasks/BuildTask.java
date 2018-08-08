@@ -37,7 +37,7 @@ public class BuildTask extends Task {
 
         this.taskDuration = DURATION;
         this.taskColor = COLOR;
-        this.assignedTaskType = AssignedTaskType.Build;
+        this.assignedTaskType = AssignedTaskType.BUILD;
 
         this.buildingType = buildingType;
     }

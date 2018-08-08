@@ -33,7 +33,7 @@ public class SleepTask extends Task {
         this.hunger = HUNGER;
 
         this.taskDuration = DURATION;
-        this.assignedTaskType = AssignedTaskType.Sleep;
+        this.assignedTaskType = AssignedTaskType.SLEEP;
         this.isAdvanced = true;
     }
 }

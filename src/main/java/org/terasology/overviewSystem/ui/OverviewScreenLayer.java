@@ -76,7 +76,7 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 List<String> result = new ArrayList<>();
                 for (EntityRef taskEntity : entityManager.getEntitiesWith(TaskComponent.class)) {
                     TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
-                    if (!taskComponent.assignedTaskType.equals(AssignedTaskType.None) && taskComponent.taskStatus.equals(TaskStatusType.Available)) {
+                    if (!taskComponent.assignedTaskType.equals(AssignedTaskType.NONE) && taskComponent.taskStatus.equals(TaskStatusType.Available)) {
                         result.add(taskComponent.task.assignedTaskType);
                     }
                 }

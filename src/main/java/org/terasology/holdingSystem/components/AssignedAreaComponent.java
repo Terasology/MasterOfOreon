@@ -31,7 +31,7 @@ public class AssignedAreaComponent implements Component {
     public Region3i assignedRegion;
 
     @Replicate
-    public String assignedTaskType = AssignedTaskType.None;
+    public String assignedTaskType = AssignedTaskType.NONE;
 
     @Replicate
     public BuildingType buildingType = BuildingType.None;

@@ -16,17 +16,17 @@
 package org.terasology.taskSystem;
 
 public class AssignedTaskType {
-    public static final String None = "none";
-    public static final String Plant = "plant";
-    public static final String Build = "build";
-    public static final String Harvest = "harvest";
-    public static final String Guard = "guard";
-    public static final String Eat = "eat";
-    public static final String Sleep = "sleep";
-    public static final String Train_Strength = "train_strength";
-    public static final String Train_Intelligence = "train_intelligence";
-    public static final String Upgrade = "upgrade";
-    public static final String Research = "research";
-    public static final String PlaceBlocksInChest = "placeBlocksInChest";
-    public static final String GetBlocksFromChest = "getBlocksFromChest";
+    public static final String NONE = "none";
+    public static final String PLANT = "plant";
+    public static final String BUILD = "build";
+    public static final String HARVEST = "harvest";
+    public static final String GUARD = "guard";
+    public static final String EAT = "eat";
+    public static final String SLEEP = "sleep";
+    public static final String TRAIN_STRENGTH = "train_strength";
+    public static final String TRAIN_INTELLIGENCE = "train_intelligence";
+    public static final String UPGRADE = "upgrade";
+    public static final String RESEARCH = "research";
+    public static final String PLACE_BLOCKS_IN_CHEST = "placeBlocksInChest";
+    public static final String GET_BLOCKS_FROM_CHEST = "getBlocksFromChest";
 }

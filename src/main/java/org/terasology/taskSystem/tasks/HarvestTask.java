@@ -42,6 +42,6 @@ public class HarvestTask extends Task {
 
         this.taskDuration = DURATION;
         this.taskColor = COLOR;
-        this.assignedTaskType = AssignedTaskType.Harvest;
+        this.assignedTaskType = AssignedTaskType.HARVEST;
     }
 }

@@ -241,14 +241,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
         Task newTask;
 
         switch (newTaskType) {
-            case AssignedTaskType.Plant :
+            case AssignedTaskType.PLANT :
                 newTask = new PlantTask(Constants.OREON_CROP_0_BLOCK);
                 taskComponent.subsequentTask = new HarvestTask();
-                taskComponent.subsequentTaskType = AssignedTaskType.Harvest;
+                taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
                 taskComponent.delayBeforeNextTask = 50000;
                 break;
 
-            case AssignedTaskType.Build :
+            case AssignedTaskType.BUILD :
                 newTask = new BuildTask(buildingType);
                 taskComponent.taskRegion = getBuildingExtents(buildingType, region);
                 break;
@@ -490,7 +490,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     public void abandonTask(EntityRef oreon) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
-        if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.None)) {
+        if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.NONE)) {
 
             String message = "Oreon " + oreon.getComponent(NameTagComponent.class).text + " got stuck. Abandoning task " + oreonTaskComponent.assignedTaskType;
             oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
@@ -517,7 +517,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             }
 
             // Free the Oreon
-            oreonTaskComponent.assignedTaskType = AssignedTaskType.None;
+            oreonTaskComponent.assignedTaskType = AssignedTaskType.NONE;
             inventoryManager.removeItem(oreon, oreon, 0, true, 1);
 
             oreon.saveComponent(oreonTaskComponent);
