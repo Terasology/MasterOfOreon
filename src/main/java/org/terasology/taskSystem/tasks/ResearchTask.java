@@ -22,11 +22,11 @@ import java.util.List;
 
 public class ResearchTask extends Task {
     private static final int HEALTH = 10;
-    private static final int INTELLIGENCE = 0;
-    private static final int STRENGTH = 0;
-    private static final int HUNGER = 20;
+    private static final int INTELLIGENCE = 10;
+    private static final int STRENGTH = 20;
+    private static final int HUNGER = 30;
 
-    private static final float DURATION = 10;
+    private static final float DURATION = 100;
 
     public ResearchTask(List<String> requiredBlocks, String blockResult) {
         this.health = HEALTH;

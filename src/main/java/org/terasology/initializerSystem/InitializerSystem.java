@@ -56,10 +56,6 @@ public class InitializerSystem extends BaseComponentSystem {
             player.addComponent(new HoldingComponent());
         }
 
-        // TODO : Added for testing purposes, remove after adding some Oreon centric resources
-        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Sand"), 99));
-        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Dirt"), 99));
-
         inventoryManager.giveItem(player, player, entityManager.create(MooConstants.INITIATION_BOOK_PREFAB));
     }
 }

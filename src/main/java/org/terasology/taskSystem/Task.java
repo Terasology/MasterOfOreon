@@ -15,7 +15,6 @@
  */
 package org.terasology.taskSystem;
 
-import org.terasology.math.Region3i;
 import org.terasology.rendering.nui.Color;
 
 import java.util.List;
