@@ -17,7 +17,7 @@ package org.terasology.buildings.ui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.buildings.BuildingUpgradeSystem;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.GuardBuildingEvent;
@@ -52,10 +52,10 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
     public void initialise() {
         buildingUpgradeSystem = context.get(BuildingUpgradeSystem.class);
 
-        buildingName = find(Constants.BUILDING_NAME_UI_LABEL_ID, UILabel.class);
-        buildingLevel = find(Constants.BUILDING_LEVEL_UI_LABEL_ID, UILabel.class);
-        upgradeBuildingButton = find(Constants.BUILDING_UPGRADE_COMMAND_UI_ID, UIButton.class);
-        guardBuildingButton = find(Constants.GUARD_BUILDING_COMMAND_UI_ID, UIButton.class);
+        buildingName = find(MooConstants.BUILDING_NAME_UI_LABEL_ID, UILabel.class);
+        buildingLevel = find(MooConstants.BUILDING_LEVEL_UI_LABEL_ID, UILabel.class);
+        upgradeBuildingButton = find(MooConstants.BUILDING_UPGRADE_COMMAND_UI_ID, UIButton.class);
+        guardBuildingButton = find(MooConstants.GUARD_BUILDING_COMMAND_UI_ID, UIButton.class);
 
         populateLabels();
 

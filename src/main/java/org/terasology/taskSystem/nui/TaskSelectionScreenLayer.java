@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem.nui;
 
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
@@ -47,18 +47,19 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
 
     @Override
     public void initialise() {
-        plantCommand = find(Constants.PLANT_COMMAND_UI_ID, UIButton.class);
-        guardCommand = find(Constants.GUARD_COMMAND_UI_ID, UIButton.class);
+        plantCommand = find(MooConstants.PLANT_COMMAND_UI_ID, UIButton.class);
+        guardCommand = find(MooConstants.GUARD_COMMAND_UI_ID, UIButton.class);
 
-        hospitalButton = find(Constants.HOSPITAL_BUTTON_ID, UIButton.class);
-        dinerButton = find(Constants.DINER_BUTTON_ID, UIButton.class);
-        gymButton = find(Constants.GYM_BUTTON_ID, UIButton.class);
-        classroomButton = find(Constants.CLASSROOM_BUTTON_ID, UIButton.class);
-        storageButton = find(Constants.STORAGE_BUTTON_ID, UIButton.class);
-        laboratoryButton = find(Constants.LABORATORY_BUTTON_ID, UIButton.class);
-        jailButton = find(Constants.JAIL_BUTTON_ID, UIButton.class);
+        hospitalButton = find(MooConstants.HOSPITAL_BUTTON_ID, UIButton.class);
+        dinerButton = find(MooConstants.DINER_BUTTON_ID, UIButton.class);
+        gymButton = find(MooConstants.GYM_BUTTON_ID, UIButton.class);
+        classroomButton = find(MooConstants.CLASSROOM_BUTTON_ID, UIButton.class);
+        storageButton = find(MooConstants.STORAGE_BUTTON_ID, UIButton.class);
+        laboratoryButton = find(MooConstants.LABORATORY_BUTTON_ID, UIButton.class);
+        jailButton = find(MooConstants.JAIL_BUTTON_ID, UIButton.class);
 
-        cancelButton = find(Constants.CANCEL_BUTTON_ID, UIButton.class);
+
+        cancelButton = find(MooConstants.CANCEL_BUTTON_ID, UIButton.class);
 
         plantCommand.subscribe(button -> {
             sendSetTaskTypeEvent(AssignedTaskType.PLANT);

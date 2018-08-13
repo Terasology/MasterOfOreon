@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem.actions;
 
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -66,7 +66,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
         delayedNotificationSystem = context.get(DelayedNotificationSystem.class);
 
-        notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
+        notificationMessageEntity = entityManager.create(MooConstants.NOTIFICATION_MESSAGE_PREFAB);
 
         DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
         displayNameComponent.name = "Oreons";
@@ -107,7 +107,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
         BlockComponent blockComponent = plantBlockEntity.getComponent(BlockComponent.class);
         harvestTask.harvestedCrop = blockComponent.getBlock().getURI().toString();
 
-        Vector3i chestBlockLocation = storageBuildingRegions.get(Constants.CHEST_BLOCK_INDEX).min();
+        Vector3i chestBlockLocation = storageBuildingRegions.get(MooConstants.CHEST_BLOCK_INDEX).min();
 
         oreonTaskComponent.subsequentTask = new PlaceBlocksInChestTask(harvestTask.harvestedCrop,
                 harvestTask.numberOfCropBlocksHarvested,
@@ -116,7 +116,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
 
         removeCropBlocks(oreon);
 
-        oreonTaskComponent.subsequentTaskRegion = storageBuildingRegions.get(Constants.STORAGE_ENTRANCE_REGION);
+        oreonTaskComponent.subsequentTaskRegion = storageBuildingRegions.get(MooConstants.STORAGE_ENTRANCE_REGION);
         oreon.save(oreonTaskComponent);
 
         return BehaviorState.SUCCESS;

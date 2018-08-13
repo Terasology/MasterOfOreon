@@ -15,7 +15,7 @@
  */
 package org.terasology.healthSystem;
 
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.context.Context;
 import org.terasology.deathSystem.DeathSystem;
 import org.terasology.engine.Time;
@@ -54,7 +54,7 @@ public class OreonHealthSystem extends BaseComponentSystem {
     public void postBegin() {
         delayedNotificationSystem = context.get(DelayedNotificationSystem.class);
         deathSystem = context.get(DeathSystem.class);
-        notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
+        notificationMessageEntity = entityManager.create(MooConstants.NOTIFICATION_MESSAGE_PREFAB);
 
         ColorComponent colorComponent = notificationMessageEntity.getComponent(ColorComponent.class);
         colorComponent.color = Color.RED;
