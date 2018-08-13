@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem;
 
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -52,7 +52,7 @@ public class TaskManagementClientSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void openTaskSelectionScreen(OpenTaskSelectionScreenEvent event, EntityRef player) {
-        this.taskSelectionScreenLayer = nuiManager.createScreen(Constants.TASK_SELECTION_SCREEN_URI);
+        this.taskSelectionScreenLayer = nuiManager.createScreen(MooConstants.TASK_SELECTION_SCREEN_URI);
         this.taskRegion = event.getTaskRegion();
 
         // To persist the area rendering while task type is selected

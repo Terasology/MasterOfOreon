@@ -15,7 +15,7 @@
  */
 package org.terasology.overviewSystem;
 
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -39,6 +39,6 @@ public class OverviewClientSystem extends BaseComponentSystem {
     }
 
     private void toggleOverviewScreen() {
-        nuiManager.toggleScreen(Constants.OVERVIEW_SCREEN_URI);
+        nuiManager.toggleScreen(MooConstants.OVERVIEW_SCREEN_URI);
     }
 }

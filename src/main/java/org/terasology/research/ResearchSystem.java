@@ -17,7 +17,7 @@ package org.terasology.research;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.books.logic.BookComponent;
 import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
@@ -37,10 +37,8 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.research.components.LaboratoryComponent;
 import org.terasology.research.events.ResearchStartEvent;
@@ -102,7 +100,7 @@ public class ResearchSystem extends BaseComponentSystem {
 
         addBooksToCase(player, event.absoluteRegions, 0);
 
-        Vector3i pedestalLocation = event.absoluteRegions.get(Constants.PEDESTAL_REGION_INDEX).max();
+        Vector3i pedestalLocation = event.absoluteRegions.get(MooConstants.PEDESTAL_REGION_INDEX).max();
         EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(pedestalLocation);
         LaboratoryComponent laboratoryComponent = pedestalEntity.getComponent(LaboratoryComponent.class);
         laboratoryComponent.laboratoryEntity = event.constructedBuildingEntity;
@@ -127,7 +125,7 @@ public class ResearchSystem extends BaseComponentSystem {
     private void addBooksToCase(EntityRef player, List<Region3i> absoluteRegions, int level) {
         logger.debug("Adding books to laboratory");
         // Get the bookcase block
-        Vector3i bookcaseLocation = absoluteRegions.get(Constants.BOOKCASE_REGION_INDEX).max();
+        Vector3i bookcaseLocation = absoluteRegions.get(MooConstants.BOOKCASE_REGION_INDEX).max();
         EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(bookcaseLocation);
 
         for (EntityRef book : getBooksToAdd(player, level)) {
@@ -145,7 +143,7 @@ public class ResearchSystem extends BaseComponentSystem {
 
         switch (level) {
             case 0 :
-                EntityRef book = entityManager.create(Constants.COOKIE_CROP_RESEARCH_BOOK);
+                EntityRef book = entityManager.create(MooConstants.COOKIE_CROP_RESEARCH_BOOK);
                 booksToAdd.add(book);
         }
 
@@ -161,14 +159,14 @@ public class ResearchSystem extends BaseComponentSystem {
     @ReceiveEvent(components = LaboratoryComponent.class)
     public void onBookPlacedInInventory(OnChangedComponent event, EntityRef inventoryEntity, InventoryComponent inventoryComponent) {
 
-        if (inventoryEntity.getParentPrefab().getName().equals(Constants.PEDESTAL_PREFAB)) {
+        if (inventoryEntity.getParentPrefab().getName().equals(MooConstants.PEDESTAL_PREFAB)) {
             for (EntityRef item : inventoryComponent.itemSlots) {
                 DisplayNameComponent nameComponent = item.getComponent(DisplayNameComponent.class);
 
                 // TODO: this is a dirty way to prevent the research task being added twice when the Exclamation point is placed in inventory
                 if (inventoryComponent.itemSlots.get(1) == EntityRef.NULL) {
                     // Check if item is research Book
-                    if (nameComponent != null && nameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
+                    if (nameComponent != null && nameComponent.name.equals(MooConstants.RESEARCH_BOOK_NAME)) {
                         getResearchRecipe(item, inventoryEntity);
                         break;
                     }
@@ -192,7 +190,7 @@ public class ResearchSystem extends BaseComponentSystem {
         taskComponent.task = researchTask;
 
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
-        taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.LABORATORY_SLAB_REGION);
+        taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.LABORATORY_SLAB_REGION);
 
         taskManagementSystem.addTask(player, entityManager.create(taskComponent));
 
@@ -244,7 +242,7 @@ public class ResearchSystem extends BaseComponentSystem {
                 laboratoryComponent.laboratoryEntity);
 
         // add exclamation point
-        EntityRef exclamationPoint = entityManager.create(Constants.EXCLAMATION_PREFAB);
+        EntityRef exclamationPoint = entityManager.create(MooConstants.EXCLAMATION_PREFAB);
         inventoryManager.giveItem(inventoryEntity, inventoryEntity, exclamationPoint);
     }
 
@@ -256,8 +254,8 @@ public class ResearchSystem extends BaseComponentSystem {
     private void removeBookFromPedestal(EntityRef laboratory) {
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
 
-        EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(Constants.PEDESTAL_REGION_INDEX).max());
-        EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(Constants.BOOKCASE_REGION_INDEX).max());
+        EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.PEDESTAL_REGION_INDEX).max());
+        EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.BOOKCASE_REGION_INDEX).max());
 
         InventoryComponent pedestalInventory = pedestalEntity.getComponent(InventoryComponent.class);
 
@@ -265,7 +263,7 @@ public class ResearchSystem extends BaseComponentSystem {
             EntityRef removedItem = inventoryManager.removeItem(pedestalEntity, pedestalEntity, item, false);
             logger.info(removedItem.toString());
             DisplayNameComponent displayNameComponent = removedItem.getComponent(DisplayNameComponent.class);
-            if (displayNameComponent != null && displayNameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
+            if (displayNameComponent != null && displayNameComponent.name.equals(MooConstants.RESEARCH_BOOK_NAME)) {
                 inventoryManager.giveItem(bookcaseEntity, bookcaseEntity, removedItem);
             }
             else {

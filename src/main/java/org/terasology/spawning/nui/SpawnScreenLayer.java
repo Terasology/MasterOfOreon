@@ -28,7 +28,7 @@ import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.spawning.OreonSpawnEvent;
 
@@ -61,28 +61,28 @@ public class SpawnScreenLayer extends CoreScreenLayer {
 
     @Override
     public void initialise() {
-        summonOreonBuilderCommand = find(Constants.OREON_BUILDER_UI_ID, UIButton.class);
-        summonOreonGuardCommand = find(Constants.OREON_GUARD_UI_ID, UIButton.class);
-        summonOreonKingCommand = find(Constants.OREON_KING_UI_ID, UIButton.class);
+        summonOreonBuilderCommand = find(MooConstants.OREON_BUILDER_UI_ID, UIButton.class);
+        summonOreonGuardCommand = find(MooConstants.OREON_GUARD_UI_ID, UIButton.class);
+        summonOreonKingCommand = find(MooConstants.OREON_KING_UI_ID, UIButton.class);
 
-        builderResourceRequired = find(Constants.OREON_BUILDER_RESOURCES_LABEL_ID, UILabel.class);
-        guardResourceRequired = find(Constants.OREON_GUARD_RESOURCES_LABEL_ID, UILabel.class);
-        kingResourceRequired = find(Constants.OREON_KING_RESOURCES_LABEL_ID, UILabel.class);
+        builderResourceRequired = find(MooConstants.OREON_BUILDER_RESOURCES_LABEL_ID, UILabel.class);
+        guardResourceRequired = find(MooConstants.OREON_GUARD_RESOURCES_LABEL_ID, UILabel.class);
+        kingResourceRequired = find(MooConstants.OREON_KING_RESOURCES_LABEL_ID, UILabel.class);
 
-        populateUiLabels(Constants.OREON_BUILDER_PREFAB, builderResourceRequired);
-        populateUiLabels(Constants.OREON_GUARD_PREFAB, guardResourceRequired);
-        populateUiLabels(Constants.OREON_KING_PREFAB, kingResourceRequired);
+        populateUiLabels(MooConstants.OREON_BUILDER_PREFAB, builderResourceRequired);
+        populateUiLabels(MooConstants.OREON_GUARD_PREFAB, guardResourceRequired);
+        populateUiLabels(MooConstants.OREON_KING_PREFAB, kingResourceRequired);
 
         summonOreonBuilderCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab(Constants.OREON_BUILDER_PREFAB));
+            sendOreonSpawnEvent(prefabManager.getPrefab(MooConstants.OREON_BUILDER_PREFAB));
         });
 
         summonOreonGuardCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab(Constants.OREON_GUARD_PREFAB));
+            sendOreonSpawnEvent(prefabManager.getPrefab(MooConstants.OREON_GUARD_PREFAB));
         });
 
         summonOreonKingCommand.subscribe(button -> {
-            sendOreonSpawnEvent(prefabManager.getPrefab(Constants.OREON_KING_PREFAB));
+            sendOreonSpawnEvent(prefabManager.getPrefab(MooConstants.OREON_KING_PREFAB));
         });
     }
 

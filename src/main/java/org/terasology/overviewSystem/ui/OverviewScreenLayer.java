@@ -17,12 +17,11 @@ package org.terasology.overviewSystem.ui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.databinding.Binding;
@@ -51,10 +50,10 @@ public class OverviewScreenLayer extends CoreScreenLayer {
 
     @Override
     public void initialise() {
-        availableTasks = find(Constants.AVAILABLE_TASKS_LIST_ID, UIList.class);
-        inProgressTasks = find(Constants.ON_GOING_TASKS_LIST_ID, UIList.class);
-        oreons = find(Constants.OREONS_LIST_ID, UIList.class);
-        buildings = find(Constants.BUILDINGS_LIST_ID, UIList.class);
+        availableTasks = find(MooConstants.AVAILABLE_TASKS_LIST_ID, UIList.class);
+        inProgressTasks = find(MooConstants.ON_GOING_TASKS_LIST_ID, UIList.class);
+        oreons = find(MooConstants.OREONS_LIST_ID, UIList.class);
+        buildings = find(MooConstants.BUILDINGS_LIST_ID, UIList.class);
 
         populateLists();
     }
@@ -115,13 +114,13 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 int numberOfKings = 0;
                 for (EntityRef oreonEntity : entityManager.getEntitiesWith(OreonSpawnComponent.class)) {
                     switch (oreonEntity.getParentPrefab().getName()) {
-                        case Constants.OREON_BUILDER_PREFAB :
+                        case MooConstants.OREON_BUILDER_PREFAB :
                             numberOfBuilders++;
                             break;
-                        case Constants.OREON_GUARD_PREFAB :
+                        case MooConstants.OREON_GUARD_PREFAB :
                             numberOfGuards++;
                             break;
-                        case Constants.OREON_KING_PREFAB :
+                        case MooConstants.OREON_KING_PREFAB :
                             numberOfKings++;
                     }
                 }

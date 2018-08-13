@@ -17,7 +17,7 @@ package org.terasology.taskSystem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
 import org.terasology.buildings.events.BuildingConstructionStartedEvent;
@@ -112,7 +112,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
+        notificationMessageEntity = entityManager.create(MooConstants.NOTIFICATION_MESSAGE_PREFAB);
 
         DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
         displayNameComponent.name = "Task System";
@@ -242,7 +242,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         switch (newTaskType) {
             case AssignedTaskType.PLANT :
-                newTask = new PlantTask(Constants.OREON_CROP_0_BLOCK);
+                newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
                 taskComponent.subsequentTask = new HarvestTask();
                 taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
                 taskComponent.delayBeforeNextTask = 50000;
@@ -254,7 +254,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 break;
 
             default :
-                newTask = new PlantTask(Constants.OREON_CROP_0_BLOCK);
+                newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
         }
 
         newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
@@ -309,7 +309,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         int maxZ = region.maxZ();
         int y = region.minY();
 
-        Block block = blockManager.getBlock(Constants.FENCE_BLOCK_URI);
+        Block block = blockManager.getBlock(MooConstants.FENCE_BLOCK_URI);
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z <= maxZ; z++) {
                 blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, y + 1, z), block);
@@ -318,7 +318,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         // Place torches on corners
         if (placeTorch) {
-            block = blockManager.getBlock(Constants.TORCH_BLOCK_URI);
+            block = blockManager.getBlock(MooConstants.TORCH_BLOCK_URI);
             blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(minX, y + 2, minZ), block);
             blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(maxX, y + 2, maxZ), block);
         }
@@ -397,9 +397,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
             ConstructedBuildingComponent constructedBuildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
             if (constructedBuildingComponent.buildingType.equals(buildingType)) {
-                oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
+                oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
                 oreonTaskComponent.task.requiredBuildingEntityID = building.getId();
-                return constructedBuildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX).min();
+                return constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX).min();
             }
         }
 

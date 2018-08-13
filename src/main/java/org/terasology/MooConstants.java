@@ -15,7 +15,7 @@
  */
 package org.terasology;
 
-final class Constants {
+public class MooConstants {
     // Oreon prefabs
     public static final String OREON_BUILDER_PREFAB = "Oreons:OreonBuilder";
     public static final String OREON_GUARD_PREFAB = "Oreons:OreonGuard";

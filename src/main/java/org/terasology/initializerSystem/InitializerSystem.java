@@ -27,7 +27,7 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
@@ -49,9 +49,9 @@ public class InitializerSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
-        inventoryManager.giveItem(player, player, entityManager.create(Constants.SELECTION_TOOL_PREFAB));
-        inventoryManager.giveItem(player, player, entityManager.create(Constants.BUILDING_UPGRADE_TOOL));
-        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(Constants.PORTAL_PREFAB), 10));
+        inventoryManager.giveItem(player, player, entityManager.create(MooConstants.SELECTION_TOOL_PREFAB));
+        inventoryManager.giveItem(player, player, entityManager.create(MooConstants.BUILDING_UPGRADE_TOOL));
+        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(MooConstants.PORTAL_PREFAB), 10));
         if (!player.hasComponent(HoldingComponent.class)) {
             player.addComponent(new HoldingComponent());
         }
@@ -60,6 +60,6 @@ public class InitializerSystem extends BaseComponentSystem {
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Sand"), 99));
         inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily("Core:Dirt"), 99));
 
-        inventoryManager.giveItem(player, player, entityManager.create(Constants.INITIATION_BOOK_PREFAB));
+        inventoryManager.giveItem(player, player, entityManager.create(MooConstants.INITIATION_BOOK_PREFAB));
     }
 }

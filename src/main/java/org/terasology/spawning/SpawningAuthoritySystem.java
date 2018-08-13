@@ -17,7 +17,7 @@ package org.terasology.spawning;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -34,7 +34,6 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.namegenerator.creature.CreatureNameComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
-import org.terasology.rendering.logic.FloatingTextComponent;
 import org.terasology.utilities.random.MersenneRandom;
 import org.terasology.world.block.BlockManager;
 
@@ -205,7 +204,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
         MersenneRandom random = new MersenneRandom();
 
-        if (prefabToSpawn.getName().equals(Constants.OREON_BUILDER_PREFAB)) {
+        if (prefabToSpawn.getName().equals(MooConstants.OREON_BUILDER_PREFAB)) {
             oreonAttributes.intelligence = random.nextInt(oreonAttributes.maxIntelligence);
         } else {
             oreonAttributes.intelligence = 0;

@@ -17,7 +17,7 @@ package org.terasology.buildings;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.buildings.events.CloseUpgradeScreenEvent;
@@ -90,7 +90,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         EntityRef selectedItem = heldItemComponent.selectedItem;
         DisplayNameComponent displayNameComponent = selectedItem.getComponent(DisplayNameComponent.class);
 
-        if (displayNameComponent == null || !displayNameComponent.name.equals(Constants.UPGRADE_TOOL_NAME)) {
+        if (displayNameComponent == null || !displayNameComponent.name.equals(MooConstants.UPGRADE_TOOL_NAME)) {
             return;
         }
 
@@ -142,12 +142,13 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         // TODO: Assign a random region or a region based on blocks to be upgraded
         switch(buildingComponent.buildingType) {
             case Diner:
-                taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
+                taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
                 break;
             case Jail:
-                taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.WALL_OF_JAIL_REGION);
+                taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.WALL_OF_JAIL_REGION);
                 break;
         }
+
         taskComponent.task = new BuildingUpgradeTask(buildingToUpgrade);
 
         taskComponent.taskCompletionTime = taskManagementSystem.getTaskCompletionTime(taskComponent.task);
@@ -180,7 +181,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskComponent.assignedTaskType = AssignedTaskType.GUARD;
 
         ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
-        taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.LABORATORY_SLAB_REGION);
+        taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.LABORATORY_SLAB_REGION);
         taskComponent.taskStatus = TaskStatusType.Available;
 
         taskComponent.task = new GuardTask(buildingToUpgrade.getId());

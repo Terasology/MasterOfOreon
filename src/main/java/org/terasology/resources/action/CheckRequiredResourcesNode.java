@@ -17,7 +17,7 @@ package org.terasology.resources.action;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -123,21 +123,21 @@ public class CheckRequiredResourcesNode extends BaseAction {
         if (storageRegion == null) {
             return;
         }
-        EntityRef chestEntity = blockEntityRegistry.getBlockEntityAt(storageRegion.get(Constants.CHEST_BLOCK_INDEX).max());
+        EntityRef chestEntity = blockEntityRegistry.getBlockEntityAt(storageRegion.get(MooConstants.CHEST_BLOCK_INDEX).max());
 
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.GET_BLOCKS_FROM_CHEST;
-        taskComponent.taskRegion = storageRegion.get(Constants.STORAGE_ENTRANCE_REGION);
+        taskComponent.taskRegion = storageRegion.get(MooConstants.STORAGE_ENTRANCE_REGION);
         taskComponent.taskStatus = TaskStatusType.Available;
 
         Task getBlocksTask = new GetBlocksFromChestTask(requiredResource, 1, chestEntity);
 
         // Add place blocks into the required building as a subsequent task.
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
-        EntityRef targetChestEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(Constants.CHEST_BLOCK_INDEX).max());
+        EntityRef targetChestEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.CHEST_BLOCK_INDEX).max());
         taskComponent.subsequentTask = new PlaceBlocksInChestTask(requiredResource, 1, targetChestEntity);
         taskComponent.subsequentTaskType = AssignedTaskType.PLACE_BLOCKS_IN_CHEST;
-        taskComponent.subsequentTaskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
+        taskComponent.subsequentTaskRegion = buildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
 
         taskComponent.task = getBlocksTask;
 

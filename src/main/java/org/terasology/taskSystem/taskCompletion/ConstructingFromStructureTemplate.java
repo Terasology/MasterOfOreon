@@ -17,7 +17,7 @@ package org.terasology.taskSystem.taskCompletion;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.buildings.events.BuildingConstructionStartedEvent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.math.Region3i;

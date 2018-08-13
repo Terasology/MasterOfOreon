@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem.actions;
 
-import org.terasology.Constants;
+import org.terasology.MooConstants;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -67,7 +67,7 @@ public class NeedsFoodNode extends BaseAction {
 
         oreonHealthSystem  = context.get(OreonHealthSystem.class);
 
-        notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
+        notificationMessageEntity = entityManager.create(MooConstants.NOTIFICATION_MESSAGE_PREFAB);
 
         DisplayNameComponent displayNameComponent = notificationMessageEntity.getComponent(DisplayNameComponent.class);
         displayNameComponent.name = oreon.getComponent(NameTagComponent.class).text;
