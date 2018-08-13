@@ -29,7 +29,7 @@ public class GetBlocksFromChestTask extends Task {
     private static final int STRENGTH = 0;
     private static final int HUNGER = 50;
 
-    private static final float DURATION = 10;
+    private static final float DURATION = 100;
 
     public String blocksToTransfer;
     public int numberOfBlocks;

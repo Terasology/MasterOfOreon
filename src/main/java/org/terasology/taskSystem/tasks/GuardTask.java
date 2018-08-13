@@ -21,10 +21,10 @@ import org.terasology.taskSystem.Task;
 public class GuardTask extends Task {
     private static final int HEALTH = 20;
     private static final int INTELLIGENCE = 0;
-    private static final int STRENGTH = 0;
-    private static final int HUNGER = 20;
+    private static final int STRENGTH = 10;
+    private static final int HUNGER = 40;
 
-    private static final float DURATION = 40;
+    private static final float DURATION = 100;
 
     public GuardTask(long buildingEntityId) {
         this.health = HEALTH;

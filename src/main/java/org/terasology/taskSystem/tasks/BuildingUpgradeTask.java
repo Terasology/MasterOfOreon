@@ -20,12 +20,12 @@ import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 
 public class BuildingUpgradeTask extends Task {
-    private static final int HEALTH = 20;
-    private static final int INTELLIGENCE = 30;
+    private static final int HEALTH = 40;
+    private static final int INTELLIGENCE = 0;
     private static final int STRENGTH = 0;
-    private static final int HUNGER = 20;
+    private static final int HUNGER = 30;
 
-    private static final float DURATION = 30;
+    private static final float DURATION = 120;
 
     public BuildingUpgradeTask(EntityRef building) {
         this.health = HEALTH;

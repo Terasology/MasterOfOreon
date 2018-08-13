@@ -26,7 +26,7 @@ public class EatTask extends Task {
     private static final int STRENGTH = 0;
     private static final int HUNGER = -20;
 
-    private static final float DURATION = 20;
+    private static final float DURATION = 150;
 
     public EatTask() {
         this.health = HEALTH;
