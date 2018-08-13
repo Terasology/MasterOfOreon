@@ -325,17 +325,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     private Region3i getBuildingExtents(BuildingType buildingType, Region3i region) {
-        Prefab buildingPrefab;
-
-        switch (buildingType) {
-            case Diner:
-                buildingPrefab = prefabManager.getPrefab(Constants.DINER_PREFAB);
-                break;
-
-            default:
-                buildingPrefab = prefabManager.getPrefab(Constants.STORAGE_PREFAB);
-
-        }
+        Prefab buildingPrefab = prefabManager.getPrefab(buildingType.toString());
 
         SpawnBlockRegionsComponent blockRegionsComponent = buildingPrefab.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> regionsToFill = blockRegionsComponent.regionsToFill;

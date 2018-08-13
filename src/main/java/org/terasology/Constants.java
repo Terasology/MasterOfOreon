@@ -15,7 +15,7 @@
  */
 package org.terasology;
 
-public class Constants {
+final class Constants {
     // Oreon prefabs
     public static final String OREON_BUILDER_PREFAB = "Oreons:OreonBuilder";
     public static final String OREON_GUARD_PREFAB = "Oreons:OreonGuard";
@@ -91,8 +91,6 @@ public class Constants {
     public static final int LABORATORY_SLAB_REGION = 16;
     public static final int STORAGE_ENTRANCE_REGION =12;
     public static final int WALL_OF_JAIL_REGION = 0;
-
-    public static final String AIR_BLOCK_URI = "engine:air";
 
     public static final String TASK_SELECTION_SCREEN_URI = "taskSelectionScreen";
     public static final String BUILDING_UPGRADE_SCREEN_URI = "buildingUpgradeScreen";
