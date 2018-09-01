@@ -1,6 +1,6 @@
 {
     "StructureTemplate": {
-        "type": "MasterOfOreon:diner0"
+        "type": "MasterOfOreon:dinerLevel0"
     },
     "SpawnBlockRegions": {
         "regionsToFill": [
