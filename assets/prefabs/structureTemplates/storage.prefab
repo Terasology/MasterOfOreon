@@ -1,6 +1,6 @@
 {
     "StructureTemplate": {
-        "type": "MasterOfOreon:storage0"
+        "type": "MasterOfOreon:storageLevel0"
     },
     "SpawnBlockRegions": {
         "regionsToFill": [

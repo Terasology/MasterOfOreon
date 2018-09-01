@@ -1,6 +1,6 @@
 {
     "StructureTemplate": {
-        "type": "MasterOfOreon:laboratory0"
+        "type": "MasterOfOreon:laboratoryLevel0"
     },
     "SpawnBlockRegions": {
         "regionsToFill": [

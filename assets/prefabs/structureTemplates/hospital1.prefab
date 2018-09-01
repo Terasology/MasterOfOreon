@@ -1,6 +1,6 @@
 {
     "StructureTemplate" : {
-        "type": "MasterOfOreon:hospital",
+        "type": "MasterOfOreon:hospitalLevel1",
         "spawnChance": 100
     },
     "SpawnBlockRegions": {
