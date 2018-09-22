@@ -16,12 +16,7 @@
 package org.terasology.taskSystem;
 
 import com.google.common.collect.ImmutableMap;
-import org.terasology.persistence.typeHandling.DeserializationContext;
-import org.terasology.persistence.typeHandling.PersistedData;
-import org.terasology.persistence.typeHandling.PersistedDataMap;
-import org.terasology.persistence.typeHandling.RegisterTypeHandler;
-import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.TypeHandler;
+import org.terasology.persistence.typeHandling.*;
 import org.terasology.rendering.nui.Color;
 
 import java.util.ArrayList;
@@ -29,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @RegisterTypeHandler
-public class TaskTypeHandler implements TypeHandler<Task> {
+public class TaskTypeHandler extends SimpleTypeHandler<Task> {
 
     @Override
     public PersistedData serialize(Task task, SerializationContext context) {
