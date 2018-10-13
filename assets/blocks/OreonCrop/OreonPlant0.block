@@ -1,7 +1,6 @@
 {
     "basedOn" : "Core:plant",
     "entity" : {
-        "prefab" : "MasterOfOreon:OreonCrop",
-        "keepActive" : "true"
+        "prefab" : "MasterOfOreon:OreonCrop"
     }
 }
