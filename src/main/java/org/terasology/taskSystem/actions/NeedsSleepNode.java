@@ -28,6 +28,7 @@ import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ColorComponent;
+import org.terasology.notification.NotificationMessageEvent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.Color;
 import org.terasology.taskSystem.AssignedTaskType;
@@ -88,7 +89,7 @@ public class NeedsSleepNode extends BaseAction {
         if (diffCeiling < 0.24 || diffFloor < 0.24) {
             taskManagementSystem.assignAdvancedTaskToOreon(oreon, new SleepTask());
             String message = "Sleepy time";
-            localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
+            localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEvent(message, notificationMessageEntity));
             return BehaviorState.FAILURE;
         }
 

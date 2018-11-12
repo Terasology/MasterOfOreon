@@ -7,8 +7,8 @@
         "contents" : [
             {
                 "type" : "UIText",
-                 "id" : "notificationInfo",
-                 "text" : "aggagaagagagadgasgasfghsfhsfhfhsdf",
+                 "id" : "notificationMessage",
+                 "text" : "",
                  "layoutInfo" : {
                      "width" : 400,
                      "height" : 30,
