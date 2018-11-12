@@ -1,0 +1,22 @@
+{
+    "type" : "NotificationScreenLayer",
+    "skin" : "engine:default",
+    "id" : "notificationScreen",
+    "contents" : {
+        "type" : "relativeLayout",
+        "contents" : [
+            {
+                "type" : "UIText",
+                 "id" : "notificationInfo",
+                 "text" : "aggagaagagagadgasgasfghsfhsfhfhsdf",
+                 "layoutInfo" : {
+                     "width" : 400,
+                     "height" : 30,
+                     "position-horizontal-left" : {},
+                     "position-vertical-left" : {}
+                 },
+                 "readOnly": true
+            }
+        ]
+    }
+}
