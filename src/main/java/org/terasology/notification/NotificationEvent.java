@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology;
+package org.terasology.notification;
 
-import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.entitySystem.event.Event;
 
-public class NotificationScreenLayer extends CoreScreenLayer {
+@FunctionalInterface
+public interface NotificationEvent extends Event {
 
-    @Override
-    public void initialise (){
-
-    }
+    String getFormattedString();
 }
