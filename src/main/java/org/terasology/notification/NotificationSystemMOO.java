@@ -27,7 +27,7 @@ import org.terasology.rendering.nui.NUIManager;
  * The system for notifying the player through notification overlay for Master of Oreon (MOO)
  */
 @RegisterSystem
-public class NotificationSystem extends BaseComponentSystem {
+public class NotificationSystemMOO extends BaseComponentSystem {
 
     private NotificationOverlayMOO overlay;
 
@@ -40,9 +40,10 @@ public class NotificationSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent(components = ClientComponent.class)
-    public void onNotification(NotificationEvent event, EntityRef entity) {
+    public void onNotification(NotificationEventMOO event, EntityRef entity) {
         ClientComponent client = entity.getComponent(ClientComponent.class);
         if (client.local) {
+            overlay.setVisible(true);
             overlay.setNotificationText(event.getFormattedString());
         }
     }
