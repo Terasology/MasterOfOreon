@@ -17,8 +17,14 @@ package org.terasology.notification;
 
 import org.terasology.entitySystem.event.Event;
 
+/**
+ * Notification event for Master of Oreon (MOO)
+ */
 @FunctionalInterface
 public interface NotificationEvent extends Event {
 
+    /**
+     * @return The final notification message, combining all elements
+     */
     String getFormattedString();
 }
