@@ -23,14 +23,14 @@ import org.terasology.network.OwnerEvent;
  * A notification message for Master of Oreon (MOO)
  */
 @OwnerEvent
-public class NotificationMessageEvent implements NotificationEvent {
+public class NotificationMessageEventMOO implements NotificationEventMOO {
     private String message;
     private EntityRef from;
 
-    protected NotificationMessageEvent() {
+    protected NotificationMessageEventMOO() {
     }
 
-    public NotificationMessageEvent(String message, EntityRef from) {
+    public NotificationMessageEventMOO(String message, EntityRef from) {
         this.message = message;
         this.from = from;
     }

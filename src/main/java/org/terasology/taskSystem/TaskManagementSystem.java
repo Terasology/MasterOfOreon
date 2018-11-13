@@ -38,7 +38,6 @@ import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.characters.events.HorizontalCollisionEvent;
-import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.DelayedActionTriggeredEvent;
@@ -51,7 +50,7 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.network.ColorComponent;
 import org.terasology.network.NetworkComponent;
-import org.terasology.notification.NotificationMessageEvent;
+import org.terasology.notification.NotificationMessageEventMOO;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.assets.texture.Texture;
@@ -200,7 +199,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         //check if held item is an Oreon Selection Tool
         if (!checkHeldItem(player)) {
             String message = "Use the Oreon selection Tool to mark areas for a task";
-            player.getOwner().send(new NotificationMessageEvent(message, notificationMessageEntity));
+            player.getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
             return;
         }
 
@@ -224,7 +223,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
 
         logger.info("Adding task to " + oreonHolding);
-        player.getOwner().send(new NotificationMessageEvent("Adding a new task of type : " + taskComponent.assignedTaskType, notificationMessageEntity));
+        player.getOwner().send(new NotificationMessageEventMOO("Adding a new task of type : " + taskComponent.assignedTaskType, notificationMessageEntity));
         oreonHolding.availableTasks.add(taskEntity);
         player.saveComponent(oreonHolding);
     }
@@ -494,7 +493,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.None)) {
 
             String message = "Oreon " + oreon.getComponent(NameTagComponent.class).text + " got stuck. Abandoning task " + oreonTaskComponent.assignedTaskType;
-            oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new NotificationMessageEvent(message, notificationMessageEntity));
+            oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
 
             if (!oreonTaskComponent.task.isAdvanced) {
                 // Create entity for abandoned task
