@@ -19,23 +19,37 @@ import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.widgets.UIText;
 
-public class NotificationScreenLayer extends CoreScreenLayer {
+/**
+ * Controlling Notification Overlay UI for Master of Oreon (MOO)
+ */
+public class NotificationOverlayMOO extends CoreScreenLayer {
 
     @In
     private UIText notificationText;
 
-    @In
-    private NotificationMessageEvent notificationMessage;
-
     @Override
-    public void initialise () {
+    public void initialise() {
         notificationText = find("notificationMessage", UIText.class);
 
-        notificationText.setText(notificationMessage.getFormattedString());
+        setNotificationText("NO NOTIFICATION");
+    }
+
+    public void setNotificationText(String message) {
+        notificationText.setText(message);
+    }
+
+    @Override
+    public boolean canBeFocus() {
+        return false;
     }
 
     @Override
     protected boolean isEscapeToCloseAllowed() {
+        return false;
+    }
+
+    @Override
+    public boolean isModal() {
         return false;
     }
 }

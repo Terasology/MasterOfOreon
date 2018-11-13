@@ -19,6 +19,9 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.network.OwnerEvent;
 
+/**
+ * A notification message for Master of Oreon (MOO)
+ */
 @OwnerEvent
 public class NotificationMessageEvent implements NotificationEvent {
     private String message;
@@ -34,7 +37,7 @@ public class NotificationMessageEvent implements NotificationEvent {
 
     @Override
     public String getFormattedString() {
-        String  name = PlayerUtil.getColoredPlayerName(from);
+        String name = PlayerUtil.getColoredPlayerName(from);
 
         return String.format("%s: %s", name, message);
     }
@@ -42,6 +45,7 @@ public class NotificationMessageEvent implements NotificationEvent {
     public String getMessage() {
         return message;
     }
+
     public EntityRef getFrom() {
         return from;
     }
