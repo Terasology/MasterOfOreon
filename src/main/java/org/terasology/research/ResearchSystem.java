@@ -147,6 +147,9 @@ public class ResearchSystem extends BaseComponentSystem {
             case 0 :
                 EntityRef book = entityManager.create(Constants.COOKIE_CROP_RESEARCH_BOOK);
                 booksToAdd.add(book);
+            case 1 :
+                EntityRef book = entityManager.create(Constants.COOKIE_CROP_RESEARCH_BOOK);
+                booksToAdd.add(book);
         }
 
         return booksToAdd;
