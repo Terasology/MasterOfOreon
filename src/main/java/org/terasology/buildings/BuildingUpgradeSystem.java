@@ -143,7 +143,17 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.Upgrade;
         // TODO: Assign a random region or a region based on blocks to be upgraded
-        taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
+        switch(buildingComponent.buildingType) {
+            case Diner:
+                taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.DINER_CHAIR_REGION_INDEX);
+                break;
+            case Laboratory:
+                taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.LABORATORY_SLAB_REGION);
+                break;
+            case Storage:
+                taskComponent.taskRegion = buildingComponent.boundingRegions.get(Constants.STORAGE_ENTRANCE_REGION);
+                break;
+        }
         taskComponent.task = new BuildingUpgradeTask(buildingToUpgrade);
         taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(taskComponent.task);
         EntityRef task = entityManager.create(taskComponent);

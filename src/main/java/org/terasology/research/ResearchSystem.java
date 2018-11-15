@@ -147,9 +147,13 @@ public class ResearchSystem extends BaseComponentSystem {
             case 0 :
                 EntityRef book = entityManager.create(Constants.COOKIE_CROP_RESEARCH_BOOK);
                 booksToAdd.add(book);
+                break;
             case 1 :
-                EntityRef book = entityManager.create(Constants.COOKIE_CROP_RESEARCH_BOOK);
-                booksToAdd.add(book);
+                EntityRef book1 = entityManager.create(Constants.COOKIE_CROP_RESEARCH_BOOK2);
+                EntityRef book2 = entityManager.create(Constants.PORTAL_RESEARCH_BOOK);
+                booksToAdd.add(book1);
+                booksToAdd.add(book2);
+                break;
         }
 
         return booksToAdd;
@@ -270,8 +274,7 @@ public class ResearchSystem extends BaseComponentSystem {
             DisplayNameComponent displayNameComponent = removedItem.getComponent(DisplayNameComponent.class);
             if (displayNameComponent != null && displayNameComponent.name.equals(Constants.RESEARCH_BOOK_NAME)) {
                 inventoryManager.giveItem(bookcaseEntity, bookcaseEntity, removedItem);
-            }
-            else {
+            } else {
                 removedItem.destroy();
             }
         }

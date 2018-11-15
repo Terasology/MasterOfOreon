@@ -321,6 +321,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
             case Diner:
                 buildingPrefab = prefabManager.getPrefab(Constants.DINER_PREFAB);
                 break;
+            case Laboratory:
+                buildingPrefab = prefabManager.getPrefab(Constants.LABORATORY_PREFAB);
+                break;
 
             default:
                 buildingPrefab = prefabManager.getPrefab(Constants.STORAGE_PREFAB);

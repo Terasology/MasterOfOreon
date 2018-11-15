@@ -5,15 +5,15 @@
         "usage" : "NONE"
     },
     "DisplayName" : {
-        "name" : "Cookie Research Book #1"
+        "name" : "Portal Research Book"
     },
     "Book" : {
         "pages" : ["This is a research recipe book. ",
             "You can find out about the required blocks for a research in this book. Add these to a storage building and your research will be accomplished by one of the smart Oreons in the village.",
-            "Following is the Cookie Crop Research Recipe <recipe MasterOfOreon:cookieCropResearchRecipe> Place this book in the Pedestal beside the book case to trigger a Research task",
+            "Following is the Portal Research Recipe <recipe MasterOfOreon:portalResearchRecipe> Place this book in the Pedestal beside the book case to trigger a Research task",
             "Go ahead find those resources!"],
-        "tint" : [0, 0, 255, 255],
-        "title" : "Cookie Crop Research"
+        "tint" : [0, 255, 0, 255],
+        "title" : "Portal Research"
     },
     "AnimateRotation": {
         "yawSpeed": 0.5,
