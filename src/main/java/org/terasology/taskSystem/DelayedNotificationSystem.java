@@ -20,10 +20,10 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.chat.ChatMessageEvent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.notification.NotificationMessageEventMOO;
 
 @Share(DelayedNotificationSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -45,7 +45,7 @@ public class DelayedNotificationSystem extends BaseComponentSystem {
 
     public float sendNotification(String message, EntityRef notificationMessageEntity, float lastNotification) {
         if (lastNotification == 0 || time.getGameTime() - lastNotification > maxDelay) {
-            localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
+            localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
             return time.getGameTime();
         }
 
@@ -53,6 +53,6 @@ public class DelayedNotificationSystem extends BaseComponentSystem {
     }
 
     public void sendNotificationNow(String message, EntityRef notificationMessageEntity) {
-        localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
+        localPlayer.getCharacterEntity().getOwner().send(new ChatMessageEvent(message, notificationMessageEntity));
     }
 }
