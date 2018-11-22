@@ -80,6 +80,10 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
             case Laboratory :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
+                break;
+
+            case Church :
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_CHURCH + Integer.toString(level));
         }
     }
 
