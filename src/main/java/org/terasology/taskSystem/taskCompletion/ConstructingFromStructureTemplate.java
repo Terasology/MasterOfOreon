@@ -69,7 +69,6 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     }
 
     public void selectBuilding(BuildingType buildingType, int level) {
-
         switch (buildingType) {
             case Diner :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
