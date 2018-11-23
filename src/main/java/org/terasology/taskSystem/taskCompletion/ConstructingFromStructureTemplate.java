@@ -80,6 +80,9 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
             case Laboratory :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
+            case Jail :
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_JAIL + Integer.toString(level));
+                break;
         }
     }
 

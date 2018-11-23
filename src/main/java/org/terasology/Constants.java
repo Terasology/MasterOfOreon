@@ -49,6 +49,7 @@ public class Constants {
     public static final String CLASSROOM_BUTTON_ID = "classroomButton";
     public static final String STORAGE_BUTTON_ID = "storageButton";
     public static final String LABORATORY_BUTTON_ID = "laboratoryButton";
+    public static final String JAIL_BUTTON_ID = "jailButton";
 
     // Cancel Selection button on task selection screen
     public static final String CANCEL_BUTTON_ID = "cancelButton";
@@ -72,6 +73,7 @@ public class Constants {
     public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
     public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
     public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
+    public static final String STRUCTURE_TEMPLATE_TYPE_JAIL = "MasterOfOreon:jail";
 
     // Structure Template prefabs
     public static final String DINER_PREFAB = "MasterOfOreon:inn";

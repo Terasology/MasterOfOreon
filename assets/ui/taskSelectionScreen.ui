@@ -79,6 +79,11 @@
                                             "type" : "UIButton",
                                             "id" : "laboratoryButton",
                                             "text" : "Laboratory"
+                                        },
+                                        {
+                                            "type" : "UIButton",
+                                            "id" : "jailButton",
+                                            "text" : "Jail"
                                         }
                                     ]
                                 }

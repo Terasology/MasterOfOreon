@@ -22,5 +22,6 @@ public enum BuildingType {
     Gym,
     Classroom,
     Storage,
-    Laboratory
+    Laboratory,
+    Jail
 }
