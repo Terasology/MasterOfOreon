@@ -140,6 +140,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.UPGRADE;
         // TODO: Assign a random region or a region based on blocks to be upgraded
+
         switch(buildingComponent.buildingType) {
             case Diner:
                 taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
