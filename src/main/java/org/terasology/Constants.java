@@ -89,6 +89,7 @@ public class Constants {
     public static final int PEDESTAL_REGION_INDEX = 2;
     public static final int LABORATORY_SLAB_REGION = 16;
     public static final int STORAGE_ENTRANCE_REGION =12;
+    public static final int WALL_OF_JAIL_REGION = 0;
 
     public static final String AIR_BLOCK_URI = "engine:air";
 
