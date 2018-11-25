@@ -101,4 +101,21 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         EntityRef building = EntityRef.NULL;
         player.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay));
     }
+
+    public BuildingConstructionStartedEvent getBuildingConstructionStartedEvent(Vector3i centerBlock, BuildingType buildingType, EntityRef building) {
+        SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
+        List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
+
+        List<Region3i> absoluteRegions = new ArrayList<>();
+
+        for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
+            Region3i relativeRegion = regionToFill.region;
+            Region3i absoluteRegion = relativeRegion.move(centerBlock);
+            absoluteRegions.add(absoluteRegion);
+        }
+
+        long delay = buildingTemplate.getComponent(CompletionTimeComponent.class).completionDelay;
+
+        return new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay);
+    }
 }
