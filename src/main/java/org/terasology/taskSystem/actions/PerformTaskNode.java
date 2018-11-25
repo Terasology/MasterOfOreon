@@ -78,11 +78,7 @@ public class PerformTaskNode extends BaseAction {
     private DelayManager delayManager;
 
     @In
-<<<<<<< HEAD
     private TaskManagementSystem taskManagementSystem;
-=======
-    TaskManagementSystem taskManagementSystem;
->>>>>>> Got fences to rebuild after update.
 
     private InventoryManager inventoryManager;
     private WorldProvider worldProvider;
@@ -108,13 +104,8 @@ public class PerformTaskNode extends BaseAction {
 
         logger.info("taskManagementSystem: "+taskManagementSystem);
         EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
-<<<<<<< HEAD
         this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
-=======
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player, taskManagementSystem);
-
-        //this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
->>>>>>> Got fences to rebuild after update.
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
     }
 
     @Override
@@ -211,8 +202,13 @@ public class PerformTaskNode extends BaseAction {
                 //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
                 break;
 
+<<<<<<< HEAD
             case AssignedTaskType.UPGRADE :
 
+=======
+
+            case AssignedTaskType.Upgrade :
+>>>>>>> Deleted unused code
                 //TODO:figure out how to get region in the right area
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
 
@@ -236,14 +232,16 @@ public class PerformTaskNode extends BaseAction {
                         Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
                         Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
                         Region3i region = Region3i.createFromMinMax(min, max);
-                        logger.info("region: "+region);
                         Iterator<Vector3i> regionsIterator = region.iterator();
                         while (regionsIterator.hasNext()) {
                             Vector3i vector = regionsIterator.next();
                             totalRegion = totalRegion.expandToContain(vector);
                         }
                     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> Deleted unused code
                     taskManagementSystem.placeFenceAroundRegion(totalRegion);
                 }
 
