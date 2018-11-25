@@ -110,8 +110,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private EntityRef notificationMessageEntity;
     private Vector3f lastCollisionLocation;
 
-    public int minYOverall;
-
     @Override
     public void postBegin() {
         notificationMessageEntity = entityManager.create(MooConstants.NOTIFICATION_MESSAGE_PREFAB);
@@ -296,7 +294,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         for (int x = minX - 2; x <= maxX + 2; x++) {
             for (int z = minZ - 2; z <= maxZ + 2; z++) {
-
                 blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, Y + 1, z), airBlock);
             }
         }
