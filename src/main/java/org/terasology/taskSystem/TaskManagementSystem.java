@@ -277,7 +277,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     public void placeFenceAroundRegion(Region3i region) {
-        logger.info("placing fence");
         int minX = region.minX();
         int maxX = region.maxX();
         int minZ = region.minZ();

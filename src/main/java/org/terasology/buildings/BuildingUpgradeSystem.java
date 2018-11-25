@@ -79,7 +79,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     public void postBegin() {
         taskManagementSystem = context.get(TaskManagementSystem.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
-        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity(), taskManagementSystem);
+        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity());
     }
 
     @ReceiveEvent

@@ -104,9 +104,7 @@ public class PerformTaskNode extends BaseAction {
 
         logger.info("taskManagementSystem: "+taskManagementSystem);
         EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player, taskManagementSystem);
-
-        //this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
     }
 
     @Override
@@ -204,13 +202,11 @@ public class PerformTaskNode extends BaseAction {
                 break;
 
             case AssignedTaskType.Upgrade :
-                //TODO:figure out how to get region in the right area
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
 
                 EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
                 ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
-                logger.info("current level: "+buildingComponent.currentLevel);
                 EntityRef buildingTemplate = constructingFromStructureTemplate.selectAndReturnBuilding(buildingComponent.buildingType, buildingComponent.currentLevel);
 
                 if (buildingTemplate!=null) {
@@ -227,33 +223,13 @@ public class PerformTaskNode extends BaseAction {
                         Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
                         Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
                         Region3i region = Region3i.createFromMinMax(min, max);
-                        logger.info("region: "+region);
                         Iterator<Vector3i> regionsIterator = region.iterator();
                         while (regionsIterator.hasNext()) {
                             Vector3i vector = regionsIterator.next();
                             totalRegion = totalRegion.expandToContain(vector);
                         }
                     }
-                    logger.info("totalRegion: "+totalRegion);
                     taskManagementSystem.placeFenceAroundRegion(totalRegion);
-/*
-                    Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).region.center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).region.center().z), new Vector3i(1, 1, 1));
-                    for (SpawnBlockRegionsComponent.RegionToFill regionToFill:regionsToFill) {
-                        Region3i baseRegion = regionToFill.region;
-                        Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
-                        Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
-                        Region3i region = Region3i.createFromMinMax(min, max);
-                        logger.info("region: "+region);
-                        Iterator<Vector3i> regionsIterator = region.iterator();
-                        while (regionsIterator.hasNext()) {
-                            Vector3i vector = regionsIterator.next();
-                            totalRegion = totalRegion.expandToContain(vector);
-                        }
-                    }
-                    logger.info("totalRegion: "+totalRegion);
-                    taskManagementSystem.placeFenceAroundRegion(totalRegion);*/
-                } else {
-                    logger.info("IS NULL!!!");
                 }
 
                 break;

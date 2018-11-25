@@ -29,7 +29,6 @@ import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.structureTemplates.util.BlockRegionTransform;
 import org.terasology.taskSystem.BuildingType;
-import org.terasology.taskSystem.TaskManagementSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +40,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     private EntityRef buildingTemplate;
     private EntityRef player;
 
-    private TaskManagementSystem taskManagementSystem;
-
-    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity, TaskManagementSystem taskManagementSystem) {
+    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity) {
         this.structureTemplateProvider = templateProvider;
         this.player = playerEntity;
     }
