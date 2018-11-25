@@ -19,7 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
-import org.terasology.buildings.events.*;
+import org.terasology.buildings.events.BuildingUpgradeStartEvent;
+import org.terasology.buildings.events.CloseUpgradeScreenEvent;
+import org.terasology.buildings.events.GuardBuildingEvent;
+import org.terasology.buildings.events.OpenUpgradeScreenEvent;
+import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -38,7 +42,6 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.structureTemplates.components.CompletionTimeComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
@@ -77,7 +80,6 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
 
         constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity());
-
     }
 
     @ReceiveEvent
@@ -155,8 +157,6 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskComponent.task = new BuildingUpgradeTask(buildingToUpgrade);
         taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(taskComponent.task);
         EntityRef task = entityManager.create(taskComponent);
-
-        //player.send(new BuildingConstructionStartedEvent())
 
         taskMangementSystem.addTask(player, task);
     }
