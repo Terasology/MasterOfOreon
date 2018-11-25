@@ -17,6 +17,7 @@ package org.terasology.taskSystem.actions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -30,13 +31,16 @@ import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.Region3i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
+import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
+import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.TaskStatusType;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromBuildingGenerator;
@@ -48,6 +52,8 @@ import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.selection.BlockSelectionComponent;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -71,10 +77,15 @@ public class PerformTaskNode extends BaseAction {
     @In
     private DelayManager delayManager;
 
+    @In
+    TaskManagementSystem taskManagementSystem;
+
     private InventoryManager inventoryManager;
     private WorldProvider worldProvider;
     private BlockEntityRegistry blockEntityRegistry;
     private StructureTemplateProvider structureTemplateProvider;
+
+    private TaskComponent currentTaskComponent;
 
     private PlantingTaskCompletion plantingTaskCompletion;
     private ConstructingFromStructureTemplate constructingFromStructureTemplate;
@@ -87,11 +98,13 @@ public class PerformTaskNode extends BaseAction {
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
         delayManager = context.get(DelayManager.class);
         inventoryManager = context.get(InventoryManager.class);
+        taskManagementSystem = context.get(TaskManagementSystem.class);
 
         this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
 
+        logger.info("taskManagementSystem: "+taskManagementSystem);
         EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player, taskManagementSystem);
 
         //this.constructingFromBuildingGenerator = new ConstructingFromBuildingGenerator(worldProvider, blockManager);
     }
@@ -121,7 +134,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Removes the {@link BlockSelectionComponent} from the assigned area so that it no longer renders once the task is complete.
-     * @param actor The Actor which calls this node
+     * @param oreon The Actor which calls this node
      */
     private void removeColorFromArea(Actor oreon, TaskComponent taskComponent) {
         OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
@@ -191,7 +204,58 @@ public class PerformTaskNode extends BaseAction {
                 break;
 
             case AssignedTaskType.Upgrade :
+                //TODO:figure out how to get region in the right area
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
+
+                EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
+                ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+
+                logger.info("current level: "+buildingComponent.currentLevel);
+                EntityRef buildingTemplate = constructingFromStructureTemplate.selectAndReturnBuilding(buildingComponent.buildingType, buildingComponent.currentLevel);
+
+                if (buildingTemplate!=null) {
+                    List<SpawnBlockRegionsComponent.RegionToFill> relativeRegionsToFill = buildingTemplate.getParentPrefab().getComponent(SpawnBlockRegionsComponent.class).regionsToFill;
+
+                    List<Region3i> regionsToFill = new ArrayList<>();
+                    for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegionsToFill) {
+                        Region3i relativeRegion = regionToFill.region;
+                        Region3i absoluteRegion = relativeRegion.move(buildingComponent.centerLocation);
+                        regionsToFill.add(absoluteRegion);
+                    }
+                    Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).center().z), new Vector3i(1, 1, 1));
+                    for (Region3i baseRegion:regionsToFill) {
+                        Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
+                        Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
+                        Region3i region = Region3i.createFromMinMax(min, max);
+                        logger.info("region: "+region);
+                        Iterator<Vector3i> regionsIterator = region.iterator();
+                        while (regionsIterator.hasNext()) {
+                            Vector3i vector = regionsIterator.next();
+                            totalRegion = totalRegion.expandToContain(vector);
+                        }
+                    }
+                    logger.info("totalRegion: "+totalRegion);
+                    taskManagementSystem.placeFenceAroundRegion(totalRegion);
+/*
+                    Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).region.center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).region.center().z), new Vector3i(1, 1, 1));
+                    for (SpawnBlockRegionsComponent.RegionToFill regionToFill:regionsToFill) {
+                        Region3i baseRegion = regionToFill.region;
+                        Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
+                        Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
+                        Region3i region = Region3i.createFromMinMax(min, max);
+                        logger.info("region: "+region);
+                        Iterator<Vector3i> regionsIterator = region.iterator();
+                        while (regionsIterator.hasNext()) {
+                            Vector3i vector = regionsIterator.next();
+                            totalRegion = totalRegion.expandToContain(vector);
+                        }
+                    }
+                    logger.info("totalRegion: "+totalRegion);
+                    taskManagementSystem.placeFenceAroundRegion(totalRegion);*/
+                } else {
+                    logger.info("IS NULL!!!");
+                }
+
                 break;
 
             case AssignedTaskType.Research :

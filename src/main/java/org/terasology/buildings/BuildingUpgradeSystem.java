@@ -46,6 +46,7 @@ import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.TaskStatusType;
+import org.terasology.taskSystem.actions.PerformTaskNode;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
 import org.terasology.taskSystem.tasks.BuildingUpgradeTask;
@@ -68,7 +69,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     @In
     private LocalPlayer localPlayer;
 
-    private TaskManagementSystem taskMangementSystem;
+    private TaskManagementSystem taskManagementSystem;
     private ConstructingFromStructureTemplate constructingFromStructureTemplate;
     private StructureTemplateProvider structureTemplateProvider;
 
@@ -76,15 +77,13 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
     @Override
     public void postBegin() {
-        taskMangementSystem = context.get(TaskManagementSystem.class);
+        taskManagementSystem = context.get(TaskManagementSystem.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
-
-        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity());
+        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity(), taskManagementSystem);
     }
 
     @ReceiveEvent
     public void onActivateEvent(ActivateEvent event, EntityRef entityRef) {
-        logger.info("event received activate");
         EntityRef player = event.getInstigator();
         CharacterHeldItemComponent heldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
 
@@ -116,7 +115,6 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
             for (Region3i buildingRegion : buildingRegions) {
                 Vector3i target = new Vector3i(blockPos);
                 if (buildingRegion.encompasses(target)) {
-                    logger.info("hit building" + buildingComponent.buildingType);
                     this.buildingToUpgrade = building;
                     building.send(new OpenUpgradeScreenEvent());
                 }
@@ -136,7 +134,6 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onReceiveBuildingUpgradeEvent(UpgradeBuildingEvent upgradeBuildingEvent, EntityRef player) {
         buildingToUpgrade.send(new CloseUpgradeScreenEvent());
-        logger.info("adding building upgrade task");
 
         ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
 
@@ -152,10 +149,11 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
                 break;
         }
         taskComponent.task = new BuildingUpgradeTask(buildingToUpgrade);
-        taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(taskComponent.task);
+
+        taskComponent.taskCompletionTime = taskManagementSystem.getTaskCompletionTime(taskComponent.task);
         EntityRef task = entityManager.create(taskComponent);
 
-        taskMangementSystem.addTask(player, task);
+        taskManagementSystem.addTask(player, task);
     }
 
     /**
@@ -168,7 +166,6 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
      */
     @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_HIGH)
     public void onUpgradeStart(BuildingUpgradeStartEvent event, EntityRef oreon, TaskComponent taskComponent) {
-        logger.info("upgrade event start");
         EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
@@ -187,9 +184,9 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskComponent.taskStatus = TaskStatusType.Available;
 
         taskComponent.task = new GuardTask(buildingToUpgrade.getId());
-        taskComponent.taskCompletionTime = taskMangementSystem.getTaskCompletionTime(taskComponent.task);
+        taskComponent.taskCompletionTime = taskManagementSystem.getTaskCompletionTime(taskComponent.task);
 
         EntityRef taskEntity = entityManager.create(taskComponent);
-        taskMangementSystem.addTask(player, taskEntity);
+        taskManagementSystem.addTask(player, taskEntity);
     }
 }

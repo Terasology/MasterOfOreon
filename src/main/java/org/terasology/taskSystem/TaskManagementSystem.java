@@ -108,6 +108,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private EntityRef notificationMessageEntity;
     private Vector3f lastCollisionLocation;
 
+    public int minYOverall;
+
     @Override
     public void postBegin() {
         notificationMessageEntity = entityManager.create(Constants.NOTIFICATION_MESSAGE_PREFAB);
@@ -274,17 +276,26 @@ public class TaskManagementSystem extends BaseComponentSystem {
         addTask(player, task);
     }
 
-    private void placeFenceAroundRegion(Region3i region) {
+    public void placeFenceAroundRegion(Region3i region) {
+        logger.info("placing fence");
         int minX = region.minX();
         int maxX = region.maxX();
         int minZ = region.minZ();
         int maxZ = region.maxZ();
         int Y = region.minY();
+        minYOverall = Y;
 
         Region3i leftRegion = Region3i.createFromMinMax(new Vector3i(minX - 2, Y, minZ - 2), new Vector3i(minX - 2, Y, maxZ + 2));
         Region3i rightRegion = Region3i.createFromMinMax(new Vector3i(maxX + 2, Y, minZ - 2), new Vector3i(maxX + 2, Y, maxZ + 2));
         Region3i topRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, maxZ + 2), new Vector3i(maxX, Y, maxZ + 2));
         Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1, Y, minZ - 2));
+
+        Block airBlock = blockManager.getBlock("engine:air");
+        for (int x = minX-2; x <= maxX+2; x++) {
+            for (int z = minZ-2; z <= maxZ+2; z++) {
+                blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, Y + 1, z), airBlock);
+            }
+        }
 
         placeFenceBlocks(topRegion, false);
         placeFenceBlocks(bottomRegion, false);

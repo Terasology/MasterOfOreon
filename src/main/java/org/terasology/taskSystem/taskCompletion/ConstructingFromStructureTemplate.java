@@ -29,6 +29,7 @@ import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.structureTemplates.util.BlockRegionTransform;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.taskSystem.TaskManagementSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,9 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     private EntityRef buildingTemplate;
     private EntityRef player;
 
-    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity) {
+    private TaskManagementSystem taskManagementSystem;
+
+    public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity, TaskManagementSystem taskManagementSystem) {
         this.structureTemplateProvider = templateProvider;
         this.player = playerEntity;
     }
@@ -80,10 +83,29 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
             case Laboratory :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
+                break;
+
             case Jail :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_JAIL + Integer.toString(level));
                 break;
         }
+    }
+
+    public EntityRef selectAndReturnBuilding(BuildingType buildingType, int level) {
+        switch (buildingType) {
+            case Diner :
+                return structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
+
+            case Storage :
+                return structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_STORAGE + Integer.toString(level));
+
+            case Laboratory :
+                return structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
+
+            case Jail :
+                return structureTemplateProvider.getRandomTemplateOfType(Constants.STRUCTURE_TEMPLATE_TYPE_JAIL + Integer.toString(level));
+        }
+        return null;
     }
 
     private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType) {
