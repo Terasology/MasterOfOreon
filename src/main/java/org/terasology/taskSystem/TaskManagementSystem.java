@@ -80,6 +80,8 @@ import java.util.Queue;
 @Share(TaskManagementSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TaskManagementSystem extends BaseComponentSystem {
+    public int minYOverall;
+
     private static final Logger logger = LoggerFactory.getLogger(TaskManagementSystem.class);
     private static final String CONSTRUCTION_COMPLETE_EVENT_ID = "taskManagementSystem:constructionComplete";
     private static final String ADD_TASK_DELAYED_ACTION_ID = "taskManagementSystem:addTask";
@@ -107,8 +109,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private HoldingAuthoritySystem holdingSystem;
     private EntityRef notificationMessageEntity;
     private Vector3f lastCollisionLocation;
-
-    public int minYOverall;
 
     @Override
     public void postBegin() {
@@ -290,8 +290,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
         Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1, Y, minZ - 2));
 
         Block airBlock = blockManager.getBlock("engine:air");
-        for (int x = minX-2; x <= maxX+2; x++) {
-            for (int z = minZ-2; z <= maxZ+2; z++) {
+        for (int x = minX - 2; x <= maxX + 2; x++) {
+            for (int z = minZ - 2; z <= maxZ + 2; z++) {
                 blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, Y + 1, z), airBlock);
             }
         }

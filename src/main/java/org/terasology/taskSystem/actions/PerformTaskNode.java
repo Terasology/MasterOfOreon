@@ -78,7 +78,7 @@ public class PerformTaskNode extends BaseAction {
     private DelayManager delayManager;
 
     @In
-    TaskManagementSystem taskManagementSystem;
+    private TaskManagementSystem taskManagementSystem;
 
     private InventoryManager inventoryManager;
     private WorldProvider worldProvider;
@@ -102,7 +102,6 @@ public class PerformTaskNode extends BaseAction {
 
         this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
 
-        logger.info("taskManagementSystem: "+taskManagementSystem);
         EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
         this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
     }
@@ -209,7 +208,7 @@ public class PerformTaskNode extends BaseAction {
 
                 EntityRef buildingTemplate = constructingFromStructureTemplate.selectAndReturnBuilding(buildingComponent.buildingType, buildingComponent.currentLevel);
 
-                if (buildingTemplate!=null) {
+                if (buildingTemplate != null) {
                     List<SpawnBlockRegionsComponent.RegionToFill> relativeRegionsToFill = buildingTemplate.getParentPrefab().getComponent(SpawnBlockRegionsComponent.class).regionsToFill;
 
                     List<Region3i> regionsToFill = new ArrayList<>();
@@ -220,8 +219,8 @@ public class PerformTaskNode extends BaseAction {
                     }
                     Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).center().z), new Vector3i(1, 1, 1));
                     for (Region3i baseRegion:regionsToFill) {
-                        Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
-                        Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
+                        Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall + baseRegion.minY(), baseRegion.minZ());
+                        Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY() + taskManagementSystem.minYOverall, baseRegion.maxZ());
                         Region3i region = Region3i.createFromMinMax(min, max);
                         Iterator<Vector3i> regionsIterator = region.iterator();
                         while (regionsIterator.hasNext()) {
