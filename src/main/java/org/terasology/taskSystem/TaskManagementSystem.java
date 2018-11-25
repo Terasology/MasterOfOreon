@@ -279,10 +279,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     public void placeFenceAroundRegion(Region3i region) {
-<<<<<<< HEAD
-=======
         logger.info("placing fence");
->>>>>>> Got fences to rebuild after update.
         int minX = region.minX();
         int maxX = region.maxX();
         int minZ = region.minZ();
@@ -296,13 +293,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
         Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1, Y, minZ - 2));
 
         Block airBlock = blockManager.getBlock("engine:air");
-<<<<<<< HEAD
+
         for (int x = minX - 2; x <= maxX + 2; x++) {
             for (int z = minZ - 2; z <= maxZ + 2; z++) {
-=======
-        for (int x = minX-2; x <= maxX+2; x++) {
-            for (int z = minZ-2; z <= maxZ+2; z++) {
->>>>>>> Got fences to rebuild after update.
+
                 blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, Y + 1, z), airBlock);
             }
         }

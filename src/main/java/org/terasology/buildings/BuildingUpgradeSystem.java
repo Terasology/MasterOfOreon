@@ -79,11 +79,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     public void postBegin() {
         taskManagementSystem = context.get(TaskManagementSystem.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
-<<<<<<< HEAD
+
         constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity());
-=======
-        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity(), taskManagementSystem);
->>>>>>> Got fences to rebuild after update.
     }
 
     @ReceiveEvent
