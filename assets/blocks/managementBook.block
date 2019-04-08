@@ -1,0 +1,9 @@
+{
+    "shadowCasting" : false,
+    "luminance" : 10,
+    "hardness" : 10,
+    "penetrable" : true,
+    "entity" : {
+        "prefab" : "masteroforeon:managementBook"
+    }
+}

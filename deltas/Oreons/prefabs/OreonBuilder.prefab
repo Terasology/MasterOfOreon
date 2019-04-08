@@ -42,7 +42,7 @@
     },
     "OreonSpawn" : {
         "itemsToConsume" : {
-            "Dirt" : [1],
+            "Dirt" : [10],
             "Sand" : [2]
         }
     },

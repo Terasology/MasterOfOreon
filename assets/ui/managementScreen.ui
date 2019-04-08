@@ -1,0 +1,155 @@
+{
+  "type": "ManagementScreenLayer",
+  "skin": "engine:default",
+  "id": "managementScreen",
+  "contents": {
+    "type": "RelativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "layoutInfo": {
+          "width": 620,
+          "use-content-height": true,
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
+        },
+        "content": {
+          "type": "ColumnLayout",
+          "columns": 2,
+          "verticalSpacing": 8,
+          "contents": [
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 5,
+              "contents": [
+                {
+                  "type": "engine:UILabel",
+                  "id": "newWidget",
+                  "layoutInfo": {},
+                  "text": "Owned villages"
+                }
+              ]
+            },
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 2,
+              "contents": [
+                {
+                  "type": "engine:UILabel",
+                  "id": "selectedVillageName",
+                  "layoutInfo": {},
+                  "text": "Selected Village Name"
+                }
+              ]
+            },
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 2,
+              "contents": [
+                {
+                  "type": "engine:ScrollableArea",
+                  "id": "newWidget",
+                  "preferredHeight": 200,
+                  "layoutInfo": {},
+                  "verticalScrollbar": true,
+                  "contents": [
+                    {
+                      "type": "engine:UIList",
+                      "id": "ownedVillagesList",
+                      "layoutInfo": {}
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 2,
+              "contents": [
+                {
+                  "type": "engine:ColumnLayout",
+                  "id": "newWidget",
+                  "layoutInfo": {},
+                  "contents": [
+                    {
+                      "type": "engine:RowLayout",
+                      "id": "newWidget",
+                      "layoutInfo": {},
+                      "contents": [
+                        {
+                          "type": "engine:RelativeLayout",
+                          "id": "newWidget",
+                          "layoutInfo": {},
+                          "contents": [
+                            {
+                              "type": "engine:UILabel",
+                              "id": "selectedVillageOwner",
+                              "layoutInfo": {},
+                              "text": "Owner: $username\nStatistics:\nNumber of Oreons: $number\nBuildings:"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "engine:RowLayout",
+                      "id": "newWidget",
+                      "layoutInfo": {},
+                      "contents": []
+                    }
+                  ]
+                }
+              ],
+              "layoutInfo": {}
+            },
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 5,
+              "contents": [
+                {
+                  "type": "engine:UILabel",
+                  "id": "newWidget",
+                  "layoutInfo": {},
+                  "text": "Managed villages"
+                }
+              ]
+            },
+            {
+              "type": "UISpace",
+              "size": [
+                1,
+                8
+              ]
+            },
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 2,
+              "contents": [
+                {
+                  "type": "engine:ScrollableArea",
+                  "id": "newWidget",
+                  "preferredHeight": 125,
+                  "layoutInfo": {},
+                  "verticalScrollbar": true,
+                  "contents": [
+                    {
+                      "type": "engine:UIList",
+                      "id": "ownedVillagesList",
+                      "layoutInfo": {}
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "layoutInfo": {
+            "width": 620,
+            "position-horizontal-center": {},
+            "position-vertical-center": {}
+          },
+          "horizontalSpacing": 5
+        }
+      }
+    ]
+  }
+}

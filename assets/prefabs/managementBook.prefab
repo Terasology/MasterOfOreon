@@ -1,0 +1,13 @@
+{
+    "ManagementBook" : {
+    },
+    "InteractionTarget" : {
+    },
+    "InteractionScreen" : {
+        "screen" : "masteroforeon:managementScreen"
+    },
+    "PlaySoundAction" : {
+        "sounds" : "masteroforeon:spawn"
+    }
+}
+

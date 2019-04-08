@@ -1,0 +1,107 @@
+{
+    "type" : "ManagementScreenLayer",
+    "skin" : "engine:default",
+    "id" : "managementScreen",
+    "contents" :
+    {
+        "type" : "RelativeLayout",
+        "contents" : [
+            {
+                "type" : "UIBox",
+                "layoutInfo" : {
+                    "width": 500,
+                    "use-content-height": true,
+                    "position-horizontal-center": {},
+                    "position-vertical-center": {}
+                },
+                "content" : {
+                    "type" : "ColumnLayout",
+                    "columns" : 2,
+                    "verticalSpacing" : 8,
+                    "contents" : [
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
+                            {
+                                "type" : "UIButton",
+                                "id" : "city1Command",
+                                "text" : "City1"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "city1TeleportLabel",
+                                "layoutInfo" : {
+                                    "width": 500,
+                                    "use-content-height": true
+                                }
+                            }
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [1, 8]
+                        },
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
+
+                            {
+                                "type" : "UIButton",
+                                "id" : "city2Command",
+                                "text" : "City2"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "city2TeleportLabel",
+                                "layoutInfo" : {
+                                    "width" : 500,
+                                    "use-content-height" : true
+                                }
+                            }
+
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [1, 8]
+                        },
+                    {
+                        "type" : "RowLayout",
+                        "horizontalSpacing" : 2,
+                        "contents" : [
+
+                            {
+                                "type" : "UIButton",
+                                "id" : "city3Command",
+                                "text" : "City3"
+                            },
+                            {
+                                "type" : "UILabel",
+                                "id" : "city3TeleportLabel",
+                                "layoutInfo" : {
+                                    "width" : 500,
+                                    "use-content-height" : true
+                                }
+                            }
+
+                        ]
+                    },
+                        {
+                            "type" : "UISpace",
+                            "size" : [1, 8]
+                        }
+                    ],
+
+                    "layoutInfo" : {
+                              "width" : 500,
+                              "height" : 100,
+                              "position-horizontal-center" : {},
+                              "position-vertical-center" : {}
+                    }
+                }
+            }
+        ]
+    }
+}

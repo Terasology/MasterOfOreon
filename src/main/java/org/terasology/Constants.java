@@ -26,10 +26,17 @@ public class Constants {
     public static final String OREON_GUARD_UI_ID = "summonOreonGuardCommand";
     public static final String OREON_KING_UI_ID = "summonOreonKingCommand";
 
+    // City teleport button IDs
+    public static final String CITY1_UI_ID = "city1Command";
+    public static final String CITY2_UI_ID = "city2Command";
+    public static final String CITY3_UI_ID = "city3Command";
+
+
     // Tools given to player on spawn
     public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:oreonSelectionTool";
     public static final String BUILDING_UPGRADE_TOOL = "MasterOfOreon:upgradeTool";
     public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
+    public static final String MANAGEMENT_BOOK_PREFAB = "MasterOfOreon:managementBook";
 
     public static final String UPGRADE_TOOL_NAME = "Building Upgrade Tool";
 
@@ -37,6 +44,11 @@ public class Constants {
     public static final String OREON_BUILDER_RESOURCES_LABEL_ID = "oreonBuilderResourcesRequired";
     public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourcesRequired";
     public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourcesRequired";
+
+    // Required resources UI label ID
+    public static final String CITY1_LABEL_ID = "city1TeleportLabel";
+    public static final String CITY2_LABEL_ID = "city2TeleportLabel";
+    public static final String CITY3_LABEL_ID = "city3TeleportLabel";
 
     // Task selection button IDs
     public static final String PLANT_COMMAND_UI_ID = "plantCommandButton";
@@ -102,6 +114,9 @@ public class Constants {
     public static final String ON_GOING_TASKS_LIST_ID = "inProgressTasksList";
     public static final String OREONS_LIST_ID = "oreons";
     public static final String BUILDINGS_LIST_ID = "buildingsList";
+
+    // List in Management Screen
+    public static final String OWNED_VILLAGES_LIST_ID = "ownedVillagesList";
 
     public static final String PEDESTAL_PREFAB = "MasterOfOreon:pedestal";
     public static final String RESEARCH_BOOK_NAME = "Research Book";
