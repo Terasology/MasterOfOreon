@@ -83,7 +83,7 @@
                           "contents": [
                             {
                               "type": "engine:UILabel",
-                              "id": "selectedVillageOwner",
+                              "id": "selectedVillageInfo",
                               "layoutInfo": {},
                               "text": "Owner: $username\nStatistics:\nNumber of Oreons: $number\nBuildings:"
                             }
@@ -134,7 +134,7 @@
                   "contents": [
                     {
                       "type": "engine:UIList",
-                      "id": "ownedVillagesList",
+                      "id": "managedVillagesList",
                       "layoutInfo": {}
                     }
                   ]

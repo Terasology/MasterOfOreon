@@ -15,14 +15,30 @@
  */
 package org.terasology.managerInterface;
 
+import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.entitySystem.entity.EntityRef;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 
 public class VillageEntity {
     public String VillageName;
     public String OwnerName;
+    public int OreonCount;
+    public List<String> BuildingList;
 
     public VillageEntity(String name, String player){
         VillageName = name;
         OwnerName = player;
+        BuildingList = new ArrayList<String>();
+        Random r = new Random();
+        OreonCount = r.nextInt((10 - 0) + 1) + 0;
+    }
+
+    @Override
+    public String toString(){
+        return VillageName;
     }
 }

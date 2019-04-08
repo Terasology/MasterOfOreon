@@ -117,6 +117,9 @@ public class Constants {
 
     // List in Management Screen
     public static final String OWNED_VILLAGES_LIST_ID = "ownedVillagesList";
+    public static final String MANAGED_VILLAGES_LIST_ID = "managedVillagesList";
+    public static final String SELECTED_VILLAGE_NAME_LABEL_ID = "selectedVillageName";
+    public static final String SELECTED_VILLAGE_INFO_LABEL_ID = "selectedVillageInfo";
 
     public static final String PEDESTAL_PREFAB = "MasterOfOreon:pedestal";
     public static final String RESEARCH_BOOK_NAME = "Research Book";

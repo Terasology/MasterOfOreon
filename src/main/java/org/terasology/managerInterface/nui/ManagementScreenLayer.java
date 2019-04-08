@@ -39,9 +39,7 @@ import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.spawning.OreonSpawnEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The screen which is triggered when player interacts({@code e press}) with a Management book block.
@@ -59,11 +57,52 @@ public class ManagementScreenLayer extends CoreScreenLayer {
     private PrefabManager prefabManager;
 
     private UIList ownedVillagesList;
+    private UIList managedVillagesList;
+    private UILabel selectedVillageNameLabel;
+    private UILabel selectedVillageInfoLabel;
+
+    private List<VillageEntity> debugOwnedVillages;
+    private List<VillageEntity> debugManagedVillages;
+
 
     @Override
     public void initialise() {
         ownedVillagesList = find(Constants.OWNED_VILLAGES_LIST_ID, UIList.class);
+        managedVillagesList = find(Constants.MANAGED_VILLAGES_LIST_ID, UIList.class);
+        selectedVillageNameLabel = find(Constants.SELECTED_VILLAGE_NAME_LABEL_ID, UILabel.class);
+        selectedVillageInfoLabel = find(Constants.SELECTED_VILLAGE_INFO_LABEL_ID, UILabel.class);
 
+        List<String> cityNames = new ArrayList<String>();
+        cityNames.add("Lordaeron");
+        cityNames.add("Prague");
+        cityNames.add("Kategad");
+        cityNames.add("London");
+        cityNames.add("Berlin");
+        cityNames.add("Helsinki");
+        //
+        cityNames.add("Viena");
+        cityNames.add("NewYork");
+        cityNames.add("Brno");
+        cityNames.add("Katowice");
+
+        debugOwnedVillages = new ArrayList<VillageEntity>();
+        for (int i = 0; i < 6; i++) {
+            VillageEntity city = new VillageEntity(cityNames.get(i),"nightmaredev");
+            debugOwnedVillages.add(city);
+        }
+
+        debugManagedVillages = new ArrayList<VillageEntity>();
+        for (int i = 6; i < 10; i++) {
+            VillageEntity city = new VillageEntity(cityNames.get(i),"xXxSlayer1337");
+            debugManagedVillages.add(city);
+        }
+
+        ownedVillagesList.subscribeSelection((widget, item) -> {
+            DisplayVillageInfo((VillageEntity)item);
+        });
+        managedVillagesList.subscribeSelection((widget, item) -> {
+            DisplayVillageInfo((VillageEntity)item);
+        });
         populateLists();
     }
 
@@ -82,23 +121,44 @@ public class ManagementScreenLayer extends CoreScreenLayer {
     }
 
     private void populateLists() {
-        Binding<List> villageList = new ReadOnlyBinding<List>() {
+        Binding<List> ownedVillageList = new ReadOnlyBinding<List>() {
             @Override
             public List get() {
-                List<VillageEntity> villageNames = new ArrayList<>();
-
-                /* DEBUG*/
-
-                for (int i = 0; i < 6; i++) {
-                    VillageEntity city = new VillageEntity("City"+i,"nightmare");
-                    villageNames.add(city);
-                }
-                /* DEBUG*/
-
-                return villageNames;
+                return getVillages(debugOwnedVillages);
             }
         };
 
-        ownedVillagesList.bindList(villageList);
+        Binding<List> managedVillageList = new ReadOnlyBinding<List>() {
+            @Override
+            public List get() {
+                return getVillages(debugManagedVillages);
+            }
+        };
+
+        ownedVillagesList.bindList(ownedVillageList);
+        managedVillagesList.bindList(managedVillageList);
+    }
+
+    private List<VillageEntity> getVillages(List<VillageEntity> veList){
+        List<VillageEntity> villages = new ArrayList<>();
+
+        for (VillageEntity ve : veList) {
+            villages.add(ve);
+        }
+        return villages;
+    }
+
+    public void DisplayVillageInfo(VillageEntity village){
+        selectedVillageNameLabel.setText(village.VillageName);
+
+        String infoText = String.format(
+                "Owner: %s\nStatistics:\nNumber of Oreons: %d\nBuildings:\n", village.OwnerName, village.OreonCount
+        );
+
+        for(String buildingName : village.BuildingList){
+            infoText += buildingName + "\n";
+        }
+
+        selectedVillageInfoLabel.setText(infoText);
     }
 }
