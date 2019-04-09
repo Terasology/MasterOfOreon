@@ -29,12 +29,11 @@ public class VillageEntity {
     public int OreonCount;
     public List<String> BuildingList;
 
-    public VillageEntity(String name, String player){
+    public VillageEntity(String name, String player, int oreonCount, List<String> buildingList){
         VillageName = name;
         OwnerName = player;
-        BuildingList = new ArrayList<String>();
-        Random r = new Random();
-        OreonCount = r.nextInt((10 - 0) + 1) + 0;
+        BuildingList = buildingList;
+        OreonCount = oreonCount;
     }
 
     @Override

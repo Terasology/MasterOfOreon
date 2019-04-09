@@ -18,28 +18,29 @@ package org.terasology.managerInterface.nui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
-import org.terasology.buildings.components.ConstructedBuildingComponent;
+import org.terasology.config.PlayerConfig;
+import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
-import org.terasology.logic.console.commandSystem.annotations.Command;
-import org.terasology.logic.console.commandSystem.annotations.CommandParam;
-import org.terasology.logic.location.LocationComponent;
+import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.players.LocalPlayer;
-import org.terasology.managerInterface.managementBookComponent;
+import org.terasology.namegenerator.creature.CreatureAssetTheme;
+import org.terasology.namegenerator.creature.CreatureNameProvider;
+import org.terasology.namegenerator.town.TownNameProvider;
+import org.terasology.namegenerator.town.TownAssetTheme;
 import org.terasology.registry.In;
+import org.terasology.config.Config;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.managerInterface.VillageEntity;
 import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.rendering.nui.widgets.UIList;
-import org.terasology.spawning.OreonSpawnComponent;
-import org.terasology.spawning.OreonSpawnEvent;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 
-import java.util.*;
+import org.terasology.taskSystem.BuildingType;
 
 /**
  * The screen which is triggered when player interacts({@code e press}) with a Management book block.
@@ -71,54 +72,66 @@ public class ManagementScreenLayer extends CoreScreenLayer {
         managedVillagesList = find(Constants.MANAGED_VILLAGES_LIST_ID, UIList.class);
         selectedVillageNameLabel = find(Constants.SELECTED_VILLAGE_NAME_LABEL_ID, UILabel.class);
         selectedVillageInfoLabel = find(Constants.SELECTED_VILLAGE_INFO_LABEL_ID, UILabel.class);
+        selectedVillageNameLabel.setText("");
+        selectedVillageInfoLabel.setText("");
 
-        List<String> cityNames = new ArrayList<String>();
-        cityNames.add("Lordaeron");
-        cityNames.add("Prague");
-        cityNames.add("Kategad");
-        cityNames.add("London");
-        cityNames.add("Berlin");
-        cityNames.add("Helsinki");
-        //
-        cityNames.add("Viena");
-        cityNames.add("NewYork");
-        cityNames.add("Brno");
-        cityNames.add("Katowice");
-
-        debugOwnedVillages = new ArrayList<VillageEntity>();
-        for (int i = 0; i < 6; i++) {
-            VillageEntity city = new VillageEntity(cityNames.get(i),"nightmaredev");
-            debugOwnedVillages.add(city);
-        }
-
-        debugManagedVillages = new ArrayList<VillageEntity>();
-        for (int i = 6; i < 10; i++) {
-            VillageEntity city = new VillageEntity(cityNames.get(i),"xXxSlayer1337");
-            debugManagedVillages.add(city);
-        }
+        CreateDebugData();
 
         ownedVillagesList.subscribeSelection((widget, item) -> {
-            DisplayVillageInfo((VillageEntity)item);
+            DisplayVillageInfo((UIList)widget, (VillageEntity)item);
         });
         managedVillagesList.subscribeSelection((widget, item) -> {
-            DisplayVillageInfo((VillageEntity)item);
+            DisplayVillageInfo((UIList)widget, (VillageEntity)item);
         });
         populateLists();
     }
 
-    /**
-     * Popultes the text label fields in the screen with the items required for spawning.
-     * @param cityName The Oreon prefab for which the label is being set.
-     * @param label The label to be set.
-     */
-    private void populateUiLabels(String cityName, UILabel label) {
-        StringBuilder text = new StringBuilder("Teleport to " + cityName);
-        label.setText(text.toString());
-    }
+    /* DEBUG WILL BE REMOVED AFTER LIST OF VILLAGES IN WORLD IS INTRODUCED */
+    private void CreateDebugData(){
+        CreatureNameProvider creatureNameProvider = new CreatureNameProvider(1337, CreatureAssetTheme.DEFAULT);
+        TownNameProvider townNameProvider = new TownNameProvider(1337, TownAssetTheme.FANTASY);
 
-    private void writeOutCity(String cityName) {
-        logger.info("Teleported player to " + cityName);
+        List<BuildingType> availableTypes = new ArrayList<BuildingType>();
+        BuildingType[] allTypes = BuildingType.values();
+        for(int i = 1; i < allTypes.length; i++){
+            availableTypes.add(allTypes[i]);
+        }
+
+        String localPlayerName = "localPlayer";
+
+        Random rnd = new Random();
+
+        debugOwnedVillages = new ArrayList<VillageEntity>();
+        for (int i = 0; i < 10; i++) {
+            int OreonCount = rnd.nextInt((50 - 2) + 1) + 2;
+            List<String> buildingsInTown = new ArrayList<String>();
+
+            for(BuildingType bt : availableTypes){
+                if(rnd.nextInt((5 - 0) + 1) + 0 < 1){
+                    buildingsInTown.add(bt.name());
+                }
+            }
+
+            VillageEntity city = new VillageEntity(townNameProvider.generateName(), localPlayerName, OreonCount, buildingsInTown);
+            debugOwnedVillages.add(city);
+        }
+
+        debugManagedVillages = new ArrayList<VillageEntity>();
+        for (int i = 10; i < 16; i++) {
+            int OreonCount = rnd.nextInt((50 - 2) + 1) + 2;
+            List<String> buildingsInTown = new ArrayList<String>();
+
+            for(BuildingType bt : availableTypes){
+                if(rnd.nextInt((5 - 0) + 1) + 0 < 1){
+                    buildingsInTown.add(bt.name());
+                }
+            }
+
+            VillageEntity city = new VillageEntity(townNameProvider.generateName(),creatureNameProvider.generateName(), OreonCount, buildingsInTown);
+            debugManagedVillages.add(city);
+        }
     }
+    /* DEBUG WILL BE REMOVED AFTER LIST OF VILLAGES IN WORLD IS INTRODUCED */
 
     private void populateLists() {
         Binding<List> ownedVillageList = new ReadOnlyBinding<List>() {
@@ -148,15 +161,26 @@ public class ManagementScreenLayer extends CoreScreenLayer {
         return villages;
     }
 
-    public void DisplayVillageInfo(VillageEntity village){
+    public void DisplayVillageInfo(UIList widget, VillageEntity village){
+        if(village == null) return;
+        if(widget == ownedVillagesList){
+            managedVillagesList.setSelection(null);
+        } else {
+            ownedVillagesList.setSelection(null);
+        }
+
         selectedVillageNameLabel.setText(village.VillageName);
 
         String infoText = String.format(
                 "Owner: %s\nStatistics:\nNumber of Oreons: %d\nBuildings:\n", village.OwnerName, village.OreonCount
         );
 
-        for(String buildingName : village.BuildingList){
-            infoText += buildingName + "\n";
+        if(village.BuildingList.size() > 0){
+            for(String buildingName : village.BuildingList){
+                infoText += buildingName + "\n";
+            }
+        } else {
+            infoText += "No building in village" + "\n";
         }
 
         selectedVillageInfoLabel.setText(infoText);
