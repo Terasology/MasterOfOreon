@@ -18,10 +18,6 @@ package org.terasology.managerInterface.nui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.Constants;
-import org.terasology.config.PlayerConfig;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.namegenerator.creature.CreatureAssetTheme;
@@ -29,7 +25,6 @@ import org.terasology.namegenerator.creature.CreatureNameProvider;
 import org.terasology.namegenerator.town.TownNameProvider;
 import org.terasology.namegenerator.town.TownAssetTheme;
 import org.terasology.registry.In;
-import org.terasology.config.Config;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.managerInterface.VillageEntity;
 import org.terasology.rendering.nui.databinding.Binding;
@@ -49,13 +44,7 @@ public class ManagementScreenLayer extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(ManagementScreenLayer.class);
 
     @In
-    private EntityManager entityManager;
-
-    @In
     private LocalPlayer localPlayer;
-
-    @In
-    private PrefabManager prefabManager;
 
     private UIList ownedVillagesList;
     private UIList managedVillagesList;
@@ -97,7 +86,7 @@ public class ManagementScreenLayer extends CoreScreenLayer {
             availableTypes.add(allTypes[i]);
         }
 
-        String localPlayerName = "localPlayer";
+        String localPlayerName = localPlayer.getClientEntity().getComponent(DisplayNameComponent.class).name;
 
         Random rnd = new Random();
 

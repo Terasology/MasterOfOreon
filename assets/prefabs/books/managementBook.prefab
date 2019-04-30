@@ -1,0 +1,24 @@
+{
+    "parent" : "engine:iconItem",
+    "Item" : {
+        "icon" : "engine:items#BlueBook",
+        "usage" : "NONE"
+    },
+    "DisplayName" : {
+        "name" : "Management Book"
+    },
+    "AnimateRotation": {
+        "yawSpeed": 0.5,
+        "isSynchronized": false
+    },
+    "Network": {},
+    "CapsuleShape" : {
+        "radius" : 2,
+        "height" : 5
+    },
+    "InteractionTarget": {
+    },
+    "InteractionScreen" : {
+         "screen" : "masteroforeon:managementScreen"
+    }
+}
