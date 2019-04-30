@@ -86,7 +86,7 @@ public class ManagementScreenLayer extends CoreScreenLayer {
             availableTypes.add(allTypes[i]);
         }
 
-        String localPlayerName = localPlayer.getClientEntity().getComponent(DisplayNameComponent.class).name;
+        String localPlayerName = "LocalPlayer";
 
         Random rnd = new Random();
 
