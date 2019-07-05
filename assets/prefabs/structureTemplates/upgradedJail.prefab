@@ -1,6 +1,6 @@
 {
     "StructureTemplate": {
-        "type": "MasterOfOreon:jail1"
+        "type": "MasterOfOreon:jailLevel1"
     },
     "SpawnBlockRegions": {
         "regionsToFill": [

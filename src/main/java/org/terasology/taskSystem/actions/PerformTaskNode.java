@@ -202,7 +202,6 @@ public class PerformTaskNode extends BaseAction {
                 break;
 
             case AssignedTaskType.UPGRADE :
-
                 //TODO:figure out how to get region in the right area
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
 

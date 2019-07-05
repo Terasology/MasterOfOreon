@@ -22,34 +22,33 @@ import org.terasology.rendering.nui.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RegisterTypeHandler
 public class TaskTypeHandler extends SimpleTypeHandler<Task> {
 
     @Override
-    public PersistedData serializeNonNull(Task task, PersistedDataSerializer serializer) {
+    public PersistedData serialize(Task task, SerializationContext context) {
         Map<String, PersistedData> dataMap = new ImmutableMap.Builder()
-                .put("health", serializer.serialize(task.health))
-                .put("intelligence", serializer.serialize(task.intelligence))
-                .put("strength", serializer.serialize(task.strength))
-                .put("hunger", serializer.serialize(task.hunger))
-                .put("assignedTaskType", serializer.serialize(task.assignedTaskType))
-                .put("taskDuration", serializer.serialize(task.taskDuration))
-                .put("taskColor", serializer.serialize(task.taskColor.rgba()))
-                .put("buildingType", serializer.serialize(task.buildingType.toString()))
-                .put("requiredBuildingEntityID", serializer.serialize(task.requiredBuildingEntityID))
-                .put("requiredBlocks", serializer.serializeStrings(task.requiredBlocks))
-                .put("blockResult", serializer.serialize(task.blockResult))
-                .put("isAdvanced", serializer.serialize(task.isAdvanced))
-                .put("blockToRender", serializer.serialize(task.blockToRender))
+                .put("health", context.create(task.health))
+                .put("intelligence", context.create(task.intelligence))
+                .put("strength", context.create(task.strength))
+                .put("hunger", context.create(task.hunger))
+                .put("assignedTaskType", context.create(task.assignedTaskType))
+                .put("taskDuration", context.create(task.taskDuration))
+                .put("taskColor", context.create(task.taskColor.rgba()))
+                .put("buildingType", context.create(task.buildingType.toString()))
+                .put("requiredBuildingEntityID", context.create(task.requiredBuildingEntityID))
+                .put("requiredBlocks", context.createStrings(task.requiredBlocks))
+                .put("blockResult", context.create(task.blockResult))
+                .put("isAdvanced", context.create(task.isAdvanced))
+                .put("blockToRender", context.create(task.blockToRender))
                 .build();
 
-        return serializer.serialize(dataMap);
+        return context.create(dataMap);
     }
 
     @Override
-    public Optional<Task> deserialize(PersistedData data) {
+    public Task deserialize(PersistedData data, DeserializationContext context) {
         PersistedDataMap dataMap = data.getAsValueMap();
 
         Task task = new Task();
@@ -75,6 +74,6 @@ public class TaskTypeHandler extends SimpleTypeHandler<Task> {
 
         task.isAdvanced = dataMap.getAsBoolean("isAdvanced");
         task.blockToRender = dataMap.getAsString("blockToRender");
-        return Optional.ofNullable(task);
+        return task;
     }
 }
