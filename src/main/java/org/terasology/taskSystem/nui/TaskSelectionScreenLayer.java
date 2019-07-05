@@ -94,7 +94,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         });
 
         jailButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.Build, BuildingType.Jail);
+            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Jail);
         });
 
         cancelButton.subscribe(button -> {

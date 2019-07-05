@@ -50,15 +50,7 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.network.ColorComponent;
 import org.terasology.network.NetworkComponent;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import org.terasology.notification.NotificationMessageEventMOO;
-=======
-import org.terasology.notification.NotificationMessageEvent;
->>>>>>> Add NotificationMessageEvent
-=======
-import org.terasology.notification.NotificationMessageEventMOO;
->>>>>>> Add fade-in, fade-out notification, finishing up and refactor
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.assets.texture.Texture;
@@ -207,15 +199,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         //check if held item is an Oreon Selection Tool
         if (!checkHeldItem(player)) {
             String message = "Use the Oreon selection Tool to mark areas for a task";
-<<<<<<< HEAD
-<<<<<<< HEAD
             player.getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
-=======
-            player.getOwner().send(new NotificationMessageEvent(message, notificationMessageEntity));
->>>>>>> Add NotificationMessageEvent
-=======
-            player.getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
->>>>>>> Add fade-in, fade-out notification, finishing up and refactor
             return;
         }
 
@@ -239,15 +223,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
 
         logger.info("Adding task to " + oreonHolding);
-<<<<<<< HEAD
-<<<<<<< HEAD
         player.getOwner().send(new NotificationMessageEventMOO("Adding a new task of type : " + taskComponent.assignedTaskType, notificationMessageEntity));
-=======
-        player.getOwner().send(new NotificationMessageEvent("Adding a new task of type : " + taskComponent.assignedTaskType, notificationMessageEntity));
->>>>>>> Add NotificationMessageEvent
-=======
-        player.getOwner().send(new NotificationMessageEventMOO("Adding a new task of type : " + taskComponent.assignedTaskType, notificationMessageEntity));
->>>>>>> Add fade-in, fade-out notification, finishing up and refactor
         oreonHolding.availableTasks.add(taskEntity);
         player.saveComponent(oreonHolding);
     }

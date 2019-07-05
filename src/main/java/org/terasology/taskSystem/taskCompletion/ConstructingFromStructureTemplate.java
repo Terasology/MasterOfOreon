@@ -71,19 +71,19 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     public void selectBuilding(BuildingType buildingType, int level) {
         switch (buildingType) {
             case Diner :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER+"Level" + Integer.toString(level));
                 break;
 
             case Storage :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE + Integer.toString(level));
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE+"Level" + Integer.toString(level));
                 break;
 
             case Laboratory :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY+"Level" + Integer.toString(level));
                 break;
 
             case Jail :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL + Integer.toString(level));
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
                 break;
         }
     }

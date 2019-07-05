@@ -45,15 +45,7 @@ public class DelayedNotificationSystem extends BaseComponentSystem {
 
     public float sendNotification(String message, EntityRef notificationMessageEntity, float lastNotification) {
         if (lastNotification == 0 || time.getGameTime() - lastNotification > maxDelay) {
-<<<<<<< HEAD
-<<<<<<< HEAD
             localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
-=======
-            localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEvent(message, notificationMessageEntity));
->>>>>>> Add NotificationMessageEvent
-=======
-            localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
->>>>>>> Add fade-in, fade-out notification, finishing up and refactor
             return time.getGameTime();
         }
 
@@ -61,14 +53,7 @@ public class DelayedNotificationSystem extends BaseComponentSystem {
     }
 
     public void sendNotificationNow(String message, EntityRef notificationMessageEntity) {
-<<<<<<< HEAD
-<<<<<<< HEAD
         localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
-=======
-        localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEvent(message, notificationMessageEntity));
->>>>>>> Add NotificationMessageEvent
-=======
-        localPlayer.getCharacterEntity().getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
->>>>>>> Add fade-in, fade-out notification, finishing up and refactor
+
     }
 }
