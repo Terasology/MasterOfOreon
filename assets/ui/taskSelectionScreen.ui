@@ -31,14 +31,8 @@
                                             "family" : "title"
                                         },
                                         {
-                                            "type" : "UIButton",
-                                            "id" : "plantCommandButton",
-                                            "text" : "Plant"
-                                        },
-                                        {
-                                            "type" : "UIButton",
-                                            "id" : "guardCommandButton",
-                                            "text" : "Guard"
+                                            "type" : "UIList",
+                                            "id" : "tasksList"
                                         }
                                     ]
                                 },
@@ -51,39 +45,8 @@
                                             "family" : "title"
                                         },
                                         {
-                                            "type" : "UIButton",
-                                            "id" : "hospitalButton",
-                                            "text" : "Hospital"
-                                        },
-                                        {
-                                            "type" : "UIButton",
-                                            "id" : "dinerButton",
-                                            "text" : "Diner"
-                                        },
-                                        {
-                                            "type" : "UIButton",
-                                            "id" : "gymButton",
-                                            "text" : "Gym"
-                                        },
-                                        {
-                                            "type" : "UIButton",
-                                            "id" : "classroomButton",
-                                            "text" : "Classroom"
-                                        },
-                                        {
-                                            "type" : "UIButton",
-                                            "id" : "storageButton",
-                                            "text" : "Storage"
-                                        },
-                                        {
-                                            "type" : "UIButton",
-                                            "id" : "laboratoryButton",
-                                            "text" : "Laboratory"
-                                        },
-                                        {
-                                            "type" : "UIButton",
-                                            "id" : "jailButton",
-                                            "text" : "Jail"
+                                            "type" : "UIList",
+                                            "id" : "buildingsList"
                                         }
                                     ]
                                 }

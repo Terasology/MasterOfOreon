@@ -83,7 +83,7 @@
                                         },
                                         {
                                             "type" : "UIList",
-                                            "id" : "buildingsList"
+                                            "id" : "constructedBuildingsList"
                                         }
                                     ]
                                 }
