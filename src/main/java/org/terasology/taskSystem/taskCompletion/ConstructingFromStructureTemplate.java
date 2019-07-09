@@ -63,6 +63,11 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level) {
         selectBuilding(buildingType, level);
 
+        if (buildingTemplate == null) {
+            logger.info("Could not find a prefab for the selected building");
+            return;
+        }
+
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
         buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, centerBlockPosition)));

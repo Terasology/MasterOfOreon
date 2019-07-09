@@ -20,10 +20,16 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.UIWidget;
+import org.terasology.rendering.nui.widgets.ItemSelectEventListener;
 import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TaskSelectionScreenLayer extends CoreScreenLayer {
     @In
@@ -32,85 +38,76 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
     @In
     private NUIManager nuiManager;
 
-    private UIButton plantCommand;
-    private UIButton guardCommand;
-
-    private UIButton hospitalButton;
-    private UIButton dinerButton;
-    private UIButton gymButton;
-    private UIButton classroomButton;
-    private UIButton storageButton;
-    private UIButton laboratoryButton;
-    private UIButton jailButton;
-
     private UIButton cancelButton;
+
+    private UIList<String> tasksList;
+    private UIList<String> buildingsList;
 
     @Override
     public void initialise() {
-        plantCommand = find(MooConstants.PLANT_COMMAND_UI_ID, UIButton.class);
-        guardCommand = find(MooConstants.GUARD_COMMAND_UI_ID, UIButton.class);
-
-        hospitalButton = find(MooConstants.HOSPITAL_BUTTON_ID, UIButton.class);
-        dinerButton = find(MooConstants.DINER_BUTTON_ID, UIButton.class);
-        gymButton = find(MooConstants.GYM_BUTTON_ID, UIButton.class);
-        classroomButton = find(MooConstants.CLASSROOM_BUTTON_ID, UIButton.class);
-        storageButton = find(MooConstants.STORAGE_BUTTON_ID, UIButton.class);
-        laboratoryButton = find(MooConstants.LABORATORY_BUTTON_ID, UIButton.class);
-        jailButton = find(MooConstants.JAIL_BUTTON_ID, UIButton.class);
-
-
         cancelButton = find(MooConstants.CANCEL_BUTTON_ID, UIButton.class);
 
-        plantCommand.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.PLANT);
-        });
-
-        guardCommand.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.GUARD);
-        });
-
-        hospitalButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Hospital);
-        });
-
-        dinerButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Diner);
-        });
-
-        gymButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Gym);
-        });
-
-        classroomButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Classroom);
-        });
-
-        storageButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Storage);
-        });
-
-        laboratoryButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Laboratory);
-        });
-
-        jailButton.subscribe(button -> {
-            sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.Jail);
-        });
+        populateTasksList();
+        populateBuildingsList();
 
         cancelButton.subscribe(button -> {
             sendSetTaskTypeEvent();
         });
     }
 
-    public void sendSetTaskTypeEvent () {
+    private void sendSetTaskTypeEvent () {
         localPlayer.getCharacterEntity().send(new SetTaskTypeEvent());
     }
 
-    public void sendSetTaskTypeEvent(String assignedTaskType) {
+    private void sendSetTaskTypeEvent(String assignedTaskType) {
         localPlayer.getCharacterEntity().send(new SetTaskTypeEvent(assignedTaskType));
     }
 
-    public void sendSetTaskTypeEvent (String assignedTaskType, BuildingType buildingType) {
+    private void sendSetTaskTypeEvent (String assignedTaskType, BuildingType buildingType) {
         localPlayer.getCharacterEntity().send(new SetTaskTypeEvent(assignedTaskType, buildingType));
+    }
+
+    private void populateBuildingsList() {
+        buildingsList = find(MooConstants.BUILDINGS_LIST_ID, UIList.class);
+        buildingsList.subscribeSelection(new ItemSelectEventListener<String>() {
+            @Override
+            public void onItemSelected(UIWidget widget, String item) {
+                sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.valueOf(item));
+            }
+        });
+
+        List<String> buttonList = new ArrayList<>();
+        buttonList.add("Diner");
+        buttonList.add("Storage");
+        buttonList.add("Laboratory");
+        buttonList.add("Hospital");
+        buttonList.add("Jail");
+        buildingsList.setList(buttonList);
+    }
+
+    private void populateTasksList() {
+        tasksList = find(MooConstants.TASKS_LIST_ID, UIList.class);
+
+        tasksList.subscribeSelection(new ItemSelectEventListener<String>() {
+            @Override
+            public void onItemSelected(UIWidget widget, String item) {
+                String task = AssignedTaskType.NONE;
+                switch(item) {
+                    case "Plant" :
+                        task = AssignedTaskType.PLANT;
+                        break;
+
+                    case "Guard":
+                        task = AssignedTaskType.GUARD;
+                        break;
+                }
+                sendSetTaskTypeEvent(task);
+            }
+        });
+
+        List<String> buttonList = new ArrayList<>();
+        buttonList.add("Plant");
+        buttonList.add("Guard");
+        tasksList.setList(buttonList);
     }
 }

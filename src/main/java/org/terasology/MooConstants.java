@@ -39,18 +39,9 @@ public class MooConstants {
     public static final String OREON_GUARD_RESOURCES_LABEL_ID = "oreonGuardResourcesRequired";
     public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourcesRequired";
 
-    // Task selection button IDs
-    public static final String PLANT_COMMAND_UI_ID = "plantCommandButton";
-    public static final String GUARD_COMMAND_UI_ID = "guardCommandButton";
-
-    // Building type selection button IDs
-    public static final String HOSPITAL_BUTTON_ID = "hospitalButton";
-    public static final String DINER_BUTTON_ID = "dinerButton";
-    public static final String GYM_BUTTON_ID = "gymButton";
-    public static final String CLASSROOM_BUTTON_ID = "classroomButton";
-    public static final String STORAGE_BUTTON_ID = "storageButton";
-    public static final String LABORATORY_BUTTON_ID = "laboratoryButton";
-    public static final String JAIL_BUTTON_ID = "jailButton";
+    // Lists on Task Selection Screen
+    public static final String TASKS_LIST_ID = "tasksList";
+    public static final String BUILDINGS_LIST_ID = "buildingsList";
 
     // Cancel Selection button on task selection screen
     public static final String CANCEL_BUTTON_ID = "cancelButton";
@@ -100,7 +91,7 @@ public class MooConstants {
     public static final String AVAILABLE_TASKS_LIST_ID = "availableTasksList";
     public static final String ON_GOING_TASKS_LIST_ID = "inProgressTasksList";
     public static final String OREONS_LIST_ID = "oreons";
-    public static final String BUILDINGS_LIST_ID = "buildingsList";
+    public static final String CONSTRUCTED_BUILDINGS_LIST_ID = "constructedBuildingsList";
 
     public static final String PEDESTAL_PREFAB = "MasterOfOreon:pedestal";
     public static final String RESEARCH_BOOK_NAME = "Research Book";
