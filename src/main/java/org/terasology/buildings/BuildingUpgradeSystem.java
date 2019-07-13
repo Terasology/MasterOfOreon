@@ -117,6 +117,9 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
                 Vector3i target = new Vector3i(blockPos);
                 if (buildingRegion.encompasses(target)) {
                     this.buildingToUpgrade = building;
+                    holdingComponent.lastBuildingInteractedWith = building;
+                    player.saveComponent(holdingComponent);
+
                     building.send(new OpenUpgradeScreenEvent());
                 }
             }

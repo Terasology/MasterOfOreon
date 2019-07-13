@@ -37,4 +37,7 @@ public class HoldingComponent implements Component {
 
     @Replicate
     public List<EntityRef> constructedBuildings = new ArrayList<>();
+
+    @Replicate
+    public EntityRef lastBuildingInteractedWith = EntityRef.NULL;
 }

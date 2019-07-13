@@ -24,6 +24,7 @@ import org.terasology.buildings.events.GuardBuildingEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
 import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
@@ -69,12 +70,14 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
     }
 
     private void populateLabels() {
-        EntityRef building = buildingUpgradeSystem.getBuildingToUpgrade();
+        HoldingComponent holdingComponent = localPlayer.getCharacterEntity().getComponent(HoldingComponent.class);
+        EntityRef building = holdingComponent.lastBuildingInteractedWith;
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
         if (buildingComponent == null) {
             logger.info("ConstructedBuildingComponent null");
             return;
         }
+
 
         Binding<String> buildingNameBinding = new ReadOnlyBinding<String>() {
             @Override
@@ -92,5 +95,11 @@ public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
 
         buildingName.bindText(buildingNameBinding);
         buildingLevel.bindText(buildingLevelBinding);
+    }
+
+    @Override
+    public void onScreenOpened() {
+        super.onScreenOpened();
+        populateLabels();
     }
 }
