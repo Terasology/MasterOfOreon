@@ -25,7 +25,7 @@ public class BuildingUpgradeTask extends Task {
     private static final int STRENGTH = 0;
     private static final int HUNGER = 30;
 
-    private static final float DURATION = 120;
+    private static final float DURATION = 1;
 
     public BuildingUpgradeTask(EntityRef building) {
         this.health = HEALTH;

@@ -26,7 +26,7 @@ public class BuildTask extends Task {
     private static final int STRENGTH = 0;
     private static final int HUNGER = 40;
 
-    private static final float DURATION = 100;
+    private static final float DURATION = 1;
     private static final Color COLOR = Color.GREY.alterAlpha(90);
 
     public BuildTask(BuildingType buildingType) {
