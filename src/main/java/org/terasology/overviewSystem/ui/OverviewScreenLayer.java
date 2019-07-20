@@ -53,7 +53,7 @@ public class OverviewScreenLayer extends CoreScreenLayer {
         availableTasks = find(MooConstants.AVAILABLE_TASKS_LIST_ID, UIList.class);
         inProgressTasks = find(MooConstants.ON_GOING_TASKS_LIST_ID, UIList.class);
         oreons = find(MooConstants.OREONS_LIST_ID, UIList.class);
-        buildings = find(MooConstants.BUILDINGS_LIST_ID, UIList.class);
+        buildings = find(MooConstants.CONSTRUCTED_BUILDINGS_LIST_ID, UIList.class);
 
         populateLists();
     }
@@ -147,7 +147,6 @@ public class OverviewScreenLayer extends CoreScreenLayer {
 
                 for (EntityRef building : entityManager.getEntitiesWith(ConstructedBuildingComponent.class)) {
                     ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
-
                     switch (buildingComponent.buildingType) {
                         case Diner :
                             numberOfDiners++;
