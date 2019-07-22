@@ -39,6 +39,10 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
     private NUIManager nuiManager;
 
     private UIButton cancelButton;
+    private UIButton tasksTabButton;
+    private UIButton buildingsTabButton;
+
+    private UIList<String> taskSelectionScreenList;
 
     private UIList<String> tasksList;
     private UIList<String> buildingsList;
@@ -46,9 +50,42 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
     @Override
     public void initialise() {
         cancelButton = find(MooConstants.CANCEL_BUTTON_ID, UIButton.class);
+        tasksTabButton = find(MooConstants.TASKS_TAB_BUTTON, UIButton.class);
+        buildingsTabButton = find(MooConstants.BUILDINGS_TAB_BUTTON, UIButton.class);
+
+        taskSelectionScreenList = find(MooConstants.TASK_SELECTION_SCREEN_LIST, UIList.class);
+
+        taskSelectionScreenList.subscribeSelection(new ItemSelectEventListener<String>() {
+            @Override
+            public void onItemSelected(UIWidget widget, String item) {
+                String task = AssignedTaskType.NONE;
+                switch(item) {
+                    case "Plant" :
+                        task = AssignedTaskType.PLANT;
+                        sendSetTaskTypeEvent(task);
+                        break;
+
+                    case "Guard":
+                        task = AssignedTaskType.GUARD;
+                        sendSetTaskTypeEvent(task);
+                        break;
+                    default:
+                        sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.valueOf(item));
+                }
+
+            }
+        });
 
         populateTasksList();
-        populateBuildingsList();
+        tasksTabButton.setActive(true);
+
+        tasksTabButton.subscribe(button -> {
+            populateTasksList();
+        });
+
+        buildingsTabButton.subscribe(button -> {
+            populateBuildingsList();
+        });
 
         cancelButton.subscribe(button -> {
             sendSetTaskTypeEvent();
@@ -68,46 +105,25 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
     }
 
     private void populateBuildingsList() {
-        buildingsList = find(MooConstants.BUILDINGS_LIST_ID, UIList.class);
-        buildingsList.subscribeSelection(new ItemSelectEventListener<String>() {
-            @Override
-            public void onItemSelected(UIWidget widget, String item) {
-                sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.valueOf(item));
-            }
-        });
-
         List<String> buttonList = new ArrayList<>();
         buttonList.add("Diner");
         buttonList.add("Storage");
         buttonList.add("Laboratory");
         buttonList.add("Hospital");
         buttonList.add("Jail");
-        buildingsList.setList(buttonList);
+        taskSelectionScreenList.setList(buttonList);
+
+        tasksTabButton.setActive(false);
+        buildingsTabButton.setActive(true);
     }
 
     private void populateTasksList() {
-        tasksList = find(MooConstants.TASKS_LIST_ID, UIList.class);
-
-        tasksList.subscribeSelection(new ItemSelectEventListener<String>() {
-            @Override
-            public void onItemSelected(UIWidget widget, String item) {
-                String task = AssignedTaskType.NONE;
-                switch(item) {
-                    case "Plant" :
-                        task = AssignedTaskType.PLANT;
-                        break;
-
-                    case "Guard":
-                        task = AssignedTaskType.GUARD;
-                        break;
-                }
-                sendSetTaskTypeEvent(task);
-            }
-        });
-
         List<String> buttonList = new ArrayList<>();
         buttonList.add("Plant");
         buttonList.add("Guard");
-        tasksList.setList(buttonList);
+        taskSelectionScreenList.setList(buttonList);
+
+        buildingsTabButton.setActive(false);
+        tasksTabButton.setActive(true);
     }
 }

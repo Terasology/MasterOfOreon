@@ -20,19 +20,16 @@
                     "contents" : [
                         {
                             "type" : "RowLayout",
-                            "horizontalSpacing" : 16,
+                            "horizontalSpacing" : 0,
                             "contents" : [
                                 {
                                     "type" : "ColumnLayout",
                                     "contents" : [
                                         {
-                                            "type" : "UILabel",
+                                            "type" : "UIButton",
                                             "text" : "Tasks",
+                                            "id"   : "tasksTabButton",
                                             "family" : "title"
-                                        },
-                                        {
-                                            "type" : "UIList",
-                                            "id" : "tasksList"
                                         }
                                     ]
                                 },
@@ -40,17 +37,23 @@
                                     "type" : "ColumnLayout",
                                     "contents" : [
                                         {
-                                            "type" : "UILabel",
+                                            "type" : "UIButton",
                                             "text" : "Buildings",
+                                            "id"   : "buildingsTabButton",
                                             "family" : "title"
-                                        },
-                                        {
-                                            "type" : "UIList",
-                                            "id" : "buildingsList"
                                         }
                                     ]
                                 }
 
+                            ]
+                        },
+                        {
+                            "type" : "RowLayout",
+                            "contents" : [
+                                {
+                                    "type" : "UIList",
+                                    "id" : "taskSelectionScreenList"
+                                }
                             ]
                         },
                         {
