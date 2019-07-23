@@ -531,19 +531,30 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void addBuildingToHolding(BuildingConstructionStartedEvent constructionStartedEvent, EntityRef player) {
-        ConstructedBuildingComponent constructedBuildingComponent = new ConstructedBuildingComponent();
-        constructedBuildingComponent.boundingRegions = constructionStartedEvent.absoluteRegions;
-        constructedBuildingComponent.buildingType = constructionStartedEvent.buildingType;
-        constructedBuildingComponent.centerLocation = constructionStartedEvent.centerBlockPosition;
+        if (constructionStartedEvent.constructedBuildingEntity == EntityRef.NULL) {
+            // When a new building is constructed in the village
+            ConstructedBuildingComponent constructedBuildingComponent = new ConstructedBuildingComponent();
+            constructedBuildingComponent.boundingRegions = constructionStartedEvent.absoluteRegions;
+            constructedBuildingComponent.buildingType = constructionStartedEvent.buildingType;
+            constructedBuildingComponent.centerLocation = constructionStartedEvent.centerBlockPosition;
 
-        constructionStartedEvent.constructedBuildingEntity = entityManager.create(constructedBuildingComponent);
+            constructionStartedEvent.constructedBuildingEntity = entityManager.create(constructedBuildingComponent);
 
-        NetworkComponent networkComponent = new NetworkComponent();
-        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+            NetworkComponent networkComponent = new NetworkComponent();
+            networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
 
-        constructionStartedEvent.constructedBuildingEntity.addComponent(networkComponent);
+            constructionStartedEvent.constructedBuildingEntity.addComponent(networkComponent);
 
-        constructionStartedEvent.constructedBuildingEntity.setOwner(player);
+            constructionStartedEvent.constructedBuildingEntity.setOwner(player);
+        }
+        else {
+            // When a building is upgraded
+            // Update the extents of the building in the ConstructedBuildingComponent after upgrade
+            ConstructedBuildingComponent constructedBuildingComponent = constructionStartedEvent.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class);
+            constructedBuildingComponent.boundingRegions = constructionStartedEvent.absoluteRegions;
+            constructedBuildingComponent.centerLocation = constructionStartedEvent.centerBlockPosition;
+            constructionStartedEvent.constructedBuildingEntity.saveComponent(constructedBuildingComponent);
+        }
 
         delayManager.addDelayedAction(constructionStartedEvent.constructedBuildingEntity, CONSTRUCTION_COMPLETE_EVENT_ID, constructionStartedEvent.completionDelay);
     }

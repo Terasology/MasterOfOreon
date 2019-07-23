@@ -55,12 +55,11 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         Vector3i centerBlockPosition = new Vector3i((minX + maxX) / 2, minY, (minZ + maxZ) / 2);
         logger.info("Center" + centerBlockPosition);
 
-        constructBuilding(centerBlockPosition, buildingType, 0);
+        constructBuilding(centerBlockPosition, buildingType, 0, EntityRef.NULL, player);
 
-        sendConstructionStartEvent(centerBlockPosition, buildingType);
     }
 
-    public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level) {
+    public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level, EntityRef building, EntityRef playerEntity) {
         selectBuilding(buildingType, level);
 
         if (buildingTemplate == null) {
@@ -71,6 +70,8 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
         buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, centerBlockPosition)));
+
+        sendConstructionStartEvent(centerBlockPosition, buildingType, building, playerEntity);
     }
 
     public void selectBuilding(BuildingType buildingType, int level) {
@@ -94,23 +95,29 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     }
 
     public EntityRef selectAndReturnBuilding(BuildingType buildingType, int level) {
+        EntityRef building = EntityRef.NULL;
         switch (buildingType) {
             case Diner :
-                return structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER+"Level" + Integer.toString(level));
+                break;
 
             case Storage :
-                return structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE+"Level" + Integer.toString(level));
+                break;
 
             case Laboratory :
-                return structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY+"Level" + Integer.toString(level));
+                break;
 
             case Jail :
-                return structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
+                break;
         }
-        return null;
+
+        return building;
     }
 
-    private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType) {
+    private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType, EntityRef building, EntityRef playerEntity) {
         SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
@@ -125,7 +132,6 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         long delay = buildingTemplate.getComponent(CompletionTimeComponent.class).completionDelay;
 
         // Add this building's regions to the Holding
-        EntityRef building = EntityRef.NULL;
-        player.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay));
+        playerEntity.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay));
     }
 }

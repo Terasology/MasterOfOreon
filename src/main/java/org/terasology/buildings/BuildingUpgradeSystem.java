@@ -42,6 +42,8 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.structureTemplates.components.CompletionTimeComponent;
+import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
@@ -52,6 +54,7 @@ import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplat
 import org.terasology.taskSystem.tasks.BuildingUpgradeTask;
 import org.terasology.taskSystem.tasks.GuardTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Share(BuildingUpgradeSystem.class)
@@ -152,6 +155,11 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
             case Jail:
                 taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.WALL_OF_JAIL_REGION);
                 break;
+            case Storage:
+                taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.STORAGE_ENTRANCE_REGION);
+                break;
+            case Laboratory:
+                taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.LABORATORY_SLAB_REGION);
         }
 
         taskComponent.task = new BuildingUpgradeTask(buildingToUpgrade);
@@ -177,7 +185,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
         buildingComponent.currentLevel += 1;
         building.saveComponent(buildingComponent);
-        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel);
+        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel, building, localPlayer.getCharacterEntity());
     }
 
     @ReceiveEvent
