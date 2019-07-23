@@ -66,6 +66,7 @@ import org.terasology.taskSystem.tasks.PlantTask;
 import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.selection.BlockSelectionComponent;
@@ -230,6 +231,19 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     public void setTaskType(String newTaskType, BuildingType buildingType, Region3i region, EntityRef player) {
         logger.info("Adding a new Task");
+
+        // if the building extends to an area which is not suitable
+        if (newTaskType == AssignedTaskType.BUILD) {
+            region = getBuildingExtents(buildingType, region);
+
+            if (region == null) {
+                player.getOwner().send(
+                        new NotificationMessageEventMOO("Please select an open area which can accomadate the entire building",
+                                notificationMessageEntity));
+                return;
+            }
+        }
+
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.taskRegion = region;
         taskComponent.creationTime = timer.getGameTimeInMs();
@@ -250,7 +264,6 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             case AssignedTaskType.BUILD :
                 newTask = new BuildTask(buildingType);
-                taskComponent.taskRegion = getBuildingExtents(buildingType, region);
                 break;
 
             default :
@@ -346,7 +359,31 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         Vector3f center = region.center();
         Vector3f extents = new Vector3f((maxX - minX) / 2, 0, (maxZ - minZ) / 2);
-        return Region3i.createFromCenterExtents(center, extents);
+        Region3i buildingRegion = Region3i.createFromCenterExtents(center, extents);
+
+        minX = buildingRegion.minX();
+        maxX = buildingRegion.maxX();
+        minZ = buildingRegion.minZ();
+        maxZ = buildingRegion.maxZ();
+        int y = buildingRegion.minY();
+
+        // Invalidate area if any corner block is air
+        if (checkIfTargetable(new Vector3f(minX - 2, y, maxZ + 2))
+            && checkIfTargetable(new Vector3f(maxX + 2, y, maxZ + 2))
+            && checkIfTargetable(new Vector3f(minX - 2, y, minZ - 2))
+            && checkIfTargetable(new Vector3f(maxX + 2, y, minZ - 2))) {
+            return buildingRegion;
+        }
+
+        return null;
+
+    }
+
+    private boolean checkIfTargetable(Vector3f blockLocation) {
+        EntityRef blockEntity = blockEntityRegistry.getBlockEntityAt(blockLocation);
+        BlockComponent blockComponent = blockEntity.getComponent(BlockComponent.class);
+
+        return blockComponent.block.isTargetable();
     }
 
     private Texture getAreaTexture(Task newTask) {
