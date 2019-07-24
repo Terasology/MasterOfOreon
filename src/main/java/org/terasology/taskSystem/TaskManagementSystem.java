@@ -56,6 +56,7 @@ import org.terasology.registry.Share;
 import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.assets.texture.TextureUtil;
 import org.terasology.rendering.nui.Color;
+import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.taskSystem.components.TaskComponent;
@@ -130,23 +131,34 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     public boolean getTaskForOreon(Actor oreon) {
+        //TODO: go into getTaskCompletionTime( to change based on attributes
         HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
-        Queue<EntityRef> availableTasks = oreonHolding.availableTasks;
+        Object[] availableTasks = oreonHolding.availableTasks.toArray();
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
         logger.debug("Looking for task in " + oreonHolding);
 
-        if (!availableTasks.isEmpty()) {
-            EntityRef taskEntityToAssign = availableTasks.remove();
-            TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
+        if (availableTasks.length > 0) {
+            TaskComponent taskComponentToAssign = ((EntityRef) availableTasks[0]).getComponent(TaskComponent.class);
+            OreonAttributeComponent attributes = oreon.getComponent(OreonAttributeComponent.class);
+            int indexOfTaskComp = 0;
+            int skillInTask = getSkillInAttribute(attributes, taskComponentToAssign.task.primaryAttr);
 
+            for (int i = 1; i < availableTasks.length; i++) {
+                int tempSkill = getSkillInAttribute(attributes, taskComponentToAssign.task.primaryAttr);
+                if (tempSkill > skillInTask) {
+                    skillInTask = tempSkill;
+                    indexOfTaskComp = i;
+                    taskComponentToAssign = ((EntityRef) availableTasks[i]).getComponent(TaskComponent.class);
+                }
+            }
             oreonTaskComponent.task = taskComponentToAssign.task;
 
             oreonTaskComponent.assignedTaskType = taskComponentToAssign.assignedTaskType;
             oreonTaskComponent.creationTime = taskComponentToAssign.creationTime;
             oreonTaskComponent.taskRegion = taskComponentToAssign.taskRegion;
             oreonTaskComponent.taskStatus = TaskStatusType.InProgress;
-            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.task);
+            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(oreonTaskComponent.task, skillInTask);
             oreonTaskComponent.subsequentTaskType = taskComponentToAssign.subsequentTaskType;
             oreonTaskComponent.subsequentTask = taskComponentToAssign.subsequentTask;
             oreonTaskComponent.delayBeforeNextTask = taskComponentToAssign.delayBeforeNextTask;
@@ -161,12 +173,47 @@ public class TaskManagementSystem extends BaseComponentSystem {
             setOreonTarget(oreon, oreonTaskComponent.taskRegion.min());
 
             //destroy the entity since this task is no longer required
-            taskEntityToAssign.destroy();
+            ((EntityRef) availableTasks[indexOfTaskComp]).destroy();
 
+            oreonHolding.availableTasks.remove(availableTasks[indexOfTaskComp]);
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Gets an oreon's score in a certain attribute.
+     * @param attributeComp The component that has the oreon's attribute skills.
+     * @param attributeToFind The name of the attribute that is being looked for.
+     * @return The score if attributeToFind is valid, -1 if not.
+     */
+    private int getSkillInAttribute(OreonAttributeComponent attributeComp, String attributeToFind) {
+        switch(attributeToFind) {
+            case Task.HEALTH_ATTR:
+                return attributeComp.health;
+            case Task.HUNGER_ATTR:
+                return attributeComp.hunger;
+            case Task.INTELLIGENCE_ATTR:
+                return attributeComp.intelligence;
+            case Task.STRENGTH_ATTR:
+                return attributeComp.strength;
+            default:
+                return -1;
+        }
+    }
+
+    public int getSkillInAttribute(Task task) {
+        switch (task.primaryAttr) {
+            case Task.HEALTH_ATTR:
+                return task.health;
+            case Task.HUNGER_ATTR:
+                return task.hunger;
+            case Task.INTELLIGENCE_ATTR:
+                return task.intelligence;
+            default:
+                return task.strength;
+        }
     }
 
     /**
@@ -439,7 +486,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
             newTask.requiredBuildingEntityID = oreonTaskComponent.task.requiredBuildingEntityID;
             oreonTaskComponent.task = newTask;
             oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
-            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
+            //TODO: change to use an actual relevant skill
+            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask, 0);
 
 
             oreonTaskComponent.creationTime = timer.getGameTimeInMs();
@@ -521,12 +569,17 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * Calculates the time at which the assigned task will be completed based on the assigned task type and current game
      * time.
      * @param newTask The type of task that is being assigned to the Oreon
+     * @param relevantSkill The skill of the oreon in the attribute relating to this task.
      * @return The time at which the task will be completed
      */
-    public float getTaskCompletionTime(Task newTask) {
+    public float getTaskCompletionTime(Task newTask, int relevantSkill) {
         float currentTime = timer.getGameTime();
 
-        return currentTime + newTask.taskDuration;
+        return currentTime + newTask.taskDuration - Math.min(relevantSkill / 2, newTask.taskDuration);
+    }
+
+    public float getTaskCompletionTime(Task newTask) {
+        return getTaskCompletionTime(newTask, getSkillInAttribute(newTask));
     }
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)

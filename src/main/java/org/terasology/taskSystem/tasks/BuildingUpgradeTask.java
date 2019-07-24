@@ -33,6 +33,8 @@ public class BuildingUpgradeTask extends Task {
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
+        this.primaryAttr = STRENGTH_ATTR;
+
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.UPGRADE;
 

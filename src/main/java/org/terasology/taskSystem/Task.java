@@ -21,12 +21,18 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Task {
+    public static final String HEALTH_ATTR = "health";
+    public static final String INTELLIGENCE_ATTR = "intelligence";
+    public static final String STRENGTH_ATTR = "strength";
+    public static final String HUNGER_ATTR = "hunger";
 
     // Effects on different Oreon attributes after task completion
     public int health;
     public int intelligence;
     public int strength;
     public int hunger;
+
+    public String primaryAttr;
 
     // Task specifications
     public String assignedTaskType = AssignedTaskType.NONE;
@@ -41,4 +47,17 @@ public class Task {
 
     // URI of the block to render as an indication for the task being performed
     public String blockToRender = "";
+
+    public int getSkillInPrimary() {
+        switch (primaryAttr) {
+            case HEALTH_ATTR:
+                return health;
+            case INTELLIGENCE_ATTR:
+                return intelligence;
+            case STRENGTH_ATTR:
+                return strength;
+            default:
+                return hunger;
+        }
+    }
 }

@@ -33,6 +33,8 @@ public class TrainIntelligenceTask extends Task {
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
+        this.primaryAttr = STRENGTH_ATTR;
+
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.TRAIN_INTELLIGENCE;
 

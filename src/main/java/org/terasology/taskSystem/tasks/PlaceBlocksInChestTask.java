@@ -41,6 +41,8 @@ public class PlaceBlocksInChestTask extends Task {
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
+        this.primaryAttr = STRENGTH_ATTR;
+
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.PLACE_BLOCKS_IN_CHEST;
 

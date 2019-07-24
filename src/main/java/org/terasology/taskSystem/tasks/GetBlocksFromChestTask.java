@@ -41,6 +41,8 @@ public class GetBlocksFromChestTask extends Task {
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
+        this.primaryAttr = STRENGTH_ATTR;
+
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.GET_BLOCKS_FROM_CHEST;
 

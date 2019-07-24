@@ -32,6 +32,8 @@ public class SleepTask extends Task {
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
+        this.primaryAttr = HEALTH_ATTR;
+
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.SLEEP;
         this.isAdvanced = true;

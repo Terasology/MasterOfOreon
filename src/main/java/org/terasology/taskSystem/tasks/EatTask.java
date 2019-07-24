@@ -34,6 +34,8 @@ public class EatTask extends Task {
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
+        this.primaryAttr = HUNGER_ATTR;
+
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.EAT;
         this.buildingType = BuildingType.Diner;

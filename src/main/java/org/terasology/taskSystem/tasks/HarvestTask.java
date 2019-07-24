@@ -40,6 +40,8 @@ public class HarvestTask extends Task {
         this.strength = STRENGTH;
         this.hunger = HUNGER;
 
+        this.primaryAttr = STRENGTH_ATTR;
+
         this.taskDuration = DURATION;
         this.taskColor = COLOR;
         this.assignedTaskType = AssignedTaskType.HARVEST;
