@@ -47,6 +47,8 @@ import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
+import org.terasology.logic.selection.MovableSelectionEndEvent;
+import org.terasology.logic.selection.MovableSelectionStartEvent;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -293,8 +295,11 @@ public class TaskManagementSystem extends BaseComponentSystem {
             case AssignedTaskType.BUILD :
                 pendingTask = new BuildTask(buildingType);
                 newBlockSelectionComponent.currentSelection = getBuildingExtents(buildingType, region);
+                newBlockSelectionComponent.isMovable = true;
                 pendingBuildTaskEntity = entityManager.create(newBlockSelectionComponent);
                 pendingBuildTaskEntity.setOwner(player);
+
+                pendingBuildTaskEntity.send(new MovableSelectionStartEvent());
                 break;
 
             default :
@@ -303,24 +308,13 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void receiveCameraTargetChangeEvent(CameraTargetChangedEvent event, EntityRef entity) {
-        if (pendingBuildTaskEntity != EntityRef.NULL) {
-            BlockSelectionComponent blockSelectionComponent = pendingBuildTaskEntity.getComponent(BlockSelectionComponent.class);
-            Region3i region = blockSelectionComponent.currentSelection;
-
-            blockSelectionComponent.currentSelection = Region3i.createFromCenterExtents(cameraTargetSystem.getTargetBlockPosition(),
-                    new Vector3i(region.sizeX()/2, 0, region.sizeZ()/2));
-            pendingBuildTaskEntity.saveComponent(blockSelectionComponent);
-        }
-    }
-
-    @ReceiveEvent
-    public void receiveLeftMouseButtonDownEvent(LeftMouseDownButtonEvent event, EntityRef entity) {
+    public void onMovableSelectionEnd(MovableSelectionEndEvent event, EntityRef entity) {
         if (pendingBuildTaskEntity != EntityRef.NULL) {
             EntityRef player = pendingBuildTaskEntity.getOwner();
-            
-            BlockSelectionComponent blockSelectionComponent = pendingBuildTaskEntity.getComponent(BlockSelectionComponent.class);
             pendingBuildTaskEntity.destroy();
+
+            BlockSelectionComponent blockSelectionComponent = new BlockSelectionComponent();
+            blockSelectionComponent.currentSelection = event.getFinalRegion();
 
             // Create new build task
             TaskComponent taskComponent = new TaskComponent();
