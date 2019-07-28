@@ -35,6 +35,9 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
+import org.terasology.input.cameraTarget.CameraTargetChangedEvent;
+import org.terasology.input.cameraTarget.CameraTargetSystem;
+import org.terasology.input.events.LeftMouseDownButtonEvent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.characters.events.HorizontalCollisionEvent;
@@ -44,6 +47,8 @@ import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
+import org.terasology.logic.selection.MovableSelectionEndEvent;
+import org.terasology.logic.selection.MovableSelectionStartEvent;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -66,6 +71,7 @@ import org.terasology.taskSystem.tasks.PlantTask;
 import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.selection.BlockSelectionComponent;
@@ -104,11 +110,16 @@ public class TaskManagementSystem extends BaseComponentSystem {
     @In
     private InventoryManager inventoryManager;
 
+    @In
+    private CameraTargetSystem cameraTargetSystem;
+
     private BlockManager blockManager;
     private BlockEntityRegistry blockEntityRegistry;
     private HoldingAuthoritySystem holdingSystem;
     private EntityRef notificationMessageEntity;
     private Vector3f lastCollisionLocation;
+    private EntityRef pendingBuildTaskEntity;
+    private Task pendingTask;
 
     @Override
     public void postBegin() {
@@ -127,6 +138,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         blockManager = context.get(BlockManager.class);
         blockEntityRegistry = context.get(BlockEntityRegistry.class);
+
+        pendingBuildTaskEntity = EntityRef.NULL;
     }
 
     public boolean getTaskForOreon(Actor oreon) {
@@ -230,6 +243,19 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     public void setTaskType(String newTaskType, BuildingType buildingType, Region3i region, EntityRef player) {
         logger.info("Adding a new Task");
+
+        // if the building extends to an area which is not suitable
+//        if (newTaskType == AssignedTaskType.BUILD) {
+//            region = getBuildingExtents(buildingType, region);
+//
+//            if (region == null) {
+//                player.getOwner().send(
+//                        new NotificationMessageEventMOO("Please select an open area which can accomadate the entire building",
+//                                notificationMessageEntity));
+//                return;
+//            }
+//        }
+
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.taskRegion = region;
         taskComponent.creationTime = timer.getGameTimeInMs();
@@ -246,34 +272,73 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 taskComponent.subsequentTask = new HarvestTask();
                 taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
                 taskComponent.delayBeforeNextTask = 50000;
+
+                newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
+
+                taskComponent.task = newTask;
+
+                placeFenceAroundRegion(taskComponent.taskRegion);
+
+                newBlockSelectionComponent.texture = getAreaTexture(newTask);
+
+                //mark this area so that no other task can be assigned here
+                markArea(newBlockSelectionComponent, newTask, taskComponent, player);
+
+                NetworkComponent networkComponent = new NetworkComponent();
+                networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+
+                EntityRef task = entityManager.create(taskComponent, networkComponent);
+
+                addTask(player, task);
                 break;
 
             case AssignedTaskType.BUILD :
-                newTask = new BuildTask(buildingType);
-                taskComponent.taskRegion = getBuildingExtents(buildingType, region);
+                pendingTask = new BuildTask(buildingType);
+                newBlockSelectionComponent.currentSelection = getBuildingExtents(buildingType, region);
+                newBlockSelectionComponent.isMovable = true;
+                pendingBuildTaskEntity = entityManager.create(newBlockSelectionComponent);
+                pendingBuildTaskEntity.setOwner(player);
+
+                pendingBuildTaskEntity.send(new MovableSelectionStartEvent());
                 break;
 
             default :
                 newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
         }
+    }
 
-        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
+    @ReceiveEvent
+    public void onMovableSelectionEnd(MovableSelectionEndEvent event, EntityRef entity) {
+        if (pendingBuildTaskEntity != EntityRef.NULL) {
+            EntityRef player = pendingBuildTaskEntity.getOwner();
+            pendingBuildTaskEntity.destroy();
 
-        taskComponent.task = newTask;
+            BlockSelectionComponent blockSelectionComponent = new BlockSelectionComponent();
+            blockSelectionComponent.currentSelection = event.getFinalRegion();
 
-        placeFenceAroundRegion(taskComponent.taskRegion);
+            // Create new build task
+            TaskComponent taskComponent = new TaskComponent();
+            taskComponent.taskRegion = blockSelectionComponent.currentSelection;
+            taskComponent.creationTime = timer.getGameTimeInMs();
 
-        newBlockSelectionComponent.texture = getAreaTexture(newTask);
+            taskComponent.assignedTaskType = AssignedTaskType.BUILD;
+            Task newTask = pendingTask;
+            taskComponent.task = newTask;
 
-        //mark this area so that no other task can be assigned here
-        markArea(newBlockSelectionComponent, newTask, taskComponent, player);
+            placeFenceAroundRegion(taskComponent.taskRegion);
 
-        NetworkComponent networkComponent = new NetworkComponent();
-        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+            blockSelectionComponent.texture = getAreaTexture(newTask);
 
-        EntityRef task = entityManager.create(taskComponent, networkComponent);
+            //mark this area so that no other task can be assigned here
+            markArea(blockSelectionComponent, newTask, taskComponent, player);
 
-        addTask(player, task);
+            NetworkComponent networkComponent = new NetworkComponent();
+            networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+
+            EntityRef task = entityManager.create(taskComponent, networkComponent);
+
+            addTask(player, task);
+        }
     }
 
     public void placeFenceAroundRegion(Region3i region) {
@@ -347,6 +412,30 @@ public class TaskManagementSystem extends BaseComponentSystem {
         Vector3f center = region.center();
         Vector3f extents = new Vector3f((maxX - minX) / 2, 0, (maxZ - minZ) / 2);
         return Region3i.createFromCenterExtents(center, extents);
+
+//        minX = buildingRegion.minX();
+//        maxX = buildingRegion.maxX();
+//        minZ = buildingRegion.minZ();
+//        maxZ = buildingRegion.maxZ();
+//        int y = buildingRegion.minY();
+//
+//        // Invalidate area if any corner block is air
+//        if (checkIfTargetable(new Vector3f(minX - 2, y, maxZ + 2))
+//            && checkIfTargetable(new Vector3f(maxX + 2, y, maxZ + 2))
+//            && checkIfTargetable(new Vector3f(minX - 2, y, minZ - 2))
+//            && checkIfTargetable(new Vector3f(maxX + 2, y, minZ - 2))) {
+//            return buildingRegion;
+//        }
+//
+//        return null;
+
+    }
+
+    private boolean checkIfTargetable(Vector3f blockLocation) {
+        EntityRef blockEntity = blockEntityRegistry.getBlockEntityAt(blockLocation);
+        BlockComponent blockComponent = blockEntity.getComponent(BlockComponent.class);
+
+        return blockComponent.block.isTargetable();
     }
 
     private Texture getAreaTexture(Task newTask) {
