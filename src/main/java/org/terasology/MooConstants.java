@@ -40,8 +40,12 @@ public class MooConstants {
     public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourcesRequired";
 
     // Lists on Task Selection Screen
-    public static final String TASKS_LIST_ID = "tasksList";
+    public static final String TASK_SELECTION_SCREEN_LIST = "taskSelectionScreenList";
     public static final String BUILDINGS_LIST_ID = "buildingsList";
+
+    //Tab buttons on Task Selection Screen
+    public static final String TASKS_TAB_BUTTON = "tasksTabButton";
+    public static final String BUILDINGS_TAB_BUTTON = "buildingsTabButton";
 
     // Cancel Selection button on task selection screen
     public static final String CANCEL_BUTTON_ID = "cancelButton";
