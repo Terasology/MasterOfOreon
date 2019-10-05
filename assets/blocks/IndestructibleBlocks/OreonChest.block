@@ -1,16 +1,16 @@
 {
-    "basedOn": "core:wood",
+    "basedOn": "CoreAssets:wood",
     "attachmentAllowed": false,
     "family": "horizontal",
     "hardness": 0,
     // Graphics
     "tiles": {
-        "sides": "Core:ChestSides",
-        "front": "Core:ChestFront",
-        "topBottom": "Core:ChestTopBottom"
+        "sides": "CoreAssets:ChestSides",
+        "front": "CoreAssets:ChestFront",
+        "topBottom": "CoreAssets:ChestTopBottom"
     },
     "entity": {
-        "prefab": "Core:chest"
+        "prefab": "CoreAssets:chest"
     },
     "inventory": {
         "stackable": false,

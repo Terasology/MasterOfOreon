@@ -1,4 +1,4 @@
 {
-    "basedOn": "core:rock",
+    "basedOn": "CoreAssets:rock",
     "hardness" : 0
 }
