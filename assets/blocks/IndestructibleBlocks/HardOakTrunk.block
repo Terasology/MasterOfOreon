@@ -1,10 +1,10 @@
 {
-    "basedOn": "core:wood",
+    "basedOn": "CoreAssets:wood",
     "displayName": "Oak Log",
     // Graphics
     "tiles": {
-        "sides": "Core:OakBark",
-        "topBottom": "Core:OakTrunk"
+        "sides": "CoreAssets:OakBark",
+        "topBottom": "CoreAssets:OakTrunk"
     },
     "hardness" :0
 }
