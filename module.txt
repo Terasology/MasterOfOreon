@@ -12,7 +12,7 @@
         {"id" : "Behaviors", "minVersion" : "0.2.0"},
         {"id" : "WorldlyTooltip", "minVersion" : "1.1.1"},
         {"id" : "NameGenerator", "minVersion" : "0.4.3"},
-        {"id" : "Cities", "minVersion" : "0.6.2"},
+        {"id" : "Cities", "minVersion" : "1.0.0"},
         {"id" : "StructuralResources", "minVersion" : "1.0.2"},
         {"id" : "StructureTemplates", "minVersion" : "0.3.0"},
         {"id" : "ChiselBlocks", "minVersion" : "0.1.0"},
