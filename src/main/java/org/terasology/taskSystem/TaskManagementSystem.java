@@ -157,7 +157,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         logger.debug("Looking for task in " + oreonHolding);
 
-        if (!availableTasks.isEmpty()) {
+        while (!availableTasks.isEmpty()) {
             Queue<EntityRef> possibleTasks = new LinkedList<>();
             Queue<EntityRef> recommendedTasks = new LinkedList<>();
 
@@ -186,7 +186,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             }
 
             if (recommendedTasks.isEmpty() && possibleTasks.isEmpty()) {
-                return false;
+                continue;
             }
 
             EntityRef taskEntityToAssign;
@@ -195,6 +195,13 @@ public class TaskManagementSystem extends BaseComponentSystem {
             } else {
                 taskEntityToAssign = strategy.getBestTask(oreonAttributes, possibleTasks);
             }
+
+            if (taskEntityToAssign == null) {
+                continue;
+            } else {
+                availableTasks.remove(taskEntityToAssign);
+            }
+
 
             TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
 
