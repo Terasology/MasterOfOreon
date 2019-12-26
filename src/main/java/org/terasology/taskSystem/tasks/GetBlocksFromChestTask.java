@@ -36,10 +36,10 @@ public class GetBlocksFromChestTask extends Task {
     public EntityRef chestEntity;
 
     public GetBlocksFromChestTask(String blockToGet, int number, EntityRef chestBlockEntity) {
-        this.health = HEALTH;
-        this.intelligence = INTELLIGENCE;
-        this.strength = STRENGTH;
-        this.hunger = HUNGER;
+        this.attributeChanges.health = HEALTH;
+        this.attributeChanges.intelligence = INTELLIGENCE;
+        this.attributeChanges.strength = STRENGTH;
+        this.attributeChanges.hunger = HUNGER;
 
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.GET_BLOCKS_FROM_CHEST;

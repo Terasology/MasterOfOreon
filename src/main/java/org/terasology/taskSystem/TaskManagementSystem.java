@@ -61,8 +61,11 @@ import org.terasology.registry.Share;
 import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.assets.texture.TextureUtil;
 import org.terasology.rendering.nui.Color;
+import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
+import org.terasology.taskSystem.assignment.AssignmentStrategy;
+import org.terasology.taskSystem.assignment.BestFitStrategy;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.tasks.BuildTask;
@@ -76,6 +79,7 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.selection.BlockSelectionComponent;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -143,6 +147,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     public boolean getTaskForOreon(Actor oreon) {
+        return getTaskForOreon(oreon, new BestFitStrategy());
+    }
+
+    public boolean getTaskForOreon(Actor oreon, AssignmentStrategy strategy) {
         HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
         Queue<EntityRef> availableTasks = oreonHolding.availableTasks;
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
@@ -150,7 +158,44 @@ public class TaskManagementSystem extends BaseComponentSystem {
         logger.debug("Looking for task in " + oreonHolding);
 
         if (!availableTasks.isEmpty()) {
-            EntityRef taskEntityToAssign = availableTasks.remove();
+            Queue<EntityRef> possibleTasks = new LinkedList<>();
+            Queue<EntityRef> recommendedTasks = new LinkedList<>();
+
+            OreonAttributeComponent oreonAttributes = oreon.getComponent(OreonAttributeComponent.class);
+            for (EntityRef taskEntity : availableTasks) {
+                if (taskEntity == null) {
+                    logger.warn("Null entity in task queue.");
+                    availableTasks.remove(taskEntity);
+                    continue;
+                }
+
+                TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+                if (taskComponent == null) {
+                    logger.warn("Task entity has no TaskComponent.");
+                    availableTasks.remove(taskEntity);
+                    continue;
+                }
+
+                if (taskMeetsRequirements(taskComponent.task, oreonAttributes)) {
+                    if (taskIsRecommended(taskComponent.task, oreonAttributes)) {
+                        recommendedTasks.add(taskEntity);
+                    } else {
+                        possibleTasks.add(taskEntity);
+                    }
+                }
+            }
+
+            if (recommendedTasks.isEmpty() && possibleTasks.isEmpty()) {
+                return false;
+            }
+
+            EntityRef taskEntityToAssign;
+            if (!recommendedTasks.isEmpty()) {
+                taskEntityToAssign = strategy.getBestTask(oreonAttributes, recommendedTasks);
+            } else {
+                taskEntityToAssign = strategy.getBestTask(oreonAttributes, possibleTasks);
+            }
+
             TaskComponent taskComponentToAssign = taskEntityToAssign.getComponent(TaskComponent.class);
 
             oreonTaskComponent.task = taskComponentToAssign.task;
@@ -180,6 +225,20 @@ public class TaskManagementSystem extends BaseComponentSystem {
         }
 
         return false;
+    }
+
+    private boolean taskMeetsRequirements(Task task, OreonAttributeComponent attributes) {
+        return (attributes.intelligence >= task.minimumAttributes.intelligence &&
+                attributes.strength >= task.minimumAttributes.strength &&
+                attributes.health >= task.minimumAttributes.health &&
+                attributes.hunger >= task.minimumAttributes.hunger);
+    }
+
+    private boolean taskIsRecommended(Task task, OreonAttributeComponent attributes) {
+        return (attributes.intelligence >= task.recommendedAttributes.intelligence &&
+                attributes.strength >= task.recommendedAttributes.strength &&
+                attributes.health >= task.recommendedAttributes.health &&
+                attributes.hunger >= task.recommendedAttributes.hunger);
     }
 
     /**
