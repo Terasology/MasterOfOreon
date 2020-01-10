@@ -36,9 +36,7 @@
         {
             "sequence" : [
                 {
-                    "move_to": {
-                        "distance": 1.5
-                    }
+                    "lookup" : {"tree":"Behaviors:pointPathfindingFollow"}
                 },
                 {
                     "selector" : [
