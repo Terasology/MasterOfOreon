@@ -57,7 +57,7 @@ public class MooConstants {
     public static final String GUARD_BUILDING_COMMAND_UI_ID = "guardBuildingCommand";
 
     // Crop to be placed after plant task
-    public static final String OREON_CROP_0_BLOCK = "MasterOfOreon:OreonPlant0";
+    public static final String OREON_CROP_0_BLOCK = "MasterOfOreon:FudgeFlower0";
 
     // Crop to be checked for in the Diner before eat task
     public static final String COOKIE_CROP_URI = "MasterOfOreon:CookieCrop";
