@@ -47,6 +47,7 @@ import org.terasology.taskSystem.taskCompletion.ConstructingFromBuildingGenerato
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
 import org.terasology.taskSystem.taskCompletion.PlantingTaskCompletion;
 import org.terasology.taskSystem.tasks.PlantTask;
+import org.terasology.taskSystem.tasks.PlantTaskFF;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
@@ -192,7 +193,7 @@ public class PerformTaskNode extends BaseAction {
 
         switch (taskType) {
             case AssignedTaskType.PLANT :
-                PlantTask task = (PlantTask) taskComponent.task;
+                PlantTaskFF task = (PlantTaskFF) taskComponent.task;
                 plantingTaskCompletion.placeCrops(selectedRegion, task.cropToPlant);
                 break;
 

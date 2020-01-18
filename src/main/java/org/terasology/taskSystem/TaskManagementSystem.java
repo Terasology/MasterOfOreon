@@ -68,6 +68,7 @@ import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.tasks.BuildTask;
 import org.terasology.taskSystem.tasks.HarvestTask;
 import org.terasology.taskSystem.tasks.PlantTask;
+import org.terasology.taskSystem.tasks.PlantTaskFF;
 import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
@@ -268,7 +269,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         switch (newTaskType) {
             case AssignedTaskType.PLANT :
-                newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
+                newTask = new PlantTaskFF();
                 taskComponent.subsequentTask = new HarvestTask();
                 taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
                 taskComponent.delayBeforeNextTask = 50000;
