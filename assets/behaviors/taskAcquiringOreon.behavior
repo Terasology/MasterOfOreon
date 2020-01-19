@@ -10,7 +10,7 @@
                     "selector" : [
                         {
                             "timeout" : {
-                                "time" : 10,
+                                "time" : 1,
                                 "child" : {
                                     "lookup" : {
                                         "tree" : "Behaviors:critter"
@@ -36,7 +36,36 @@
         {
             "sequence" : [
                 {
-                    "lookup" : {"tree":"Behaviors:pointPathfindingFollow"}
+                    "sequence": [
+                        {
+                            "animation" : {
+                                "play": "engine:Walk.animationPool",
+                                "loop": "engine:Walk.animationPool"
+                            }
+                        },
+                        {
+                            "set_speed" : {
+                                "speedMultiplier" : 0.8
+                            }
+                        },
+                        {
+                            "sequence" : [
+                                {
+                                    "find_path" : {}
+                                },
+                                {
+                                    "move_along_path" : {
+                                        "child" : {
+                                            "move_to" : {
+                                                "distance" : 1.0
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+
+                        }
+                    ]
                 },
                 {
                     "selector" : [
