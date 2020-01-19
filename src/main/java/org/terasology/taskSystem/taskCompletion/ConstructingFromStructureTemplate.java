@@ -91,6 +91,10 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
             case Jail :
                 buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
                 break;
+
+            case Bedroom :
+                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_BEDROOM+"Level" + Integer.toString(level));
+                break;
         }
     }
 
@@ -111,6 +115,10 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
             case Jail :
                 building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
+                break;
+
+            case Bedroom :
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_BEDROOM+"Level" + Integer.toString(level));
                 break;
         }
 
