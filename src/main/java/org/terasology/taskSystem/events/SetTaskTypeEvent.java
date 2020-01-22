@@ -17,10 +17,12 @@ package org.terasology.taskSystem.events;
 
 import org.terasology.entitySystem.event.Event;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.taskSystem.PlantType;
 
 public class SetTaskTypeEvent implements Event {
     private String taskType;
     private BuildingType buildingType;
+    private PlantType plantType;
 
     public SetTaskTypeEvent () {
 
@@ -35,11 +37,20 @@ public class SetTaskTypeEvent implements Event {
         this.buildingType = buildingType;
     }
 
+    public SetTaskTypeEvent (String assignedTaskType, PlantType plantType) {
+        this.taskType = assignedTaskType;
+        this.plantType = plantType;
+    }
+
     public String getTaskType() {
         return taskType;
     }
 
     public BuildingType getBuildingType() {
         return buildingType;
+    }
+
+    public PlantType getPlantType() {
+        return plantType;
     }
 }

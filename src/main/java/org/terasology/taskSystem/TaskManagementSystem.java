@@ -35,9 +35,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.input.cameraTarget.CameraTargetChangedEvent;
 import org.terasology.input.cameraTarget.CameraTargetSystem;
-import org.terasology.input.events.LeftMouseDownButtonEvent;
 import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.characters.events.HorizontalCollisionEvent;
@@ -68,7 +66,6 @@ import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.tasks.BuildTask;
 import org.terasology.taskSystem.tasks.HarvestTask;
 import org.terasology.taskSystem.tasks.PlantTask;
-import org.terasology.taskSystem.tasks.PlantTaskFF;
 import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
@@ -242,7 +239,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         player.saveComponent(oreonHolding);
     }
 
-    public void setTaskType(String newTaskType, BuildingType buildingType, Region3i region, EntityRef player) {
+    public void setTaskType(String newTaskType, BuildingType buildingType, PlantType plantType, Region3i region, EntityRef player) {
         logger.info("Adding a new Task");
 
         // if the building extends to an area which is not suitable
@@ -269,7 +266,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         switch (newTaskType) {
             case AssignedTaskType.PLANT :
-                newTask = new PlantTaskFF();
+                newTask = new PlantTask(plantType.path);
                 taskComponent.subsequentTask = new HarvestTask();
                 taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
                 taskComponent.delayBeforeNextTask = 50000;
@@ -306,6 +303,43 @@ public class TaskManagementSystem extends BaseComponentSystem {
             default :
                 newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
         }
+    }
+
+    public void setTaskType(String newTaskType, PlantType plantType, Region3i region, EntityRef player) {
+        logger.info("Adding a new Task");
+
+        TaskComponent taskComponent = new TaskComponent();
+        taskComponent.taskRegion = region;
+        taskComponent.creationTime = timer.getGameTimeInMs();
+
+        BlockSelectionComponent newBlockSelectionComponent = new BlockSelectionComponent();
+        newBlockSelectionComponent.shouldRender = true;
+
+        taskComponent.assignedTaskType = newTaskType;
+        Task newTask;
+
+        newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
+        taskComponent.subsequentTask = new HarvestTask();
+        taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
+        taskComponent.delayBeforeNextTask = 50000;
+
+        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
+
+        taskComponent.task = newTask;
+
+        placeFenceAroundRegion(taskComponent.taskRegion);
+
+        newBlockSelectionComponent.texture = getAreaTexture(newTask);
+
+        //mark this area so that no other task can be assigned here
+        markArea(newBlockSelectionComponent, newTask, taskComponent, player);
+
+        NetworkComponent networkComponent = new NetworkComponent();
+        networkComponent.replicateMode = NetworkComponent.ReplicateMode.ALWAYS;
+
+        EntityRef task = entityManager.create(taskComponent, networkComponent);
+
+        addTask(player, task);
     }
 
     @ReceiveEvent

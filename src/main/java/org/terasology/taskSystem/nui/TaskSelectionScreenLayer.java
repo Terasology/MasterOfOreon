@@ -20,6 +20,7 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.UIScreenLayer;
 import org.terasology.rendering.nui.UIWidget;
 import org.terasology.rendering.nui.widgets.ItemSelectEventListener;
 import org.terasology.rendering.nui.widgets.UIButton;
@@ -46,6 +47,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
 
     private UIList<String> tasksList;
     private UIList<String> buildingsList;
+    private UIScreenLayer plantSelectionScreenLayer;
 
     @Override
     public void initialise() {
@@ -61,10 +63,10 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
                 String task = AssignedTaskType.NONE;
                 switch(item) {
                     case "Plant" :
-                        task = AssignedTaskType.PLANT;
-                        sendSetTaskTypeEvent(task);
+                        nuiManager.closeAllScreens();
+                        plantSelectionScreenLayer = nuiManager.createScreen("plantSelectionScreen");
+                        nuiManager.pushScreen(plantSelectionScreenLayer);
                         break;
-
                     case "Guard":
                         task = AssignedTaskType.GUARD;
                         sendSetTaskTypeEvent(task);
