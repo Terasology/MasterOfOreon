@@ -5,7 +5,7 @@
     "displayName" : "Master Of Oreon",
     "description" : "Provides a manager interface for working with Terasology\nUse the 'O' key to toggle mouse grab so you can use the interface.",
     "dependencies" : [
-        {"id" : "Core", "minVersion" : "2.0.0"},
+        {"id" : "Core", "minVersion" : "3.0.0"},
         {"id" : "CoreBlocks", "minVersion" : "1.0.0"},
         {"id" : "Oreons", "minVersion" : "0.2.0"},
         {"id" : "ChangingBlocks", "minVersion" : "0.1.0"},
