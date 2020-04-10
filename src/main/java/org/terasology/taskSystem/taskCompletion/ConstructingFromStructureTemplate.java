@@ -75,23 +75,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     }
 
     public void selectBuilding(BuildingType buildingType, int level) {
-        switch (buildingType) {
-            case Diner :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER+"Level" + Integer.toString(level));
-                break;
-
-            case Storage :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE+"Level" + Integer.toString(level));
-                break;
-
-            case Laboratory :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY+"Level" + Integer.toString(level));
-                break;
-
-            case Jail :
-                buildingTemplate = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
-                break;
-        }
+        buildingTemplate = selectAndReturnBuilding(buildingType, level);
     }
 
     public EntityRef selectAndReturnBuilding(BuildingType buildingType, int level) {
@@ -100,17 +84,17 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
             case Diner :
                 building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER+"Level" + Integer.toString(level));
                 break;
-
             case Storage :
                 building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE+"Level" + Integer.toString(level));
                 break;
-
             case Laboratory :
                 building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY+"Level" + Integer.toString(level));
                 break;
-
             case Jail :
                 building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
+                break;
+            case Church :
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_CHURCH+"Level" + Integer.toString(level));
                 break;
         }
 
