@@ -66,6 +66,7 @@ public class MooConstants {
     public static final String STRUCTURE_TEMPLATE_TYPE_JAIL = "MasterOfOreon:jail";
     public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
     public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
+    public static final String STRUCTURE_TEMPLATE_TYPE_BEDROOM = "MasterOfOreon:bedroom";
 
     // Structure Template prefabs
     public static final String DINER_PREFAB = "MasterOfOreon:inn";

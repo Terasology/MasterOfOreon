@@ -112,6 +112,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         buttonList.add("Hospital");
         buttonList.add("Jail");
         buttonList.add("Church");
+        buttonList.add("Bedroom");
         taskSelectionScreenList.setList(buttonList);
 
         tasksTabButton.setActive(false);
