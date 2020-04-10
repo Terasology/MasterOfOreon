@@ -24,5 +24,6 @@ public enum BuildingType {
     Storage,
     Laboratory,
     Jail,
+    Bedroom,
     Church
 }

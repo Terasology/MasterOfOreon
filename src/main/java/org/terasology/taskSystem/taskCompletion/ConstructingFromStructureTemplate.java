@@ -99,6 +99,9 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
             case Hospital:
                 building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_HOSPITAL+"Level"+Integer.toString(level));
                 break;
+            case Bedroom :
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_BEDROOM+"Level" + Integer.toString(level));
+                break;
         }
 
         return building;

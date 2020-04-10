@@ -145,6 +145,7 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 int numberOfHospitals = 0;
                 int numberOfJails = 0;
                 int numberOfChurches = 0;
+                int numberOfBedrooms = 0;
 
                 for (EntityRef building : entityManager.getEntitiesWith(ConstructedBuildingComponent.class)) {
                     ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
@@ -173,6 +174,9 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                         case Church :
                             numberOfChurches++;
                             break;
+                        case Bedroom :
+                            numberOfBedrooms++;
+                            break;
                     }
                 }
 
@@ -184,6 +188,7 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 result.add("Hospitals : " + numberOfHospitals);
                 result.add("Jails : " + numberOfJails);
                 result.add("Churches : " + numberOfChurches);
+                result.add("Bedrooms :" + numberOfBedrooms);
 
                 return result;
             }
