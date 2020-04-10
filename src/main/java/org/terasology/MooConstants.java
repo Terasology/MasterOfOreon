@@ -26,12 +26,6 @@ public class MooConstants {
     public static final String OREON_GUARD_UI_ID = "summonOreonGuardCommand";
     public static final String OREON_KING_UI_ID = "summonOreonKingCommand";
 
-    // Tools given to player on spawn
-    public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:oreonSelectionTool";
-    public static final String BUILDING_UPGRADE_TOOL = "MasterOfOreon:upgradeTool";
-    public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
-    public static final String INITIATION_BOOK_PREFAB = "MasterOfOreon:initiationBook";
-
     public static final String UPGRADE_TOOL_NAME = "Building Upgrade Tool";
 
     // Required resources UI label ID

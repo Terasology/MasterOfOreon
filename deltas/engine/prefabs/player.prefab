@@ -1,0 +1,12 @@
+{
+  "StartingInventory": {
+    "items": [
+      { "uri": "MasterOfOreon:oreonSelectionTool", "quantity": 1 },
+      { "uri": "MasterOfOreon:upgradeTool", "quantity": 1 },
+      { "uri": "MasterOfOreon:portal", "quantity": 10 },
+      { "uri": "MasterOfOreon:initiationBook", "quantity": 1 },
+      { "uri": "CoreBlocks:Dirt", "quantity": 32 },
+      { "uri": "CoreBlocks:Sand", "quantity": 32 },
+    ]
+  }
+}
