@@ -26,12 +26,6 @@ public class MooConstants {
     public static final String OREON_GUARD_UI_ID = "summonOreonGuardCommand";
     public static final String OREON_KING_UI_ID = "summonOreonKingCommand";
 
-    // Tools given to player on spawn
-    public static final String SELECTION_TOOL_PREFAB = "MasterOfOreon:oreonSelectionTool";
-    public static final String BUILDING_UPGRADE_TOOL = "MasterOfOreon:upgradeTool";
-    public static final String PORTAL_PREFAB = "MasterOfOreon:portal";
-    public static final String INITIATION_BOOK_PREFAB = "MasterOfOreon:initiationBook";
-
     public static final String UPGRADE_TOOL_NAME = "Building Upgrade Tool";
 
     // Required resources UI label ID
@@ -66,11 +60,12 @@ public class MooConstants {
     public static final String NOTIFICATION_MESSAGE_PREFAB = "MasterOfOreon:notificationMessage";
 
     // Structure Template type prefabs for construction
-    public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
-    public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
-    public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
-    public static final String STRUCTURE_TEMPLATE_TYPE_JAIL = "MasterOfOreon:jail";
     public static final String STRUCTURE_TEMPLATE_TYPE_CHURCH = "MasterOfOreon:church";
+    public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
+    public static final String STRUCTURE_TEMPLATE_TYPE_HOSPITAL = "MasterOfOreon:hospital";
+    public static final String STRUCTURE_TEMPLATE_TYPE_JAIL = "MasterOfOreon:jail";
+    public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
+    public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
 
     // Structure Template prefabs
     public static final String DINER_PREFAB = "MasterOfOreon:inn";

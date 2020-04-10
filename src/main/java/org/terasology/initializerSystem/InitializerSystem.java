@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.managerInterface;
+package org.terasology.initializerSystem;
 
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -48,14 +48,8 @@ public class InitializerSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
-        BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
-        inventoryManager.giveItem(player, player, entityManager.create(MooConstants.SELECTION_TOOL_PREFAB));
-        inventoryManager.giveItem(player, player, entityManager.create(MooConstants.BUILDING_UPGRADE_TOOL));
-        inventoryManager.giveItem(player, player, blockItemFactory.newInstance(blockManager.getBlockFamily(MooConstants.PORTAL_PREFAB), 10));
         if (!player.hasComponent(HoldingComponent.class)) {
             player.addComponent(new HoldingComponent());
         }
-
-        inventoryManager.giveItem(player, player, entityManager.create(MooConstants.INITIATION_BOOK_PREFAB));
     }
 }

@@ -60,7 +60,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     }
 
     public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level, EntityRef building, EntityRef playerEntity) {
-        selectBuilding(buildingType, level);
+        buildingTemplate = selectAndReturnBuilding(buildingType, level);
 
         if (buildingTemplate == null) {
             logger.info("Could not find a prefab for the selected building");
@@ -95,6 +95,9 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
                 break;
             case Church :
                 building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_CHURCH+"Level" + Integer.toString(level));
+                break;
+            case Hospital:
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_HOSPITAL+"Level"+Integer.toString(level));
                 break;
         }
 
