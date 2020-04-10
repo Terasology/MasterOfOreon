@@ -47,6 +47,5 @@
             { "blockType": "engine:air", "region": { "min": [-1, 2, 3], "size": [3, 1, 1]}},
             { "blockType": "engine:air", "region": { "min": [0, 3, 3], "size": [1, 1, 1]}}
         ]
-    },
-    "FallingBlocksPlacementAlgorithm" : {}
+    }
 }
