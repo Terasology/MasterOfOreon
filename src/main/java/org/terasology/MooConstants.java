@@ -60,11 +60,12 @@ public class MooConstants {
     public static final String NOTIFICATION_MESSAGE_PREFAB = "MasterOfOreon:notificationMessage";
 
     // Structure Template type prefabs for construction
-    public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
-    public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
-    public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
-    public static final String STRUCTURE_TEMPLATE_TYPE_JAIL = "MasterOfOreon:jail";
     public static final String STRUCTURE_TEMPLATE_TYPE_CHURCH = "MasterOfOreon:church";
+    public static final String STRUCTURE_TEMPLATE_TYPE_DINER = "MasterOfOreon:diner";
+    public static final String STRUCTURE_TEMPLATE_TYPE_HOSPITAL = "MasterOfOreon:hospital";
+    public static final String STRUCTURE_TEMPLATE_TYPE_JAIL = "MasterOfOreon:jail";
+    public static final String STRUCTURE_TEMPLATE_TYPE_LABORATORY = "MasterOfOreon:laboratory";
+    public static final String STRUCTURE_TEMPLATE_TYPE_STORAGE = "MasterOfOreon:storage";
 
     // Structure Template prefabs
     public static final String DINER_PREFAB = "MasterOfOreon:inn";
