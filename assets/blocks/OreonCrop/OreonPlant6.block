@@ -1,7 +1,7 @@
 {
     "basedOn" : "CoreAssets:plant",
     "entity" : {
-        "prefab" : "MasterOfOreon:OreonCrop",
+        "prefab" : "CookieCrop",
         "keepActive" : "true"
     }
 }

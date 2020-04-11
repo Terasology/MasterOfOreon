@@ -1,0 +1,10 @@
+{
+    "basedOn" : "engine:iconItem",
+    "Item" : {
+        "icon" : "MasterOfOreon:OreonPlant6"
+    },
+    "AnimateRotation": {
+      "yawSpeed": 0.5,
+      "isSynchronized": false
+    }
+}
