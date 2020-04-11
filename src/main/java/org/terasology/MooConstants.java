@@ -70,7 +70,8 @@ public class MooConstants {
 
     // Structure Template prefabs
     public static final String DINER_PREFAB = "MasterOfOreon:inn";
-    public static final String STORAGE_PREFAB = "MasterOfOreon:storage";
+    public static final String STORAGE_PREFAB = "MasterOfOreon:storehouse";
+    public static final String LABORATORY_PREFAB = "MasterOfOreon:lab";
 
     public static final String FENCE_BLOCK_URI = "Fences:Fence.0";
     public static final String TORCH_BLOCK_URI = "CoreBlocks:Torch.TOP";
@@ -99,6 +100,8 @@ public class MooConstants {
 
     // Books' prefab
     public static final String COOKIE_CROP_RESEARCH_BOOK = "MasterOfOreon:cookieCropResearchBook";
+    public static final String COOKIE_CROP_RESEARCH_BOOK2 = "MasterOfOreon:cookieCropResearchBook2";
+    public static final String PORTAL_RESEARCH_BOOK = "MasterOfOreon:portalResearchBook";
 
     public static final String EXCLAMATION_PREFAB = "MasterOfOreon:exclamationMark";
 }

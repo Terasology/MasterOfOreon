@@ -1,0 +1,13 @@
+{
+    "BookRecipe": {
+        "blockIngredients": 4,
+        "blockIngredientsList": [
+            "MasterOfOreon:OreonPlant2",
+            "MasterOfOreon:OreonPlant2",
+            "MasterOfOreon:OreonPlant2",
+            "MasterOfOreon:OreonPlant2"
+        ],
+        "blockResult": "MasterOfOreon:OreonPlant4",
+        "resultCount": 1
+    }
+}
