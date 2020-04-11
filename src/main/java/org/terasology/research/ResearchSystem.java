@@ -89,7 +89,8 @@ public class ResearchSystem extends BaseComponentSystem {
 
     /**
      * This method adds books to a newly constructed Laboratory's bookcase
-     * @param event The event sent.
+     *
+     * @param event  The event sent.
      * @param player The player entity which triggered the building construction
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
@@ -98,8 +99,11 @@ public class ResearchSystem extends BaseComponentSystem {
             return;
         }
 
-        addBooksToCase(player, event.absoluteRegions, 0);
+        int currentLevel = event.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class).currentLevel;
 
+        addBooksToCase(player, event.absoluteRegions, currentLevel);
+
+        //TODO: this index access does not look very safe in case of building upgrades
         Vector3i pedestalLocation = event.absoluteRegions.get(MooConstants.PEDESTAL_REGION_INDEX).max();
         EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(pedestalLocation);
         LaboratoryComponent laboratoryComponent = pedestalEntity.getComponent(LaboratoryComponent.class);
@@ -110,9 +114,10 @@ public class ResearchSystem extends BaseComponentSystem {
 
     /**
      * This method adds new books to the case after the Laboratory is upgraded. Receives an event sent by the {@link org.terasology.taskSystem.actions.PerformTaskNode}
+     *
      * @param upgradeStartEvent The event sent.
-     * @param oreon The Oreon performing the upgrade task.
-     * @param taskComponent TaskComponent attached to the Oreon.
+     * @param oreon             The Oreon performing the upgrade task.
+     * @param taskComponent     TaskComponent attached to the Oreon.
      */
     @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_TRIVIAL)
     public void onLaboratoryUpgrade(BuildingUpgradeStartEvent upgradeStartEvent, EntityRef oreon, TaskComponent taskComponent) {
@@ -135,6 +140,7 @@ public class ResearchSystem extends BaseComponentSystem {
 
     /**
      * Specifies the book blocks to be added to the laboratory bookcase according to the Laboratory's current level
+     *
      * @param level Current level of the laboratory
      * @return A list of book entities to be added
      */
@@ -142,9 +148,16 @@ public class ResearchSystem extends BaseComponentSystem {
         List<EntityRef> booksToAdd = new ArrayList<>();
 
         switch (level) {
-            case 0 :
+            case 0:
                 EntityRef book = entityManager.create(MooConstants.COOKIE_CROP_RESEARCH_BOOK);
                 booksToAdd.add(book);
+                break;
+            case 1:
+                EntityRef book1 = entityManager.create(MooConstants.COOKIE_CROP_RESEARCH_BOOK2);
+                EntityRef book2 = entityManager.create(MooConstants.PORTAL_RESEARCH_BOOK);
+                booksToAdd.add(book1);
+                booksToAdd.add(book2);
+                break;
         }
 
         return booksToAdd;
@@ -152,8 +165,9 @@ public class ResearchSystem extends BaseComponentSystem {
 
     /**
      * Adds a Research Task to the Holding when the player adds a Research Book to the pedestal inventory.
-     * @param event The event received
-     * @param inventoryEntity The entity whose InventoryComponent is changed.
+     *
+     * @param event              The event received
+     * @param inventoryEntity    The entity whose InventoryComponent is changed.
      * @param inventoryComponent The changed component
      */
     @ReceiveEvent(components = LaboratoryComponent.class)
@@ -198,8 +212,9 @@ public class ResearchSystem extends BaseComponentSystem {
 
     /**
      * Adds the resulting block of a research to the building chest.
+     *
      * @param researchEvent The event received after Oreon performs Research Task.
-     * @param oreon The Oreon which performed the task.
+     * @param oreon         The Oreon which performed the task.
      * @param taskComponent The TaskComponent attached to the Oreon.
      */
     @ReceiveEvent
@@ -249,6 +264,7 @@ public class ResearchSystem extends BaseComponentSystem {
     /**
      * Removes the book and exclamation point from the Pedestal after Research is completed. Also places the book back
      * into the Bookcase
+     *
      * @param laboratory The building entity where the task was performed
      */
     private void removeBookFromPedestal(EntityRef laboratory) {
@@ -265,8 +281,7 @@ public class ResearchSystem extends BaseComponentSystem {
             DisplayNameComponent displayNameComponent = removedItem.getComponent(DisplayNameComponent.class);
             if (displayNameComponent != null && displayNameComponent.name.equals(MooConstants.RESEARCH_BOOK_NAME)) {
                 inventoryManager.giveItem(bookcaseEntity, bookcaseEntity, removedItem);
-            }
-            else {
+            } else {
                 removedItem.destroy();
             }
         }

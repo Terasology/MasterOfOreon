@@ -42,8 +42,6 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.structureTemplates.components.CompletionTimeComponent;
-import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
@@ -54,7 +52,6 @@ import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplat
 import org.terasology.taskSystem.tasks.BuildingUpgradeTask;
 import org.terasology.taskSystem.tasks.GuardTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Share(BuildingUpgradeSystem.class)
@@ -105,8 +102,9 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
     /**
      * Checks if the block activated using the upgrade tool is part of a building
+     *
      * @param blockPos The position of the block to be checked
-     * @param player The entity which sends the event
+     * @param player   The entity which sends the event
      */
     private void checkIfPartOfBuilding(Vector3f blockPos, EntityRef player) {
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
@@ -136,6 +134,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     /**
      * Receives the {@link UpgradeBuildingEvent} triggered by the Upgrade Button on the BuildingUpgradeScreen and adds a
      * upgrade task to the holding
+     *
      * @param upgradeBuildingEvent The event received
      */
     @ReceiveEvent
@@ -148,7 +147,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskComponent.assignedTaskType = AssignedTaskType.UPGRADE;
         // TODO: Assign a random region or a region based on blocks to be upgraded
 
-        switch(buildingComponent.buildingType) {
+        switch (buildingComponent.buildingType) {
             case Diner:
                 taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
                 break;
@@ -174,8 +173,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
      * This method handles the construction of the upgraded version of a building. The event is sent by {@link PerformTaskNode}
      * after the Oreon has completed an Upgrade task.
      *
-     * @param event The upgrade event sent.
-     * @param oreon The Oreon entity which completed the task.
+     * @param event         The upgrade event sent.
+     * @param oreon         The Oreon entity which completed the task.
      * @param taskComponent The task component attached to the Oreon.
      */
     @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_HIGH)
@@ -186,6 +185,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         buildingComponent.currentLevel += 1;
         building.saveComponent(buildingComponent);
         constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel, building, localPlayer.getCharacterEntity());
+
+        taskManagementSystem.addBuildingToHolding(constructingFromStructureTemplate.getBuildingConstructionStartedEvent(buildingComponent.centerLocation, buildingComponent.buildingType, building), localPlayer.getCharacterEntity());
     }
 
     @ReceiveEvent

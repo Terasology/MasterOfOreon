@@ -1,0 +1,14 @@
+{
+    "BookRecipe": {
+        "blockIngredients": 6,
+        "blockIngredientsList": [
+            "MasterOfOreon:OreonPlant6",
+            "MasterOfOreon:OreonPlant6",
+            "MasterOfOreon:OreonPlant6",
+            "MasterOfOreon:OreonPlant6",
+            "Core:GoldBar"
+        ],
+        "blockResult": "MasterOfOreon:portal",
+        "resultCount": 1
+    }
+}
