@@ -1,0 +1,112 @@
+{
+  "type": "PlantSelectionScreen",
+  "skin": "MasterOfOreon:plantScreen",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "layoutInfo": {
+          "width": 400,
+          "height": 300,
+          "position-horizontal-center": {
+
+          },
+          "position-vertical-center": {
+
+          }
+        },
+        "content": {
+          "type": "relativeLayout",
+          "contents": [
+            {
+              "type": "UILabel",
+              "id": "environmentInfoLabel",
+              "text": "Plant Selection",
+              "layoutInfo": {
+                "use-content-width": true,
+                "position-horizontal-center": {
+
+                },
+                "height": 30
+
+              }
+            },
+            {
+              "type": "RowLayout",
+              "id": "plantSearch",
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "text": "Search: ",
+                  "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-horizontal-center": {
+                    },
+                    "relativeWidth": 0.2
+                  }
+                },
+                {
+                  "type": "ResettableUIText",
+                  "id": "plantSearchBar",
+                  "layoutInfo": {
+                    "use-content-height": true,
+                    "position-horizontal-center": {
+
+                    },
+                    "relativeWidth": 0.8
+                  }
+                }
+              ],
+              "layoutInfo": {
+                "use-content-height": true,
+                "position-top": {
+                  "offset": 32
+                },
+                "position-horizontal-center": {
+                  "offset": -5
+                },
+                "width":355
+              }
+            },
+            {
+              "type": "ScrollableArea",
+              "content": {
+                "type": "UIList",
+                "id": "plantsList"
+              },
+              "layoutInfo": {
+                "use-content-height": true,
+                "position-top": {
+                  "offset": 80
+                },
+                "position-horizontal-center": {
+
+                },
+                "height": 125,
+                "width": 350
+              }
+            },
+            {
+              "type": "UIButton",
+              "id": "plant",
+              "text": "Plant!",
+              "layoutInfo": {
+                "use-content-height": true,
+                "position-bottom": {
+                  "offset": 12
+                },
+                "position-horizontal-center": {
+
+                },
+                "width": 350,
+                "height": 40
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

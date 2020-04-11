@@ -15,6 +15,8 @@
  */
 package org.terasology.taskSystem;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -29,9 +31,8 @@ import org.terasology.rendering.assets.texture.TextureUtil;
 import org.terasology.rendering.nui.Color;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.UIScreenLayer;
-import org.terasology.taskSystem.events.CloseTaskSelectionScreenEvent;
-import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
-import org.terasology.taskSystem.events.SetTaskTypeEvent;
+import org.terasology.resources.system.ResourceSystem;
+import org.terasology.taskSystem.events.*;
 import org.terasology.utilities.Assets;
 import org.terasology.world.selection.BlockSelectionComponent;
 
@@ -47,6 +48,10 @@ public class TaskManagementClientSystem extends BaseComponentSystem {
     private TaskManagementSystem taskManagementSystem;
 
     private UIScreenLayer taskSelectionScreenLayer;
+    private UIScreenLayer plantSelectionScreenLayer;
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskManagementClientSystem.class);
+
     private Region3i taskRegion;
     private EntityRef tempTaskEntity;
 
@@ -90,7 +95,7 @@ public class TaskManagementClientSystem extends BaseComponentSystem {
             return;
         }
 
-        taskManagementSystem.setTaskType(newTaskType, event.getBuildingType(), this.taskRegion, player);
+        taskManagementSystem.setTaskType(newTaskType, event.getBuildingType(), event.getPlantType(), this.taskRegion, player);
 
         tempTaskEntity.destroy();
     }

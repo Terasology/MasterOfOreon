@@ -26,7 +26,7 @@ public class PlantTask extends Task {
     private static final int STRENGTH = 0;
     private static final int HUNGER = 60;
 
-    private static final float DURATION = 100;
+    private static final float DURATION = 10;
     private static final Color COLOR = Color.GREEN.alterAlpha(90);
 
     public String cropToPlant;
