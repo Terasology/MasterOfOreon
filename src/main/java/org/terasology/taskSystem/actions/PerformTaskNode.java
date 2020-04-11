@@ -163,10 +163,10 @@ public class PerformTaskNode extends BaseAction {
 
         Task completedTask = taskComponent.task;
 
-        oreonAttributeComponent.strength += completedTask.strength;
-        oreonAttributeComponent.health += completedTask.health;
-        oreonAttributeComponent.intelligence += completedTask.intelligence;
-        oreonAttributeComponent.hunger += completedTask.hunger;
+        oreonAttributeComponent.strength += completedTask.attributeChanges.strength;
+        oreonAttributeComponent.health += completedTask.attributeChanges.health;
+        oreonAttributeComponent.intelligence += completedTask.attributeChanges.intelligence;
+        oreonAttributeComponent.hunger += completedTask.attributeChanges.hunger;
 
         oreonAttributeComponent.strength = oreonAttributeComponent.strength > oreonAttributeComponent.maxStrength
                 ? oreonAttributeComponent.maxStrength : oreonAttributeComponent.strength;

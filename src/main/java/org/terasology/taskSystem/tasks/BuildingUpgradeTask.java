@@ -28,10 +28,10 @@ public class BuildingUpgradeTask extends Task {
     private static final float DURATION = 1;
 
     public BuildingUpgradeTask(EntityRef building) {
-        this.health = HEALTH;
-        this.intelligence = INTELLIGENCE;
-        this.strength = STRENGTH;
-        this.hunger = HUNGER;
+        this.attributeChanges.health = HEALTH;
+        this.attributeChanges.intelligence = INTELLIGENCE;
+        this.attributeChanges.strength = STRENGTH;
+        this.attributeChanges.hunger = HUNGER;
 
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.UPGRADE;

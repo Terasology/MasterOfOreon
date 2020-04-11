@@ -35,10 +35,10 @@ public class HarvestTask extends Task {
     public int numberOfCropBlocksHarvested;
 
     public HarvestTask() {
-        this.health = HEALTH;
-        this.intelligence = INTELLIGENCE;
-        this.strength = STRENGTH;
-        this.hunger = HUNGER;
+        this.attributeChanges.health = HEALTH;
+        this.attributeChanges.intelligence = INTELLIGENCE;
+        this.attributeChanges.strength = STRENGTH;
+        this.attributeChanges.hunger = HUNGER;
 
         this.taskDuration = DURATION;
         this.taskColor = COLOR;

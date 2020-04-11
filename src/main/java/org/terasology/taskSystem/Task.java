@@ -22,11 +22,12 @@ import java.util.ArrayList;
 
 public class Task {
 
+    // The minimum attributes required to perform a task
+    public OreonAttributes minimumAttributes = new OreonAttributes();
     // Effects on different Oreon attributes after task completion
-    public int health;
-    public int intelligence;
-    public int strength;
-    public int hunger;
+    public OreonAttributes attributeChanges = new OreonAttributes();
+    // The attributes needed to perform a task efficiently
+    public OreonAttributes recommendedAttributes = new OreonAttributes();
 
     // Task specifications
     public String assignedTaskType = AssignedTaskType.NONE;

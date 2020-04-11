@@ -27,10 +27,10 @@ public class GuardTask extends Task {
     private static final float DURATION = 100;
 
     public GuardTask(long buildingEntityId) {
-        this.health = HEALTH;
-        this.intelligence = INTELLIGENCE;
-        this.strength = STRENGTH;
-        this.hunger = HUNGER;
+        this.attributeChanges.health = HEALTH;
+        this.attributeChanges.intelligence = INTELLIGENCE;
+        this.attributeChanges.strength = STRENGTH;
+        this.attributeChanges.hunger = HUNGER;
 
         this.taskDuration = DURATION;
         this.assignedTaskType = AssignedTaskType.GUARD;
