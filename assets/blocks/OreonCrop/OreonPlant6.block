@@ -1,7 +1,0 @@
-{
-    "basedOn" : "CoreAssets:plant",
-    "entity" : {
-        "prefab" : "CookieCrop",
-        "keepActive" : "true"
-    }
-}

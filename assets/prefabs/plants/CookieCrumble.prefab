@@ -1,0 +1,11 @@
+{
+  "parent" : "engine:iconItem",
+  "displayName": "Cookie Crop Seed",
+  "Item" : {
+    "icon" : "MasterOfOreon:toolIcons16#CookieCrumble",
+    "stackId": "CookieCrumble"
+  },
+  "SeedDefinition": {
+    "prefab": "MasterOfOreon:CookieCrop"
+  }
+}

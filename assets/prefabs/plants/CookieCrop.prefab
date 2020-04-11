@@ -1,43 +1,45 @@
 {
     "parent" : "engine:iconItem",
     "Item" : {
-        "icon" : "MasterOfOreon:OreonPlant0"
+        "icon" : "MasterOfOreon:CookieCrop0"
     },
     "SeedDefinition" : {
-        "prefab" : "MasterOfOreon:OreonCrop"
+        "prefab" : "MasterOfOreon:CookieCrop"
     },
     "BushDefinition" : {
         "growthStages" : {
-            "MasterOfOreon:OreonPlant0" : {
+            "MasterOfOreon:CookieCrop0" : {
                 "minTime" : 4000,
                 "maxTime" : 6000
             },
-            "MasterOfOreon:OreonPlant1" : {
+            "MasterOfOreon:CookieCrop1" : {
                 "minTime" : 4000,
                 "maxTime" : 6000
             },
-            "MasterOfOreon:OreonPlant2" : {
+            "MasterOfOreon:CookieCrop2" : {
                 "minTime" : 4000,
                 "maxTime" : 6000
             },
-            "MasterOfOreon:OreonPlant3" : {
+            "MasterOfOreon:CookieCrop3" : {
                 "minTime" : 4000,
                 "maxTime" : 6000
             },
-            "MasterOfOreon:OreonPlant4" : {
+            "MasterOfOreon:CookieCrop4" : {
                 "minTime" : 4000,
                 "maxTime" : 6000
             },
-            "MasterOfOreon:OreonPlant5" : {
+            "MasterOfOreon:CookieCrop5" : {
                 "minTime" : 4000,
                 "maxTime" : 6000
             },
-            "MasterOfOreon:OreonPlant6" : {
+            "MasterOfOreon:CookieCrop6" : {
                 "minTime" : 4000,
                 "maxTime" : 6000
-            },
-            "produce" : "MasterOfOreon:OreonPlant6"
-        }
+            }
+        },
+        "produce" : "MasterOfOreon:Cookie",
+        "seed": "MasterOfOreon:CookieCrumble",
+        "sustainable": false
     },
     "DisplayName" : {
         "name" : "Cookie Crop"

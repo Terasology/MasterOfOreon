@@ -1,7 +1,0 @@
-{
-    "basedOn" : "CoreAssets:plant",
-    "entity" : {
-
-        "keepActive" : "true"
-    }
-}

@@ -1,0 +1,5 @@
+{
+  "basedOn": "CoreAssets:plant",
+  "mass": 30,
+  "keepActive": true
+}

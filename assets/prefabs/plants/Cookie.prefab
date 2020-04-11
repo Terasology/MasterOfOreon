@@ -1,0 +1,12 @@
+{
+  "parent" : "engine:iconItem",
+  "displayName": "Cookie",
+  "Item" : {
+    "icon" : "MasterOfOreon:toolIcons16#Cookie",
+    "stackId": "Cookie",
+    "maxStackSize": 16
+  },
+  "Food": {
+    "filling": 1.0
+  }
+}

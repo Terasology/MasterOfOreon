@@ -1,0 +1,52 @@
+{
+    "SeedDefinition" : {
+    },
+    "BushDefinition": {
+        "produce": "MasterOfOreon:FudgeFlowerCrop",
+        "growthStages": {
+            "MasterOfOreon:FudgeFlower0": {
+                "minTime": 6000,
+                "maxTime": 8000
+            },
+            "MasterOfOreon:FudgeFlower1": {
+                "minTime": 9000,
+                "maxTime": 10000
+            },
+            "MasterOfOreon:FudgeFlower2": {
+                "minTime": 7000,
+                "maxTime": 9000
+            },
+            "MasterOfOreon:FudgeFlower3": {
+                "minTime": 4000,
+                "maxTime": 6000
+            },
+            "MasterOfOreon:FudgeFlower4": {
+                "minTime": 1500,
+                "maxTime": 2500
+            },
+            "MasterOfOreon:FudgeFlower5": {
+                "minTime": 5000,
+                "maxTime": 6000
+            },
+            "MasterOfOreon:FudgeFlower6":{
+                "minTime": 2000,
+                "maxTime": 2000
+            },
+            "MasterOfOreon:FudgeFlower7": {
+                "minTime": 2000,
+                "maxTime": 4000
+            },
+            "MasterOfOreon:FudgeFlower8": {
+                "minTime": 6000,
+                "maxTime": 7000
+            }
+        }
+    },
+    "DisplayName" : {
+        "name" : "Fudge Flowers"
+    },
+    "AnimateRotation": {
+        "yawSpeed": 0.5,
+        "isSynchronized": false
+     }
+}
