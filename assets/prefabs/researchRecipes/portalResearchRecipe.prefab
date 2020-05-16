@@ -6,7 +6,7 @@
             "MasterOfOreon:OreonPlant6",
             "MasterOfOreon:OreonPlant6",
             "MasterOfOreon:OreonPlant6",
-            "Core:GoldBar"
+            "CoreAssets:GoldBar"
         ],
         "blockResult": "MasterOfOreon:portal",
         "resultCount": 1
