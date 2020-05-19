@@ -5,8 +5,8 @@
       { "uri": "MasterOfOreon:upgradeTool", "quantity": 1 },
       { "uri": "MasterOfOreon:portal", "quantity": 10 },
       { "uri": "MasterOfOreon:initiationBook", "quantity": 1 },
-      { "uri": "CoreBlocks:Dirt", "quantity": 32 },
-      { "uri": "CoreBlocks:Sand", "quantity": 32 },
+      { "uri": "CoreAssets:Dirt", "quantity": 32 },
+      { "uri": "CoreAssets:Sand", "quantity": 32 },
     ]
   }
 }
