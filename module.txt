@@ -10,6 +10,7 @@
         { "id": "ChangingBlocks", "minVersion": "1.0.0" },
         { "id": "ChiselBlocks", "minVersion": "1.0.0" },
         { "id": "Cities", "minVersion": "1.1.0" },
+        { "id": "CommonWorld", "minVersion": "1.0.0" },
         { "id": "CoreAdvancedAssets", "minVersion": "1.1.0" },
         { "id": "CoreAssets", "minVersion": "2.0.1" },
         { "id": "Fences", "minVersion": "1.0.0" },
@@ -20,7 +21,8 @@
         { "id": "Oreons", "minVersion": "1.0.0" },
         { "id": "StructuralResources", "minVersion": "2.1.0" },
         { "id": "StructureTemplates", "minVersion": "1.0.0" },
-        { "id": "WorldlyTooltip", "minVersion": "1.2.0" }
+        { "id": "WorldlyTooltip", "minVersion": "1.2.0" },
+        { "id": "WorldlyTooltipAPI", "minVersion": "1.0.0" }
     ],
     "isServerSideOnly": false,
     "isGameplay": true
