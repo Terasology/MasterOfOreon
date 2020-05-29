@@ -1,6 +1,6 @@
 {
     "id": "MasterOfOreon",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "Mike Kienenberger <mkienenb@gmail.com>",
     "displayName": "Master Of Oreon",
     "description": "Provides a manager interface for working with Terasology\nUse the 'O' key to toggle mouse grab so you can use the interface.",
@@ -13,6 +13,7 @@
         { "id": "CommonWorld", "minVersion": "1.0.0" },
         { "id": "CoreAdvancedAssets", "minVersion": "1.1.0" },
         { "id": "CoreAssets", "minVersion": "2.0.1" },
+        { "id": "CoreRendering", "minVersion": "1.0.0" },
         { "id": "Fences", "minVersion": "1.0.0" },
         { "id": "Health", "minVersion": "1.0.0" },
         { "id": "Inventory", "minVersion": "1.1.0" },
