@@ -1,6 +1,6 @@
 {
     "type" : "TaskSelectionScreenLayer",
-    "skin" : "engine:default",
+    "skin" : "MasterOfOreon:plantScreen",
     "id" : "taskSelectionScreen",
     "contents" : {
         "type" : "RelativeLayout",
@@ -8,67 +8,112 @@
             {
                 "type" : "UIBox",
                 "layoutInfo" : {
-                    "width": 500,
-                    "use-content-height": true,
-                    "position-horizontal-center": {},
-                    "position-vertical-center": {}
+                    "width": 1000,
+                    "height": 800,
+                    "position-horizontal-center": {
+
+                    },
+                    "position-vertical-center": {
+
+                    }
                 },
                 "content" : {
-                    "type" : "ColumnLayout",
-                    "columns" : 1,
-                    "verticalSpacing" : 16,
+                    "type" : "relativeLayout",
+
                     "contents" : [
                         {
-                            "type" : "RowLayout",
-                            "horizontalSpacing" : 0,
-                            "contents" : [
-                                {
-                                    "type" : "ColumnLayout",
-                                    "contents" : [
-                                        {
-                                            "type" : "UIButton",
-                                            "text" : "Tasks",
-                                            "id"   : "tasksTabButton",
-                                            "family" : "title"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type" : "ColumnLayout",
-                                    "contents" : [
-                                        {
-                                            "type" : "UIButton",
-                                            "text" : "Buildings",
-                                            "id"   : "buildingsTabButton",
-                                            "family" : "title"
-                                        }
-                                    ]
-                                }
+                            "type" : "UILabel",
+                            "text" : "PICK YOUR MAGIC",
+                            "id"   : "environmentTaskInfoLabel",
 
-                            ]
+                            "layoutInfo": {
+                                "use-content-width": true,
+                                "position-horizontal-center": {
+
+                                },
+                                "height": 30
+                            }
                         },
                         {
                             "type" : "RowLayout",
-                            "contents" : [
-                                {
-                                    "type" : "UIList",
-                                    "id" : "taskSelectionScreenList"
-                                }
-                            ]
-                        },
-                        {
-                            "type" : "RowLayout",
+                            "id" : "options",
                             "contents" : [
                                 {
                                     "type" : "UIButton",
-                                    "id" : "cancelButton",
-                                    "text" : "Cancel Selection"
+                                    "text" : "Tasks",
+                                    "id"   : "tasksTabButton",
+                                    "family" : "title"
+
+
+                                },
+                                {
+                                    "type" : "UIButton",
+                                    "text" : "Buildings",
+                                    "id"   : "buildingsTabButton",
+                                    "family" : "title"
+
                                 }
-                            ]
+                            ],
+                            "layoutInfo": {
+                                "use-content-height": true,
+                                "position-top": {
+                                  "offset": 32
+                                },
+                                "position-horizontal-center": {
+                                  "offset": -5
+                                },
+                                "width":1000
+                              }
+                        },
+                        {
+                            "type" : "RowLayout",
+                            "contents" : [
+                                {
+                                    "type": "ScrollableArea",
+                                    "content": {
+                                        "type" : "UIList",
+                                        "id" : "taskSelectionScreenList",
+                                        "family" : "titlee"
+                                    }
+                                },
+                                {
+
+                                    "type" : "UILabel",
+                                    "text" : "REFERENCE PIC",
+                                    "id"   : "environmentTaskInfoLabel",
+                                    "family" : "titlee"
+
+                                }
+                            ],
+                             "layoutInfo": {
+                                 "position-top": {
+                                     "offset": 80
+                                     },
+                                 "position-horizontal-center": {
+
+                                 },
+                                 "height": 200,
+                                 "width": 350
+                             }
+                        },
+                        {
+                            "type" : "UIButton",
+                            "id" : "cancelButton",
+                            "text" : "Cancel Selection",
+                            "layoutInfo": {
+                                "use-content-height": true,
+                                "position-bottom": {
+                                    "offset": 12
+                                },
+                                "position-horizontal-bottom": {
+
+                                },
+                                "width": 90,
+                                "height": 40
+                            }
                         }
                     ]
                 }
-
             }
         ]
     }
