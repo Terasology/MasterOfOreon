@@ -22,6 +22,22 @@
 
                     "contents" : [
                         {
+                            "type" : "UIButton",
+                            "id" : "cancelButton",
+                            "text" : "X",
+                            "layoutInfo": {
+                                "use-content-height": true,
+                                "position-right": {
+                                    "offset": 1
+                                },
+                                "position-horizontal-top": {
+                                    "offset": 1
+                                },
+                                "width": 30,
+                                "height": 30
+                            }
+                        },
+                        {
                             "type" : "UILabel",
                             "text" : "PICK YOUR MAGIC",
                             "id"   : "environmentTaskInfoLabel",
@@ -92,24 +108,24 @@
                                  "position-horizontal-center": {
 
                                  },
-                                 "height": 200,
-                                 "width": 350
+                                 "height": 600,
+                                 "width": 900
                              }
                         },
                         {
                             "type" : "UIButton",
-                            "id" : "cancelButton",
-                            "text" : "Cancel Selection",
+                            "id" : "confirmButton",
+                            "text" : "Confirm",
                             "layoutInfo": {
                                 "use-content-height": true,
                                 "position-bottom": {
-                                    "offset": 12
+                                    "offset": 15
                                 },
-                                "position-horizontal-bottom": {
-
+                                "position-horizontal-right": {
+                                    "offset": 30
                                 },
-                                "width": 90,
-                                "height": 40
+                                "width": 110,
+                                "height": 50
                             }
                         }
                     ]
