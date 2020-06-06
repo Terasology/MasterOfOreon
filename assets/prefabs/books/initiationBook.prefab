@@ -9,10 +9,10 @@
     },
     "Book" : {
         "pages" : ["This book walks you through the various things that you can play around with in the mystical land of the Oreons.",
-            "Spawning Oreons \\n You can spawn Oreons by activating a placed Portal block, which triggers a screen with the three available options and their requirements.",
-            "Add Tasks for the Oreons \\n Use the selection tool to select areas and assign tasks for the Oreons to perform. If no task is available for the Oreons to perform they autonomously pick up tasks based on their requirement. For eg: a hungry Oreon picks up a eat task",
-            "Construct Buildings \\n Constructing buildings which are required for various tasks to be performed by the Oreons. For eg: If a Diner is not constructed in time, your Oreons will die of hunger",
-            "Add research task\\n Add research tasks in the Laboratory by transferring a recipe book from the Bookcase to Pedestal. You should also add the required resources in the building's chest for the task to complete."
+            "Spawning Oreons<l><l>You can spawn Oreons by activating a placed Portal block, which triggers a screen with the three available options and their requirements.",
+            "Add Tasks for the Oreons<l><l>Use the selection tool to select areas and assign tasks for the Oreons to perform. If no task is available for the Oreons to perform they autonomously pick up tasks based on their requirement. For eg: a hungry Oreon picks up a eat task",
+            "Construct Buildings<l><l>Constructing buildings which are required for various tasks to be performed by the Oreons. For eg: If a Diner is not constructed in time, your Oreons will die of hunger",
+            "Add research task<l><l>Add research tasks in the Laboratory by transferring a recipe book from the Bookcase to Pedestal. You should also add the required resources in the building's chest for the task to complete."
         ],
         "tint" : [0, 0, 129, 255],
         "title" : "Getting started with MOO"
