@@ -89,7 +89,7 @@
                                     "content": {
                                         "type" : "UIList",
                                         "id" : "taskSelectionScreenList",
-                                        "family" : "titlee"
+                                        "family" : "listAndRef"
                                     }
                                 },
                                 {
@@ -97,7 +97,7 @@
                                     "type" : "UILabel",
                                     "text" : "REFERENCE PIC",
                                     "id"   : "environmentTaskInfoLabel",
-                                    "family" : "titlee"
+                                    "family" : "listAndRef"
 
                                 }
                             ],
@@ -121,8 +121,8 @@
                                 "position-bottom": {
                                     "offset": 15
                                 },
-                                "position-horizontal-right": {
-                                    "offset": 30
+                                "position-horizontal-center": {
+                                    "offset": 400
                                 },
                                 "width": 110,
                                 "height": 50
