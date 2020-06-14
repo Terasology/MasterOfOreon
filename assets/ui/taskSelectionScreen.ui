@@ -53,6 +53,7 @@
                         {
                             "type" : "RowLayout",
                             "id" : "options",
+                            "horizontalSpacing": 15,
                             "contents" : [
                                 {
                                     "type" : "UIButton",
@@ -75,10 +76,7 @@
                                 "position-top": {
                                   "offset": 32
                                 },
-                                "position-horizontal-center": {
-                                  "offset": -5
-                                },
-                                "width":1000
+                                "width": 970
                               }
                         },
                         {
@@ -94,8 +92,8 @@
                                 },
                                 {
 
-                                    "type" : "UILabel",
-                                    "text" : "REFERENCE PIC",
+                                    "type" : "UIImage",
+                                    "image" : "MasterOfOreon:underConstruction",
                                     "id"   : "environmentTaskInfoLabel",
                                     "family" : "listAndRef"
 
@@ -121,8 +119,8 @@
                                 "position-bottom": {
                                     "offset": 15
                                 },
-                                "position-horizontal-center": {
-                                    "offset": 400
+                                "position-right": {
+                                    "offset": 10
                                 },
                                 "width": 110,
                                 "height": 50
