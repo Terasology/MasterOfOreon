@@ -42,6 +42,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
     private UIButton cancelButton;
     private UIButton tasksTabButton;
     private UIButton buildingsTabButton;
+    private UIButton confirmButton;
 
     private UIList<String> taskSelectionScreenList;
 
@@ -54,29 +55,9 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         cancelButton = find(MooConstants.CANCEL_BUTTON_ID, UIButton.class);
         tasksTabButton = find(MooConstants.TASKS_TAB_BUTTON, UIButton.class);
         buildingsTabButton = find(MooConstants.BUILDINGS_TAB_BUTTON, UIButton.class);
+        confirmButton = find(MooConstants.CONFIRM_BUTTON_ID, UIButton.class);
 
         taskSelectionScreenList = find(MooConstants.TASK_SELECTION_SCREEN_LIST, UIList.class);
-
-        taskSelectionScreenList.subscribeSelection(new ItemSelectEventListener<String>() {
-            @Override
-            public void onItemSelected(UIWidget widget, String item) {
-                String task = AssignedTaskType.NONE;
-                switch(item) {
-                    case "Plant" :
-                        nuiManager.closeAllScreens();
-                        plantSelectionScreenLayer = nuiManager.createScreen("plantSelectionScreen");
-                        nuiManager.pushScreen(plantSelectionScreenLayer);
-                        break;
-                    case "Guard":
-                        task = AssignedTaskType.GUARD;
-                        sendSetTaskTypeEvent(task);
-                        break;
-                    default:
-                        sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.valueOf(item));
-                }
-
-            }
-        });
 
         populateTasksList();
         tasksTabButton.setActive(true);
@@ -92,6 +73,8 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         cancelButton.subscribe(button -> {
             sendSetTaskTypeEvent();
         });
+
+        confirmButton.subscribe(click -> performAction(taskSelectionScreenList.getSelection()));
     }
 
     private void sendSetTaskTypeEvent () {
@@ -129,5 +112,22 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
 
         buildingsTabButton.setActive(false);
         tasksTabButton.setActive(true);
+    }
+
+    private void performAction(String selection){
+        String task = AssignedTaskType.NONE;
+        switch(selection) {
+            case "Plant" :
+                nuiManager.closeAllScreens();
+                plantSelectionScreenLayer = nuiManager.createScreen("plantSelectionScreen");
+                nuiManager.pushScreen(plantSelectionScreenLayer);
+                break;
+            case "Guard":
+                task = AssignedTaskType.GUARD;
+                sendSetTaskTypeEvent(task);
+                break;
+            default:
+                sendSetTaskTypeEvent(AssignedTaskType.BUILD, BuildingType.valueOf(selection));
+        }
     }
 }
