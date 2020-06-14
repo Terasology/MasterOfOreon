@@ -102,12 +102,12 @@
                              "layoutInfo": {
                                  "position-top": {
                                      "offset": 80
-                                     },
+                                 },
                                  "position-horizontal-center": {
 
                                  },
                                  "height": 600,
-                                 "width": 900
+                                 "width": 880
                              }
                         },
                         {
