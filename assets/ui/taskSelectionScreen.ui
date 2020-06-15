@@ -93,8 +93,8 @@
                                 {
 
                                     "type" : "UIImage",
-                                    "image" : "MasterOfOreon:underConstruction",
-                                    "id"   : "environmentTaskInfoLabel",
+                                    "image" : "MasterOfOreon:blueprint",
+                                    "id"   : "selectionImage",
                                     "family" : "listAndRef"
 
                                 }
