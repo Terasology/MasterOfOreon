@@ -44,6 +44,9 @@ public class MooConstants {
     // Cancel Selection button on task selection screen
     public static final String CANCEL_BUTTON_ID = "cancelButton";
 
+    // Confirm Selection button on task selection screen
+    public static final String CONFIRM_BUTTON_ID = "confirmButton";
+
     // Upgrade screen labels and button
     public static final String BUILDING_NAME_UI_LABEL_ID = "buildingName";
     public static final String BUILDING_LEVEL_UI_LABEL_ID = "buildingLevel";
