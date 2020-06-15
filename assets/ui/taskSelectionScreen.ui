@@ -19,7 +19,6 @@
                 },
                 "content" : {
                     "type" : "relativeLayout",
-
                     "contents" : [
                         {
                             "type" : "UIButton",
@@ -41,7 +40,6 @@
                             "type" : "UILabel",
                             "text" : "PICK YOUR MAGIC",
                             "id"   : "environmentTaskInfoLabel",
-
                             "layoutInfo": {
                                 "use-content-width": true,
                                 "position-horizontal-center": {
@@ -72,15 +70,17 @@
                                 }
                             ],
                             "layoutInfo": {
-                                "use-content-height": true,
                                 "position-top": {
                                   "offset": 32
                                 },
+                                "position-horizontal-center": { },
+                                "use-content-height": true,
                                 "width": 970
                               }
                         },
                         {
                             "type" : "RowLayout",
+                            "horizontalSpacing": 15,
                             "contents" : [
                                 {
                                     "type": "ScrollableArea",
@@ -88,7 +88,8 @@
                                         "type" : "UIList",
                                         "id" : "taskSelectionScreenList",
                                         "family" : "listAndRef"
-                                    }
+                                    },
+                                    "preferredWidth": 397
                                 },
                                 {
 
@@ -99,15 +100,13 @@
 
                                 }
                             ],
-                             "layoutInfo": {
+                            "layoutInfo": {
                                  "position-top": {
                                      "offset": 80
                                  },
-                                 "position-horizontal-center": {
-
-                                 },
+                                 "position-horizontal-center": { },
                                  "height": 600,
-                                 "width": 880
+                                 "width": 809
                              }
                         },
                         {
