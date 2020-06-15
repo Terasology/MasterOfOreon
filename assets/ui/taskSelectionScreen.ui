@@ -1,35 +1,32 @@
 {
-    "type" : "TaskSelectionScreenLayer",
-    "skin" : "MasterOfOreon:plantScreen",
-    "id" : "taskSelectionScreen",
-    "contents" : {
-        "type" : "RelativeLayout",
-        "contents" : [
+    "type": "TaskSelectionScreenLayer",
+    "skin": "MasterOfOreon:plantScreen",
+    "id": "taskSelectionScreen",
+    "contents": {
+        "type": "RelativeLayout",
+        "contents": [
             {
-                "type" : "UIBox",
-                "layoutInfo" : {
-                    "width": 1000,
-                    "height": 800,
+                "type": "UIBox",
+                "layoutInfo": {
+                    "width": 839,
+                    "height": 780,
                     "position-horizontal-center": {
-
                     },
                     "position-vertical-center": {
-
                     }
                 },
-                "content" : {
-                    "type" : "relativeLayout",
-                    "contents" : [
+                "content": {
+                    "type": "relativeLayout",
+                    "contents": [
                         {
-                            "type" : "UIButton",
-                            "id" : "cancelButton",
-                            "text" : "X",
+                            "type": "UIButton",
+                            "id": "cancelButton",
+                            "text": "X",
                             "layoutInfo": {
-                                "use-content-height": true,
                                 "position-right": {
-                                    "offset": 1
+                                    "offset": 4
                                 },
-                                "position-horizontal-top": {
+                                "position-top": {
                                     "offset": 1
                                 },
                                 "width": 30,
@@ -37,89 +34,82 @@
                             }
                         },
                         {
-                            "type" : "UILabel",
-                            "text" : "PICK YOUR MAGIC",
-                            "id"   : "environmentTaskInfoLabel",
+                            "type": "UILabel",
+                            "text": "PICK YOUR MAGIC",
+                            "id": "environmentTaskInfoLabel",
                             "layoutInfo": {
                                 "use-content-width": true,
                                 "position-horizontal-center": {
-
                                 },
                                 "height": 30
                             }
                         },
                         {
-                            "type" : "RowLayout",
-                            "id" : "options",
+                            "type": "RowLayout",
+                            "id": "options",
                             "horizontalSpacing": 15,
-                            "contents" : [
+                            "contents": [
                                 {
-                                    "type" : "UIButton",
-                                    "text" : "Tasks",
-                                    "id"   : "tasksTabButton",
-                                    "family" : "title"
-
-
+                                    "type": "UIButton",
+                                    "text": "Tasks",
+                                    "id": "tasksTabButton",
+                                    "family": "title"
                                 },
                                 {
-                                    "type" : "UIButton",
-                                    "text" : "Buildings",
-                                    "id"   : "buildingsTabButton",
-                                    "family" : "title"
-
+                                    "type": "UIButton",
+                                    "text": "Buildings",
+                                    "id": "buildingsTabButton",
+                                    "family": "title"
                                 }
                             ],
                             "layoutInfo": {
                                 "position-top": {
-                                  "offset": 32
+                                    "offset": 36
                                 },
-                                "position-horizontal-center": { },
+                                "position-horizontal-center": {},
                                 "use-content-height": true,
-                                "width": 970
-                              }
+                                "width": 809
+                            }
                         },
                         {
-                            "type" : "RowLayout",
+                            "type": "RowLayout",
                             "horizontalSpacing": 15,
-                            "contents" : [
+                            "contents": [
                                 {
                                     "type": "ScrollableArea",
                                     "content": {
-                                        "type" : "UIList",
-                                        "id" : "taskSelectionScreenList",
-                                        "family" : "listAndRef"
+                                        "type": "UIList",
+                                        "id": "taskSelectionScreenList",
+                                        "family": "listAndRef"
                                     },
                                     "preferredWidth": 397
                                 },
                                 {
-
-                                    "type" : "UIImage",
-                                    "image" : "MasterOfOreon:blueprint",
-                                    "id"   : "selectionImage",
-                                    "family" : "listAndRef"
-
+                                    "type": "UIImage",
+                                    "image": "MasterOfOreon:blueprint",
+                                    "id": "selectionImage",
+                                    "family": "listAndRef"
                                 }
                             ],
                             "layoutInfo": {
-                                 "position-top": {
-                                     "offset": 80
-                                 },
-                                 "position-horizontal-center": { },
-                                 "height": 600,
-                                 "width": 809
-                             }
+                                "position-top": {
+                                    "offset": 80
+                                },
+                                "position-horizontal-center": {},
+                                "height": 600,
+                                "width": 809
+                            }
                         },
                         {
-                            "type" : "UIButton",
-                            "id" : "confirmButton",
-                            "text" : "Confirm",
+                            "type": "UIButton",
+                            "id": "confirmButton",
+                            "text": "Confirm",
                             "layoutInfo": {
-                                "use-content-height": true,
                                 "position-bottom": {
-                                    "offset": 15
+                                    "offset": 1
                                 },
                                 "position-right": {
-                                    "offset": 10
+                                    "offset": 4
                                 },
                                 "width": 110,
                                 "height": 50
