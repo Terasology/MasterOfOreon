@@ -1,6 +1,6 @@
 {
     "type": "TaskSelectionScreenLayer",
-    "skin": "MasterOfOreon:taskSelectionScreen",
+    "skin": "MasterOfOreon:plantScreen",
     "id": "taskSelectionScreen",
     "contents": {
         "type": "RelativeLayout",
