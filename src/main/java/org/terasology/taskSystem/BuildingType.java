@@ -16,14 +16,22 @@
 package org.terasology.taskSystem;
 
 public enum BuildingType {
-    None,
-    Hospital,
-    Diner,
-    Gym,
-    Classroom,
-    Storage,
-    Laboratory,
-    Jail,
-    Bedroom,
-    Church
+    Hospital("Hospital", ""),
+    Diner("Diner", ""),
+    Gym("Gym", ""),
+    Classroom("Classroom", ""),
+    Storage("Storage", ""),
+    Laboratory("Laboratory", ""),
+    Jail("Jail", ""),
+    Bedroom("Bedroom", ""),
+    Church("Church", ""),
+    Random("Random Building", ""),
+    None("No Buildings Found, Try Again!", "");
+
+    public final String buildingName;
+    public final String path;
+    BuildingType(String buildingName, String path) {
+        this.buildingName = buildingName;
+        this.path = path;
+    }
 }

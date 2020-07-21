@@ -34,12 +34,18 @@ public class MooConstants {
     public static final String OREON_KING_RESOURCES_LABEL_ID = "oreonKingResourcesRequired";
 
     // Lists on Task Selection Screen
-    public static final String TASK_SELECTION_SCREEN_LIST = "taskSelectionScreenList";
-    public static final String BUILDINGS_LIST_ID = "buildingsList";
+    public static final String TASK_SELECTION_SCREEN_LIST = "selectionList";
+    public static final String TASK_SELECTION_SEARCH_BAR = "selectionSearchBar";
+    public static final String TASK_SELECTION_PREVIEW_IMAGE = "selectionImage";
+    public static final String TASK_SELECTION_PREVIEW_TEXT = "selectionText";
+
+    // Texts for Task Selection Info
+    public static final String TASK_SELECTION_TEXT_GUARD = "Stand guard - to be responsible for protecting someone or something, or for preventing someone from escaping.";
 
     //Tab buttons on Task Selection Screen
-    public static final String TASKS_TAB_BUTTON = "tasksTabButton";
-    public static final String BUILDINGS_TAB_BUTTON = "buildingsTabButton";
+    public static final String BUILD_TAB_BUTTON = "buildTabButton";
+    public static final String PLANT_TAB_BUTTON = "plantTabButton";
+    public static final String GUARD_TAB_BUTTON = "guardTabButton";
 
     // Cancel Selection button on task selection screen
     public static final String CANCEL_BUTTON_ID = "cancelButton";
