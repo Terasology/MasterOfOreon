@@ -1,0 +1,45 @@
+{
+    "inherit": "default",
+    "elements": {
+        "UIBox": {
+            "background": "taskSelectionScreenSkinBox",
+            "text-shadowed": true
+        },
+        "ScrollableArea": {
+            "background": "taskSelectionScreenSkinBox",
+            "background-border": {
+                "top": 4,
+                "bottom": 4,
+                "left": 4,
+                "right": 4
+            }
+        },
+        "UIList": {
+            "background": "taskSelectionScreenSkinScroll",
+            "background-border": {
+                "top": 4,
+                "bottom": 4,
+                "left": 4,
+                "right": 4
+            }
+        },
+        "UIButton": {
+            "background": "taskSelectionScreenSkinScroll",
+            "background-border": {
+                "top": 4,
+                "bottom": 4,
+                "left": 4,
+                "right": 4
+            }
+        },
+        "ResettableUIText": {
+            "background": "taskSelectionScreenSkinScroll",
+            "background-border": {
+                "top": 4,
+                "bottom": 4,
+                "left": 4,
+                "right": 4
+            }
+        }
+    }
+}
