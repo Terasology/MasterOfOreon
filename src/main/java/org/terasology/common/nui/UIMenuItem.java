@@ -15,9 +15,10 @@
  */
 package org.terasology.common.nui;
 
-import org.terasology.rendering.nui.UIWidget;
-import org.terasology.rendering.nui.itemRendering.StringTextRenderer;
-import org.terasology.rendering.nui.widgets.ItemActivateEventListener;
+
+import org.terasology.nui.UIWidget;
+import org.terasology.nui.itemRendering.StringTextRenderer;
+import org.terasology.nui.widgets.ItemActivateEventListener;
 
 public class UIMenuItem {
     private String text;

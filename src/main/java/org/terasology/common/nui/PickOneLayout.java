@@ -15,16 +15,15 @@
  */
 package org.terasology.common.nui;
 
+import com.google.common.collect.Lists;
+import org.joml.Vector2i;
+import org.terasology.nui.Canvas;
+import org.terasology.nui.CoreLayout;
+import org.terasology.nui.LayoutHint;
+import org.terasology.nui.UIWidget;
+
 import java.util.Iterator;
 import java.util.List;
-
-import org.terasology.math.geom.Vector2i;
-import org.terasology.rendering.nui.Canvas;
-import org.terasology.rendering.nui.CoreLayout;
-import org.terasology.rendering.nui.LayoutHint;
-import org.terasology.rendering.nui.UIWidget;
-
-import com.google.common.collect.Lists;
 
 public class PickOneLayout extends CoreLayout<LayoutHint> {
 

@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem.tasks;
 
-import org.terasology.rendering.nui.Color;
+import org.terasology.nui.Color;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 

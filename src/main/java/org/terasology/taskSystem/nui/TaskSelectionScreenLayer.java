@@ -17,14 +17,12 @@ package org.terasology.taskSystem.nui;
 
 import org.terasology.MooConstants;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.nui.widgets.UIButton;
+import org.terasology.nui.widgets.UIList;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.UIScreenLayer;
-import org.terasology.rendering.nui.UIWidget;
-import org.terasology.rendering.nui.widgets.ItemSelectEventListener;
-import org.terasology.rendering.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
@@ -77,7 +75,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         confirmButton.subscribe(click -> performAction(taskSelectionScreenList.getSelection()));
     }
 
-    private void sendSetTaskTypeEvent () {
+    private void sendSetTaskTypeEvent() {
         localPlayer.getCharacterEntity().send(new SetTaskTypeEvent());
     }
 
@@ -85,7 +83,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         localPlayer.getCharacterEntity().send(new SetTaskTypeEvent(assignedTaskType));
     }
 
-    private void sendSetTaskTypeEvent (String assignedTaskType, BuildingType buildingType) {
+    private void sendSetTaskTypeEvent(String assignedTaskType, BuildingType buildingType) {
         localPlayer.getCharacterEntity().send(new SetTaskTypeEvent(assignedTaskType, buildingType));
     }
 
@@ -114,10 +112,10 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         tasksTabButton.setActive(true);
     }
 
-    private void performAction(String selection){
+    private void performAction(String selection) {
         String task = AssignedTaskType.NONE;
-        switch(selection) {
-            case "Plant" :
+        switch (selection) {
+            case "Plant":
                 nuiManager.closeAllScreens();
                 plantSelectionScreenLayer = nuiManager.createScreen("plantSelectionScreen");
                 nuiManager.pushScreen(plantSelectionScreenLayer);

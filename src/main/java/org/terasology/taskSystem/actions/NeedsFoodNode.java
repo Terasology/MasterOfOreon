@@ -30,7 +30,7 @@ import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ColorComponent;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.Color;
+import org.terasology.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.DelayedNotificationSystem;
 import org.terasology.taskSystem.TaskManagementSystem;
