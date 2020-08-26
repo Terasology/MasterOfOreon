@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem;
 
-import org.terasology.rendering.nui.Color;
+import org.terasology.nui.Color;
 
 import java.util.List;
 import java.util.ArrayList;

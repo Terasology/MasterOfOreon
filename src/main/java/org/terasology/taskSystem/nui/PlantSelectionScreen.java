@@ -16,12 +16,12 @@
 package org.terasology.taskSystem.nui;
 
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.nui.widgets.ResettableUIText;
+import org.terasology.nui.widgets.UIButton;
+import org.terasology.nui.widgets.UIList;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.widgets.ResettableUIText;
-import org.terasology.rendering.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.PlantType;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;
@@ -53,7 +53,7 @@ public class PlantSelectionScreen extends CoreScreenLayer {
 
         plantButton.subscribe(button -> {
             String task = AssignedTaskType.PLANT;
-            if(plantSelected != "") {
+            if (plantSelected != "") {
                 switch (plantSelected) {
                     case "Cookie Crops":
                         sendPlantTypeEvent(task, PlantType.CookieCrops);
@@ -79,7 +79,7 @@ public class PlantSelectionScreen extends CoreScreenLayer {
 
     private PlantType chooseRandomPlant() {
         String randomElement = uiList.getList().get(new Random().nextInt(uiList.getList().size()));
-        switch(randomElement) {
+        switch (randomElement) {
             case "Cookie Crops":
                 return PlantType.CookieCrops;
             case "Fudge Flowers":
@@ -90,7 +90,7 @@ public class PlantSelectionScreen extends CoreScreenLayer {
     }
 
     private void populatePlantScroll() {
-        if(uiList == null) return;
+        if (uiList == null) return;
         List<String> buttonList = new ArrayList<>();
         for (int i = 0; i < PlantType.values().length - 1; i++)
             buttonList.add(PlantType.values()[i].plantName);
@@ -99,14 +99,14 @@ public class PlantSelectionScreen extends CoreScreenLayer {
         uiList.select(0);
     }
 
-    private void filterSearchResults(String searchTerm){
+    private void filterSearchResults(String searchTerm) {
         List<String> buttonList = new ArrayList<>();
         for (int i = 0; i < PlantType.values().length - 1; i++) {
-            if(PlantType.values()[i].name().toUpperCase().contains(searchTerm.toUpperCase())) {
+            if (PlantType.values()[i].name().toUpperCase().contains(searchTerm.toUpperCase())) {
                 buttonList.add(PlantType.values()[i].plantName);
             }
         }
-        if(buttonList.size() == 0) {
+        if (buttonList.size() == 0) {
             uiList.setEnabled(false);
             buttonList.add(PlantType.None.plantName);
         } else {
@@ -115,7 +115,7 @@ public class PlantSelectionScreen extends CoreScreenLayer {
         uiList.setList(buttonList);
     }
 
-    private void sendPlantTypeEvent (String assignedTask, PlantType plantType) {
+    private void sendPlantTypeEvent(String assignedTask, PlantType plantType) {
         localPlayer.getCharacterEntity().send(new SetTaskTypeEvent(assignedTask, plantType));
         nuiManager.popScreen();
         nuiManager.closeAllScreens();

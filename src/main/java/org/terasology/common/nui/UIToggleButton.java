@@ -15,8 +15,8 @@
  */
 package org.terasology.common.nui;
 
-import org.terasology.rendering.nui.LayoutConfig;
-import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.nui.LayoutConfig;
+import org.terasology.nui.widgets.UIButton;
 
 public class UIToggleButton extends UIButton {
 

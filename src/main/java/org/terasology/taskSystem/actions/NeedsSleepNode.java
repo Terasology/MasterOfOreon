@@ -29,7 +29,7 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ColorComponent;
 import org.terasology.notification.NotificationMessageEventMOO;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.Color;
+import org.terasology.nui.Color;
 import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.tasks.SleepTask;
 import org.terasology.world.WorldProvider;
