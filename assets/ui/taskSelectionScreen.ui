@@ -72,8 +72,22 @@
                   "id": "leftCol",
                   "contents": [
                     {
-                      "type": "ResettableUIText",
-                      "id": "selectionSearchBar",
+                      "type": "ColumnLayout",
+                      "columns": 2,
+                      "column-widths": [0.2, 0.8],
+                      "verticalSpacing": 16,
+                      "horizontalSpacing": 4,
+                      "contents": [
+                        {
+                          "type": "UILabel",
+                          "text": "Search: ",
+                          "family": "description"
+                        },
+                        {
+                          "type": "ResettableUIText",
+                          "id": "selectionSearchBar"
+                        }
+                      ],
                       "preferredHeight": 30
                     },
                     {

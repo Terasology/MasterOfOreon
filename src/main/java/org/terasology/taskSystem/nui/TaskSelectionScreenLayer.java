@@ -121,7 +121,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         }
         selectionList.setList(buttonList);
         selectionList.select(0);
-        selectionSearchBar.setText("Type and enter to search");
+        selectionSearchBar.setText("");
 
         plantTabButton.setActive(false);
         guardTabButton.setActive(false);
@@ -135,7 +135,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         }
         selectionList.setList(buttonList);
         selectionList.select(0);
-        selectionSearchBar.setText("Type and enter to search");
+        selectionSearchBar.setText("");
 
         buildTabButton.setActive(false);
         guardTabButton.setActive(false);
@@ -146,6 +146,7 @@ public class TaskSelectionScreenLayer extends CoreScreenLayer {
         List<String> buttonList = new ArrayList<>();
         selectionList.setList(buttonList);
         selectionText.navigateTo(createDocument(MooConstants.TASK_SELECTION_TEXT_GUARD));
+        selectionSearchBar.setText("");
 
         buildTabButton.setActive(false);
         plantTabButton.setActive(false);
