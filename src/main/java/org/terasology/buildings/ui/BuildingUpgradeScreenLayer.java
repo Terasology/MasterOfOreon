@@ -26,12 +26,12 @@ import org.terasology.context.Context;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.nui.databinding.Binding;
+import org.terasology.nui.databinding.ReadOnlyBinding;
+import org.terasology.nui.widgets.UIButton;
+import org.terasology.nui.widgets.UILabel;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
-import org.terasology.rendering.nui.databinding.Binding;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.UILabel;
 
 public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(BuildingUpgradeSystem.class);
