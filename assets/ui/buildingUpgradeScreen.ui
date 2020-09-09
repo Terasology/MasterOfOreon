@@ -1,70 +1,69 @@
 {
-    "type" : "BuildingUpgradeScreenLayer",
-    "skin" : "engine:default",
-    "id" : "buildingUpgradeScreen",
-    "contents" :
-    {
-        "type" : "RelativeLayout",
-        "contents" : [
+  "type": "BuildingUpgradeScreenLayer",
+  "skin": "engine:default",
+  "id": "buildingUpgradeScreen",
+  "contents": {
+    "type": "RelativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "layoutInfo": {
+          "width": 400,
+          "use-content-height": true,
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
+        },
+        "content": {
+          "type": "ColumnLayout",
+          "columns": 2,
+          "contents": [
             {
-                "type" : "UIBox",
-                "layoutInfo" : {
-                    "width": 400,
-                    "use-content-height": true,
-                    "position-horizontal-center": {},
-                    "position-vertical-center": {}
+              "type": "RowLayout",
+              "horizontalSpacing": 20,
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "id": "buildingName",
+                  "layoutInfo": {
+                    "width": 200,
+                    "use-content-height": true
+                  }
                 },
-                "content" : {
-                    "type": "ColumnLayout",
-                    "columns" : 2,
-                    "contents": [
-                        {
-                            "type": "RowLayout",
-                            "horizontalSpacing": 20,
-                            "contents": [
-                                {
-                                    "type": "UILabel",
-                                    "id": "buildingName",
-                                    "layoutInfo": {
-                                        "width": 200,
-                                        "use-content-height": true
-                                    }
-                                },
-                                {
-                                    "type": "UILabel",
-                                    "id": "buildingLevel",
-                                    "layoutInfo": {
-                                        "width": 200,
-                                        "use-content-height": true
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "UISpace",
-                            "size": [
-                                1,
-                                8
-                            ]
-                        },
-                        {
-                            "type": "RowLayout",
-                            "contents": [
-                                {
-                                    "type": "UIButton",
-                                    "id": "upgradeBuildingCommand",
-                                    "text": "Upgrade Building"
-                                },
-                                {
-                                    "type": "UIButton",
-                                    "id": "guardBuildingCommand",
-                                    "text": "Guard this building"
-                                }
-                            ]
-                        }
-                    ]
+                {
+                  "type": "UILabel",
+                  "id": "buildingLevel",
+                  "layoutInfo": {
+                    "width": 200,
+                    "use-content-height": true
+                  }
                 }
+              ]
+            },
+            {
+              "type": "UISpace",
+              "size": [
+                1,
+                8
+              ]
+            },
+            {
+              "type": "RowLayout",
+              "contents": [
+                {
+                  "type": "UIButton",
+                  "id": "upgradeBuildingCommand",
+                  "text": "Upgrade Building"
+                },
+                {
+                  "type": "UIButton",
+                  "id": "guardBuildingCommand",
+                  "text": "Guard this building"
+                }
+              ]
             }
-        ]
-    }
+          ]
+        }
+      }
+    ]
+  }
 }

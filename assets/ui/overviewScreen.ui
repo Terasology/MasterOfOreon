@@ -1,97 +1,97 @@
 {
-    "type" : "OverviewScreenLayer",
-    "skin" : "engine:default",
-    "id" : "overviewScreen",
-    "contents" : {
-        "type" : "RelativeLayout",
-        "contents" : [
+  "type": "OverviewScreenLayer",
+  "skin": "engine:default",
+  "id": "overviewScreen",
+  "contents": {
+    "type": "RelativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "layoutInfo": {
+          "width": 500,
+          "use-content-height": true,
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
+        },
+        "content": {
+          "type": "ColumnLayout",
+          "columns": 1,
+          "verticalSpacing": 16,
+          "contents": [
             {
-                "type" : "UIBox",
-                "layoutInfo" : {
-                    "width": 500,
-                    "use-content-height": true,
-                    "position-horizontal-center": {},
-                    "position-vertical-center": {}
-                },
-                "content" : {
-                    "type" : "ColumnLayout",
-                    "columns" : 1,
-                    "verticalSpacing" : 16,
-                    "contents" : [
-                        {
-                            "type" : "RowLayout",
-                            "contents" : [
-                                {
-                                    "type" : "ColumnLayout",
-                                    "contents" : [
-                                        {
-                                            "type": "UILabel",
-                                            "text": "Number Of Oreons : "
-                                        },
-                                        {
-                                            "type" : "UIList",
-                                            "id" : "oreons"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type" : "RowLayout",
-                            "horizontalSpacing" : 16,
-                            "contents" : [
-                                {
-                                    "type" : "ColumnLayout",
-                                    "contents" : [
-                                        {
-                                            "type" : "UILabel",
-                                            "text" : "Available Tasks",
-                                            "family" : "title"
-                                        },
-                                        {
-                                            "type" : "UIList",
-                                            "id" : "availableTasksList"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type" : "ColumnLayout",
-                                    "contents" : [
-                                        {
-                                            "type" : "UILabel",
-                                            "text" : "On-going Tasks",
-                                            "family" : "title"
-                                        },
-                                        {
-                                            "type" : "UIList",
-                                            "id" : "inProgressTasksList"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type" : "RowLayout",
-                            "contents" : [
-                                {
-                                    "type" : "ColumnLayout",
-                                    "contents" : [
-                                        {
-                                            "type" : "UILabel",
-                                            "text" : "Buildings",
-                                            "family" : "title"
-                                        },
-                                        {
-                                            "type" : "UIList",
-                                            "id" : "constructedBuildingsList"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
+              "type": "RowLayout",
+              "contents": [
+                {
+                  "type": "ColumnLayout",
+                  "contents": [
+                    {
+                      "type": "UILabel",
+                      "text": "Number Of Oreons : "
+                    },
+                    {
+                      "type": "UIList",
+                      "id": "oreons"
+                    }
+                  ]
                 }
+              ]
+            },
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 16,
+              "contents": [
+                {
+                  "type": "ColumnLayout",
+                  "contents": [
+                    {
+                      "type": "UILabel",
+                      "text": "Available Tasks",
+                      "family": "title"
+                    },
+                    {
+                      "type": "UIList",
+                      "id": "availableTasksList"
+                    }
+                  ]
+                },
+                {
+                  "type": "ColumnLayout",
+                  "contents": [
+                    {
+                      "type": "UILabel",
+                      "text": "On-going Tasks",
+                      "family": "title"
+                    },
+                    {
+                      "type": "UIList",
+                      "id": "inProgressTasksList"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "RowLayout",
+              "contents": [
+                {
+                  "type": "ColumnLayout",
+                  "contents": [
+                    {
+                      "type": "UILabel",
+                      "text": "Buildings",
+                      "family": "title"
+                    },
+                    {
+                      "type": "UIList",
+                      "id": "constructedBuildingsList"
+                    }
+                  ]
+                }
+              ]
             }
-        ]
-    }
+          ]
+        }
+      }
+    ]
+  }
 }

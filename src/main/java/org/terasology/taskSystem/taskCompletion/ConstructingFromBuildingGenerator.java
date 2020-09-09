@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.taskCompletion;
 
 import com.google.common.math.DoubleMath;
@@ -37,25 +24,25 @@ import org.terasology.cities.model.roof.PentRoof;
 import org.terasology.cities.model.roof.Roof;
 import org.terasology.cities.model.roof.SaddleRoof;
 import org.terasology.cities.raster.BuildingPens;
-import org.terasology.cities.raster.RasterTarget;
-import org.terasology.cities.raster.RasterUtil;
 import org.terasology.cities.raster.Pen;
 import org.terasology.cities.raster.Pens;
+import org.terasology.cities.raster.RasterTarget;
+import org.terasology.cities.raster.RasterUtil;
 import org.terasology.cities.window.RectWindow;
 import org.terasology.cities.window.SimpleWindow;
 import org.terasology.cities.window.Window;
 import org.terasology.commonworld.Orientation;
 import org.terasology.commonworld.heightmap.HeightMap;
 import org.terasology.commonworld.heightmap.HeightMaps;
-import org.terasology.math.Region3i;
-import org.terasology.math.Side;
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.math.Side;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.BlockManager;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.ImmutableVector3i;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.taskSystem.BuildingType;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.BlockManager;
 
 import java.math.RoundingMode;
 import java.util.Collections;
@@ -68,9 +55,9 @@ import static org.terasology.commonworld.Orientation.WEST;
 // TODO: This class should be moved to the Cities module
 public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
-    private BlockManager blockManager;
+    private final BlockManager blockManager;
 
-    private WorldProvider worldProvider;
+    private final WorldProvider worldProvider;
 
     private BuildingGenerator compositeBuildingGenerator;
 
@@ -110,6 +97,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
     /**
      * Generates the BlockTheme with the blocks required for the construction of different buildings
+     *
      * @return The genrated theme
      */
     private BlockTheme buildBlockTheme() {
@@ -146,6 +134,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
     /**
      * Constructs the different parts of a building like its doors, windows etc.
+     *
      * @param compositeBuilding The Building object which is to be built
      * @param shape The bounding rectangle inside which construction is to be done
      * @param heightMap The height map of the base on which the building is being constructed
@@ -156,8 +145,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         BasicRasterTarget rasterTarget = new BasicRasterTarget(worldProvider, shape, theme);
 
         for (BuildingPart part : compositeBuilding.getParts()) {
-            if (RectBuildingPart.class.isInstance(part)) {
-                RectBuildingPart rectBuildingPart = RectBuildingPart.class.cast(part);
+            if (part instanceof RectBuildingPart) {
+                RectBuildingPart rectBuildingPart = (RectBuildingPart) part;
                 buildRectPart(rasterTarget, rectBuildingPart, heightMap);
             }
 
@@ -171,10 +160,12 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         }
     }
 
-    //TODO: Move the following methods to separate classes i.e different classes for Doors, Windows etc so that different types of these parts can be handled at one place
+    //TODO: Move the following methods to separate classes i.e different classes for Doors, Windows etc so that 
+    // different types of these parts can be handled at one place
 
     /**
      * Places the {@link RectBuildingPart} of a building into the world
+     *
      * @param rasterTarget
      * @param rectBuildingPart The part object which is being built
      * @param heightMap Height map of the base
@@ -202,9 +193,10 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         for (Door door : part.getDoors()) {
 
             // For a Wing Door
-            if (WingDoor.class.isInstance(door)) {
-                WingDoor wingDoor = WingDoor.class.cast(door);
-                Pen pen = Pens.fill(rasterTarget, wingDoor.getBaseHeight(), wingDoor.getTopHeight(), DefaultBlockType.WING_DOOR);
+            if (door instanceof WingDoor) {
+                WingDoor wingDoor = (WingDoor) door;
+                Pen pen = Pens.fill(rasterTarget, wingDoor.getBaseHeight(), wingDoor.getTopHeight(),
+                        DefaultBlockType.WING_DOOR);
                 RasterUtil.fillRect(pen, wingDoor.getArea());
             }
         }
@@ -214,14 +206,15 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         for (Window window : part.getWindows()) {
 
             // For RectWindow
-            if (RectWindow.class.isInstance(window)) {
-                RectWindow rectWindow = RectWindow.class.cast(window);
-                Pen pen = Pens.fill(rasterTarget, rectWindow.getBaseHeight(), rectWindow.getTopHeight(), rectWindow.getBlockType());
+            if (window instanceof RectWindow) {
+                RectWindow rectWindow = (RectWindow) window;
+                Pen pen = Pens.fill(rasterTarget, rectWindow.getBaseHeight(), rectWindow.getTopHeight(),
+                        rectWindow.getBlockType());
                 RasterUtil.fillRect(pen, rectWindow.getArea());
             }
 
-            if (SimpleWindow.class.isInstance(window)) {
-                SimpleWindow simpleWindow = SimpleWindow.class.cast(window);
+            if (window instanceof SimpleWindow) {
+                SimpleWindow simpleWindow = (SimpleWindow) window;
                 int x = simpleWindow.getPos().x();
                 int y = simpleWindow.getHeight();
                 int z = simpleWindow.getPos().y();
@@ -236,15 +229,16 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
     private void buildDecorations(RasterTarget rasterTarget, BuildingPart part) {
         for (Decoration decoration : part.getDecorations()) {
 
-            if (SingleBlockDecoration.class.isInstance(decoration)) {
-                SingleBlockDecoration blockDecoration = SingleBlockDecoration.class.cast(decoration);
+            if (decoration instanceof SingleBlockDecoration) {
+                SingleBlockDecoration blockDecoration = (SingleBlockDecoration) decoration;
                 if (rasterTarget.getAffectedRegion().encompasses(blockDecoration.getPos())) {
-                    rasterTarget.setBlock(blockDecoration.getPos(), blockDecoration.getType(), Collections.singleton(blockDecoration.getSide()));
+                    rasterTarget.setBlock(blockDecoration.getPos(), blockDecoration.getType(),
+                            Collections.singleton(blockDecoration.getSide()));
                 }
             }
 
-            if (ColumnDecoration.class.isInstance(decoration)) {
-                ColumnDecoration columnDecoration = ColumnDecoration.class.cast(decoration);
+            if (decoration instanceof ColumnDecoration) {
+                ColumnDecoration columnDecoration = (ColumnDecoration) decoration;
                 ImmutableVector3i pos = columnDecoration.getBasePos();
                 int y = pos.getY();
                 if (rasterTarget.getAffectedArea().contains(pos.getX(), pos.getZ())) {
@@ -265,8 +259,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
     private void buildRoofs(RasterTarget rasterTarget, BuildingPart part) {
         Roof roof = part.getRoof();
 
-        if (SaddleRoof.class.isInstance(roof)) {
-            SaddleRoof saddleRoof = SaddleRoof.class.cast(roof);
+        if (roof instanceof SaddleRoof) {
+            SaddleRoof saddleRoof = (SaddleRoof) roof;
             Rect2i area = saddleRoof.getArea();
 
             if (!area.overlaps(rasterTarget.getAffectedArea())) {
@@ -332,8 +326,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
             RasterUtil.fillRect(pen, area);
         }
 
-        if (HipRoof.class.isInstance(roof)) {
-            HipRoof hipRoof = HipRoof.class.cast(roof);
+        if (roof instanceof HipRoof) {
+            HipRoof hipRoof = (HipRoof) roof;
             Rect2i area = hipRoof.getArea();
 
             if (!area.overlaps(rasterTarget.getAffectedArea())) {
@@ -355,8 +349,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
             RasterUtil.fillRect(pen, area);
         }
 
-        if (PentRoof.class.isInstance(roof)) {
-            PentRoof pentRoof = PentRoof.class.cast(roof);
+        if (roof instanceof PentRoof) {
+            PentRoof pentRoof = (PentRoof) roof;
 
             Rect2i area = pentRoof.getArea();
 

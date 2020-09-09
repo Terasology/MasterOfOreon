@@ -1,27 +1,14 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.taskCompletion;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
 import org.terasology.buildings.events.BuildingConstructionStartedEvent;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.math.Region3i;
-import org.terasology.math.Side;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.math.Side;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.structureTemplates.components.CompletionTimeComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
@@ -36,9 +23,9 @@ import java.util.List;
 public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     private static final Logger logger = LoggerFactory.getLogger(ConstructingFromStructureTemplate.class);
 
-    private StructureTemplateProvider structureTemplateProvider;
+    private final StructureTemplateProvider structureTemplateProvider;
+    private final EntityRef player;
     private EntityRef buildingTemplate;
-    private EntityRef player;
 
     public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity) {
         this.structureTemplateProvider = templateProvider;
@@ -59,7 +46,8 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
     }
 
-    public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level, EntityRef building, EntityRef playerEntity) {
+    public void constructBuilding(Vector3i centerBlockPosition, BuildingType buildingType, int level,
+                                  EntityRef building, EntityRef playerEntity) {
         buildingTemplate = selectAndReturnBuilding(buildingType, level);
 
         if (buildingTemplate == null) {
@@ -69,7 +57,8 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
-        buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, centerBlockPosition)));
+        buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT,
+                Side.FRONT, centerBlockPosition)));
 
         sendConstructionStartEvent(centerBlockPosition, buildingType, building, playerEntity);
     }
@@ -81,34 +70,43 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     public EntityRef selectAndReturnBuilding(BuildingType buildingType, int level) {
         EntityRef building = EntityRef.NULL;
         switch (buildingType) {
-            case Diner :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER+"Level" + Integer.toString(level));
+            case Diner:
+                building =
+                        structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER + "Level" + level);
                 break;
-            case Storage :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE+"Level" + Integer.toString(level));
+            case Storage:
+                building =
+                        structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE + "Level" + level);
                 break;
-            case Laboratory :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY+"Level" + Integer.toString(level));
+            case Laboratory:
+                building =
+                        structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY + "Level" + level);
                 break;
-            case Jail :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
+            case Jail:
+                building =
+                        structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL + "Level" + level);
                 break;
-            case Church :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_CHURCH+"Level" + Integer.toString(level));
+            case Church:
+                building =
+                        structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_CHURCH + "Level" + level);
                 break;
             case Hospital:
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_HOSPITAL+"Level"+Integer.toString(level));
+                building =
+                        structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_HOSPITAL + "Level" + level);
                 break;
-            case Bedroom :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_BEDROOM+"Level" + Integer.toString(level));
+            case Bedroom:
+                building =
+                        structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_BEDROOM + "Level" + level);
                 break;
         }
 
         return building;
     }
 
-    private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType, EntityRef building, EntityRef playerEntity) {
-        SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
+    private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType, EntityRef building,
+                                            EntityRef playerEntity) {
+        SpawnBlockRegionsComponent blockRegionsComponent =
+                buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
         List<Region3i> absoluteRegions = new ArrayList<>();
@@ -122,11 +120,15 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         long delay = buildingTemplate.getComponent(CompletionTimeComponent.class).completionDelay;
 
         // Add this building's regions to the Holding
-        playerEntity.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay));
+        playerEntity.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building,
+                delay));
     }
 
-    public BuildingConstructionStartedEvent getBuildingConstructionStartedEvent(Vector3i centerBlock, BuildingType buildingType, EntityRef building) {
-        SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
+    public BuildingConstructionStartedEvent getBuildingConstructionStartedEvent(Vector3i centerBlock,
+                                                                                BuildingType buildingType,
+                                                                                EntityRef building) {
+        SpawnBlockRegionsComponent blockRegionsComponent =
+                buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
         List<Region3i> absoluteRegions = new ArrayList<>();

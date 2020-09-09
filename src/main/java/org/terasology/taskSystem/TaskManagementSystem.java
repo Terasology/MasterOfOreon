@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem;
 
 import org.slf4j.Logger;
@@ -21,43 +8,50 @@ import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
 import org.terasology.buildings.events.BuildingConstructionStartedEvent;
-import org.terasology.context.Context;
-import org.terasology.engine.Time;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.prefab.PrefabManager;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.core.Time;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.prefab.PrefabManager;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.input.cameraTarget.CameraTargetSystem;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
+import org.terasology.engine.logic.characters.events.HorizontalCollisionEvent;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
+import org.terasology.engine.logic.nameTags.NameTagComponent;
+import org.terasology.engine.logic.selection.ApplyBlockSelectionEvent;
+import org.terasology.engine.logic.selection.MovableSelectionEndEvent;
+import org.terasology.engine.logic.selection.MovableSelectionStartEvent;
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.network.ColorComponent;
+import org.terasology.engine.network.NetworkComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
+import org.terasology.engine.rendering.assets.texture.Texture;
+import org.terasology.engine.rendering.assets.texture.TextureUtil;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.engine.world.BlockEntityRegistry;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockComponent;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.engine.world.selection.BlockSelectionComponent;
 import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.input.cameraTarget.CameraTargetSystem;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.characters.CharacterHeldItemComponent;
-import org.terasology.logic.characters.events.HorizontalCollisionEvent;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.nameTags.NameTagComponent;
-import org.terasology.logic.selection.ApplyBlockSelectionEvent;
-import org.terasology.logic.selection.MovableSelectionEndEvent;
-import org.terasology.logic.selection.MovableSelectionStartEvent;
-import org.terasology.math.Region3i;
+import org.terasology.inventory.logic.InventoryManager;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
-import org.terasology.network.ColorComponent;
-import org.terasology.network.NetworkComponent;
 import org.terasology.notification.NotificationMessageEventMOO;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
-import org.terasology.rendering.assets.texture.Texture;
-import org.terasology.rendering.assets.texture.TextureUtil;
 import org.terasology.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
@@ -69,31 +63,22 @@ import org.terasology.taskSystem.events.OpenTaskSelectionScreenEvent;
 import org.terasology.taskSystem.tasks.BuildTask;
 import org.terasology.taskSystem.tasks.HarvestTask;
 import org.terasology.taskSystem.tasks.PlantTask;
-import org.terasology.utilities.Assets;
-import org.terasology.world.BlockEntityRegistry;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockComponent;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.items.BlockItemFactory;
-import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 /**
- * The authority task management system which handles task creation, adding them to the correct Holding and assigning tasks
- * to the Oreons.
+ * The authority task management system which handles task creation, adding them to the correct Holding and assigning
+ * tasks to the Oreons.
  */
 @Share(TaskManagementSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TaskManagementSystem extends BaseComponentSystem {
-    public int minYOverall;
-
     private static final Logger logger = LoggerFactory.getLogger(TaskManagementSystem.class);
     private static final String CONSTRUCTION_COMPLETE_EVENT_ID = "taskManagementSystem:constructionComplete";
     private static final String ADD_TASK_DELAYED_ACTION_ID = "taskManagementSystem:addTask";
-
+    public int minYOverall;
     @In
     private EntityManager entityManager;
 
@@ -248,6 +233,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Checks if the item used for selection of an area is an Oreon Selection Tool
+     *
      * @param player
      * @return True - If held item is an Oreon Selection Tool
      */
@@ -258,16 +244,13 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         String selectedItemName = selectedItem.getComponent(DisplayNameComponent.class).name;
 
-        if (selectedItemName.equals("Oreon Selection Tool")) {
-            return true;
-        }
-
-        return false;
+        return selectedItemName.equals("Oreon Selection Tool");
     }
 
     /**
      * Receives the {@link ApplyBlockSelectionEvent} which is sent after a block selection end point is set. Also checks
      * if the item used for selection is an Oreon Selection Tool, if not the area is intended for another purpose.
+     *
      * @param blockSelectionEvent Event triggered after a block selection has been completed
      * @param player The player entity which triggers the event
      */
@@ -289,8 +272,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     /**
-     * Adds task to the player's holding.
-     * This method can be used by external systems to add tasks to the holding.
+     * Adds task to the player's holding. This method can be used by external systems to add tasks to the holding.
+     *
      * @param player The player entity which has the holding
      * @param taskEntity The task entity to be added
      */
@@ -305,7 +288,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
         player.saveComponent(oreonHolding);
     }
 
-    public void setTaskType(String newTaskType, BuildingType buildingType, PlantType plantType, Region3i region, EntityRef player) {
+    public void setTaskType(String newTaskType, BuildingType buildingType, PlantType plantType, Region3i region,
+                            EntityRef player) {
         logger.info("Adding a new Task");
 
         // if the building extends to an area which is not suitable
@@ -314,7 +298,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
 //
 //            if (region == null) {
 //                player.getOwner().send(
-//                        new NotificationMessageEventMOO("Please select an open area which can accomadate the entire building",
+//                        new NotificationMessageEventMOO("Please select an open area which can accomadate the entire
+//                        building",
 //                                notificationMessageEntity));
 //                return;
 //            }
@@ -331,7 +316,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         Task newTask;
 
         switch (newTaskType) {
-            case AssignedTaskType.PLANT :
+            case AssignedTaskType.PLANT:
                 newTask = new PlantTask(plantType.path);
                 taskComponent.subsequentTask = new HarvestTask();
                 taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
@@ -356,7 +341,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 addTask(player, task);
                 break;
 
-            case AssignedTaskType.BUILD :
+            case AssignedTaskType.BUILD:
                 pendingTask = new BuildTask(buildingType);
                 newBlockSelectionComponent.currentSelection = getBuildingExtents(buildingType, region);
                 newBlockSelectionComponent.isMovable = true;
@@ -366,7 +351,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 pendingBuildTaskEntity.send(new MovableSelectionStartEvent());
                 break;
 
-            default :
+            default:
                 newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
         }
     }
@@ -451,10 +436,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
         int Y = region.minY();
         minYOverall = Y;
 
-        Region3i leftRegion = Region3i.createFromMinMax(new Vector3i(minX - 2, Y, minZ - 2), new Vector3i(minX - 2, Y, maxZ + 2));
-        Region3i rightRegion = Region3i.createFromMinMax(new Vector3i(maxX + 2, Y, minZ - 2), new Vector3i(maxX + 2, Y, maxZ + 2));
-        Region3i topRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, maxZ + 2), new Vector3i(maxX, Y, maxZ + 2));
-        Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1, Y, minZ - 2));
+        Region3i leftRegion = Region3i.createFromMinMax(new Vector3i(minX - 2, Y, minZ - 2), new Vector3i(minX - 2, Y
+                , maxZ + 2));
+        Region3i rightRegion = Region3i.createFromMinMax(new Vector3i(maxX + 2, Y, minZ - 2), new Vector3i(maxX + 2,
+                Y, maxZ + 2));
+        Region3i topRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, maxZ + 2), new Vector3i(maxX, Y,
+                maxZ + 2));
+        Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1,
+                Y, minZ - 2));
 
         Block airBlock = blockManager.getBlock("engine:air");
 
@@ -495,7 +484,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private Region3i getBuildingExtents(BuildingType buildingType, Region3i region) {
         Prefab buildingPrefab = prefabManager.getPrefab(buildingType.toString());
 
-        SpawnBlockRegionsComponent blockRegionsComponent = buildingPrefab.getComponent(SpawnBlockRegionsComponent.class);
+        SpawnBlockRegionsComponent blockRegionsComponent =
+                buildingPrefab.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> regionsToFill = blockRegionsComponent.regionsToFill;
 
         int minX = Integer.MAX_VALUE;
@@ -545,15 +535,17 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     /**
-     * Saves the selected area for a particular task to check for clashes later.
-     * Attaches a {@link BlockSelectionComponent} to the assignedArea entity so that the assigned area remains colored
-     * until the task is finished.
+     * Saves the selected area for a particular task to check for clashes later. Attaches a {@link
+     * BlockSelectionComponent} to the assignedArea entity so that the assigned area remains colored until the task is
+     * finished.
+     *
      * @param blockSelectionComponent The component which has information related to the area selected.
      * @param newTask The new Task object which is being created
      * @param taskComponent The TaskComponent which will be added to the task entity
      * @param player The player entity which triggered the task creation.
      */
-    private void markArea(BlockSelectionComponent blockSelectionComponent, Task newTask, TaskComponent taskComponent, EntityRef player) {
+    private void markArea(BlockSelectionComponent blockSelectionComponent, Task newTask, TaskComponent taskComponent,
+                          EntityRef player) {
         AssignedAreaComponent assignedAreaComponent = new AssignedAreaComponent();
 
         assignedAreaComponent.assignedRegion = blockSelectionComponent.currentSelection;
@@ -571,6 +563,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Checks if the selected area can be used i.e not already assigned to some other task
+     *
      * @param selectedRegion The region to be checked
      * @return A boolean value specifying whether the area is valid
      */
@@ -580,16 +573,20 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Looks for a building in the assignedAreas list.
+     *
      * @param buildingType The type of the building required by the Oreon
      * @return Returns a target for the Oreon to go to.
      */
-    private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent, HoldingComponent oreonHolding) {
+    private Vector3i findRequiredBuilding(BuildingType buildingType, TaskComponent oreonTaskComponent,
+                                          HoldingComponent oreonHolding) {
         List<EntityRef> buildings = oreonHolding.constructedBuildings;
         for (EntityRef building : buildings) {
-            ConstructedBuildingComponent constructedBuildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+            ConstructedBuildingComponent constructedBuildingComponent =
+                    building.getComponent(ConstructedBuildingComponent.class);
 
             if (constructedBuildingComponent.buildingType.equals(buildingType)) {
-                oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
+                oreonTaskComponent.taskRegion =
+                        constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
                 oreonTaskComponent.task.requiredBuildingEntityID = building.getId();
                 return constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX).min();
             }
@@ -612,40 +609,42 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Assigns advanced tasks like Eat and sleep to Oreon when it is free.
+     *
      * @param oreon The oreon Actor to which the task will be assigned
      * @param newTask The type of task to performed received based on priority of different tasks from its BT
      * @return A boolean value which signifies if the task was successfully assigned.
      */
     public boolean assignAdvancedTaskToOreon(Actor oreon, Task newTask) {
-            TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
-            HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
+        TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
+        HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
 
-            Vector3i target = findRequiredBuilding(newTask.buildingType, oreonTaskComponent, oreonHolding);
+        Vector3i target = findRequiredBuilding(newTask.buildingType, oreonTaskComponent, oreonHolding);
 
-            // if a building required for the task like the Diner for Eat is not found
-            if (target == null) {
-                return false;
-            }
+        // if a building required for the task like the Diner for Eat is not found
+        if (target == null) {
+            return false;
+        }
 
-            newTask.requiredBuildingEntityID = oreonTaskComponent.task.requiredBuildingEntityID;
-            oreonTaskComponent.task = newTask;
-            oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
-            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
+        newTask.requiredBuildingEntityID = oreonTaskComponent.task.requiredBuildingEntityID;
+        oreonTaskComponent.task = newTask;
+        oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
+        oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
 
 
-            oreonTaskComponent.creationTime = timer.getGameTimeInMs();
-            oreon.save(oreonTaskComponent);
+        oreonTaskComponent.creationTime = timer.getGameTimeInMs();
+        oreon.save(oreonTaskComponent);
 
-            setOreonTarget(oreon, target);
+        setOreonTarget(oreon, target);
 
-            return true;
+        return true;
     }
 
     /**
      * Receives the HorizontalCollisionEvent and decides whether the Oreon should abandon tasks
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
-    public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon, MinionMoveComponent moveComponent) {
+    public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon,
+                                      MinionMoveComponent moveComponent) {
         if (lastCollisionLocation == null) {
             lastCollisionLocation = collisionEvent.getLocation();
         } else {
@@ -675,7 +674,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         if (!oreonTaskComponent.assignedTaskType.equals(AssignedTaskType.NONE)) {
 
-            String message = "Oreon " + oreon.getComponent(NameTagComponent.class).text + " got stuck. Abandoning task " + oreonTaskComponent.assignedTaskType;
+            String message = "Oreon " + oreon.getComponent(NameTagComponent.class).text + " got stuck. Abandoning " +
+                    "task " + oreonTaskComponent.assignedTaskType;
 
             oreon.getComponent(OreonSpawnComponent.class).parent.getOwner().send(new NotificationMessageEventMOO(message, notificationMessageEntity));
 
@@ -711,6 +711,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     /**
      * Calculates the time at which the assigned task will be completed based on the assigned task type and current game
      * time.
+     *
      * @param newTask The type of task that is being assigned to the Oreon
      * @return The time at which the task will be completed
      */
@@ -737,17 +738,18 @@ public class TaskManagementSystem extends BaseComponentSystem {
             constructionStartedEvent.constructedBuildingEntity.addComponent(networkComponent);
 
             constructionStartedEvent.constructedBuildingEntity.setOwner(player);
-        }
-        else {
+        } else {
             // When a building is upgraded
             // Update the extents of the building in the ConstructedBuildingComponent after upgrade
-            ConstructedBuildingComponent constructedBuildingComponent = constructionStartedEvent.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class);
+            ConstructedBuildingComponent constructedBuildingComponent =
+                    constructionStartedEvent.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class);
             constructedBuildingComponent.boundingRegions = constructionStartedEvent.absoluteRegions;
             constructedBuildingComponent.centerLocation = constructionStartedEvent.centerBlockPosition;
             constructionStartedEvent.constructedBuildingEntity.saveComponent(constructedBuildingComponent);
         }
 
-        delayManager.addDelayedAction(constructionStartedEvent.constructedBuildingEntity, CONSTRUCTION_COMPLETE_EVENT_ID, constructionStartedEvent.completionDelay);
+        delayManager.addDelayedAction(constructionStartedEvent.constructedBuildingEntity,
+                CONSTRUCTION_COMPLETE_EVENT_ID, constructionStartedEvent.completionDelay);
     }
 
     @ReceiveEvent
@@ -755,13 +757,15 @@ public class TaskManagementSystem extends BaseComponentSystem {
         if (!event.getActionId().equals(CONSTRUCTION_COMPLETE_EVENT_ID)) {
             return;
         }
-        ConstructedBuildingComponent constructedBuildingComponent = constructedBuilding.getComponent(ConstructedBuildingComponent.class);
+        ConstructedBuildingComponent constructedBuildingComponent =
+                constructedBuilding.getComponent(ConstructedBuildingComponent.class);
 
         HoldingComponent holdingComponent = constructedBuilding.getOwner().getComponent(HoldingComponent.class);
         holdingComponent.constructedBuildings.add(constructedBuilding);
 
         constructedBuilding.getOwner().send(new BuildingConstructionCompletedEvent(constructedBuildingComponent.boundingRegions,
-                constructedBuildingComponent.buildingType, constructedBuildingComponent.centerLocation, constructedBuilding));
+                constructedBuildingComponent.buildingType, constructedBuildingComponent.centerLocation,
+                constructedBuilding));
     }
 
     @ReceiveEvent(components = TaskComponent.class)
@@ -775,6 +779,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Adds a block to the Oreon's inventory which is rendered as an indication for the task being being performed
+     *
      * @param oreon Oreon entity performing the task
      * @param task Task being performed
      */

@@ -1,33 +1,20 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.actions;
 
 import org.terasology.MooConstants;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.behavior.BehaviorAction;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.behavior.core.BaseAction;
-import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.nameTags.NameTagComponent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.network.ColorComponent;
-import org.terasology.registry.In;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.behavior.BehaviorAction;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.logic.behavior.core.BaseAction;
+import org.terasology.engine.logic.behavior.core.BehaviorState;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.logic.nameTags.NameTagComponent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.network.ColorComponent;
+import org.terasology.engine.registry.In;
 import org.terasology.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.DelayedNotificationSystem;
@@ -87,7 +74,8 @@ public class NeedsTrainingNode extends BaseAction {
             }
 
             String message = "Build a Gym for stronger Oreons";
-            lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
+            lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity,
+                    lastNotification);
 
         } else if (intelligence < strength && intelligence < maxIntelligence) {
             if (taskManagementSystem.assignAdvancedTaskToOreon(oreon, new TrainIntelligenceTask())) {
@@ -95,7 +83,8 @@ public class NeedsTrainingNode extends BaseAction {
             }
 
             String message = "Build a Classroom for smarter Oreons";
-            lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity, lastNotification);
+            lastNotification = delayedNotificationSystem.sendNotification(message, notificationMessageEntity,
+                    lastNotification);
         }
 
         return BehaviorState.FAILURE;

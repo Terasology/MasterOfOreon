@@ -1,29 +1,29 @@
 {
-    "type" : "NotificationOverlayMOO",
-    "skin" : "engine:default",
-    "id" : "notificationOverlayMOO",
-    "contents" : {
-        "type" : "relativeLayout",
-        "contents" : [
-            {
-                "type": "RelativeLayout",
-                "contents": [
-                    {
-                        "type" : "UIText",
-                         "id" : "notificationMessage",
-                         "text" : "",
-                         "layoutInfo" : {
-                             "use-content-height": true
-                         }
-                     }
-                ],
-                "layoutInfo": {
-                         "width" : 600,
-                         "height" : 40,
-                         "position-horizontal-left" : {},
-                         "position-vertical-left" : {}
-                }
+  "type": "NotificationOverlayMOO",
+  "skin": "engine:default",
+  "id": "notificationOverlayMOO",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "RelativeLayout",
+        "contents": [
+          {
+            "type": "UIText",
+            "id": "notificationMessage",
+            "text": "",
+            "layoutInfo": {
+              "use-content-height": true
             }
-        ]
-    }
+          }
+        ],
+        "layoutInfo": {
+          "width": 600,
+          "height": 40,
+          "position-horizontal-left": {},
+          "position-vertical-left": {}
+        }
+      }
+    ]
+  }
 }

@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.research;
 
 import org.slf4j.Logger;
@@ -23,23 +10,27 @@ import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingConstructionCompletedEvent;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.prefab.PrefabManager;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.Region3i;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnChangedComponent;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.prefab.PrefabManager;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.BlockEntityRegistry;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.inventory.logic.InventoryComponent;
+import org.terasology.inventory.logic.InventoryManager;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
 import org.terasology.research.components.LaboratoryComponent;
 import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.resources.system.BuildingResourceSystem;
@@ -49,10 +40,6 @@ import org.terasology.taskSystem.Task;
 import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.tasks.ResearchTask;
-import org.terasology.world.BlockEntityRegistry;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.items.BlockItemFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +77,7 @@ public class ResearchSystem extends BaseComponentSystem {
     /**
      * This method adds books to a newly constructed Laboratory's bookcase
      *
-     * @param event  The event sent.
+     * @param event The event sent.
      * @param player The player entity which triggered the building construction
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
@@ -99,7 +86,8 @@ public class ResearchSystem extends BaseComponentSystem {
             return;
         }
 
-        int currentLevel = event.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class).currentLevel;
+        int currentLevel =
+                event.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class).currentLevel;
 
         addBooksToCase(player, event.absoluteRegions, currentLevel);
 
@@ -113,14 +101,16 @@ public class ResearchSystem extends BaseComponentSystem {
     }
 
     /**
-     * This method adds new books to the case after the Laboratory is upgraded. Receives an event sent by the {@link org.terasology.taskSystem.actions.PerformTaskNode}
+     * This method adds new books to the case after the Laboratory is upgraded. Receives an event sent by the {@link
+     * org.terasology.taskSystem.actions.PerformTaskNode}
      *
      * @param upgradeStartEvent The event sent.
-     * @param oreon             The Oreon performing the upgrade task.
-     * @param taskComponent     TaskComponent attached to the Oreon.
+     * @param oreon The Oreon performing the upgrade task.
+     * @param taskComponent TaskComponent attached to the Oreon.
      */
     @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_TRIVIAL)
-    public void onLaboratoryUpgrade(BuildingUpgradeStartEvent upgradeStartEvent, EntityRef oreon, TaskComponent taskComponent) {
+    public void onLaboratoryUpgrade(BuildingUpgradeStartEvent upgradeStartEvent, EntityRef oreon,
+                                    TaskComponent taskComponent) {
         EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
@@ -166,18 +156,20 @@ public class ResearchSystem extends BaseComponentSystem {
     /**
      * Adds a Research Task to the Holding when the player adds a Research Book to the pedestal inventory.
      *
-     * @param event              The event received
-     * @param inventoryEntity    The entity whose InventoryComponent is changed.
+     * @param event The event received
+     * @param inventoryEntity The entity whose InventoryComponent is changed.
      * @param inventoryComponent The changed component
      */
     @ReceiveEvent(components = LaboratoryComponent.class)
-    public void onBookPlacedInInventory(OnChangedComponent event, EntityRef inventoryEntity, InventoryComponent inventoryComponent) {
+    public void onBookPlacedInInventory(OnChangedComponent event, EntityRef inventoryEntity,
+                                        InventoryComponent inventoryComponent) {
 
         if (inventoryEntity.getParentPrefab().getName().equals(MooConstants.PEDESTAL_PREFAB)) {
             for (EntityRef item : inventoryComponent.itemSlots) {
                 DisplayNameComponent nameComponent = item.getComponent(DisplayNameComponent.class);
 
-                // TODO: this is a dirty way to prevent the research task being added twice when the Exclamation point is placed in inventory
+                // TODO: this is a dirty way to prevent the research task being added twice when the Exclamation 
+                //  point is placed in inventory
                 if (inventoryComponent.itemSlots.get(1) == EntityRef.NULL) {
                     // Check if item is research Book
                     if (nameComponent != null && nameComponent.name.equals(MooConstants.RESEARCH_BOOK_NAME)) {
@@ -214,15 +206,17 @@ public class ResearchSystem extends BaseComponentSystem {
      * Adds the resulting block of a research to the building chest.
      *
      * @param researchEvent The event received after Oreon performs Research Task.
-     * @param oreon         The Oreon which performed the task.
+     * @param oreon The Oreon which performed the task.
      * @param taskComponent The TaskComponent attached to the Oreon.
      */
     @ReceiveEvent
-    public void addResearchBlockToInventory(ResearchStartEvent researchEvent, EntityRef oreon, TaskComponent taskComponent) {
+    public void addResearchBlockToInventory(ResearchStartEvent researchEvent, EntityRef oreon,
+                                            TaskComponent taskComponent) {
         Task completedTask = taskComponent.task;
         EntityRef laboratory = entityManager.getEntity(completedTask.requiredBuildingEntityID);
 
-        EntityRef result = blockItemFactory.newInstance(blockManager.getBlock(completedTask.blockResult).getBlockFamily());
+        EntityRef result =
+                blockItemFactory.newInstance(blockManager.getBlock(completedTask.blockResult).getBlockFamily());
 
         buildingResourceSystem.addAResource(laboratory, result);
 
@@ -270,8 +264,10 @@ public class ResearchSystem extends BaseComponentSystem {
     private void removeBookFromPedestal(EntityRef laboratory) {
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
 
-        EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.PEDESTAL_REGION_INDEX).max());
-        EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.BOOKCASE_REGION_INDEX).max());
+        EntityRef pedestalEntity =
+                blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.PEDESTAL_REGION_INDEX).max());
+        EntityRef bookcaseEntity =
+                blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.BOOKCASE_REGION_INDEX).max());
 
         InventoryComponent pedestalInventory = pedestalEntity.getComponent(InventoryComponent.class);
 

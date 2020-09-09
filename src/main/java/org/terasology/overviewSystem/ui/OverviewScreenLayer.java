@@ -1,32 +1,19 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.overviewSystem.ui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
-import org.terasology.engine.Time;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.core.Time;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
 import org.terasology.nui.databinding.Binding;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.widgets.UIList;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskStatusType;
@@ -114,13 +101,13 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 int numberOfKings = 0;
                 for (EntityRef oreonEntity : entityManager.getEntitiesWith(OreonSpawnComponent.class)) {
                     switch (oreonEntity.getParentPrefab().getName()) {
-                        case MooConstants.OREON_BUILDER_PREFAB :
+                        case MooConstants.OREON_BUILDER_PREFAB:
                             numberOfBuilders++;
                             break;
-                        case MooConstants.OREON_GUARD_PREFAB :
+                        case MooConstants.OREON_GUARD_PREFAB:
                             numberOfGuards++;
                             break;
-                        case MooConstants.OREON_KING_PREFAB :
+                        case MooConstants.OREON_KING_PREFAB:
                             numberOfKings++;
                     }
                 }
@@ -148,33 +135,34 @@ public class OverviewScreenLayer extends CoreScreenLayer {
                 int numberOfBedrooms = 0;
 
                 for (EntityRef building : entityManager.getEntitiesWith(ConstructedBuildingComponent.class)) {
-                    ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+                    ConstructedBuildingComponent buildingComponent =
+                            building.getComponent(ConstructedBuildingComponent.class);
                     switch (buildingComponent.buildingType) {
-                        case Diner :
+                        case Diner:
                             numberOfDiners++;
                             break;
-                        case Storage :
+                        case Storage:
                             numberOfStorage++;
                             break;
-                        case Laboratory :
+                        case Laboratory:
                             numberOfLaboratories++;
                             break;
-                        case Classroom :
+                        case Classroom:
                             numberOfClassrooms++;
                             break;
-                        case Gym :
+                        case Gym:
                             numberOfGyms++;
                             break;
-                        case Hospital :
+                        case Hospital:
                             numberOfHospitals++;
                             break;
-                        case Jail :
+                        case Jail:
                             numberOfJails++;
                             break;
-                        case Church :
+                        case Church:
                             numberOfChurches++;
                             break;
-                        case Bedroom :
+                        case Bedroom:
                             numberOfBedrooms++;
                             break;
                     }

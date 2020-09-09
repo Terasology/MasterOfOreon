@@ -1,38 +1,29 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.actions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.BuildingUpgradeStartEvent;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.behavior.BehaviorAction;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.logic.behavior.core.BaseAction;
+import org.terasology.engine.logic.behavior.core.BehaviorState;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.BlockEntityRegistry;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.selection.BlockSelectionComponent;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.logic.behavior.BehaviorAction;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.behavior.core.BaseAction;
-import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.Region3i;
+import org.terasology.inventory.logic.InventoryManager;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
 import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.spawning.OreonSpawnComponent;
@@ -47,10 +38,6 @@ import org.terasology.taskSystem.taskCompletion.ConstructingFromBuildingGenerato
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
 import org.terasology.taskSystem.taskCompletion.PlantingTaskCompletion;
 import org.terasology.taskSystem.tasks.PlantTask;
-import org.terasology.world.BlockEntityRegistry;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -103,8 +90,10 @@ public class PerformTaskNode extends BaseAction {
         this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
 
         EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider,
+                player);
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider,
+                player);
     }
 
     @Override
@@ -131,7 +120,9 @@ public class PerformTaskNode extends BaseAction {
     }
 
     /**
-     * Removes the {@link BlockSelectionComponent} from the assigned area so that it no longer renders once the task is complete.
+     * Removes the {@link BlockSelectionComponent} from the assigned area so that it no longer renders once the task is
+     * complete.
+     *
      * @param oreon The Actor which calls this node
      */
     private void removeColorFromArea(Actor oreon, TaskComponent taskComponent) {
@@ -156,6 +147,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Changes a Oreon's attributes values after it completes a task.
+     *
      * @param oreon The Actor which calls this node
      */
     private void changeOreonAttributes(Actor oreon, TaskComponent taskComponent) {
@@ -174,7 +166,8 @@ public class PerformTaskNode extends BaseAction {
         oreonAttributeComponent.health = oreonAttributeComponent.health > oreonAttributeComponent.maxHealth
                 ? oreonAttributeComponent.maxHealth : oreonAttributeComponent.health;
 
-        oreonAttributeComponent.intelligence = oreonAttributeComponent.intelligence > oreonAttributeComponent.maxIntelligence
+        oreonAttributeComponent.intelligence =
+                oreonAttributeComponent.intelligence > oreonAttributeComponent.maxIntelligence
                 ? oreonAttributeComponent.maxIntelligence : oreonAttributeComponent.intelligence;
 
         oreon.save(oreonAttributeComponent);
@@ -182,6 +175,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Places the required blocks in the selected area based on the task selected
+     *
      * @param oreon The Oreon entity working on the task
      * @param taskComponent The component with task information which just completed
      */
@@ -191,27 +185,31 @@ public class PerformTaskNode extends BaseAction {
 
 
         switch (taskType) {
-            case AssignedTaskType.PLANT :
+            case AssignedTaskType.PLANT:
                 PlantTask task = (PlantTask) taskComponent.task;
                 plantingTaskCompletion.placeCrops(selectedRegion, task.cropToPlant);
                 break;
 
-            case AssignedTaskType.BUILD :
+            case AssignedTaskType.BUILD:
                 constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.task.buildingType);
                 //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
                 break;
 
-            case AssignedTaskType.UPGRADE :
+            case AssignedTaskType.UPGRADE:
                 //TODO:figure out how to get region in the right area
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
 
                 EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
-                ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+                ConstructedBuildingComponent buildingComponent =
+                        building.getComponent(ConstructedBuildingComponent.class);
 
-                EntityRef buildingTemplate = constructingFromStructureTemplate.selectAndReturnBuilding(buildingComponent.buildingType, buildingComponent.currentLevel);
+                EntityRef buildingTemplate =
+                        constructingFromStructureTemplate.selectAndReturnBuilding(buildingComponent.buildingType,
+                                buildingComponent.currentLevel);
 
                 if (buildingTemplate != null) {
-                    List<SpawnBlockRegionsComponent.RegionToFill> relativeRegionsToFill = buildingTemplate.getParentPrefab().getComponent(SpawnBlockRegionsComponent.class).regionsToFill;
+                    List<SpawnBlockRegionsComponent.RegionToFill> relativeRegionsToFill =
+                            buildingTemplate.getParentPrefab().getComponent(SpawnBlockRegionsComponent.class).regionsToFill;
 
                     List<Region3i> regionsToFill = new ArrayList<>();
                     for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegionsToFill) {
@@ -219,11 +217,15 @@ public class PerformTaskNode extends BaseAction {
                         Region3i absoluteRegion = relativeRegion.move(buildingComponent.centerLocation);
                         regionsToFill.add(absoluteRegion);
                     }
-                    Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).center().z), new Vector3i(1, 1, 1));
-                    for (Region3i baseRegion:regionsToFill) {
+                    Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).center().x
+                            , taskManagementSystem.minYOverall, regionsToFill.get(0).center().z), new Vector3i(1, 1,
+                            1));
+                    for (Region3i baseRegion : regionsToFill) {
 
-                        Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
-                        Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
+                        Vector3i min = new Vector3i(baseRegion.minX(),
+                                taskManagementSystem.minYOverall + baseRegion.minY(), baseRegion.minZ());
+                        Vector3i max = new Vector3i(baseRegion.maxX(),
+                                baseRegion.maxY() + taskManagementSystem.minYOverall, baseRegion.maxZ());
 
                         Region3i region = Region3i.createFromMinMax(min, max);
                         Iterator<Vector3i> regionsIterator = region.iterator();
@@ -238,7 +240,7 @@ public class PerformTaskNode extends BaseAction {
 
                 break;
 
-            case AssignedTaskType.RESEARCH :
+            case AssignedTaskType.RESEARCH:
                 oreon.getEntity().send(new ResearchStartEvent());
         }
 
@@ -263,6 +265,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Removes the block from the Oreon's inventory
+     *
      * @param oreon
      * @param oreonTaskComponent
      */

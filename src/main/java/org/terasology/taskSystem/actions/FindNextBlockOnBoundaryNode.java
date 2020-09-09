@@ -1,36 +1,23 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.actions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
-import org.terasology.engine.Time;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.behavior.BehaviorAction;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.behavior.core.BaseAction;
-import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.Region3i;
+import org.terasology.engine.core.Time;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.behavior.BehaviorAction;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.logic.behavior.core.BaseAction;
+import org.terasology.engine.logic.behavior.core.BehaviorState;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.registry.In;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
-import org.terasology.registry.In;
 import org.terasology.taskSystem.components.TaskComponent;
 
 @BehaviorAction(name = "find_next_block_on_boundary")
@@ -84,8 +71,9 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
     }
 
     /**
-     * Sets the Oreon's target in the {@link MinionMoveComponent} to a nearby block on the boundary of a building. Used for the
-     * guard task.
+     * Sets the Oreon's target in the {@link MinionMoveComponent} to a nearby block on the boundary of a building. Used
+     * for the guard task.
+     *
      * @param oreon The character whose target is being set.
      */
     private void setTargetToNearbyBoundaryBlock(Actor oreon, TaskComponent taskComponent) {
@@ -104,28 +92,22 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
         if (Math.round(worldPosition.x) == maxX) {
             if (Math.round(worldPosition.z) != maxZ) {
                 moveComponent.target = new Vector3f(maxX + 1, y, maxZ + 1);
-            }
-            else {
+            } else {
                 moveComponent.target = new Vector3f(minX - 1, y, maxZ + 1);
             }
-        }
-        else if (Math.round(worldPosition.z) == maxZ) {
+        } else if (Math.round(worldPosition.z) == maxZ) {
             if (Math.round(worldPosition.x) != minX) {
                 moveComponent.target = new Vector3f(minX - 1, y, maxZ + 1);
-            }
-            else {
+            } else {
                 moveComponent.target = new Vector3f(minX - 1, y, minZ - 1);
             }
-        }
-        else if (Math.round(worldPosition.x) == minX) {
+        } else if (Math.round(worldPosition.x) == minX) {
             if (Math.round(worldPosition.z) != minZ) {
                 moveComponent.target = new Vector3f(minX - 1, y, minZ - 1);
-            }
-            else {
+            } else {
                 moveComponent.target = new Vector3f(maxX + 1, y, minZ - 1);
             }
-        }
-        else {
+        } else {
             moveComponent.target = new Vector3f(maxX + 1, y, maxZ + 1);
         }
 

@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.buildings;
 
 import org.slf4j.Logger;
@@ -24,24 +11,24 @@ import org.terasology.buildings.events.CloseUpgradeScreenEvent;
 import org.terasology.buildings.events.GuardBuildingEvent;
 import org.terasology.buildings.events.OpenUpgradeScreenEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
+import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.math.Region3i;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.logic.characters.CharacterHeldItemComponent;
-import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
-import org.terasology.registry.Share;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.TaskManagementSystem;
@@ -80,7 +67,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskManagementSystem = context.get(TaskManagementSystem.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
 
-        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity());
+        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider,
+                localPlayer.getCharacterEntity());
     }
 
     @ReceiveEvent
@@ -104,7 +92,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
      * Checks if the block activated using the upgrade tool is part of a building
      *
      * @param blockPos The position of the block to be checked
-     * @param player   The entity which sends the event
+     * @param player The entity which sends the event
      */
     private void checkIfPartOfBuilding(Vector3f blockPos, EntityRef player) {
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
@@ -141,7 +129,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     public void onReceiveBuildingUpgradeEvent(UpgradeBuildingEvent upgradeBuildingEvent, EntityRef player) {
         buildingToUpgrade.send(new CloseUpgradeScreenEvent());
 
-        ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
+        ConstructedBuildingComponent buildingComponent =
+                buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
 
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.UPGRADE;
@@ -170,11 +159,11 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     }
 
     /**
-     * This method handles the construction of the upgraded version of a building. The event is sent by {@link PerformTaskNode}
-     * after the Oreon has completed an Upgrade task.
+     * This method handles the construction of the upgraded version of a building. The event is sent by {@link
+     * PerformTaskNode} after the Oreon has completed an Upgrade task.
      *
-     * @param event         The upgrade event sent.
-     * @param oreon         The Oreon entity which completed the task.
+     * @param event The upgrade event sent.
+     * @param oreon The Oreon entity which completed the task.
      * @param taskComponent The task component attached to the Oreon.
      */
     @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_HIGH)
@@ -184,7 +173,9 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
         buildingComponent.currentLevel += 1;
         building.saveComponent(buildingComponent);
-        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel, building, localPlayer.getCharacterEntity());
+        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation,
+                buildingComponent.buildingType, buildingComponent.currentLevel, building,
+                localPlayer.getCharacterEntity());
 
         taskManagementSystem.addBuildingToHolding(constructingFromStructureTemplate.getBuildingConstructionStartedEvent(buildingComponent.centerLocation, buildingComponent.buildingType, building), localPlayer.getCharacterEntity());
     }
@@ -194,7 +185,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.GUARD;
 
-        ConstructedBuildingComponent buildingComponent = buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
+        ConstructedBuildingComponent buildingComponent =
+                buildingToUpgrade.getComponent(ConstructedBuildingComponent.class);
         taskComponent.taskRegion = buildingComponent.boundingRegions.get(MooConstants.LABORATORY_SLAB_REGION);
         taskComponent.taskStatus = TaskStatusType.Available;
 

@@ -10,10 +10,8 @@
           "width": 400,
           "height": 300,
           "position-horizontal-center": {
-
           },
           "position-vertical-center": {
-
           }
         },
         "content": {
@@ -26,10 +24,8 @@
               "layoutInfo": {
                 "use-content-width": true,
                 "position-horizontal-center": {
-
                 },
                 "height": 30
-
               }
             },
             {
@@ -53,7 +49,6 @@
                   "layoutInfo": {
                     "use-content-height": true,
                     "position-horizontal-center": {
-
                     },
                     "relativeWidth": 0.8
                   }
@@ -67,7 +62,7 @@
                 "position-horizontal-center": {
                   "offset": -5
                 },
-                "width":355
+                "width": 355
               }
             },
             {
@@ -82,7 +77,6 @@
                   "offset": 80
                 },
                 "position-horizontal-center": {
-
                 },
                 "height": 125,
                 "width": 350
@@ -98,7 +92,6 @@
                   "offset": 12
                 },
                 "position-horizontal-center": {
-
                 },
                 "width": 350,
                 "height": 40

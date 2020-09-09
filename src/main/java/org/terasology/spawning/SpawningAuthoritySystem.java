@@ -1,41 +1,28 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.spawning;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.nameTags.NameTagComponent;
-import org.terasology.logic.players.PlayerUtil;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.logic.nameTags.NameTagComponent;
+import org.terasology.engine.logic.players.PlayerUtil;
+import org.terasology.engine.network.NetworkComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.utilities.random.MersenneRandom;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.inventory.logic.InventoryComponent;
+import org.terasology.inventory.logic.InventoryManager;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.namegenerator.creature.CreatureNameComponent;
-import org.terasology.network.NetworkComponent;
-import org.terasology.registry.In;
-import org.terasology.utilities.random.MersenneRandom;
-import org.terasology.world.block.BlockManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +50,10 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Spawns the desired Oreon at the location of Portal which sends the event
-     * @param event The {@link OreonSpawnEvent} which is sent by the {@link org.terasology.spawning.nui.SpawnScreenLayer} when a player selects the Oreon to be spawned
+     *
+     * @param event The {@link OreonSpawnEvent} which is sent by the
+     * {@link org.terasology.spawning.nui.SpawnScreenLayer}
+     *         when a player selects the Oreon to be spawned
      * @param player The player entity which is spawning the Oreon.
      */
     @ReceiveEvent
@@ -94,6 +84,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Checks if the Oreon to be spawned has an item requirement and calls {@code removeNeededItem} item method
+     *
      * @param player The player entity spawning the Oreon
      * @param prefab The prefab of the Oreon to be spawned
      * @return A boolean value which signifies if the required items were found in inventory and successfully deducted
@@ -140,10 +131,11 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Makes a pass through all items in a player's inventory and adds the slot number of all required items to a list.
+     *
      * @param items The map which consists of all items and their quantity required for spawning
      * @param player The player entity spawning the Oreon
      * @return A list of slot number of all items required for spawning. If the size of this is list is not equal to the
-     * number of items required then a required item was not found in the inventory
+     *         number of items required then a required item was not found in the inventory
      */
     private List<Integer> getSlotsForRequiredItems(Map<String, Integer> items, EntityRef player) {
         List<Integer> requiredSlots = new ArrayList<>();
@@ -163,7 +155,8 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
                     if (requiredNumber <= inventoryManager.getStackSize(inventorySlot)) {
                         requiredSlots.add(slotNumber);
                     } else {
-                        logger.info("You don't have enough({} required) {} blocks to spawn the Oreon", requiredNumber, blockName);
+                        logger.info("You don't have enough({} required) {} blocks to spawn the Oreon", requiredNumber
+                                , blockName);
                         break;
                     }
                 }
@@ -175,11 +168,12 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Removes an item required for spawning from the player's inventory
+     *
      * @param items The map which consists of all items and their quantity required for spawning
      * @param slotNumber The slot number of the item to be removed
      * @param player The player entity spawning the Oreon
-     * @return True - if the item removal from the inventory was successful.<br>
-     *     False - if the required amount was not found in the inventory
+     * @return True - if the item removal from the inventory was successful.<br> False - if the required amount was not
+     *         found in the inventory
      */
     private boolean removeNeededItem(Map<String, Integer> items, int slotNumber, EntityRef player) {
         EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
