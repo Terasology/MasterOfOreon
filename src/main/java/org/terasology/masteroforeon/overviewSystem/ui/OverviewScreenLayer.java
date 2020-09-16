@@ -1,0 +1,190 @@
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+package org.terasology.masteroforeon.overviewSystem.ui;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.terasology.engine.core.Time;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+import org.terasology.masteroforeon.MooConstants;
+import org.terasology.masteroforeon.buildings.components.ConstructedBuildingComponent;
+import org.terasology.masteroforeon.spawning.OreonSpawnComponent;
+import org.terasology.masteroforeon.taskSystem.AssignedTaskType;
+import org.terasology.masteroforeon.taskSystem.TaskStatusType;
+import org.terasology.masteroforeon.taskSystem.components.TaskComponent;
+import org.terasology.nui.databinding.Binding;
+import org.terasology.nui.databinding.ReadOnlyBinding;
+import org.terasology.nui.widgets.UIList;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class OverviewScreenLayer extends CoreScreenLayer {
+    private static final Logger logger = LoggerFactory.getLogger(OverviewScreenLayer.class);
+    @In
+    private EntityManager entityManager;
+
+    @In
+    private Time time;
+
+    private UIList availableTasks;
+    private UIList inProgressTasks;
+    private UIList oreons;
+    private UIList buildings;
+
+    @Override
+    public void initialise() {
+        availableTasks = find(MooConstants.AVAILABLE_TASKS_LIST_ID, UIList.class);
+        inProgressTasks = find(MooConstants.ON_GOING_TASKS_LIST_ID, UIList.class);
+        oreons = find(MooConstants.OREONS_LIST_ID, UIList.class);
+        buildings = find(MooConstants.CONSTRUCTED_BUILDINGS_LIST_ID, UIList.class);
+
+        populateLists();
+    }
+
+    @Override
+    public boolean isReleasingMouse() {
+        return false;
+    }
+
+    @Override
+    public boolean isModal() {
+        return false;
+    }
+
+    private void populateLists() {
+        Binding<List> availableTasksList = new ReadOnlyBinding<List>() {
+            @Override
+            public List get() {
+                List<String> result = new ArrayList<>();
+                for (EntityRef taskEntity : entityManager.getEntitiesWith(TaskComponent.class)) {
+                    TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+                    if (!taskComponent.assignedTaskType.equals(AssignedTaskType.NONE) && taskComponent.taskStatus.equals(TaskStatusType.Available)) {
+                        result.add(taskComponent.task.assignedTaskType);
+                    }
+                }
+
+                if (result.isEmpty()) {
+                    result.add("No tasks");
+                }
+                return result;
+            }
+        };
+
+        Binding<List> inProgressTasksList = new ReadOnlyBinding<List>() {
+            @Override
+            public List get() {
+                List<String> result = new ArrayList<>();
+                for (EntityRef taskEntity : entityManager.getEntitiesWith(TaskComponent.class)) {
+                    TaskComponent taskComponent = taskEntity.getComponent(TaskComponent.class);
+                    if (taskComponent.task != null && taskComponent.taskStatus.equals(TaskStatusType.InProgress)) {
+                        result.add(taskComponent.task.assignedTaskType + "\nRemaining Time : " + (taskComponent.taskCompletionTime - time.getGameTime()));
+                    }
+                }
+
+                if (result.isEmpty()) {
+                    result.add("No tasks");
+                }
+                return result;
+            }
+        };
+
+        Binding<List> oreonsList = new ReadOnlyBinding<List>() {
+            @Override
+            public List get() {
+                List<String> result = new ArrayList<>();
+                int numberOfBuilders = 0;
+                int numberOfGuards = 0;
+                int numberOfKings = 0;
+                for (EntityRef oreonEntity : entityManager.getEntitiesWith(OreonSpawnComponent.class)) {
+                    switch (oreonEntity.getParentPrefab().getName()) {
+                        case MooConstants.OREON_BUILDER_PREFAB:
+                            numberOfBuilders++;
+                            break;
+                        case MooConstants.OREON_GUARD_PREFAB:
+                            numberOfGuards++;
+                            break;
+                        case MooConstants.OREON_KING_PREFAB:
+                            numberOfKings++;
+                    }
+                }
+
+                result.add("Builders : " + numberOfBuilders);
+                result.add("Guards : " + numberOfGuards);
+                result.add("Kings : " + numberOfKings);
+                return result;
+            }
+        };
+
+        Binding<List> buildingsList = new ReadOnlyBinding<List>() {
+            @Override
+            public List get() {
+                List<String> result = new ArrayList<>();
+
+                int numberOfDiners = 0;
+                int numberOfStorage = 0;
+                int numberOfLaboratories = 0;
+                int numberOfClassrooms = 0;
+                int numberOfGyms = 0;
+                int numberOfHospitals = 0;
+                int numberOfJails = 0;
+                int numberOfChurches = 0;
+                int numberOfBedrooms = 0;
+
+                for (EntityRef building : entityManager.getEntitiesWith(ConstructedBuildingComponent.class)) {
+                    ConstructedBuildingComponent buildingComponent =
+                            building.getComponent(ConstructedBuildingComponent.class);
+                    switch (buildingComponent.buildingType) {
+                        case Diner:
+                            numberOfDiners++;
+                            break;
+                        case Storage:
+                            numberOfStorage++;
+                            break;
+                        case Laboratory:
+                            numberOfLaboratories++;
+                            break;
+                        case Classroom:
+                            numberOfClassrooms++;
+                            break;
+                        case Gym:
+                            numberOfGyms++;
+                            break;
+                        case Hospital:
+                            numberOfHospitals++;
+                            break;
+                        case Jail:
+                            numberOfJails++;
+                            break;
+                        case Church:
+                            numberOfChurches++;
+                            break;
+                        case Bedroom:
+                            numberOfBedrooms++;
+                            break;
+                    }
+                }
+
+                result.add("Diners : " + numberOfDiners);
+                result.add("Storage : " + numberOfStorage);
+                result.add("Laboratories : " + numberOfLaboratories);
+                result.add("Classrooms : " + numberOfClassrooms);
+                result.add("Gyms : " + numberOfGyms);
+                result.add("Hospitals : " + numberOfHospitals);
+                result.add("Jails : " + numberOfJails);
+                result.add("Churches : " + numberOfChurches);
+                result.add("Bedrooms :" + numberOfBedrooms);
+
+                return result;
+            }
+        };
+
+        availableTasks.bindList(availableTasksList);
+        inProgressTasks.bindList(inProgressTasksList);
+        oreons.bindList(oreonsList);
+        buildings.bindList(buildingsList);
+    }
+}
