@@ -37,6 +37,7 @@ import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -95,7 +96,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
             return;
         }
 
-        Vector3f hitBlockPos = event.getTargetLocation();
+        Vector3f hitBlockPos = JomlUtil.from(event.getTargetLocation());
 
         checkIfPartOfBuilding(hitBlockPos, player);
     }
