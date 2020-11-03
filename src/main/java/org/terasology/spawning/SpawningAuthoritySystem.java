@@ -83,7 +83,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
             CreatureNameComponent oreonNameComponent = newOreon.getComponent(CreatureNameComponent.class);
             NameTagComponent nameTagComponent = new NameTagComponent();
             nameTagComponent.text = oreonNameComponent.firstName;
-            nameTagComponent.yOffset = 0.5f;
+            nameTagComponent.yOffset = 1.0f;
             newOreon.addComponent(nameTagComponent);
 
             assignRandomAttributes(newOreon);

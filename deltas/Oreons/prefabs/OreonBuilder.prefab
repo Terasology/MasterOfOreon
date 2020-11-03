@@ -1,73 +1,76 @@
 {
-    "Behavior" : {
-        "tree" : "MasterOfOreon:taskAcquiringOreon"
-    },
-    "Task" : {
-        "assignedTaskType" : "none"
-    },
-    "AliveCharacter" : {},
-    "skeletalMesh" : {
-        "heightOffset" : -0.5
-    },
-    "Stand" : {
-        "animationPool" : [
-            "BuilderIdle",
-            "BuilderShow",
-            "BuilderWave"
-        ]
-    },
-    "Walk" : {
-        "animationPool" : ["BuilderWalk"]
-    },
-    "Dying" : {
-        "animationPool" : ["BuilderDead"]
-    },
-    "Build" : {
-        "animationPool" : ["BuilderBuild", "BuilderBuild", "BuilderBuild", "BuilderThor"]
-    },
-    "CharacterMovement" : {
-        "groundFriction" : 16,
-        "speedMultiplier" : 0.3,
-        "distanceBetweenFootsteps" : 0.2,
-        "distanceBetweenSwimStrokes" : 2.5,
-        "height" : 1.6,
-        "radius" : 0.3,
-        "jumpSpeed" : 12
-    },
-    "MinionMove" : {},
-    "NPCMovement" : {},
-    "OreonTooltip" : {
-        "icon" : "MasterOfOreon:oreonguard",
-        "name" : "Oreon Builder"
-    },
-    "OreonSpawn" : {
-        "itemsToConsume" : {
-            "Dirt" : [1],
-            "Sand" : [2]
-        }
-    },
-    "CreatureNameGenerator" : {
-        "genderRatio" : 0.1,
-        "nobility" : 0,
-        "theme" : "Dwarf"
-    },
-    "Inventory": {
-        "privateToOwner": false,
-        "itemSlots": [
-            0
-        ]
-    },
-    "RenderInventorySlots": {
-        "slots": [
-            0
-        ],
-        "translate": [
-            0,
-            1,
-            0
-        ],
-        "itemSize": 0.25,
-        "rotateWithBlock": false
-    },
-    "Network" : {}
+  "Behavior": {
+    "tree": "MasterOfOreon:taskAcquiringOreon"
+  },
+  "Task": {
+    "assignedTaskType": "none"
+  },
+  "AliveCharacter": {},
+  "skeletalMesh": {
+    "heightOffset": -0.7
+  },
+  "Stand": {
+    "animationPool": [
+      "Oreons:OreonBuilder#Idle"
+    ]
+  },
+  "Walk": {
+    "animationPool": [
+      "Oreons:OreonBuilder#Walk"
+    ]
+  },
+  "Build": {
+    "animationPool": [
+      "Oreons:OreonBuilder#PickUp"
+    ]
+  },
+  "CharacterMovement": {
+    "groundFriction": 16,
+    "speedMultiplier": 0.3,
+    "distanceBetweenFootsteps": 0.2,
+    "distanceBetweenSwimStrokes": 2.5,
+    "height": 1.6,
+    "radius": 0.3,
+    "jumpSpeed": 12
+  },
+  "MinionMove": {},
+  "NPCMovement": {},
+  "OreonTooltip": {
+    "icon": "MasterOfOreon:oreons#oreonBuilder",
+    "name": "Oreon Builder"
+  },
+  "OreonSpawn": {
+    "itemsToConsume": {
+      "Dirt": [
+        1
+      ],
+      "Sand": [
+        2
+      ]
+    }
+  },
+  "CreatureNameGenerator": {
+    "genderRatio": 0.1,
+    "nobility": 0,
+    "theme": "Human"
+  },
+  "Inventory": {
+    "privateToOwner": false,
+    "itemSlots": [
+      0
+    ]
+  },
+  "RenderInventorySlots": {
+    "slots": [
+      0
+    ],
+    "translate": [
+      0,
+      1,
+      0
+    ],
+    "itemSize": 0.25,
+    "rotateWithBlock": false
+  },
+  "Network": {}
 }
