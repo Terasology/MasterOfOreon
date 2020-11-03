@@ -1,51 +1,52 @@
 {
-    "Behavior" : {
-        "tree" : "MasterOfOreon:taskAcquiringOreon"
-    },
-    "Task" : {
-        "assignedTaskType" : "none"
-    },
-    "AliveCharacter" : {},
-    "skeletalMesh" : {
-        "heightOffset" : -0.5
-    },
-    "Stand" : {
-        "animationPool" : [
-            "KingWalk",
-            "KingWalk",
-            "KingWalk"
-        ]
-    },
-    "Walk" : {
-        "animationPool" : ["KingWalk"]
-    },
-    "Dying" : {
-        "animationPool" : ["KingWalk"]
-    },
-    "CharacterMovement" : {
-        "groundFriction" : 16,
-        "speedMultiplier" : 0.3,
-        "distanceBetweenFootsteps" : 0.2,
-        "distanceBetweenSwimStrokes" : 2.5,
-        "height" : 1.6,
-        "radius" : 0.3,
-        "jumpSpeed" : 12
-    },
-    "MinionMove" : {},
-    "NPCMovement" : {},
-    "OreonTooltip" : {
-        "icon" : "MasterOfOreon:oreonguard",
-        "name" : "Oreon King"
-    },
-    "OreonSpawn" : {
-        "itemsToConsume" : {
-            "Dirt" : [3],
-            "Sand" : [3]
-        }
-    },
-    "CreatureNameGenerator" : {
-        "genderRatio" : 0.1,
-        "nobility" : 1,
-        "theme" : "Dwarf"
+  "Behavior": {
+    "tree": "MasterOfOreon:taskAcquiringOreon"
+  },
+  "Task": {
+    "assignedTaskType": "none"
+  },
+  "AliveCharacter": {},
+  "skeletalMesh": {
+    "heightOffset": -0.5
+  },
+  "Stand": {
+    "animationPool": [
+      "Oreons:OreonKing#Idle"
+    ]
+  },
+  "Walk": {
+    "animationPool": [
+      "Oreons:OreonKing#Walk"
+    ]
+  },
+  "CharacterMovement": {
+    "groundFriction": 16,
+    "speedMultiplier": 0.3,
+    "distanceBetweenFootsteps": 0.2,
+    "distanceBetweenSwimStrokes": 2.5,
+    "height": 1.6,
+    "radius": 0.3,
+    "jumpSpeed": 12
+  },
+  "MinionMove": {},
+  "NPCMovement": {},
+  "OreonTooltip": {
+    "icon": "MasterOfOreon:oreons#oreonKing",
+    "name": "Oreon King"
+  },
+  "OreonSpawn": {
+    "itemsToConsume": {
+      "Dirt": [
+        3
+      ],
+      "Sand": [
+        3
+      ]
     }
+  },
+  "CreatureNameGenerator": {
+    "genderRatio": 0.1,
+    "nobility": 1,
+    "theme": "Human"
+  }
 }

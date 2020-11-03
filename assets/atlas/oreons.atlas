@@ -1,0 +1,12 @@
+{
+  "texture" : "MasterOfOreon:oreons",
+  "textureSize" : [128, 128],
+  "grid" : {
+    "tileSize" : [64, 64],
+    "gridDimensions" : [2, 2],
+    "tileNames" : [
+      "oreonGuard", "oreonBuilder",
+      "oreonKing", ""
+    ]
+  }
+}
