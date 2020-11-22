@@ -47,6 +47,7 @@ import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.logic.selection.MovableSelectionEndEvent;
 import org.terasology.logic.selection.MovableSelectionStartEvent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -234,20 +235,21 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     private boolean taskMeetsRequirements(Task task, OreonAttributeComponent attributes) {
         return (attributes.intelligence >= task.minimumAttributes.intelligence &&
-                attributes.strength >= task.minimumAttributes.strength &&
-                attributes.health >= task.minimumAttributes.health &&
-                attributes.hunger >= task.minimumAttributes.hunger);
+            attributes.strength >= task.minimumAttributes.strength &&
+            attributes.health >= task.minimumAttributes.health &&
+            attributes.hunger >= task.minimumAttributes.hunger);
     }
 
     private boolean taskIsRecommended(Task task, OreonAttributeComponent attributes) {
         return (attributes.intelligence >= task.recommendedAttributes.intelligence &&
-                attributes.strength >= task.recommendedAttributes.strength &&
-                attributes.health >= task.recommendedAttributes.health &&
-                attributes.hunger >= task.recommendedAttributes.hunger);
+            attributes.strength >= task.recommendedAttributes.strength &&
+            attributes.health >= task.recommendedAttributes.health &&
+            attributes.hunger >= task.recommendedAttributes.hunger);
     }
 
     /**
      * Checks if the item used for selection of an area is an Oreon Selection Tool
+     *
      * @param player
      * @return True - If held item is an Oreon Selection Tool
      */
@@ -268,6 +270,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     /**
      * Receives the {@link ApplyBlockSelectionEvent} which is sent after a block selection end point is set. Also checks
      * if the item used for selection is an Oreon Selection Tool, if not the area is intended for another purpose.
+     *
      * @param blockSelectionEvent Event triggered after a block selection has been completed
      * @param player The player entity which triggers the event
      */
@@ -281,16 +284,16 @@ public class TaskManagementSystem extends BaseComponentSystem {
         }
 
         //check if this area can be used
-        if (!checkArea(blockSelectionEvent.getSelection())) {
+        if (!checkArea(JomlUtil.from(blockSelectionEvent.getSelection()))) {
             return;
         }
 
-        player.send(new OpenTaskSelectionScreenEvent(blockSelectionEvent.getSelection()));
+        player.send(new OpenTaskSelectionScreenEvent(JomlUtil.from(blockSelectionEvent.getSelection())));
     }
 
     /**
-     * Adds task to the player's holding.
-     * This method can be used by external systems to add tasks to the holding.
+     * Adds task to the player's holding. This method can be used by external systems to add tasks to the holding.
+     *
      * @param player The player entity which has the holding
      * @param taskEntity The task entity to be added
      */
@@ -331,13 +334,13 @@ public class TaskManagementSystem extends BaseComponentSystem {
         Task newTask;
 
         switch (newTaskType) {
-            case AssignedTaskType.PLANT :
+            case AssignedTaskType.PLANT:
                 newTask = new PlantTask(plantType.path);
                 taskComponent.subsequentTask = new HarvestTask();
                 taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
                 taskComponent.delayBeforeNextTask = 50000;
 
-                newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
+                newBlockSelectionComponent.currentSelection = JomlUtil.from(taskComponent.taskRegion);
 
                 taskComponent.task = newTask;
 
@@ -356,9 +359,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 addTask(player, task);
                 break;
 
-            case AssignedTaskType.BUILD :
+            case AssignedTaskType.BUILD:
                 pendingTask = new BuildTask(buildingType);
-                newBlockSelectionComponent.currentSelection = getBuildingExtents(buildingType, region);
+                newBlockSelectionComponent.currentSelection = JomlUtil.from(getBuildingExtents(buildingType, region));
                 newBlockSelectionComponent.isMovable = true;
                 pendingBuildTaskEntity = entityManager.create(newBlockSelectionComponent);
                 pendingBuildTaskEntity.setOwner(player);
@@ -366,7 +369,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
                 pendingBuildTaskEntity.send(new MovableSelectionStartEvent());
                 break;
 
-            default :
+            default:
                 newTask = new PlantTask(MooConstants.OREON_CROP_0_BLOCK);
         }
     }
@@ -389,7 +392,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         taskComponent.subsequentTaskType = AssignedTaskType.HARVEST;
         taskComponent.delayBeforeNextTask = 50000;
 
-        newBlockSelectionComponent.currentSelection = taskComponent.taskRegion;
+        newBlockSelectionComponent.currentSelection = JomlUtil.from(taskComponent.taskRegion);
 
         taskComponent.task = newTask;
 
@@ -419,7 +422,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             // Create new build task
             TaskComponent taskComponent = new TaskComponent();
-            taskComponent.taskRegion = blockSelectionComponent.currentSelection;
+            taskComponent.taskRegion = JomlUtil.from(blockSelectionComponent.currentSelection);
             taskComponent.creationTime = timer.getGameTimeInMs();
 
             taskComponent.assignedTaskType = AssignedTaskType.BUILD;
@@ -504,10 +507,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
         int maxZ = Integer.MIN_VALUE;
 
         for (SpawnBlockRegionsComponent.RegionToFill regionToFill : regionsToFill) {
-            minX = Math.min(minX, regionToFill.region.minX());
-            maxX = Math.max(maxX, regionToFill.region.maxX());
-            minZ = Math.min(minZ, regionToFill.region.minZ());
-            maxZ = Math.max(maxZ, regionToFill.region.maxZ());
+            minX = Math.min(minX, regionToFill.region.getMinX());
+            maxX = Math.max(maxX, regionToFill.region.getMaxX());
+            minZ = Math.min(minZ, regionToFill.region.getMinZ());
+            maxZ = Math.max(maxZ, regionToFill.region.getMaxZ());
         }
 
         Vector3f center = region.center();
@@ -545,9 +548,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     /**
-     * Saves the selected area for a particular task to check for clashes later.
-     * Attaches a {@link BlockSelectionComponent} to the assignedArea entity so that the assigned area remains colored
-     * until the task is finished.
+     * Saves the selected area for a particular task to check for clashes later. Attaches a {@link
+     * BlockSelectionComponent} to the assignedArea entity so that the assigned area remains colored until the task is
+     * finished.
+     *
      * @param blockSelectionComponent The component which has information related to the area selected.
      * @param newTask The new Task object which is being created
      * @param taskComponent The TaskComponent which will be added to the task entity
@@ -556,7 +560,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private void markArea(BlockSelectionComponent blockSelectionComponent, Task newTask, TaskComponent taskComponent, EntityRef player) {
         AssignedAreaComponent assignedAreaComponent = new AssignedAreaComponent();
 
-        assignedAreaComponent.assignedRegion = blockSelectionComponent.currentSelection;
+        assignedAreaComponent.assignedRegion = JomlUtil.from(blockSelectionComponent.currentSelection);
 
         assignedAreaComponent.assignedTaskType = newTask.assignedTaskType;
         assignedAreaComponent.buildingType = newTask.buildingType;
@@ -571,6 +575,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Checks if the selected area can be used i.e not already assigned to some other task
+     *
      * @param selectedRegion The region to be checked
      * @return A boolean value specifying whether the area is valid
      */
@@ -580,6 +585,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Looks for a building in the assignedAreas list.
+     *
      * @param buildingType The type of the building required by the Oreon
      * @return Returns a target for the Oreon to go to.
      */
@@ -602,7 +608,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private void setOreonTarget(Actor oreon, Vector3i target) {
         MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
 
-        moveComponent.target = new Vector3f(target.x, target.y, target.z);
+        moveComponent.target = JomlUtil.from(new Vector3f(target.x, target.y, target.z));
         moveComponent.type = MinionMoveComponent.Type.DIRECT;
 
         logger.info("Set Oreon target to : " + moveComponent.target);
@@ -612,33 +618,34 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Assigns advanced tasks like Eat and sleep to Oreon when it is free.
+     *
      * @param oreon The oreon Actor to which the task will be assigned
      * @param newTask The type of task to performed received based on priority of different tasks from its BT
      * @return A boolean value which signifies if the task was successfully assigned.
      */
     public boolean assignAdvancedTaskToOreon(Actor oreon, Task newTask) {
-            TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
-            HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
+        TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
+        HoldingComponent oreonHolding = holdingSystem.getOreonHolding(oreon);
 
-            Vector3i target = findRequiredBuilding(newTask.buildingType, oreonTaskComponent, oreonHolding);
+        Vector3i target = findRequiredBuilding(newTask.buildingType, oreonTaskComponent, oreonHolding);
 
-            // if a building required for the task like the Diner for Eat is not found
-            if (target == null) {
-                return false;
-            }
+        // if a building required for the task like the Diner for Eat is not found
+        if (target == null) {
+            return false;
+        }
 
-            newTask.requiredBuildingEntityID = oreonTaskComponent.task.requiredBuildingEntityID;
-            oreonTaskComponent.task = newTask;
-            oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
-            oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
+        newTask.requiredBuildingEntityID = oreonTaskComponent.task.requiredBuildingEntityID;
+        oreonTaskComponent.task = newTask;
+        oreonTaskComponent.assignedTaskType = newTask.assignedTaskType;
+        oreonTaskComponent.taskCompletionTime = getTaskCompletionTime(newTask);
 
 
-            oreonTaskComponent.creationTime = timer.getGameTimeInMs();
-            oreon.save(oreonTaskComponent);
+        oreonTaskComponent.creationTime = timer.getGameTimeInMs();
+        oreon.save(oreonTaskComponent);
 
-            setOreonTarget(oreon, target);
+        setOreonTarget(oreon, target);
 
-            return true;
+        return true;
     }
 
     /**
@@ -711,6 +718,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     /**
      * Calculates the time at which the assigned task will be completed based on the assigned task type and current game
      * time.
+     *
      * @param newTask The type of task that is being assigned to the Oreon
      * @return The time at which the task will be completed
      */
@@ -737,8 +745,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             constructionStartedEvent.constructedBuildingEntity.addComponent(networkComponent);
 
             constructionStartedEvent.constructedBuildingEntity.setOwner(player);
-        }
-        else {
+        } else {
             // When a building is upgraded
             // Update the extents of the building in the ConstructedBuildingComponent after upgrade
             ConstructedBuildingComponent constructedBuildingComponent = constructionStartedEvent.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class);
@@ -761,7 +768,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         holdingComponent.constructedBuildings.add(constructedBuilding);
 
         constructedBuilding.getOwner().send(new BuildingConstructionCompletedEvent(constructedBuildingComponent.boundingRegions,
-                constructedBuildingComponent.buildingType, constructedBuildingComponent.centerLocation, constructedBuilding));
+            constructedBuildingComponent.buildingType, constructedBuildingComponent.centerLocation, constructedBuilding));
     }
 
     @ReceiveEvent(components = TaskComponent.class)
@@ -775,13 +782,14 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
     /**
      * Adds a block to the Oreon's inventory which is rendered as an indication for the task being being performed
+     *
      * @param oreon Oreon entity performing the task
      * @param task Task being performed
      */
     private void placeBlockToRenderInInventory(Actor oreon, Task task) {
         BlockItemFactory blockItemFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(oreon.getEntity(), oreon.getEntity(),
-                blockItemFactory.newInstance(blockManager.getBlockFamily(task.blockToRender),
-                        1));
+            blockItemFactory.newInstance(blockManager.getBlockFamily(task.blockToRender),
+                1));
     }
 }

@@ -30,6 +30,7 @@ import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -215,7 +216,7 @@ public class PerformTaskNode extends BaseAction {
 
                     List<Region3i> regionsToFill = new ArrayList<>();
                     for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegionsToFill) {
-                        Region3i relativeRegion = regionToFill.region;
+                        Region3i relativeRegion = JomlUtil.from(regionToFill.region);
                         Region3i absoluteRegion = relativeRegion.move(buildingComponent.centerLocation);
                         regionsToFill.add(absoluteRegion);
                     }
