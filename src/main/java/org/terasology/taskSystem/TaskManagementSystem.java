@@ -47,6 +47,7 @@ import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.logic.selection.MovableSelectionEndEvent;
 import org.terasology.logic.selection.MovableSelectionStartEvent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
@@ -647,9 +648,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
     public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon, MinionMoveComponent moveComponent) {
         if (lastCollisionLocation == null) {
-            lastCollisionLocation = collisionEvent.getLocation();
+            lastCollisionLocation = JomlUtil.from(collisionEvent.getLocation());
         } else {
-            if (isSameCollisionLocation(lastCollisionLocation, collisionEvent.getLocation())) {
+            if (isSameCollisionLocation(lastCollisionLocation, JomlUtil.from(collisionEvent.getLocation()))) {
                 logger.info("oreon stuck");
                 moveComponent.target = null;
                 oreon.saveComponent(moveComponent);
