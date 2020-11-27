@@ -30,6 +30,7 @@ import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
@@ -50,6 +51,7 @@ import org.terasology.taskSystem.tasks.PlantTask;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.ArrayList;
@@ -215,9 +217,9 @@ public class PerformTaskNode extends BaseAction {
 
                     List<Region3i> regionsToFill = new ArrayList<>();
                     for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegionsToFill) {
-                        Region3i relativeRegion = regionToFill.region;
-                        Region3i absoluteRegion = relativeRegion.move(buildingComponent.centerLocation);
-                        regionsToFill.add(absoluteRegion);
+                        BlockRegion relativeRegion = regionToFill.region;
+                        BlockRegion absoluteRegion = relativeRegion.translate(JomlUtil.from(buildingComponent.centerLocation));
+                        regionsToFill.add(JomlUtil.from(absoluteRegion));
                     }
                     Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).center().z), new Vector3i(1, 1, 1));
                     for (Region3i baseRegion:regionsToFill) {
