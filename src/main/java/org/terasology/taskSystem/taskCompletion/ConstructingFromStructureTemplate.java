@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
 import org.terasology.buildings.events.BuildingConstructionStartedEvent;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
@@ -69,7 +70,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
-        buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, centerBlockPosition)));
+        buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, JomlUtil.from(centerBlockPosition))));
 
         sendConstructionStartEvent(centerBlockPosition, buildingType, building, playerEntity);
     }
@@ -114,7 +115,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         List<Region3i> absoluteRegions = new ArrayList<>();
 
         for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
-            Region3i relativeRegion = regionToFill.region;
+            Region3i relativeRegion = JomlUtil.from(regionToFill.region);
             Region3i absoluteRegion = relativeRegion.move(centerBlock);
             absoluteRegions.add(absoluteRegion);
         }
@@ -132,7 +133,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         List<Region3i> absoluteRegions = new ArrayList<>();
 
         for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
-            Region3i relativeRegion = regionToFill.region;
+            Region3i relativeRegion = JomlUtil.from(regionToFill.region);
             Region3i absoluteRegion = relativeRegion.move(centerBlock);
             absoluteRegions.add(absoluteRegion);
         }

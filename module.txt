@@ -26,5 +26,6 @@
         { "id": "WorldlyTooltipAPI", "minVersion": "1.0.0" }
     ],
     "isServerSideOnly": false,
-    "isGameplay": true
+    "isGameplay": true,
+    "defaultWorldGenerator": "CoreWorlds:FacetedSimplex"
 }
