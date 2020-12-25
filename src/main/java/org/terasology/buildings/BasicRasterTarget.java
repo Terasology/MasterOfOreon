@@ -24,7 +24,6 @@ import org.terasology.math.geom.Rect2i;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockRegion;
-import org.terasology.world.block.BlockRegions;
 
 import java.util.Set;
 
@@ -42,7 +41,7 @@ public class BasicRasterTarget implements RasterTarget {
 
         Vector3i min = new Vector3i(affectedArea.minX(), -255, affectedArea.minY());
         Vector3i max = new Vector3i(affectedArea.maxX(), 255, affectedArea.maxY());
-        this.affectedRegion = BlockRegions.createFromMinAndMax(min, max);
+        this.affectedRegion = new BlockRegion(min, max);
     }
 
     public void setBlock(int x, int y, int z, BlockType type, Set<Side> side) {
