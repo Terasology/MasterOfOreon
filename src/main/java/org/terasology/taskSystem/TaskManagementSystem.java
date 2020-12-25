@@ -505,10 +505,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
         int maxZ = Integer.MIN_VALUE;
 
         for (SpawnBlockRegionsComponent.RegionToFill regionToFill : regionsToFill) {
-            minX = Math.min(minX, regionToFill.region.getMinX());
-            maxX = Math.max(maxX, regionToFill.region.getMaxX());
-            minZ = Math.min(minZ, regionToFill.region.getMinZ());
-            maxZ = Math.max(maxZ, regionToFill.region.getMaxZ());
+            minX = Math.min(minX, regionToFill.region.minX());
+            maxX = Math.max(maxX, regionToFill.region.maxX());
+            minZ = Math.min(minZ, regionToFill.region.minZ());
+            maxZ = Math.max(maxZ, regionToFill.region.maxZ());
         }
 
         Vector3f center = region.center();
