@@ -15,15 +15,15 @@
  */
 package org.terasology.buildings;
 
+import org.joml.Vector3i;
 import org.terasology.cities.BlockTheme;
 import org.terasology.cities.BlockType;
 import org.terasology.cities.raster.RasterTarget;
-import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.Set;
 
@@ -31,7 +31,7 @@ public class BasicRasterTarget implements RasterTarget {
 
     private WorldProvider worldProvider;
     private Rect2i affectedArea;
-    private Region3i affectedRegion;
+    private BlockRegion affectedRegion;
     private BlockTheme blockTheme;
 
     public BasicRasterTarget(WorldProvider worldProvider,Rect2i area, BlockTheme blockTheme) {
@@ -39,9 +39,7 @@ public class BasicRasterTarget implements RasterTarget {
         this.affectedArea = area;
         this.blockTheme = blockTheme;
 
-        Vector3i min = new Vector3i(affectedArea.minX(), -255, affectedArea.minY());
-        Vector3i max = new Vector3i(affectedArea.maxX(), 255, affectedArea.maxY());
-        this.affectedRegion = Region3i.createFromMinMax(min, max);
+        this.affectedRegion = new BlockRegion(affectedArea.minX(), -255, affectedArea.minY(), affectedArea.maxX(), 255, affectedArea.maxY());
     }
 
     public void setBlock(int x, int y, int z, BlockType type, Set<Side> side) {
@@ -60,7 +58,7 @@ public class BasicRasterTarget implements RasterTarget {
         return affectedArea;
     }
 
-    public Region3i getAffectedRegion() {
+    public BlockRegion getAffectedRegion() {
         return affectedRegion;
     }
 }
