@@ -39,9 +39,7 @@ public class BasicRasterTarget implements RasterTarget {
         this.affectedArea = area;
         this.blockTheme = blockTheme;
 
-        Vector3i min = new Vector3i(affectedArea.minX(), -255, affectedArea.minY());
-        Vector3i max = new Vector3i(affectedArea.maxX(), 255, affectedArea.maxY());
-        this.affectedRegion = new BlockRegion(min, max);
+        this.affectedRegion = new BlockRegion(affectedArea.minX(), -255, affectedArea.minY(), affectedArea.maxX(), 255, affectedArea.maxY());
     }
 
     public void setBlock(int x, int y, int z, BlockType type, Set<Side> side) {
