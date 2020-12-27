@@ -17,6 +17,7 @@ package org.terasology.taskSystem.taskCompletion;
 
 import org.terasology.math.Region3i;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.world.block.BlockRegion;
 
 public interface BuildTaskCompletion {
 
@@ -25,7 +26,7 @@ public interface BuildTaskCompletion {
      * @param selectedRegion The region assigned for the building
      * @param  buildingType The type of building to be constructed
      */
-    void constructBuilding(Region3i selectedRegion, BuildingType buildingType);
+    void constructBuilding(BlockRegion selectedRegion, BuildingType buildingType);
 
     /**
      * Selects a building based on the type of building to be constructed

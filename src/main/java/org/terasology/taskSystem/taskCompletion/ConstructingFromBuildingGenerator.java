@@ -57,6 +57,7 @@ import org.terasology.math.geom.Rect2i;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
 
 import java.math.RoundingMode;
 import java.util.Collections;
@@ -80,7 +81,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         this.blockManager = manager;
     }
 
-    public void constructBuilding(Region3i selectedRegion, BuildingType buildingType) {
+    public void constructBuilding(BlockRegion selectedRegion, BuildingType buildingType) {
         BuildingParcel buildingParcel = new BuildingParcel();
         buildingParcel.setOrientation(Orientation.NORTH);
 

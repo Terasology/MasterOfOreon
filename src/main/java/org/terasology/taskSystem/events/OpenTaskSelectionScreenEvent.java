@@ -17,15 +17,16 @@ package org.terasology.taskSystem.events;
 
 import org.terasology.entitySystem.event.Event;
 import org.terasology.math.Region3i;
+import org.terasology.world.block.BlockRegion;
 
 public class OpenTaskSelectionScreenEvent implements Event {
-    private Region3i taskRegion;
+    private BlockRegion taskRegion;
 
-    public OpenTaskSelectionScreenEvent(Region3i region) {
+    public OpenTaskSelectionScreenEvent(BlockRegion region) {
         this.taskRegion = region;
     }
 
-    public Region3i getTaskRegion() {
+    public BlockRegion getTaskRegion() {
         return taskRegion;
     }
 }

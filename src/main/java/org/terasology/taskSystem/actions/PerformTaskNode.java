@@ -15,6 +15,10 @@
  */
 package org.terasology.taskSystem.actions;
 
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
@@ -30,9 +34,6 @@ import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.spawning.OreonAttributeComponent;
@@ -55,7 +56,6 @@ import org.terasology.world.block.BlockRegion;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -188,7 +188,7 @@ public class PerformTaskNode extends BaseAction {
      * @param taskComponent The component with task information which just completed
      */
     private void completeTask(Actor oreon, TaskComponent taskComponent) {
-        Region3i selectedRegion = taskComponent.taskRegion;
+        BlockRegion selectedRegion = taskComponent.taskRegion;
         String taskType = taskComponent.assignedTaskType;
 
 
@@ -215,23 +215,23 @@ public class PerformTaskNode extends BaseAction {
                 if (buildingTemplate != null) {
                     List<SpawnBlockRegionsComponent.RegionToFill> relativeRegionsToFill = buildingTemplate.getParentPrefab().getComponent(SpawnBlockRegionsComponent.class).regionsToFill;
 
-                    List<Region3i> regionsToFill = new ArrayList<>();
+                    List<BlockRegion> regionsToFill = new ArrayList<>();
                     for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegionsToFill) {
                         BlockRegion relativeRegion = regionToFill.region;
-                        BlockRegion absoluteRegion = relativeRegion.translate(JomlUtil.from(buildingComponent.centerLocation));
-                        regionsToFill.add(JomlUtil.from(absoluteRegion));
+                        BlockRegion absoluteRegion = relativeRegion.translate(buildingComponent.centerLocation);
+                        regionsToFill.add(absoluteRegion);
                     }
-                    Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).center().z), new Vector3i(1, 1, 1));
-                    for (Region3i baseRegion:regionsToFill) {
+
+                    Vector3i center = new Vector3i(regionsToFill.get(0).center(new Vector3f()), RoundingMode.FLOOR);
+                    BlockRegion totalRegion = new BlockRegion(new Vector3i(center.x, taskManagementSystem.minYOverall, center.z), new Vector3i(1, 1, 1));
+                    for (BlockRegion baseRegion:regionsToFill) {
 
                         Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
                         Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
 
-                        Region3i region = Region3i.createFromMinMax(min, max);
-                        Iterator<Vector3i> regionsIterator = region.iterator();
-                        while (regionsIterator.hasNext()) {
-                            Vector3i vector = regionsIterator.next();
-                            totalRegion = totalRegion.expandToContain(vector);
+                        BlockRegion region = new BlockRegion(min, max);
+                        for(Vector3ic p: region) {
+                            totalRegion.union(p);
                         }
                     }
 
