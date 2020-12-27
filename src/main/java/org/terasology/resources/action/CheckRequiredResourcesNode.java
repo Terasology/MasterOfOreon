@@ -15,6 +15,7 @@
  */
 package org.terasology.resources.action;
 
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
@@ -43,6 +44,7 @@ import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.tasks.GetBlocksFromChestTask;
 import org.terasology.taskSystem.tasks.PlaceBlocksInChestTask;
 import org.terasology.world.BlockEntityRegistry;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.List;
 
@@ -88,8 +90,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
                     // Free the Oreon because the required resources not found in building and add task to holding if not an advanced task
                     if (!taskComponent.task.isAdvanced) {
                         taskManagementSystem.abandonTask(actor.getEntity());
-                    }
-                    else {
+                    } else {
                         taskComponent.assignedTaskType = AssignedTaskType.NONE;
                         taskComponent.task = new Task();
                     }
@@ -117,13 +118,13 @@ public class CheckRequiredResourcesNode extends BaseAction {
         OreonSpawnComponent spawnComponent = oreon.getComponent(OreonSpawnComponent.class);
         HoldingComponent holdingComponent = spawnComponent.parent.getComponent(HoldingComponent.class);
 
-        List<Region3i> storageRegion = getStorageRegion(holdingComponent);
+        List<BlockRegion> storageRegion = getStorageRegion(holdingComponent);
 
         // If storage building is not constructed
         if (storageRegion == null) {
             return;
         }
-        EntityRef chestEntity = blockEntityRegistry.getBlockEntityAt(storageRegion.get(MooConstants.CHEST_BLOCK_INDEX).max());
+        EntityRef chestEntity = blockEntityRegistry.getBlockEntityAt(storageRegion.get(MooConstants.CHEST_BLOCK_INDEX).getMax(new Vector3i()));
 
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.GET_BLOCKS_FROM_CHEST;
@@ -134,7 +135,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
 
         // Add place blocks into the required building as a subsequent task.
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
-        EntityRef targetChestEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.CHEST_BLOCK_INDEX).max());
+        EntityRef targetChestEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.CHEST_BLOCK_INDEX).getMax(new Vector3i()));
         taskComponent.subsequentTask = new PlaceBlocksInChestTask(requiredResource, 1, targetChestEntity);
         taskComponent.subsequentTaskType = AssignedTaskType.PLACE_BLOCKS_IN_CHEST;
         taskComponent.subsequentTaskRegion = buildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
@@ -147,7 +148,7 @@ public class CheckRequiredResourcesNode extends BaseAction {
         taskManagementSystem.addTask(spawnComponent.parent, taskEntity);
     }
 
-    private List<Region3i> getStorageRegion(HoldingComponent oreonHolding) {
+    private List<BlockRegion> getStorageRegion(HoldingComponent oreonHolding) {
         List<EntityRef> buildings = oreonHolding.constructedBuildings;
         for (EntityRef building : buildings) {
             ConstructedBuildingComponent constructedBuildingComponent = building.getComponent(ConstructedBuildingComponent.class);

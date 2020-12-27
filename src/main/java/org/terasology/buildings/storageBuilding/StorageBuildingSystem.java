@@ -39,6 +39,7 @@ import org.terasology.resources.system.BuildingResourceSystem;
 import org.terasology.resources.system.ResourceSystem;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.world.BlockEntityRegistry;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.List;
 
@@ -91,10 +92,10 @@ public class StorageBuildingSystem extends BaseComponentSystem {
             ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
             if (buildingComponent.buildingType.equals(BuildingType.Storage)) {
-                List<Region3i> regions = buildingComponent.boundingRegions;
+                List<BlockRegion> regions = buildingComponent.boundingRegions;
 
-                for (Region3i region : regions) {
-                    if (region.encompasses(new Vector3i(location.x, location.y - 1, location.z))) {
+                for (BlockRegion region : regions) {
+                    if (region.contains(location.x, location.y - 1, location.z)) {
                         addItemToChest(item, building);
                         break;
                     }

@@ -15,11 +15,11 @@
  */
 package org.terasology.resources.system;
 
+import org.joml.Vector3i;
 import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.math.geom.Vector3i;
 
 import java.util.List;
 
@@ -42,6 +42,7 @@ public class BuildingResourceSystem extends ResourceSystem {
 
     /**
      * Looks for the chest block in the given building
+     *
      * @param building The building entity to be searched
      * @return The chest block entity
      */
@@ -50,7 +51,8 @@ public class BuildingResourceSystem extends ResourceSystem {
 
         // Get the chest block in the building
         // TODO: Should not assume that Chest will be the first item in the ST prefab
-        Vector3i chestPosition = buildingComponent.boundingRegions.get(MooConstants.CHEST_BLOCK_INDEX).max();
+        Vector3i chestPosition =
+            buildingComponent.boundingRegions.get(MooConstants.CHEST_BLOCK_INDEX).getMax(new Vector3i());
         return blockEntityRegistry.getBlockEntityAt(chestPosition);
     }
 }

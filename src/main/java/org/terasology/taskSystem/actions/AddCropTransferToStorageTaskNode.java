@@ -15,6 +15,7 @@
  */
 package org.terasology.taskSystem.actions;
 
+import org.joml.Vector3i;
 import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.context.Context;
@@ -26,11 +27,9 @@ import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ColorComponent;
-import org.terasology.registry.In;
 import org.terasology.nui.Color;
+import org.terasology.registry.In;
 import org.terasology.spawning.OreonSpawnComponent;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
@@ -42,6 +41,7 @@ import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.List;
 
@@ -82,7 +82,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
     public BehaviorState modify(Actor oreon, BehaviorState result) {
         TaskComponent oreonTaskComponent = oreon.getComponent(TaskComponent.class);
 
-        List<Region3i> storageBuildingRegions = getStorageBuildingRegion(oreon);
+        List<BlockRegion> storageBuildingRegions = getStorageBuildingRegion(oreon);
 
         // Abandon task if storage not found
         if (storageBuildingRegions == null) {
@@ -95,19 +95,19 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
             return BehaviorState.FAILURE;
         }
 
-        Region3i plantRegion = oreonTaskComponent.taskRegion;
+        BlockRegion plantRegion = oreonTaskComponent.taskRegion;
 
         HarvestTask harvestTask = (HarvestTask) oreonTaskComponent.task;
 
         // Calculate number of crop blocks harvested from the area selected
-        harvestTask.numberOfCropBlocksHarvested = plantRegion.sizeX() * plantRegion.sizeZ();
+        harvestTask.numberOfCropBlocksHarvested = plantRegion.getSizeX() * plantRegion.getSizeZ();
 
         // Get the type of crop harvested
         EntityRef plantBlockEntity = blockEntityRegistry.getBlockEntityAt(new Vector3i(plantRegion.minX(), plantRegion.minY() + 1, plantRegion.minZ()));
         BlockComponent blockComponent = plantBlockEntity.getComponent(BlockComponent.class);
         harvestTask.harvestedCrop = blockComponent.getBlock().getURI().toString();
 
-        Vector3i chestBlockLocation = storageBuildingRegions.get(MooConstants.CHEST_BLOCK_INDEX).min();
+        Vector3i chestBlockLocation = storageBuildingRegions.get(MooConstants.CHEST_BLOCK_INDEX).getMin(new Vector3i());
 
         oreonTaskComponent.subsequentTask = new PlaceBlocksInChestTask(harvestTask.harvestedCrop,
                 harvestTask.numberOfCropBlocksHarvested,
@@ -122,7 +122,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
         return BehaviorState.SUCCESS;
     }
 
-    private List<Region3i> getStorageBuildingRegion(Actor oreon) {
+    private List<BlockRegion> getStorageBuildingRegion(Actor oreon) {
         OreonSpawnComponent oreonSpawnComponent = oreon.getComponent(OreonSpawnComponent.class);
         HoldingComponent oreonHolding = oreonSpawnComponent.parent.getComponent(HoldingComponent.class);
 
@@ -141,7 +141,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
 
     private void removeCropBlocks(Actor oreon) {
         TaskComponent taskComponent = oreon.getComponent(TaskComponent.class);
-        Region3i selectedRegion = taskComponent.taskRegion;
+        BlockRegion selectedRegion = taskComponent.taskRegion;
 
         int minX = selectedRegion.minX();
         int maxX = selectedRegion.maxX();
