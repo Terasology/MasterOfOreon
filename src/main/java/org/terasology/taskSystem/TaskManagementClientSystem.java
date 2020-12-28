@@ -34,6 +34,7 @@ import org.terasology.rendering.nui.UIScreenLayer;
 import org.terasology.resources.system.ResourceSystem;
 import org.terasology.taskSystem.events.*;
 import org.terasology.utilities.Assets;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.selection.BlockSelectionComponent;
 
 @RegisterSystem(RegisterMode.CLIENT)
@@ -52,7 +53,7 @@ public class TaskManagementClientSystem extends BaseComponentSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskManagementClientSystem.class);
 
-    private Region3i taskRegion;
+    private BlockRegion taskRegion;
     private EntityRef tempTaskEntity;
 
     @ReceiveEvent

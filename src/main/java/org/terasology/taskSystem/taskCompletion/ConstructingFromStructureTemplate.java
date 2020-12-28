@@ -15,21 +15,20 @@
  */
 package org.terasology.taskSystem.taskCompletion;
 
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
 import org.terasology.buildings.events.BuildingConstructionStartedEvent;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.Region3i;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.structureTemplates.components.CompletionTimeComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.structureTemplates.util.BlockRegionTransform;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         this.player = playerEntity;
     }
 
-    public void constructBuilding(Region3i selectedRegion, BuildingType buildingType) {
+    public void constructBuilding(BlockRegion selectedRegion, BuildingType buildingType) {
         int minX = selectedRegion.minX();
         int maxX = selectedRegion.maxX();
         int minY = selectedRegion.minY();
@@ -70,7 +69,7 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
 
         logger.info("Placing Building : " + buildingTemplate.getParentPrefab().getName());
 
-        buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, JomlUtil.from(centerBlockPosition))));
+        buildingTemplate.send(new SpawnStructureEvent(BlockRegionTransform.createRotationThenMovement(Side.FRONT, Side.FRONT, centerBlockPosition)));
 
         sendConstructionStartEvent(centerBlockPosition, buildingType, building, playerEntity);
     }
@@ -112,11 +111,11 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
-        List<Region3i> absoluteRegions = new ArrayList<>();
+        List<BlockRegion> absoluteRegions = new ArrayList<>();
 
         for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
-            Region3i relativeRegion = JomlUtil.from(regionToFill.region);
-            Region3i absoluteRegion = relativeRegion.move(centerBlock);
+            BlockRegion relativeRegion = regionToFill.region;
+            BlockRegion absoluteRegion = relativeRegion.translate(centerBlock, new BlockRegion(BlockRegion.INVALID));
             absoluteRegions.add(absoluteRegion);
         }
 
@@ -130,11 +129,11 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
-        List<Region3i> absoluteRegions = new ArrayList<>();
+        List<BlockRegion> absoluteRegions = new ArrayList<>();
 
         for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
-            Region3i relativeRegion = JomlUtil.from(regionToFill.region);
-            Region3i absoluteRegion = relativeRegion.move(centerBlock);
+            BlockRegion relativeRegion = regionToFill.region;
+            BlockRegion absoluteRegion = relativeRegion.translate(centerBlock, new BlockRegion(BlockRegion.INVALID));
             absoluteRegions.add(absoluteRegion);
         }
 

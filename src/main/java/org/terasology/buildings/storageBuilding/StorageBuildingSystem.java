@@ -31,14 +31,13 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.resources.system.BuildingResourceSystem;
 import org.terasology.resources.system.ResourceSystem;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.world.BlockEntityRegistry;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.List;
 
@@ -91,10 +90,10 @@ public class StorageBuildingSystem extends BaseComponentSystem {
             ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
             if (buildingComponent.buildingType.equals(BuildingType.Storage)) {
-                List<Region3i> regions = buildingComponent.boundingRegions;
+                List<BlockRegion> regions = buildingComponent.boundingRegions;
 
-                for (Region3i region : regions) {
-                    if (region.encompasses(new Vector3i(location.x, location.y - 1, location.z))) {
+                for (BlockRegion region : regions) {
+                    if (region.contains(location.x, location.y - 1, location.z)) {
                         addItemToChest(item, building);
                         break;
                     }

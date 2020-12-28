@@ -15,6 +15,9 @@
  */
 package org.terasology.taskSystem;
 
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
@@ -48,9 +51,6 @@ import org.terasology.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.logic.selection.MovableSelectionEndEvent;
 import org.terasology.logic.selection.MovableSelectionStartEvent;
 import org.terasology.math.JomlUtil;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.network.ColorComponent;
 import org.terasology.network.NetworkComponent;
@@ -75,6 +75,7 @@ import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.block.items.BlockItemFactory;
 import org.terasology.world.selection.BlockSelectionComponent;
 
@@ -222,7 +223,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
             oreon.save(oreonTaskComponent);
 
-            setOreonTarget(oreon, oreonTaskComponent.taskRegion.min());
+            setOreonTarget(oreon, oreonTaskComponent.taskRegion.getMin(new Vector3i()));
 
             //destroy the entity since this task is no longer required
             taskEntityToAssign.destroy();
@@ -306,7 +307,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         player.saveComponent(oreonHolding);
     }
 
-    public void setTaskType(String newTaskType, BuildingType buildingType, PlantType plantType, Region3i region, EntityRef player) {
+    public void setTaskType(String newTaskType, BuildingType buildingType, PlantType plantType, BlockRegion region, EntityRef player) {
         logger.info("Adding a new Task");
 
         // if the building extends to an area which is not suitable
@@ -372,7 +373,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         }
     }
 
-    public void setTaskType(String newTaskType, PlantType plantType, Region3i region, EntityRef player) {
+    public void setTaskType(String newTaskType, PlantType plantType, BlockRegion region, EntityRef player) {
         logger.info("Adding a new Task");
 
         TaskComponent taskComponent = new TaskComponent();
@@ -443,25 +444,24 @@ public class TaskManagementSystem extends BaseComponentSystem {
         }
     }
 
-    public void placeFenceAroundRegion(Region3i region) {
+    public void placeFenceAroundRegion(BlockRegion region) {
         logger.info("placing fence");
         int minX = region.minX();
         int maxX = region.maxX();
         int minZ = region.minZ();
         int maxZ = region.maxZ();
-        int Y = region.minY();
-        minYOverall = Y;
+        minYOverall = region.minY();
 
-        Region3i leftRegion = Region3i.createFromMinMax(new Vector3i(minX - 2, Y, minZ - 2), new Vector3i(minX - 2, Y, maxZ + 2));
-        Region3i rightRegion = Region3i.createFromMinMax(new Vector3i(maxX + 2, Y, minZ - 2), new Vector3i(maxX + 2, Y, maxZ + 2));
-        Region3i topRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, maxZ + 2), new Vector3i(maxX, Y, maxZ + 2));
-        Region3i bottomRegion = Region3i.createFromMinMax(new Vector3i(minX - 1, Y, minZ - 2), new Vector3i(maxX + 1, Y, minZ - 2));
+        BlockRegion leftRegion = new BlockRegion(minX - 2, minYOverall, minZ - 2, minX - 2, minYOverall, maxZ + 2);
+        BlockRegion rightRegion = new BlockRegion(maxX + 2, minYOverall, minZ - 2,maxX + 2, minYOverall, maxZ + 2);
+        BlockRegion topRegion = new BlockRegion(minX - 1, minYOverall, maxZ + 2, maxX, minYOverall, maxZ + 2);
+        BlockRegion bottomRegion = new BlockRegion(minX - 1, minYOverall, minZ - 2,maxX + 1, minYOverall, minZ - 2);
 
         Block airBlock = blockManager.getBlock("engine:air");
 
         for (int x = minX - 2; x <= maxX + 2; x++) {
             for (int z = minZ - 2; z <= maxZ + 2; z++) {
-                blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, Y + 1, z), airBlock);
+                blockEntityRegistry.setBlockForceUpdateEntity(new Vector3i(x, minYOverall + 1, z), airBlock);
             }
         }
 
@@ -471,7 +471,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         placeFenceBlocks(rightRegion, true);
     }
 
-    private void placeFenceBlocks(Region3i region, boolean placeTorch) {
+    private void placeFenceBlocks(BlockRegion region, boolean placeTorch) {
         int minX = region.minX();
         int maxX = region.maxX();
         int minZ = region.minZ();
@@ -493,7 +493,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         }
     }
 
-    private Region3i getBuildingExtents(BuildingType buildingType, Region3i region) {
+    private BlockRegion getBuildingExtents(BuildingType buildingType, BlockRegion region) {
         Prefab buildingPrefab = prefabManager.getPrefab(buildingType.toString());
 
         SpawnBlockRegionsComponent blockRegionsComponent = buildingPrefab.getComponent(SpawnBlockRegionsComponent.class);
@@ -511,26 +511,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
             maxZ = Math.max(maxZ, regionToFill.region.maxZ());
         }
 
-        Vector3f center = region.center();
+        Vector3f center = region.center(new Vector3f());
         Vector3f extents = new Vector3f((maxX - minX) / 2, 0, (maxZ - minZ) / 2);
-        return Region3i.createFromCenterExtents(center, extents);
-
-//        minX = buildingRegion.minX();
-//        maxX = buildingRegion.maxX();
-//        minZ = buildingRegion.minZ();
-//        maxZ = buildingRegion.maxZ();
-//        int y = buildingRegion.minY();
-//
-//        // Invalidate area if any corner block is air
-//        if (checkIfTargetable(new Vector3f(minX - 2, y, maxZ + 2))
-//            && checkIfTargetable(new Vector3f(maxX + 2, y, maxZ + 2))
-//            && checkIfTargetable(new Vector3f(minX - 2, y, minZ - 2))
-//            && checkIfTargetable(new Vector3f(maxX + 2, y, minZ - 2))) {
-//            return buildingRegion;
-//        }
-//
-//        return null;
-
+        return new BlockRegion(new Vector3i(center, RoundingMode.FLOOR)).expand(new Vector3i(extents, RoundingMode.FLOOR));
     }
 
     private boolean checkIfTargetable(Vector3f blockLocation) {
@@ -575,7 +558,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
      * @param selectedRegion The region to be checked
      * @return A boolean value specifying whether the area is valid
      */
-    private boolean checkArea(Region3i selectedRegion) {
+    private boolean checkArea(BlockRegion selectedRegion) {
         return true;
     }
 
@@ -592,7 +575,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             if (constructedBuildingComponent.buildingType.equals(buildingType)) {
                 oreonTaskComponent.taskRegion = constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);
                 oreonTaskComponent.task.requiredBuildingEntityID = building.getId();
-                return constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX).min();
+                return constructedBuildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX).getMin(new Vector3i());
             }
         }
 
@@ -603,7 +586,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private void setOreonTarget(Actor oreon, Vector3i target) {
         MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
 
-        moveComponent.target = new Vector3f(target.x, target.y, target.z);
+        moveComponent.target = JomlUtil.from(new Vector3f(target.x, target.y, target.z));
         moveComponent.type = MinionMoveComponent.Type.DIRECT;
 
         logger.info("Set Oreon target to : " + moveComponent.target);
@@ -648,9 +631,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
     public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon, MinionMoveComponent moveComponent) {
         if (lastCollisionLocation == null) {
-            lastCollisionLocation = JomlUtil.from(collisionEvent.getLocation());
+            lastCollisionLocation = collisionEvent.getLocation();
         } else {
-            if (isSameCollisionLocation(lastCollisionLocation, JomlUtil.from(collisionEvent.getLocation()))) {
+            if (isSameCollisionLocation(lastCollisionLocation, collisionEvent.getLocation())) {
                 logger.info("oreon stuck");
                 moveComponent.target = null;
                 oreon.saveComponent(moveComponent);
@@ -663,10 +646,10 @@ public class TaskManagementSystem extends BaseComponentSystem {
     }
 
     private boolean isSameCollisionLocation(Vector3f lastLocation, Vector3f currentLocation) {
-        float lastX = Float.floatToIntBits(lastLocation.getX());
-        float lastZ = Float.floatToIntBits(lastLocation.getZ());
-        float currentX = Float.floatToIntBits(currentLocation.getX());
-        float currentZ = Float.floatToIntBits(currentLocation.getZ());
+        float lastX = Float.floatToIntBits(lastLocation.x());
+        float lastZ = Float.floatToIntBits(lastLocation.z());
+        float currentX = Float.floatToIntBits(currentLocation.x());
+        float currentZ = Float.floatToIntBits(currentLocation.z());
 
         return lastX == currentX && lastZ == currentZ;
     }
@@ -738,8 +721,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
             constructionStartedEvent.constructedBuildingEntity.addComponent(networkComponent);
 
             constructionStartedEvent.constructedBuildingEntity.setOwner(player);
-        }
-        else {
+        } else {
             // When a building is upgraded
             // Update the extents of the building in the ConstructedBuildingComponent after upgrade
             ConstructedBuildingComponent constructedBuildingComponent = constructionStartedEvent.constructedBuildingEntity.getComponent(ConstructedBuildingComponent.class);

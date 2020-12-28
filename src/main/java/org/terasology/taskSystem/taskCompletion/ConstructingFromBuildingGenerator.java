@@ -37,10 +37,10 @@ import org.terasology.cities.model.roof.PentRoof;
 import org.terasology.cities.model.roof.Roof;
 import org.terasology.cities.model.roof.SaddleRoof;
 import org.terasology.cities.raster.BuildingPens;
-import org.terasology.cities.raster.RasterTarget;
-import org.terasology.cities.raster.RasterUtil;
 import org.terasology.cities.raster.Pen;
 import org.terasology.cities.raster.Pens;
+import org.terasology.cities.raster.RasterTarget;
+import org.terasology.cities.raster.RasterUtil;
 import org.terasology.cities.window.RectWindow;
 import org.terasology.cities.window.SimpleWindow;
 import org.terasology.cities.window.Window;
@@ -48,7 +48,6 @@ import org.terasology.commonworld.Orientation;
 import org.terasology.commonworld.heightmap.HeightMap;
 import org.terasology.commonworld.heightmap.HeightMaps;
 import org.terasology.math.JomlUtil;
-import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.BaseVector2i;
@@ -57,6 +56,7 @@ import org.terasology.math.geom.Rect2i;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
 
 import java.math.RoundingMode;
 import java.util.Collections;
@@ -80,7 +80,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         this.blockManager = manager;
     }
 
-    public void constructBuilding(Region3i selectedRegion, BuildingType buildingType) {
+    public void constructBuilding(BlockRegion selectedRegion, BuildingType buildingType) {
         BuildingParcel buildingParcel = new BuildingParcel();
         buildingParcel.setOrientation(Orientation.NORTH);
 

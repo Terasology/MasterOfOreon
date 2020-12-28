@@ -15,6 +15,9 @@
  */
 package org.terasology.buildings;
 
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
@@ -37,10 +40,6 @@ import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.players.LocalPlayer;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
@@ -52,6 +51,7 @@ import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.taskCompletion.ConstructingFromStructureTemplate;
 import org.terasology.taskSystem.tasks.BuildingUpgradeTask;
 import org.terasology.taskSystem.tasks.GuardTask;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.List;
 
@@ -96,7 +96,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
             return;
         }
 
-        Vector3f hitBlockPos = JomlUtil.from(event.getTargetLocation());
+        Vector3f hitBlockPos = event.getTargetLocation();
 
         checkIfPartOfBuilding(hitBlockPos, player);
     }
@@ -113,11 +113,11 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
 
         for (EntityRef building : buildings) {
             ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
-            List<Region3i> buildingRegions = buildingComponent.boundingRegions;
+            List<BlockRegion> buildingRegions = buildingComponent.boundingRegions;
 
-            for (Region3i buildingRegion : buildingRegions) {
-                Vector3i target = new Vector3i(blockPos);
-                if (buildingRegion.encompasses(target)) {
+            for (BlockRegion buildingRegion : buildingRegions) {
+                Vector3i target = new Vector3i(blockPos, RoundingMode.FLOOR);
+                if (buildingRegion.contains(target)) {
                     this.buildingToUpgrade = building;
                     holdingComponent.lastBuildingInteractedWith = building;
                     player.saveComponent(holdingComponent);

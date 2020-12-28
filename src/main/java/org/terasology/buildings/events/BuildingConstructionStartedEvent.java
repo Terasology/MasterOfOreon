@@ -15,23 +15,23 @@
  */
 package org.terasology.buildings.events;
 
+import org.joml.Vector3i;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.List;
 
 public class BuildingConstructionStartedEvent implements Event {
 
-    public List<Region3i> absoluteRegions;
+    public List<BlockRegion> absoluteRegions;
     public BuildingType buildingType;
     public Vector3i centerBlockPosition;
     public EntityRef constructedBuildingEntity;
     public long completionDelay;
 
-    public BuildingConstructionStartedEvent(List<Region3i> regions, BuildingType building, Vector3i center, EntityRef buildingEntity, long delay) {
+    public BuildingConstructionStartedEvent(List<BlockRegion> regions, BuildingType building, Vector3i center, EntityRef buildingEntity, long delay) {
         this.absoluteRegions = regions;
         this.buildingType = building;
         this.centerBlockPosition = center;

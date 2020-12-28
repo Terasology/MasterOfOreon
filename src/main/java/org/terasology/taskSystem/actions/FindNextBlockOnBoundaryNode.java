@@ -15,6 +15,8 @@
  */
 package org.terasology.taskSystem.actions;
 
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
@@ -26,12 +28,11 @@ import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
+import org.terasology.math.JomlUtil;
 import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.registry.In;
 import org.terasology.taskSystem.components.TaskComponent;
+import org.terasology.world.block.BlockRegion;
 
 @BehaviorAction(name = "find_next_block_on_boundary")
 public class FindNextBlockOnBoundaryNode extends BaseAction {
@@ -63,7 +64,7 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
 
         int y = oreonTaskComponent.taskRegion.minY();
 
-        for (Region3i region : buildingComponent.boundingRegions) {
+        for (BlockRegion region : buildingComponent.boundingRegions) {
             minX = Math.min(minX, region.minX());
             maxX = Math.max(maxX, region.maxX());
             minZ = Math.min(minZ, region.minZ());
@@ -72,7 +73,7 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
 
         Vector3i min = new Vector3i(minX - 1, y, minZ - 1);
         Vector3i max = new Vector3i(maxX + 1, y, maxZ + 1);
-        oreonTaskComponent.taskRegion = Region3i.createFromMinMax(min, max);
+        oreonTaskComponent.taskRegion = new BlockRegion(min, max);
         oreon.save(oreonTaskComponent);
 
         if (oreonTaskComponent.taskCompletionTime < time.getGameTime()) {
@@ -84,15 +85,16 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
     }
 
     /**
-     * Sets the Oreon's target in the {@link MinionMoveComponent} to a nearby block on the boundary of a building. Used for the
-     * guard task.
+     * Sets the Oreon's target in the {@link MinionMoveComponent} to a nearby block on the boundary of a building. Used
+     * for the guard task.
+     *
      * @param oreon The character whose target is being set.
      */
     private void setTargetToNearbyBoundaryBlock(Actor oreon, TaskComponent taskComponent) {
         MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
 
         LocationComponent locationComponent = oreon.getComponent(LocationComponent.class);
-        Vector3f worldPosition = locationComponent.getWorldPosition();
+        Vector3f worldPosition = locationComponent.getWorldPosition(new Vector3f());
 
         int maxX = taskComponent.taskRegion.maxX();
         int maxZ = taskComponent.taskRegion.maxZ();
@@ -103,30 +105,24 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
 
         if (Math.round(worldPosition.x) == maxX) {
             if (Math.round(worldPosition.z) != maxZ) {
-                moveComponent.target = new Vector3f(maxX + 1, y, maxZ + 1);
+                moveComponent.target = JomlUtil.from(new Vector3f(maxX + 1, y, maxZ + 1));
+            } else {
+                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, maxZ + 1));
             }
-            else {
-                moveComponent.target = new Vector3f(minX - 1, y, maxZ + 1);
-            }
-        }
-        else if (Math.round(worldPosition.z) == maxZ) {
+        } else if (Math.round(worldPosition.z) == maxZ) {
             if (Math.round(worldPosition.x) != minX) {
-                moveComponent.target = new Vector3f(minX - 1, y, maxZ + 1);
+                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, maxZ + 1));
+            } else {
+                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, minZ - 1));
             }
-            else {
-                moveComponent.target = new Vector3f(minX - 1, y, minZ - 1);
-            }
-        }
-        else if (Math.round(worldPosition.x) == minX) {
+        } else if (Math.round(worldPosition.x) == minX) {
             if (Math.round(worldPosition.z) != minZ) {
-                moveComponent.target = new Vector3f(minX - 1, y, minZ - 1);
+                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, minZ - 1));
+            } else {
+                moveComponent.target = JomlUtil.from(new Vector3f(maxX + 1, y, minZ - 1));
             }
-            else {
-                moveComponent.target = new Vector3f(maxX + 1, y, minZ - 1);
-            }
-        }
-        else {
-            moveComponent.target = new Vector3f(maxX + 1, y, maxZ + 1);
+        } else {
+            moveComponent.target = JomlUtil.from(new Vector3f(maxX + 1, y, maxZ + 1));
         }
 
         oreon.save(moveComponent);
