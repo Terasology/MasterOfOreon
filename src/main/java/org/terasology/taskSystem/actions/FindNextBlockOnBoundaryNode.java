@@ -57,23 +57,16 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
 
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int minZ = Integer.MAX_VALUE;
-        int maxZ = Integer.MIN_VALUE;
-
         int y = oreonTaskComponent.taskRegion.minY();
 
-        for (BlockRegion region : buildingComponent.boundingRegions) {
-            minX = Math.min(minX, region.minX());
-            maxX = Math.max(maxX, region.maxX());
-            minZ = Math.min(minZ, region.minZ());
-            maxZ = Math.max(maxZ, region.maxZ());
-        }
+        //TODO: would be nice to replace the first two lines with `BlockRegion.union(buildingComponent.boundingRegions)`
+        final BlockRegion taskRegion = buildingComponent.boundingRegions.stream()
+                .reduce(new BlockRegion(BlockRegion.INVALID), BlockRegion::union, BlockRegion::union)
+                .minY(y).maxY(y)
+                .addToMin(-1, 0, -1)
+                .addToMax(1, 0, 1);
 
-        Vector3i min = new Vector3i(minX - 1, y, minZ - 1);
-        Vector3i max = new Vector3i(maxX + 1, y, maxZ + 1);
-        oreonTaskComponent.taskRegion = new BlockRegion(min, max);
+        oreonTaskComponent.taskRegion = taskRegion;
         oreon.save(oreonTaskComponent);
 
         if (oreonTaskComponent.taskCompletionTime < time.getGameTime()) {
@@ -100,29 +93,31 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
         int maxZ = taskComponent.taskRegion.maxZ();
         int minX = taskComponent.taskRegion.minX();
         int minZ = taskComponent.taskRegion.minZ();
-
         int y = taskComponent.taskRegion.minY();
 
+        if (moveComponent.target == null) {
+            moveComponent.target = JomlUtil.from(new Vector3f());
+        }
         if (Math.round(worldPosition.x) == maxX) {
             if (Math.round(worldPosition.z) != maxZ) {
-                moveComponent.target = JomlUtil.from(new Vector3f(maxX + 1, y, maxZ + 1));
+                moveComponent.target.set(maxX + 1, y, maxZ + 1);
             } else {
-                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, maxZ + 1));
+                moveComponent.target.set(minX - 1, y, maxZ + 1);
             }
         } else if (Math.round(worldPosition.z) == maxZ) {
             if (Math.round(worldPosition.x) != minX) {
-                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, maxZ + 1));
+                moveComponent.target.set(minX - 1, y, maxZ + 1);
             } else {
-                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, minZ - 1));
+                moveComponent.target.set(minX - 1, y, minZ - 1);
             }
         } else if (Math.round(worldPosition.x) == minX) {
             if (Math.round(worldPosition.z) != minZ) {
-                moveComponent.target = JomlUtil.from(new Vector3f(minX - 1, y, minZ - 1));
+                moveComponent.target.set(minX - 1, y, minZ - 1);
             } else {
-                moveComponent.target = JomlUtil.from(new Vector3f(maxX + 1, y, minZ - 1));
+                moveComponent.target.set(maxX + 1, y, minZ - 1);
             }
         } else {
-            moveComponent.target = JomlUtil.from(new Vector3f(maxX + 1, y, maxZ + 1));
+            moveComponent.target.set(maxX + 1, y, maxZ + 1);
         }
 
         oreon.save(moveComponent);

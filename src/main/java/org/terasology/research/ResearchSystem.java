@@ -130,7 +130,7 @@ public class ResearchSystem extends BaseComponentSystem {
     private void addBooksToCase(EntityRef player, List<BlockRegion> absoluteRegions, int level) {
         logger.debug("Adding books to laboratory");
         // Get the bookcase block
-        Vector3i bookcaseLocation = absoluteRegions.get(MooConstants.BOOKCASE_REGION_INDEX).getMax(new org.joml.Vector3i());
+        Vector3i bookcaseLocation = absoluteRegions.get(MooConstants.BOOKCASE_REGION_INDEX).getMax(new Vector3i());
         EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(bookcaseLocation);
 
         for (EntityRef book : getBooksToAdd(player, level)) {

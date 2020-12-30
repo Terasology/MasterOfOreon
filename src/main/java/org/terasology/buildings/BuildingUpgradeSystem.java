@@ -115,8 +115,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
             ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
             List<BlockRegion> buildingRegions = buildingComponent.boundingRegions;
 
+            final Vector3i target = new Vector3i(blockPos, RoundingMode.FLOOR);
             for (BlockRegion buildingRegion : buildingRegions) {
-                Vector3i target = new Vector3i(blockPos, RoundingMode.FLOOR);
                 if (buildingRegion.contains(target)) {
                     this.buildingToUpgrade = building;
                     holdingComponent.lastBuildingInteractedWith = building;

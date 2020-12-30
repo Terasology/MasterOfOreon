@@ -32,6 +32,7 @@ import org.terasology.world.block.BlockRegion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     private static final Logger logger = LoggerFactory.getLogger(ConstructingFromStructureTemplate.class);
@@ -108,34 +109,17 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     }
 
     private void sendConstructionStartEvent(Vector3i centerBlock, BuildingType buildingType, EntityRef building, EntityRef playerEntity) {
-        SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
-        List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
-
-        List<BlockRegion> absoluteRegions = new ArrayList<>();
-
-        for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
-            BlockRegion relativeRegion = regionToFill.region;
-            BlockRegion absoluteRegion = relativeRegion.translate(centerBlock, new BlockRegion(BlockRegion.INVALID));
-            absoluteRegions.add(absoluteRegion);
-        }
-
-        long delay = buildingTemplate.getComponent(CompletionTimeComponent.class).completionDelay;
-
         // Add this building's regions to the Holding
-        playerEntity.send(new BuildingConstructionStartedEvent(absoluteRegions, buildingType, centerBlock, building, delay));
+        playerEntity.send(getBuildingConstructionStartedEvent(centerBlock, buildingType, building));
     }
 
     public BuildingConstructionStartedEvent getBuildingConstructionStartedEvent(Vector3i centerBlock, BuildingType buildingType, EntityRef building) {
         SpawnBlockRegionsComponent blockRegionsComponent = buildingTemplate.getComponent(SpawnBlockRegionsComponent.class);
         List<SpawnBlockRegionsComponent.RegionToFill> relativeRegions = blockRegionsComponent.regionsToFill;
 
-        List<BlockRegion> absoluteRegions = new ArrayList<>();
-
-        for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegions) {
-            BlockRegion relativeRegion = regionToFill.region;
-            BlockRegion absoluteRegion = relativeRegion.translate(centerBlock, new BlockRegion(BlockRegion.INVALID));
-            absoluteRegions.add(absoluteRegion);
-        }
+        List<BlockRegion> absoluteRegions = relativeRegions.stream()
+                .map(regionToFill -> new BlockRegion(regionToFill.region).translate(centerBlock))
+                .collect(Collectors.toList());
 
         long delay = buildingTemplate.getComponent(CompletionTimeComponent.class).completionDelay;
 
