@@ -654,9 +654,9 @@ public class TaskManagementSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
     public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon, MinionMoveComponent moveComponent) {
         if (lastCollisionLocation == null) {
-            lastCollisionLocation = collisionEvent.getLocation();
+            lastCollisionLocation = JomlUtil.from(collisionEvent.getLocation());
         } else {
-            if (isSameCollisionLocation(lastCollisionLocation, collisionEvent.getLocation())) {
+            if (isSameCollisionLocation(lastCollisionLocation, JomlUtil.from(collisionEvent.getLocation()))) {
                 logger.info("oreon stuck");
                 moveComponent.target = null;
                 oreon.saveComponent(moveComponent);

@@ -47,6 +47,7 @@ import org.terasology.cities.window.Window;
 import org.terasology.commonworld.Orientation;
 import org.terasology.commonworld.heightmap.HeightMap;
 import org.terasology.commonworld.heightmap.HeightMaps;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.TeraMath;
@@ -226,7 +227,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
                 int y = simpleWindow.getHeight();
                 int z = simpleWindow.getPos().y();
 
-                if (rasterTarget.getAffectedRegion().encompasses(x, y, z)) {
+                if (rasterTarget.getAffectedRegion().contains(x, y, z)) {
                     rasterTarget.setBlock(x, y, z, DefaultBlockType.WINDOW_GLASS);
                 }
             }
@@ -238,7 +239,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
             if (SingleBlockDecoration.class.isInstance(decoration)) {
                 SingleBlockDecoration blockDecoration = SingleBlockDecoration.class.cast(decoration);
-                if (rasterTarget.getAffectedRegion().encompasses(blockDecoration.getPos())) {
+                if (rasterTarget.getAffectedRegion().contains(JomlUtil.from(blockDecoration.getPos()))) {
                     rasterTarget.setBlock(blockDecoration.getPos(), blockDecoration.getType(), Collections.singleton(blockDecoration.getSide()));
                 }
             }
