@@ -15,18 +15,18 @@
  */
 package org.terasology.buildings.components;
 
+import org.joml.Vector3i;
 import org.terasology.entitySystem.Component;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.network.Replicate;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.world.block.BlockRegion;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConstructedBuildingComponent implements Component {
     @Replicate
-    public List<Region3i> boundingRegions = new ArrayList<>();
+    public List<BlockRegion> boundingRegions = new ArrayList<>();
 
     @Replicate
     public BuildingType buildingType;

@@ -23,6 +23,7 @@ import org.terasology.network.Replicate;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.Task;
 import org.terasology.taskSystem.TaskStatusType;
+import org.terasology.world.block.BlockRegion;
 
 /**
  * Component which gets attached to an Oreon entity when a task is assigned to it.
@@ -39,7 +40,7 @@ public class TaskComponent implements Component {
     public TaskStatusType taskStatus = TaskStatusType.Available;
 
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
-    public Region3i taskRegion;
+    public BlockRegion taskRegion;
 
     public float taskCompletionTime;
 
@@ -48,6 +49,6 @@ public class TaskComponent implements Component {
     // next task to be performed and the delay in ms
     public Task subsequentTask = new Task();
     public String subsequentTaskType;
-    public Region3i subsequentTaskRegion;
+    public BlockRegion subsequentTaskRegion;
     public long delayBeforeNextTask;
 }

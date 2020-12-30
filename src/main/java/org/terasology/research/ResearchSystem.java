@@ -15,6 +15,7 @@
  */
 package org.terasology.research;
 
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
@@ -37,8 +38,6 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.research.components.LaboratoryComponent;
 import org.terasology.research.events.ResearchStartEvent;
@@ -52,6 +51,7 @@ import org.terasology.taskSystem.tasks.ResearchTask;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.block.items.BlockItemFactory;
 
 import java.util.ArrayList;
@@ -104,7 +104,7 @@ public class ResearchSystem extends BaseComponentSystem {
         addBooksToCase(player, event.absoluteRegions, currentLevel);
 
         //TODO: this index access does not look very safe in case of building upgrades
-        Vector3i pedestalLocation = event.absoluteRegions.get(MooConstants.PEDESTAL_REGION_INDEX).max();
+        Vector3i pedestalLocation = event.absoluteRegions.get(MooConstants.PEDESTAL_REGION_INDEX).getMax(new Vector3i());
         EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(pedestalLocation);
         LaboratoryComponent laboratoryComponent = pedestalEntity.getComponent(LaboratoryComponent.class);
         laboratoryComponent.laboratoryEntity = event.constructedBuildingEntity;
@@ -127,10 +127,10 @@ public class ResearchSystem extends BaseComponentSystem {
         addBooksToCase(building.getOwner(), buildingComponent.boundingRegions, buildingComponent.currentLevel);
     }
 
-    private void addBooksToCase(EntityRef player, List<Region3i> absoluteRegions, int level) {
+    private void addBooksToCase(EntityRef player, List<BlockRegion> absoluteRegions, int level) {
         logger.debug("Adding books to laboratory");
         // Get the bookcase block
-        Vector3i bookcaseLocation = absoluteRegions.get(MooConstants.BOOKCASE_REGION_INDEX).max();
+        Vector3i bookcaseLocation = absoluteRegions.get(MooConstants.BOOKCASE_REGION_INDEX).getMax(new Vector3i());
         EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(bookcaseLocation);
 
         for (EntityRef book : getBooksToAdd(player, level)) {
@@ -270,8 +270,8 @@ public class ResearchSystem extends BaseComponentSystem {
     private void removeBookFromPedestal(EntityRef laboratory) {
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
 
-        EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.PEDESTAL_REGION_INDEX).max());
-        EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.BOOKCASE_REGION_INDEX).max());
+        EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.PEDESTAL_REGION_INDEX).getMax(new Vector3i()));
+        EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.BOOKCASE_REGION_INDEX).getMax(new Vector3i()));
 
         InventoryComponent pedestalInventory = pedestalEntity.getComponent(InventoryComponent.class);
 

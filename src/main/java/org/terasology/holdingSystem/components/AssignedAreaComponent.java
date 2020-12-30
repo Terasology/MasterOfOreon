@@ -16,11 +16,11 @@
 package org.terasology.holdingSystem.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.math.Region3i;
 import org.terasology.network.FieldReplicateType;
 import org.terasology.network.Replicate;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
+import org.terasology.world.block.BlockRegion;
 
 /**
  * The component attached to a task entity which specifies the area selected for the task. All changes made to this task
@@ -28,7 +28,7 @@ import org.terasology.taskSystem.BuildingType;
  */
 public class AssignedAreaComponent implements Component {
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
-    public Region3i assignedRegion;
+    public BlockRegion assignedRegion;
 
     @Replicate
     public String assignedTaskType = AssignedTaskType.NONE;

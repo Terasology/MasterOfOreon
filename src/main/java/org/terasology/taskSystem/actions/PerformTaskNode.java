@@ -15,6 +15,10 @@
  */
 package org.terasology.taskSystem.actions;
 
+import org.joml.RoundingMode;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
@@ -30,9 +34,6 @@ import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.spawning.OreonAttributeComponent;
@@ -54,9 +55,8 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.BlockRegion;
 import org.terasology.world.selection.BlockSelectionComponent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -105,8 +105,10 @@ public class PerformTaskNode extends BaseAction {
         this.plantingTaskCompletion = new PlantingTaskCompletion(blockManager, blockEntityRegistry);
 
         EntityRef player = oreon.getComponent(OreonSpawnComponent.class).parent;
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
-        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, player);
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider,
+                player);
+        this.constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider,
+                player);
     }
 
     @Override
@@ -133,7 +135,9 @@ public class PerformTaskNode extends BaseAction {
     }
 
     /**
-     * Removes the {@link BlockSelectionComponent} from the assigned area so that it no longer renders once the task is complete.
+     * Removes the {@link BlockSelectionComponent} from the assigned area so that it no longer renders once the task is
+     * complete.
+     *
      * @param oreon The Actor which calls this node
      */
     private void removeColorFromArea(Actor oreon, TaskComponent taskComponent) {
@@ -158,6 +162,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Changes a Oreon's attributes values after it completes a task.
+     *
      * @param oreon The Actor which calls this node
      */
     private void changeOreonAttributes(Actor oreon, TaskComponent taskComponent) {
@@ -176,7 +181,8 @@ public class PerformTaskNode extends BaseAction {
         oreonAttributeComponent.health = oreonAttributeComponent.health > oreonAttributeComponent.maxHealth
                 ? oreonAttributeComponent.maxHealth : oreonAttributeComponent.health;
 
-        oreonAttributeComponent.intelligence = oreonAttributeComponent.intelligence > oreonAttributeComponent.maxIntelligence
+        oreonAttributeComponent.intelligence =
+                oreonAttributeComponent.intelligence > oreonAttributeComponent.maxIntelligence
                 ? oreonAttributeComponent.maxIntelligence : oreonAttributeComponent.intelligence;
 
         oreon.save(oreonAttributeComponent);
@@ -184,63 +190,61 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Places the required blocks in the selected area based on the task selected
+     *
      * @param oreon The Oreon entity working on the task
      * @param taskComponent The component with task information which just completed
      */
     private void completeTask(Actor oreon, TaskComponent taskComponent) {
-        Region3i selectedRegion = taskComponent.taskRegion;
+        BlockRegion selectedRegion = taskComponent.taskRegion;
         String taskType = taskComponent.assignedTaskType;
 
 
         switch (taskType) {
-            case AssignedTaskType.PLANT :
+            case AssignedTaskType.PLANT:
                 PlantTask task = (PlantTask) taskComponent.task;
                 plantingTaskCompletion.placeCrops(selectedRegion, task.cropToPlant);
                 break;
 
-            case AssignedTaskType.BUILD :
+            case AssignedTaskType.BUILD:
                 constructingFromStructureTemplate.constructBuilding(selectedRegion, taskComponent.task.buildingType);
                 //constructingFromBuildingGenerator.constructBuilding(selectedRegion, taskComponent.buildingType);
                 break;
 
-            case AssignedTaskType.UPGRADE :
+            case AssignedTaskType.UPGRADE:
                 //TODO:figure out how to get region in the right area
                 oreon.getEntity().send(new BuildingUpgradeStartEvent());
 
                 EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
-                ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
+                ConstructedBuildingComponent buildingComponent =
+                        building.getComponent(ConstructedBuildingComponent.class);
 
-                EntityRef buildingTemplate = constructingFromStructureTemplate.selectAndReturnBuilding(buildingComponent.buildingType, buildingComponent.currentLevel);
+                EntityRef buildingTemplate =
+                        constructingFromStructureTemplate.selectAndReturnBuilding(buildingComponent.buildingType,
+                                buildingComponent.currentLevel);
 
                 if (buildingTemplate != null) {
-                    List<SpawnBlockRegionsComponent.RegionToFill> relativeRegionsToFill = buildingTemplate.getParentPrefab().getComponent(SpawnBlockRegionsComponent.class).regionsToFill;
+                    final SpawnBlockRegionsComponent blockRegionsComponent =
+                            buildingTemplate.getParentPrefab().getComponent(SpawnBlockRegionsComponent.class);
+                    List<BlockRegion> regionsToFill = blockRegionsComponent.regionsToFill.stream()
+                            .map(regionToFill -> new BlockRegion(regionToFill.region).translate(buildingComponent.centerLocation))
+                            .collect(Collectors.toList());
 
-                    List<Region3i> regionsToFill = new ArrayList<>();
-                    for (SpawnBlockRegionsComponent.RegionToFill regionToFill : relativeRegionsToFill) {
-                        BlockRegion relativeRegion = regionToFill.region;
-                        BlockRegion absoluteRegion = relativeRegion.translate(JomlUtil.from(buildingComponent.centerLocation));
-                        regionsToFill.add(JomlUtil.from(absoluteRegion));
+                    Vector3i center = new Vector3i(regionsToFill.get(0).center(new Vector3f()), RoundingMode.FLOOR);
+                    BlockRegion totalRegion =
+                            new BlockRegion(center.x, taskManagementSystem.minYOverall, center.z).setSize(1, 1, 1);
+
+                    for (BlockRegion baseRegion : regionsToFill) {
+
+                        Vector3i min = new Vector3i(baseRegion.minX(),
+                                taskManagementSystem.minYOverall + baseRegion.minY(), baseRegion.minZ());
+                        Vector3i max = new Vector3i(baseRegion.maxX(),
+                                baseRegion.maxY() + taskManagementSystem.minYOverall, baseRegion.maxZ());
+                        totalRegion.union(min).union(max);
                     }
-                    Region3i totalRegion = Region3i.createFromMinAndSize(new Vector3i(regionsToFill.get(0).center().x, taskManagementSystem.minYOverall, regionsToFill.get(0).center().z), new Vector3i(1, 1, 1));
-                    for (Region3i baseRegion:regionsToFill) {
-
-                        Vector3i min = new Vector3i(baseRegion.minX(), taskManagementSystem.minYOverall+baseRegion.minY(), baseRegion.minZ());
-                        Vector3i max = new Vector3i(baseRegion.maxX(), baseRegion.maxY()+taskManagementSystem.minYOverall, baseRegion.maxZ());
-
-                        Region3i region = Region3i.createFromMinMax(min, max);
-                        Iterator<Vector3i> regionsIterator = region.iterator();
-                        while (regionsIterator.hasNext()) {
-                            Vector3i vector = regionsIterator.next();
-                            totalRegion = totalRegion.expandToContain(vector);
-                        }
-                    }
-
                     taskManagementSystem.placeFenceAroundRegion(totalRegion);
                 }
-
                 break;
-
-            case AssignedTaskType.RESEARCH :
+            case AssignedTaskType.RESEARCH:
                 oreon.getEntity().send(new ResearchStartEvent());
         }
 
@@ -265,6 +269,7 @@ public class PerformTaskNode extends BaseAction {
 
     /**
      * Removes the block from the Oreon's inventory
+     *
      * @param oreon
      * @param oreonTaskComponent
      */

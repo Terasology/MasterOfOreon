@@ -15,11 +15,11 @@
  */
 package org.terasology.taskSystem.taskCompletion;
 
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
+import org.joml.Vector3i;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
 
 public class PlantingTaskCompletion {
     private BlockManager blockManager;
@@ -31,7 +31,7 @@ public class PlantingTaskCompletion {
         this.blockEntityRegistry = blockRegistry;
     }
 
-    public void placeCrops(Region3i selectedRegion, String cropToPlace) {
+    public void placeCrops(BlockRegion selectedRegion, String cropToPlace) {
         int minX = selectedRegion.minX();
         int maxX = selectedRegion.maxX();
         int minZ = selectedRegion.minZ();
