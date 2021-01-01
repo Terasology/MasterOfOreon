@@ -16,6 +16,7 @@
 package org.terasology.taskSystem.actions;
 
 
+import org.joml.Vector3f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.engine.Time;
@@ -24,7 +25,6 @@ import org.terasology.logic.behavior.core.Actor;
 import org.terasology.logic.behavior.core.BaseAction;
 import org.terasology.logic.behavior.core.BehaviorState;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.minion.move.MinionMoveComponent;
 import org.terasology.registry.In;
 import org.terasology.taskSystem.components.TaskComponent;
@@ -59,13 +59,14 @@ public class CheckTaskStatusNode extends BaseAction {
     /**
      * Sets the Oreon's target in the {@link MinionMoveComponent} to a nearby selected block so that the Oreon can move
      * to it.
+     *
      * @param oreon The character whose target is being set.
      */
     private void setTargetToNearbySelectedBlock(Actor oreon, TaskComponent taskComponent) {
         MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
 
         LocationComponent locationComponent = oreon.getComponent(LocationComponent.class);
-        Vector3f worldPosition = locationComponent.getWorldPosition();
+        Vector3f worldPosition = locationComponent.getWorldPosition(new org.joml.Vector3f());
 
         int maxX = taskComponent.taskRegion.maxX();
         int maxZ = taskComponent.taskRegion.maxZ();
@@ -77,18 +78,18 @@ public class CheckTaskStatusNode extends BaseAction {
 
         // Consider all adjacent neighbors to Oreon's current location
         if (random == 0 && worldPosition.x + 1 >= minX && worldPosition.x + 1 <= maxX) {
-            moveComponent.target = worldPosition.addX(1);
+            moveComponent.target = worldPosition.add(1, 0, 0);
         }
 
         if (random == 0 && worldPosition.z + 1 >= minZ && worldPosition.z + 1 <= maxZ) {
-            moveComponent.target = worldPosition.addZ(1);
+            moveComponent.target = worldPosition.add(0, 0, 1);
         }
         if (random == 1 && worldPosition.x - 1 >= minX && worldPosition.x - 1 <= maxX) {
-            moveComponent.target = worldPosition.subX(1);
+            moveComponent.target = worldPosition.sub(1, 0, 0);
         }
 
         if (random == 1 && worldPosition.z - 1 >= minZ && worldPosition.z - 1 <= maxZ) {
-            moveComponent.target = worldPosition.subZ(1);
+            moveComponent.target = worldPosition.sub(0, 0, 1);
         }
 
         oreon.save(moveComponent);
