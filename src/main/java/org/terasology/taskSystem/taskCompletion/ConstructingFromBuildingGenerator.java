@@ -16,6 +16,7 @@
 package org.terasology.taskSystem.taskCompletion;
 
 import com.google.common.math.DoubleMath;
+import org.joml.Vector3ic;
 import org.terasology.buildings.BasicRasterTarget;
 import org.terasology.buildings.BuildingParcel;
 import org.terasology.cities.BlockTheme;
@@ -239,22 +240,22 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
             if (SingleBlockDecoration.class.isInstance(decoration)) {
                 SingleBlockDecoration blockDecoration = SingleBlockDecoration.class.cast(decoration);
-                if (rasterTarget.getAffectedRegion().contains(JomlUtil.from(blockDecoration.getPos()))) {
+                if (rasterTarget.getAffectedRegion().contains(blockDecoration.getPos())) {
                     rasterTarget.setBlock(blockDecoration.getPos(), blockDecoration.getType(), Collections.singleton(blockDecoration.getSide()));
                 }
             }
 
             if (ColumnDecoration.class.isInstance(decoration)) {
                 ColumnDecoration columnDecoration = ColumnDecoration.class.cast(decoration);
-                ImmutableVector3i pos = columnDecoration.getBasePos();
-                int y = pos.getY();
-                if (rasterTarget.getAffectedArea().contains(pos.getX(), pos.getZ())) {
+                Vector3ic pos = columnDecoration.getBasePos();
+                int y = pos.y();
+                if (rasterTarget.getAffectedArea().contains(pos.x(), pos.z())) {
                     if (y + columnDecoration.getBlockTypes().size() - 1 >= rasterTarget.getMinHeight() && y <= rasterTarget.getMaxHeight()) {
                         for (int i = 0; i < columnDecoration.getHeight(); i++) {
                             BlockType type = columnDecoration.getBlockTypes().get(i);
                             Side side = columnDecoration.getSides().get(i);
                             Set<Side> sides = (side == null) ? EnumSet.noneOf(Side.class) : EnumSet.of(side);
-                            rasterTarget.setBlock(pos.getX(), y, pos.getZ(), type, sides);
+                            rasterTarget.setBlock(pos.x(), y, pos.z(), type, sides);
                             y++;
                         }
                     }
