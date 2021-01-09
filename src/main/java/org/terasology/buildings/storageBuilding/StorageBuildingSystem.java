@@ -15,10 +15,10 @@
  */
 package org.terasology.buildings.storageBuilding;
 
+import org.joml.Vector3f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
-import org.terasology.context.Context;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -31,7 +31,6 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.resources.system.BuildingResourceSystem;
 import org.terasology.resources.system.ResourceSystem;
@@ -46,25 +45,21 @@ public class StorageBuildingSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(StorageBuildingSystem.class);
 
     @In
-    Context context;
-
-    @In
     private InventoryManager inventoryManager;
 
+    @In
     private BlockEntityRegistry blockEntityRegistry;
+
     private ResourceSystem buildingResourceSystem;
 
     @Override
     public void postBegin() {
-        blockEntityRegistry = context.get(BlockEntityRegistry.class);
-
         buildingResourceSystem = new BuildingResourceSystem();
         buildingResourceSystem.initialize(blockEntityRegistry, inventoryManager);
     }
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
     public void onDropItem(DropItemEvent event, EntityRef item, ItemComponent itemComponent) {
-        Vector3f location = event.getPosition();
         EntityRef owner = item.getOwner();
 
         if (!owner.hasComponent(HoldingComponent.class)) {
@@ -81,7 +76,7 @@ public class StorageBuildingSystem extends BaseComponentSystem {
         if (locationComponent == null) {
             return;
         }
-        Vector3f location = locationComponent.getWorldPosition();
+        Vector3f location = locationComponent.getWorldPosition(new Vector3f());
         HoldingComponent holdingComponent = owner.getComponent(HoldingComponent.class);
 
         List<EntityRef> buildings = holdingComponent.constructedBuildings;
