@@ -15,6 +15,7 @@
  */
 package org.terasology.spawning.nui;
 
+import org.joml.Vector3f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -90,7 +91,7 @@ public class SpawnScreenLayer extends CoreScreenLayer {
         setPortalEntity();
         LocationComponent portalLocation = portalEntity.getComponent(LocationComponent.class);
         if (portalLocation != null) {
-            localPlayer.getCharacterEntity().send(new OreonSpawnEvent(prefabToSpawn, portalLocation.getWorldPosition()));
+            localPlayer.getCharacterEntity().send(new OreonSpawnEvent(prefabToSpawn, portalLocation.getWorldPosition(new Vector3f())));
         }
     }
 

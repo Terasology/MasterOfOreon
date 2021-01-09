@@ -15,9 +15,10 @@
  */
 package org.terasology.spawning;
 
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ServerEvent;
 
 /**
@@ -26,21 +27,21 @@ import org.terasology.network.ServerEvent;
 @ServerEvent
 public class OreonSpawnEvent implements Event {
     private Prefab oreonPrefab;
-    private Vector3f location;
+    private Vector3f location = new Vector3f();
 
     public OreonSpawnEvent () {
     }
 
-    public OreonSpawnEvent(Prefab prefab, Vector3f location) {
+    public OreonSpawnEvent(Prefab prefab, Vector3fc location) {
         this.oreonPrefab = prefab;
-        this.location = location;
+        this.location.set(location);
     }
 
     public Prefab getOreonPrefab() {
         return this.oreonPrefab;
     }
 
-    public Vector3f getSpawnPosition() {
+    public Vector3fc getSpawnPosition() {
         return this.location;
     }
 }
