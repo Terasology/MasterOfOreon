@@ -15,6 +15,7 @@
  */
 package org.terasology.spawning;
 
+import org.joml.Vector3fc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
@@ -57,8 +58,6 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
     @In
     private InventoryManager inventoryManager;
 
-    private Prefab prefabToSpawn;
-    private Vector3f spawnPosition;
 
 
     /**
@@ -68,8 +67,8 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void oreonSpawn(OreonSpawnEvent event, EntityRef player) {
-        prefabToSpawn = event.getOreonPrefab();
-        spawnPosition = event.getSpawnPosition();
+        Prefab prefabToSpawn = event.getOreonPrefab();
+        Vector3fc spawnPosition = event.getSpawnPosition();
 
         boolean shouldSpawn = consumeItem(player, prefabToSpawn);
         if (shouldSpawn) {
@@ -86,7 +85,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
             nameTagComponent.yOffset = 1.0f;
             newOreon.addComponent(nameTagComponent);
 
-            assignRandomAttributes(newOreon);
+            assignRandomAttributes(prefabToSpawn, newOreon);
 
             logger.info("Player " + PlayerUtil.getColoredPlayerName(player) + " spawned a new Oreon of Type : " + prefabToSpawn.getName());
         }
@@ -199,7 +198,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         return true;
     }
 
-    private void assignRandomAttributes(EntityRef oreon) {
+    private void assignRandomAttributes(Prefab prefabToSpawn,EntityRef oreon) {
         OreonAttributeComponent oreonAttributes = new OreonAttributeComponent();
 
         MersenneRandom random = new MersenneRandom();
