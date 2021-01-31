@@ -31,7 +31,6 @@ import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.nameTags.NameTagComponent;
 import org.terasology.logic.players.PlayerUtil;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.namegenerator.creature.CreatureNameComponent;
 import org.terasology.network.NetworkComponent;
 import org.terasology.registry.In;
