@@ -16,6 +16,7 @@
 package org.terasology.taskSystem.taskCompletion;
 
 import com.google.common.math.DoubleMath;
+import org.joml.Vector2ic;
 import org.joml.Vector3ic;
 import org.terasology.buildings.BasicRasterTarget;
 import org.terasology.buildings.BuildingParcel;
@@ -48,14 +49,12 @@ import org.terasology.cities.window.Window;
 import org.terasology.commonworld.Orientation;
 import org.terasology.commonworld.heightmap.HeightMap;
 import org.terasology.commonworld.heightmap.HeightMaps;
-import org.terasology.math.JomlUtil;
 import org.terasology.math.Side;
 import org.terasology.math.TeraMath;
-import org.terasology.math.geom.BaseVector2i;
-import org.terasology.math.geom.ImmutableVector3i;
-import org.terasology.math.geom.Rect2i;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.world.WorldProvider;
+import org.terasology.world.block.BlockArea;
+import org.terasology.world.block.BlockAreac;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.BlockRegion;
 
@@ -89,7 +88,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         int maxX = selectedRegion.maxX();
         int minY = selectedRegion.minY();
 
-        Rect2i shape = Rect2i.createFromMinAndMax(minX, selectedRegion.minY(), maxX, selectedRegion.maxY());
+        BlockArea shape = new BlockArea(minX, selectedRegion.minY(), maxX, selectedRegion.maxY());
         buildingParcel.setShape(shape);
 
         HeightMap heightMap = HeightMaps.constant(minY);
@@ -152,7 +151,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
      * @param shape The bounding rectangle inside which construction is to be done
      * @param heightMap The height map of the base on which the building is being constructed
      */
-    private void buildParts(Building compositeBuilding, Rect2i shape, HeightMap heightMap) {
+    private void buildParts(Building compositeBuilding, BlockAreac shape, HeightMap heightMap) {
         BlockTheme theme = buildBlockTheme();
 
         BasicRasterTarget rasterTarget = new BasicRasterTarget(worldProvider, shape, theme);
@@ -183,9 +182,9 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
      */
     private void buildRectPart(RasterTarget rasterTarget, RectBuildingPart rectBuildingPart, HeightMap heightMap) {
 
-        Rect2i rc = rectBuildingPart.getShape();
+        BlockAreac rc = rectBuildingPart.getShape();
 
-        if (!rc.overlaps(rasterTarget.getAffectedArea())) {
+        if (!rc.intersectsBlockArea(rasterTarget.getAffectedArea())) {
             return;
         }
 
@@ -269,9 +268,9 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
         if (SaddleRoof.class.isInstance(roof)) {
             SaddleRoof saddleRoof = SaddleRoof.class.cast(roof);
-            Rect2i area = saddleRoof.getArea();
+            BlockAreac area = saddleRoof.getArea();
 
-            if (!area.overlaps(rasterTarget.getAffectedArea())) {
+            if (!area.intersectsBlockArea(rasterTarget.getAffectedArea())) {
                 return;
             }
 
@@ -287,8 +286,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
                     int y = saddleRoof.getBaseHeight();
 
                     // distance to border of the roof
-                    int borderDistX = Math.min(rx, area.width() - 1 - rx);
-                    int borderDistZ = Math.min(rz, area.height() - 1 - rz);
+                    int borderDistX = Math.min(rx, area.getSizeX() - 1 - rx);
+                    int borderDistZ = Math.min(rz, area.getSizeY() - 1 - rz);
 
                     if (alongX) {
                         y += borderDistZ / saddleRoof.getPitch();
@@ -304,7 +303,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
             Pen pen = Pens.fill(rasterTarget, heightMapBottom, heightMapTop, DefaultBlockType.ROOF_SADDLE);
             RasterUtil.fillRect(pen, area);
 
-            Rect2i wallRect = saddleRoof.getBaseArea();
+            BlockAreac wallRect = saddleRoof.getBaseArea();
 
             HeightMap heightMapGableBottom = new HeightMap() {
 
@@ -336,9 +335,9 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
         if (HipRoof.class.isInstance(roof)) {
             HipRoof hipRoof = HipRoof.class.cast(roof);
-            Rect2i area = hipRoof.getArea();
+            BlockAreac area = hipRoof.getArea();
 
-            if (!area.overlaps(rasterTarget.getAffectedArea())) {
+            if (!area.intersectsBlockArea(rasterTarget.getAffectedArea())) {
                 return;
             }
 
@@ -360,9 +359,9 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         if (PentRoof.class.isInstance(roof)) {
             PentRoof pentRoof = PentRoof.class.cast(roof);
 
-            Rect2i area = pentRoof.getArea();
+            BlockAreac area = pentRoof.getArea();
 
-            if (!area.overlaps(rasterTarget.getAffectedArea())) {
+            if (!area.intersectsBlockArea(rasterTarget.getAffectedArea())) {
                 return;
             }
 
@@ -373,18 +372,18 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
                     int rx = x - area.minX();
                     int rz = z - area.minY();
 
-                    BaseVector2i dir = pentRoof.getOrientation().getDir();
+                    Vector2ic dir = pentRoof.getOrientation().direction();
 
-                    if (dir.getX() < 0) {
-                        rx -= area.width() - 1;  // maxX
+                    if (dir.x() < 0) {
+                        rx -= area.getSizeX() - 1;  // maxX
                     }
 
-                    if (dir.getY() < 0) {
-                        rz -= area.height() - 1; // maxY
+                    if (dir.y() < 0) {
+                        rz -= area.getSizeY() - 1; // maxY
                     }
 
-                    int hx = rx * dir.getX();
-                    int hz = rz * dir.getY();
+                    int hx = rx * dir.x();
+                    int hz = rz * dir.y();
 
                     int h = DoubleMath.roundToInt(Math.max(hx, hz) * pentRoof.getPitch(), RoundingMode.HALF_UP);
 
@@ -397,7 +396,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
             Pen pen = Pens.fill(rasterTarget, heightMapBottom, heightMapTop, DefaultBlockType.ROOF_HIP);
             RasterUtil.fillRect(pen, area);
 
-            final Rect2i wallRect = pentRoof.getBaseArea();
+            final BlockAreac wallRect = pentRoof.getBaseArea();
 
             HeightMap heightMapGableBottom = new HeightMap() {
 

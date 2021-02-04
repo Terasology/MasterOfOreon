@@ -20,9 +20,10 @@ import org.terasology.cities.BlockTheme;
 import org.terasology.cities.BlockType;
 import org.terasology.cities.raster.RasterTarget;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Rect2i;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockArea;
+import org.terasology.world.block.BlockAreac;
 import org.terasology.world.block.BlockRegion;
 
 import java.util.Set;
@@ -30,13 +31,13 @@ import java.util.Set;
 public class BasicRasterTarget implements RasterTarget {
 
     private WorldProvider worldProvider;
-    private Rect2i affectedArea;
+    private BlockArea affectedArea;
     private BlockRegion affectedRegion;
     private BlockTheme blockTheme;
 
-    public BasicRasterTarget(WorldProvider worldProvider,Rect2i area, BlockTheme blockTheme) {
+    public BasicRasterTarget(WorldProvider worldProvider, BlockAreac area, BlockTheme blockTheme) {
         this.worldProvider = worldProvider;
-        this.affectedArea = area;
+        this.affectedArea = new BlockArea(area);
         this.blockTheme = blockTheme;
 
         this.affectedRegion = new BlockRegion(affectedArea.minX(), -255, affectedArea.minY(), affectedArea.maxX(), 255, affectedArea.maxY());
@@ -54,7 +55,7 @@ public class BasicRasterTarget implements RasterTarget {
         worldProvider.setBlock(new Vector3i(x, y, z), block);
     }
 
-    public Rect2i getAffectedArea() {
+    public BlockAreac getAffectedArea() {
         return affectedArea;
     }
 

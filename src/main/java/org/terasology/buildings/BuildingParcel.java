@@ -17,12 +17,13 @@ package org.terasology.buildings;
 
 import org.terasology.cities.parcels.Parcel;
 import org.terasology.commonworld.Orientation;
-import org.terasology.math.geom.Rect2i;
+import org.terasology.world.block.BlockArea;
+import org.terasology.world.block.BlockAreac;
 
 public class BuildingParcel implements Parcel {
 
     private Orientation orientation;
-    private Rect2i shape;
+    private BlockAreac shape;
 
     @Override
     public Orientation getOrientation() {
@@ -30,7 +31,7 @@ public class BuildingParcel implements Parcel {
     }
 
     @Override
-    public Rect2i getShape() {
+    public BlockAreac getShape() {
         return this.shape;
     }
 
@@ -38,7 +39,7 @@ public class BuildingParcel implements Parcel {
         this.orientation = orientation;
     }
 
-    public void setShape(Rect2i shape) {
-        this.shape = shape;
+    public void setShape(BlockAreac shape) {
+        this.shape = new BlockArea(shape);
     }
 }
