@@ -92,7 +92,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
         // Get the type of crop harvested
         EntityRef plantBlockEntity = blockEntityRegistry.getBlockEntityAt(new Vector3i(plantRegion.minX(), plantRegion.minY() + 1, plantRegion.minZ()));
         BlockComponent blockComponent = plantBlockEntity.getComponent(BlockComponent.class);
-        harvestTask.harvestedCrop = blockComponent.block.getURI().toString();
+        harvestTask.harvestedCrop = blockComponent.getBlock().getURI().toString();
 
         Vector3i chestBlockLocation = storageBuildingRegions.get(MooConstants.CHEST_BLOCK_INDEX).getMin(new Vector3i());
 

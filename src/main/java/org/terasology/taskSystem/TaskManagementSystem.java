@@ -519,7 +519,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
         EntityRef blockEntity = blockEntityRegistry.getBlockEntityAt(blockLocation);
         BlockComponent blockComponent = blockEntity.getComponent(BlockComponent.class);
 
-        return blockComponent.block.isTargetable();
+        return blockComponent.getBlock().isTargetable();
     }
 
     private Texture getAreaTexture(Task newTask) {
