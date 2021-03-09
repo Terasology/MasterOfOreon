@@ -15,9 +15,9 @@
  */
 package org.terasology.notification;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.players.PlayerUtil;
-import org.terasology.network.OwnerEvent;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.players.PlayerUtil;
+import org.terasology.engine.network.OwnerEvent;
 
 /**
  * A notification message for Master of Oreon (MOO)

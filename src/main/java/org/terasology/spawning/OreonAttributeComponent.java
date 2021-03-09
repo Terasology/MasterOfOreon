@@ -15,8 +15,8 @@
  */
 package org.terasology.spawning;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.network.Replicate;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.network.Replicate;
 
 /**
  * Defines the levels of various stats related to an Oreon

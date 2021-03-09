@@ -15,8 +15,8 @@
  */
 package org.terasology.taskSystem.events;
 
-import org.terasology.entitySystem.event.Event;
-import org.terasology.world.block.BlockRegion;
+import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.engine.world.block.BlockRegion;
 
 public class OpenTaskSelectionScreenEvent implements Event {
     private BlockRegion taskRegion;

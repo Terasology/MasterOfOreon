@@ -19,16 +19,16 @@ package org.terasology.taskSystem.actions;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.engine.Time;
-import org.terasology.logic.behavior.BehaviorAction;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.behavior.core.BaseAction;
-import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.location.LocationComponent;
+import org.terasology.engine.core.Time;
+import org.terasology.engine.logic.behavior.BehaviorAction;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.logic.behavior.core.BaseAction;
+import org.terasology.engine.logic.behavior.core.BehaviorState;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.utilities.random.MersenneRandom;
 import org.terasology.minion.move.MinionMoveComponent;
-import org.terasology.registry.In;
 import org.terasology.taskSystem.components.TaskComponent;
-import org.terasology.utilities.random.MersenneRandom;
 
 @BehaviorAction(name = "check_task_status")
 public class CheckTaskStatusNode extends BaseAction {

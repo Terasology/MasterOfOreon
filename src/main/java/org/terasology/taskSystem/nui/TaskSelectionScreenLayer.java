@@ -16,13 +16,13 @@
 package org.terasology.taskSystem.nui;
 
 import org.terasology.MooConstants;
-import org.terasology.logic.players.LocalPlayer;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.engine.rendering.nui.UIScreenLayer;
 import org.terasology.nui.widgets.UIButton;
 import org.terasology.nui.widgets.UIList;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.CoreScreenLayer;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.UIScreenLayer;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
 import org.terasology.taskSystem.events.SetTaskTypeEvent;

@@ -15,10 +15,10 @@
  */
 package org.terasology.notification;
 
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.widgets.UIText;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.CoreScreenLayer;
 
 /**
  * Controlling Notification Overlay UI for Master of Oreon (MOO)

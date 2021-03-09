@@ -17,12 +17,14 @@ package org.terasology.resources.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.world.BlockEntityRegistry;;
-import org.terasology.world.block.items.BlockItemComponent;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.inventory.InventoryManager;
+import org.terasology.engine.world.BlockEntityRegistry;
+import org.terasology.engine.world.block.items.BlockItemComponent;
 
 import java.util.List;
+
+;
 
 /**
  * The system which consists of the logic common between the {@link PlayerResourceSystem} and {@link BuildingResourceSystem}

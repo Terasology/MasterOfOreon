@@ -16,24 +16,24 @@
 package org.terasology.taskSystem.actions;
 
 import org.terasology.MooConstants;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.logic.behavior.BehaviorAction;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.behavior.core.BaseAction;
-import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.nameTags.NameTagComponent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.network.ColorComponent;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.behavior.BehaviorAction;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.logic.behavior.core.BaseAction;
+import org.terasology.engine.logic.behavior.core.BehaviorState;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.logic.nameTags.NameTagComponent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.network.ColorComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.time.WorldTime;
 import org.terasology.notification.NotificationMessageEventMOO;
-import org.terasology.registry.In;
 import org.terasology.nui.Color;
 import org.terasology.taskSystem.TaskManagementSystem;
 import org.terasology.taskSystem.tasks.SleepTask;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.time.WorldTime;
 
 /**
  * Checks if it is night time in the world and there are no pending tasks in the village, if yes calls the task management system to assign the Eat task.

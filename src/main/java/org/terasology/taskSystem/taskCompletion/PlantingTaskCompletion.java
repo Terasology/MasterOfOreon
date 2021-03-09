@@ -16,10 +16,10 @@
 package org.terasology.taskSystem.taskCompletion;
 
 import org.joml.Vector3i;
-import org.terasology.world.BlockEntityRegistry;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.BlockRegion;
+import org.terasology.engine.world.BlockEntityRegistry;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.block.BlockRegion;
 
 public class PlantingTaskCompletion {
     private BlockManager blockManager;

@@ -15,7 +15,7 @@
  */
 package org.terasology.research.events;
 
-import org.terasology.entitySystem.event.Event;
+import org.terasology.engine.entitySystem.event.Event;
 
 public class ResearchStartEvent implements Event {
 }

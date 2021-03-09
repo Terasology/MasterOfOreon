@@ -15,18 +15,18 @@
  */
 package org.terasology.tooltip;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.rendering.nui.layers.ingame.inventory.GetItemTooltip;
+import org.terasology.engine.world.selection.BlockSelectionComponent;
 import org.terasology.namegenerator.creature.CreatureNameComponent;
 import org.terasology.nui.widgets.TooltipLine;
-import org.terasology.rendering.nui.layers.ingame.inventory.GetItemTooltip;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.tooltip.components.OreonTooltipComponent;
-import org.terasology.world.selection.BlockSelectionComponent;
 import org.terasology.worldlyTooltipAPI.events.GetTooltipIconEvent;
 import org.terasology.worldlyTooltipAPI.events.GetTooltipNameEvent;
 

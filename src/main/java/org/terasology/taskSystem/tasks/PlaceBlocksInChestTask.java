@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem.tasks;
 
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.Task;
 

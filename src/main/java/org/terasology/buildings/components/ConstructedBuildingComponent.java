@@ -16,10 +16,10 @@
 package org.terasology.buildings.components;
 
 import org.joml.Vector3i;
-import org.terasology.entitySystem.Component;
-import org.terasology.network.Replicate;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.network.Replicate;
+import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.taskSystem.BuildingType;
-import org.terasology.world.block.BlockRegion;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,7 +15,7 @@
  */
 package org.terasology.notification;
 
-import org.terasology.entitySystem.event.Event;
+import org.terasology.engine.entitySystem.event.Event;
 
 /**
  * Notification event for Master of Oreon (MOO)

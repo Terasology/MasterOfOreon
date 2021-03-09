@@ -15,11 +15,11 @@
  */
 package org.terasology.overviewSystem;
 
-import org.terasology.input.BindButtonEvent;
-import org.terasology.input.DefaultBinding;
+import org.terasology.engine.input.BindButtonEvent;
+import org.terasology.engine.input.DefaultBinding;
+import org.terasology.engine.input.RegisterBindButton;
 import org.terasology.input.InputType;
 import org.terasology.input.Keyboard;
-import org.terasology.input.RegisterBindButton;
 
 @RegisterBindButton(id = "toggleOverviewScreen", description = "Triggers the Overview Screen")
 @DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.O)

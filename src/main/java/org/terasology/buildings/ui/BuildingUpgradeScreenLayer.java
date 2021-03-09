@@ -22,16 +22,16 @@ import org.terasology.buildings.BuildingUpgradeSystem;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.buildings.events.GuardBuildingEvent;
 import org.terasology.buildings.events.UpgradeBuildingEvent;
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.logic.players.LocalPlayer;
 import org.terasology.nui.databinding.Binding;
 import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.widgets.UIButton;
 import org.terasology.nui.widgets.UILabel;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.CoreScreenLayer;
 
 public class BuildingUpgradeScreenLayer extends CoreScreenLayer {
     private static final Logger logger = LoggerFactory.getLogger(BuildingUpgradeSystem.class);

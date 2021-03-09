@@ -15,12 +15,12 @@
  */
 package org.terasology.taskSystem.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.network.FieldReplicateType;
-import org.terasology.network.Replicate;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.network.FieldReplicateType;
+import org.terasology.engine.network.Replicate;
+import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.taskSystem.Task;
 import org.terasology.taskSystem.TaskStatusType;
-import org.terasology.world.block.BlockRegion;
 
 /**
  * Component which gets attached to an Oreon entity when a task is assigned to it.

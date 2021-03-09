@@ -17,9 +17,9 @@ package org.terasology.spawning;
 
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.terasology.entitySystem.event.Event;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.network.ServerEvent;
+import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.network.ServerEvent;
 
 /**
  * Event sent by the {@link org.terasology.spawning.nui.SpawnScreenLayer} after the player selects an Oreon to spawn.

@@ -15,9 +15,9 @@
  */
 package org.terasology.holdingSystem.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.network.Replicate;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.network.Replicate;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

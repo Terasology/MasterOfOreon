@@ -15,8 +15,8 @@
  */
 package org.terasology.tooltip.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.rendering.assets.texture.TextureRegionAsset;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.rendering.assets.texture.TextureRegionAsset;
 
 public class OreonTooltipComponent implements Component {
     public TextureRegionAsset<?> icon;

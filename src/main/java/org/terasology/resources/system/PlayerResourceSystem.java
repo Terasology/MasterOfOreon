@@ -15,7 +15,7 @@
  */
 package org.terasology.resources.system;
 
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 
 /**
  * The system which handles resources in the Player's inventory

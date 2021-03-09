@@ -15,8 +15,8 @@
  */
 package org.terasology.deathSystem.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.rendering.assets.animation.MeshAnimation;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.rendering.assets.animation.MeshAnimation;
 
 import java.util.ArrayList;
 import java.util.List;

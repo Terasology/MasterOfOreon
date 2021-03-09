@@ -17,8 +17,8 @@ package org.terasology.buildings;
 
 import org.terasology.cities.parcels.Parcel;
 import org.terasology.commonworld.Orientation;
-import org.terasology.world.block.BlockArea;
-import org.terasology.world.block.BlockAreac;
+import org.terasology.engine.world.block.BlockArea;
+import org.terasology.engine.world.block.BlockAreac;
 
 public class BuildingParcel implements Parcel {
 

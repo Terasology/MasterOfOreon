@@ -15,12 +15,12 @@
  */
 package org.terasology.holdingSystem.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.network.FieldReplicateType;
-import org.terasology.network.Replicate;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.network.FieldReplicateType;
+import org.terasology.engine.network.Replicate;
+import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.taskSystem.AssignedTaskType;
 import org.terasology.taskSystem.BuildingType;
-import org.terasology.world.block.BlockRegion;
 
 /**
  * The component attached to a task entity which specifies the area selected for the task. All changes made to this task

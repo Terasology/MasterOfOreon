@@ -20,17 +20,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.MooConstants;
 import org.terasology.buildings.events.BuildingConstructionStartedEvent;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.math.Side;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.math.Side;
+import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.structureTemplates.components.CompletionTimeComponent;
 import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.terasology.structureTemplates.events.SpawnStructureEvent;
 import org.terasology.structureTemplates.interfaces.StructureTemplateProvider;
 import org.terasology.structureTemplates.util.BlockRegionTransform;
 import org.terasology.taskSystem.BuildingType;
-import org.terasology.world.block.BlockRegion;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

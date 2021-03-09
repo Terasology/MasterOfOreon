@@ -15,18 +15,18 @@
  */
 package org.terasology.taskSystem.actions;
 
-import org.terasology.context.Context;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.logic.behavior.BehaviorAction;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.logic.behavior.core.BaseAction;
-import org.terasology.logic.behavior.core.BehaviorState;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.registry.In;
+import org.terasology.engine.context.Context;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.logic.behavior.BehaviorAction;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.logic.behavior.core.BaseAction;
+import org.terasology.engine.logic.behavior.core.BehaviorState;
+import org.terasology.engine.logic.inventory.InventoryManager;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.taskSystem.components.TaskComponent;
 import org.terasology.taskSystem.tasks.GetBlocksFromChestTask;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.items.BlockItemFactory;
 
 @BehaviorAction(name = "get_blocks_from_chest")
 public class GetBlocksFromChestNode extends BaseAction {

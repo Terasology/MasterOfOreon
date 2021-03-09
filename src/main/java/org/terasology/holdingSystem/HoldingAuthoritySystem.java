@@ -15,12 +15,12 @@
  */
 package org.terasology.holdingSystem;
 
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.behavior.core.Actor;
+import org.terasology.engine.registry.Share;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.logic.behavior.core.Actor;
-import org.terasology.registry.Share;
 import org.terasology.spawning.OreonSpawnComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)

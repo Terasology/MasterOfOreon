@@ -15,7 +15,7 @@
  */
 package org.terasology.taskSystem.assignment;
 
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.spawning.OreonAttributeComponent;
 import org.terasology.taskSystem.OreonAttributes;
 import org.terasology.taskSystem.Task;

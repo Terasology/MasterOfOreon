@@ -15,8 +15,8 @@
  */
 package org.terasology.taskSystem.taskCompletion;
 
+import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.taskSystem.BuildingType;
-import org.terasology.world.block.BlockRegion;
 
 public interface BuildTaskCompletion {
 
