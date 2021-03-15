@@ -19,7 +19,7 @@ import org.joml.Vector3i;
 import org.terasology.MooConstants;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.logic.inventory.InventoryComponent;
+import org.terasology.module.inventory.components.InventoryComponent;
 
 import java.util.List;
 

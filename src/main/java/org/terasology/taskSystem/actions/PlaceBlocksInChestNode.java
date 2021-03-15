@@ -21,7 +21,7 @@ import org.terasology.engine.logic.behavior.BehaviorAction;
 import org.terasology.engine.logic.behavior.core.Actor;
 import org.terasology.engine.logic.behavior.core.BaseAction;
 import org.terasology.engine.logic.behavior.core.BehaviorState;
-import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemFactory;
