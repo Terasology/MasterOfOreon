@@ -42,7 +42,7 @@ import org.terasology.engine.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.engine.logic.common.DisplayNameComponent;
 import org.terasology.engine.logic.delay.DelayManager;
 import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.engine.logic.inventory.InventoryManager;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.logic.nameTags.NameTagComponent;
 import org.terasology.engine.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.engine.logic.selection.MovableSelectionEndEvent;

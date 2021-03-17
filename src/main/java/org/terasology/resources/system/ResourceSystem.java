@@ -18,7 +18,7 @@ package org.terasology.resources.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.logic.inventory.InventoryManager;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.world.BlockEntityRegistry;
 import org.terasology.engine.world.block.items.BlockItemComponent;
 
