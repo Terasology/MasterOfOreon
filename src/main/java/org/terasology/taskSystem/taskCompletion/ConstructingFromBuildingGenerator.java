@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.taskCompletion;
 
 import com.google.common.math.DoubleMath;
@@ -69,9 +56,9 @@ import static org.terasology.commonworld.Orientation.WEST;
 // TODO: This class should be moved to the Cities module
 public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
-    private BlockManager blockManager;
+    private final BlockManager blockManager;
 
-    private WorldProvider worldProvider;
+    private final WorldProvider worldProvider;
 
     private BuildingGenerator compositeBuildingGenerator;
 
@@ -157,8 +144,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         BasicRasterTarget rasterTarget = new BasicRasterTarget(worldProvider, shape, theme);
 
         for (BuildingPart part : compositeBuilding.getParts()) {
-            if (RectBuildingPart.class.isInstance(part)) {
-                RectBuildingPart rectBuildingPart = RectBuildingPart.class.cast(part);
+            if (part instanceof RectBuildingPart) {
+                RectBuildingPart rectBuildingPart = (RectBuildingPart) part;
                 buildRectPart(rasterTarget, rectBuildingPart, heightMap);
             }
 
@@ -203,8 +190,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         for (Door door : part.getDoors()) {
 
             // For a Wing Door
-            if (WingDoor.class.isInstance(door)) {
-                WingDoor wingDoor = WingDoor.class.cast(door);
+            if (door instanceof WingDoor) {
+                WingDoor wingDoor = (WingDoor) door;
                 Pen pen = Pens.fill(rasterTarget, wingDoor.getBaseHeight(), wingDoor.getTopHeight(), DefaultBlockType.WING_DOOR);
                 RasterUtil.fillRect(pen, wingDoor.getArea());
             }
@@ -215,14 +202,14 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         for (Window window : part.getWindows()) {
 
             // For RectWindow
-            if (RectWindow.class.isInstance(window)) {
-                RectWindow rectWindow = RectWindow.class.cast(window);
+            if (window instanceof RectWindow) {
+                RectWindow rectWindow = (RectWindow) window;
                 Pen pen = Pens.fill(rasterTarget, rectWindow.getBaseHeight(), rectWindow.getTopHeight(), rectWindow.getBlockType());
                 RasterUtil.fillRect(pen, rectWindow.getArea());
             }
 
-            if (SimpleWindow.class.isInstance(window)) {
-                SimpleWindow simpleWindow = SimpleWindow.class.cast(window);
+            if (window instanceof SimpleWindow) {
+                SimpleWindow simpleWindow = (SimpleWindow) window;
                 int x = simpleWindow.getPos().x();
                 int y = simpleWindow.getHeight();
                 int z = simpleWindow.getPos().y();
@@ -237,15 +224,15 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
     private void buildDecorations(RasterTarget rasterTarget, BuildingPart part) {
         for (Decoration decoration : part.getDecorations()) {
 
-            if (SingleBlockDecoration.class.isInstance(decoration)) {
-                SingleBlockDecoration blockDecoration = SingleBlockDecoration.class.cast(decoration);
+            if (decoration instanceof SingleBlockDecoration) {
+                SingleBlockDecoration blockDecoration = (SingleBlockDecoration) decoration;
                 if (rasterTarget.getAffectedRegion().contains(blockDecoration.getPos())) {
                     rasterTarget.setBlock(blockDecoration.getPos(), blockDecoration.getType(), Collections.singleton(blockDecoration.getSide()));
                 }
             }
 
-            if (ColumnDecoration.class.isInstance(decoration)) {
-                ColumnDecoration columnDecoration = ColumnDecoration.class.cast(decoration);
+            if (decoration instanceof ColumnDecoration) {
+                ColumnDecoration columnDecoration = (ColumnDecoration) decoration;
                 Vector3ic pos = columnDecoration.getBasePos();
                 int y = pos.y();
                 if (rasterTarget.getAffectedArea().contains(pos.x(), pos.z())) {
@@ -266,8 +253,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
     private void buildRoofs(RasterTarget rasterTarget, BuildingPart part) {
         Roof roof = part.getRoof();
 
-        if (SaddleRoof.class.isInstance(roof)) {
-            SaddleRoof saddleRoof = SaddleRoof.class.cast(roof);
+        if (roof instanceof SaddleRoof) {
+            SaddleRoof saddleRoof = (SaddleRoof) roof;
             BlockAreac area = saddleRoof.getArea();
 
             if (!area.intersectsBlockArea(rasterTarget.getAffectedArea())) {
@@ -333,8 +320,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
             RasterUtil.fillRect(pen, area);
         }
 
-        if (HipRoof.class.isInstance(roof)) {
-            HipRoof hipRoof = HipRoof.class.cast(roof);
+        if (roof instanceof HipRoof) {
+            HipRoof hipRoof = (HipRoof) roof;
             BlockAreac area = hipRoof.getArea();
 
             if (!area.intersectsBlockArea(rasterTarget.getAffectedArea())) {
@@ -356,8 +343,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
             RasterUtil.fillRect(pen, area);
         }
 
-        if (PentRoof.class.isInstance(roof)) {
-            PentRoof pentRoof = PentRoof.class.cast(roof);
+        if (roof instanceof PentRoof) {
+            PentRoof pentRoof = (PentRoof) roof;
 
             BlockAreac area = pentRoof.getArea();
 

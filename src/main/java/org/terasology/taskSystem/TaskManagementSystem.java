@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem;
 
 import org.joml.RoundingMode;
@@ -42,7 +29,6 @@ import org.terasology.engine.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.engine.logic.common.DisplayNameComponent;
 import org.terasology.engine.logic.delay.DelayManager;
 import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.logic.nameTags.NameTagComponent;
 import org.terasology.engine.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.engine.logic.selection.MovableSelectionEndEvent;
@@ -65,6 +51,7 @@ import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.notification.NotificationMessageEventMOO;
 import org.terasology.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
@@ -259,11 +246,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
 
         String selectedItemName = selectedItem.getComponent(DisplayNameComponent.class).name;
 
-        if (selectedItemName.equals("Oreon Selection Tool")) {
-            return true;
-        }
-
-        return false;
+        return selectedItemName.equals("Oreon Selection Tool");
     }
 
     /**

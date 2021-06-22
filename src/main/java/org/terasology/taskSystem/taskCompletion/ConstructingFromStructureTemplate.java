@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.taskCompletion;
 
 import org.joml.Vector3i;
@@ -36,9 +23,9 @@ import java.util.stream.Collectors;
 public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
     private static final Logger logger = LoggerFactory.getLogger(ConstructingFromStructureTemplate.class);
 
-    private StructureTemplateProvider structureTemplateProvider;
+    private final StructureTemplateProvider structureTemplateProvider;
     private EntityRef buildingTemplate;
-    private EntityRef player;
+    private final EntityRef player;
 
     public ConstructingFromStructureTemplate(StructureTemplateProvider templateProvider, EntityRef playerEntity) {
         this.structureTemplateProvider = templateProvider;
@@ -82,25 +69,25 @@ public class ConstructingFromStructureTemplate implements BuildTaskCompletion {
         EntityRef building = EntityRef.NULL;
         switch (buildingType) {
             case Diner :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER+"Level" + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_DINER+"Level" + level);
                 break;
             case Storage :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE+"Level" + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_STORAGE+"Level" + level);
                 break;
             case Laboratory :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY+"Level" + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_LABORATORY+"Level" + level);
                 break;
             case Jail :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_JAIL+"Level" + level);
                 break;
             case Church :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_CHURCH+"Level" + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_CHURCH+"Level" + level);
                 break;
             case Hospital:
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_HOSPITAL+"Level"+Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_HOSPITAL+"Level"+ level);
                 break;
             case Bedroom :
-                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_BEDROOM+"Level" + Integer.toString(level));
+                building = structureTemplateProvider.getRandomTemplateOfType(MooConstants.STRUCTURE_TEMPLATE_TYPE_BEDROOM+"Level" + level);
                 break;
         }
 
