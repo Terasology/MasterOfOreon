@@ -7,4 +7,9 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class LaboratoryComponent implements Component<LaboratoryComponent> {
     public EntityRef laboratoryEntity;
+
+    @Override
+    public void copy(LaboratoryComponent other) {
+        this.laboratoryEntity = other.laboratoryEntity;
+    }
 }

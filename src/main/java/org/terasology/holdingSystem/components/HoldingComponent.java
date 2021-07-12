@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.holdingSystem.components;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.network.Replicate;
 import org.terasology.gestalt.entitysystem.component.Component;
@@ -27,4 +29,12 @@ public class HoldingComponent implements Component<HoldingComponent> {
 
     @Replicate
     public EntityRef lastBuildingInteractedWith = EntityRef.NULL;
+
+    @Override
+    public void copy(HoldingComponent other) {
+        this.availableTasks = Lists.newLinkedList(other.availableTasks);
+        this.assignedAreas = Lists.newArrayList(other.assignedAreas);
+        this.constructedBuildings = Lists.newArrayList(other.constructedBuildings);
+        this.lastBuildingInteractedWith = other.lastBuildingInteractedWith;
+    }
 }

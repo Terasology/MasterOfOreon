@@ -15,11 +15,18 @@ import org.terasology.taskSystem.BuildingType;
  */
 public class AssignedAreaComponent implements Component<AssignedAreaComponent> {
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
-    public BlockRegion assignedRegion;
+    public BlockRegion assignedRegion = new BlockRegion(BlockRegion.INVALID);
 
     @Replicate
     public String assignedTaskType = AssignedTaskType.NONE;
 
     @Replicate
     public BuildingType buildingType = BuildingType.None;
+
+    @Override
+    public void copy(AssignedAreaComponent other) {
+        this.assignedRegion.set(other.assignedRegion);
+        this.assignedTaskType = other.assignedTaskType;
+        this.buildingType = other.buildingType;
+    }
 }

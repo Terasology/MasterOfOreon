@@ -5,4 +5,8 @@ package org.terasology.portals;
 import org.terasology.gestalt.entitysystem.component.Component;
 
 public class PortalComponent implements Component<PortalComponent> {
+    @Override
+    public void copy(PortalComponent other) {
+
+    }
 }

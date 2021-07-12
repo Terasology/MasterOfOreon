@@ -35,4 +35,18 @@ public class TaskComponent implements Component<TaskComponent> {
     public String subsequentTaskType;
     public BlockRegion subsequentTaskRegion;
     public long delayBeforeNextTask;
+
+    @Override
+    public void copy(TaskComponent other) {
+        this.assignedTaskType = other.assignedTaskType;
+        this.creationTime = other.creationTime;
+        this.taskStatus = other.taskStatus;
+        this.taskRegion = other.taskRegion;
+        this.taskCompletionTime = other.taskCompletionTime;
+        this.task = other.task;
+        this.subsequentTask = other.subsequentTask;
+        this.subsequentTaskType = other.subsequentTaskType;
+        this.subsequentTaskRegion = other.subsequentTaskRegion;
+        this.delayBeforeNextTask = other.delayBeforeNextTask;
+    }
 }
