@@ -24,7 +24,7 @@ public class AssignedAreaComponent implements Component<AssignedAreaComponent> {
     public BuildingType buildingType = BuildingType.None;
 
     @Override
-    public void copy(AssignedAreaComponent other) {
+    public void copyFrom(AssignedAreaComponent other) {
         this.assignedRegion.set(other.assignedRegion);
         this.assignedTaskType = other.assignedTaskType;
         this.buildingType = other.buildingType;

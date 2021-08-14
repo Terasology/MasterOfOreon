@@ -10,7 +10,7 @@ public class OreonTooltipComponent implements Component<OreonTooltipComponent> {
     public String name;
 
     @Override
-    public void copy(OreonTooltipComponent other) {
+    public void copyFrom(OreonTooltipComponent other) {
         this.icon = other.icon;
         this.name = other.name;
     }

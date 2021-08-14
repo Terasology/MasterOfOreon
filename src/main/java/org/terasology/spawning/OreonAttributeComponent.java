@@ -37,7 +37,7 @@ public class OreonAttributeComponent implements Component<OreonAttributeComponen
     public float lastHungerCheck = 0;
 
     @Override
-    public void copy(OreonAttributeComponent other) {
+    public void copyFrom(OreonAttributeComponent other) {
         this.currentLevel = other.currentLevel;
         this.maxIntelligence = other.maxIntelligence;
         this.maxStrength = other.maxStrength;

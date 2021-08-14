@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.components;
 
-import com.google.common.collect.Lists;
 import org.terasology.engine.rendering.assets.animation.MeshAnimation;
 import org.terasology.gestalt.entitysystem.component.Component;
 
@@ -13,7 +12,7 @@ public class BuildComponent implements Component<BuildComponent> {
     public List<MeshAnimation> animationPool = new ArrayList<>();
 
     @Override
-    public void copy(BuildComponent other) {
+    public void copyFrom(BuildComponent other) {
         this.animationPool.clear();
         this.animationPool.addAll(other.animationPool);
     }

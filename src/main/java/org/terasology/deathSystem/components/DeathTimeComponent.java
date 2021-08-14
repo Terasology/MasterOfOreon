@@ -15,7 +15,7 @@ public class DeathTimeComponent implements Component<DeathTimeComponent> {
     public float deathTime;
 
     @Override
-    public void copy(DeathTimeComponent other) {
+    public void copyFrom(DeathTimeComponent other) {
         this.deathTime = other.deathTime;
     }
 }

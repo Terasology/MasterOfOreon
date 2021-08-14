@@ -16,7 +16,7 @@ public class DyingComponent implements Component<DyingComponent> {
     public List<MeshAnimation> animationPool = new ArrayList<>();
 
     @Override
-    public void copy(DyingComponent other) {
+    public void copyFrom(DyingComponent other) {
         this.animationPool = Lists.newArrayList(other.animationPool);
     }
 }

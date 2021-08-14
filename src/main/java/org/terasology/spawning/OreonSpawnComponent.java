@@ -24,7 +24,7 @@ public class OreonSpawnComponent implements Component<OreonSpawnComponent> {
     public EntityRef parent = EntityRef.NULL;
 
     @Override
-    public void copy(OreonSpawnComponent other) {
+    public void copyFrom(OreonSpawnComponent other) {
         this.oreonPrefab = other.oreonPrefab;
         this.itemsToConsume = Maps.newHashMap(other.itemsToConsume);
         this.parent = other.parent;

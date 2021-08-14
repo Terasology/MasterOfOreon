@@ -26,7 +26,7 @@ public class ConstructedBuildingComponent implements Component<ConstructedBuildi
     public Vector3i centerLocation = new Vector3i();
 
     @Override
-    public void copy(ConstructedBuildingComponent other) {
+    public void copyFrom(ConstructedBuildingComponent other) {
         this.boundingRegions = Lists.newArrayList(other.boundingRegions);
         this.buildingType = other.buildingType;
         this.currentLevel = other.currentLevel;

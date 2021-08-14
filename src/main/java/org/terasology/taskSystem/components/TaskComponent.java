@@ -37,7 +37,7 @@ public class TaskComponent implements Component<TaskComponent> {
     public long delayBeforeNextTask;
 
     @Override
-    public void copy(TaskComponent other) {
+    public void copyFrom(TaskComponent other) {
         this.assignedTaskType = other.assignedTaskType;
         this.creationTime = other.creationTime;
         this.taskStatus = other.taskStatus;
