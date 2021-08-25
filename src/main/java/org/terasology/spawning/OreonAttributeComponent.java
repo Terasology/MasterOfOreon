@@ -1,27 +1,14 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.spawning;
 
-import org.terasology.engine.entitySystem.Component;
 import org.terasology.engine.network.Replicate;
+import org.terasology.gestalt.entitysystem.component.Component;
 
 /**
  * Defines the levels of various stats related to an Oreon
  */
-public class OreonAttributeComponent implements Component {
+public class OreonAttributeComponent implements Component<OreonAttributeComponent> {
     /**
      * Defines the current level of the Oreon.
      * Level of the Oreon decides the max value of a particular attribute that can be attained by Training.
@@ -48,4 +35,17 @@ public class OreonAttributeComponent implements Component {
 
     @Replicate
     public float lastHungerCheck = 0;
+
+    @Override
+    public void copyFrom(OreonAttributeComponent other) {
+        this.currentLevel = other.currentLevel;
+        this.maxIntelligence = other.maxIntelligence;
+        this.maxStrength = other.maxStrength;
+        this.maxHealth = other.maxHealth;
+        this.intelligence = other.intelligence;
+        this.strength = other.strength;
+        this.health = other.health;
+        this.hunger = other.hunger;
+        this.lastHungerCheck = other.lastHungerCheck;
+    }
 }
