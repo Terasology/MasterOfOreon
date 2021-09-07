@@ -15,7 +15,7 @@
  */
 package org.terasology.buildings.events;
 
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 
 public class UpgradeBuildingEvent implements Event {
 }

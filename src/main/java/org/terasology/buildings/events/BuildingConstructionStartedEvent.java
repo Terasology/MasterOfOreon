@@ -17,8 +17,8 @@ package org.terasology.buildings.events;
 
 import org.joml.Vector3i;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.world.block.BlockRegion;
+import org.terasology.gestalt.entitysystem.event.Event;
 import org.terasology.taskSystem.BuildingType;
 
 import java.util.List;
