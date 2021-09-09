@@ -17,12 +17,12 @@ package org.terasology.overviewSystem;
 
 import org.terasology.MooConstants;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class OverviewClientSystem extends BaseComponentSystem {
