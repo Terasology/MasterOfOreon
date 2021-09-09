@@ -29,6 +29,7 @@ import org.terasology.engine.core.Time;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.prefab.PrefabManager;
@@ -42,7 +43,6 @@ import org.terasology.engine.logic.characters.events.HorizontalCollisionEvent;
 import org.terasology.engine.logic.common.DisplayNameComponent;
 import org.terasology.engine.logic.delay.DelayManager;
 import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.logic.nameTags.NameTagComponent;
 import org.terasology.engine.logic.selection.ApplyBlockSelectionEvent;
 import org.terasology.engine.logic.selection.MovableSelectionEndEvent;
@@ -65,6 +65,7 @@ import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.notification.NotificationMessageEventMOO;
 import org.terasology.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
@@ -627,7 +628,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
     /**
      * Receives the HorizontalCollisionEvent and decides whether the Oreon should abandon tasks
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
+    @Priority(EventPriority.PRIORITY_CRITICAL)
+    @ReceiveEvent
     public void receiveCollisionEvent(HorizontalCollisionEvent collisionEvent, EntityRef oreon, MinionMoveComponent moveComponent) {
         if (lastCollisionLocation == null) {
             lastCollisionLocation = collisionEvent.getLocation();
@@ -703,7 +705,8 @@ public class TaskManagementSystem extends BaseComponentSystem {
         return currentTime + newTask.taskDuration;
     }
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent
     public void addBuildingToHolding(BuildingConstructionStartedEvent constructionStartedEvent, EntityRef player) {
         if (constructionStartedEvent.constructedBuildingEntity == EntityRef.NULL) {
             // When a new building is constructed in the village

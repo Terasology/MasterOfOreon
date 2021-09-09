@@ -29,6 +29,7 @@ import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnChangedComponent;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.prefab.PrefabManager;
@@ -36,14 +37,14 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.DisplayNameComponent;
-import org.terasology.module.inventory.components.InventoryComponent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.BlockEntityRegistry;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.module.inventory.components.InventoryComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.research.components.LaboratoryComponent;
 import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.resources.system.BuildingResourceSystem;
@@ -93,7 +94,8 @@ public class ResearchSystem extends BaseComponentSystem {
      * @param event  The event sent.
      * @param player The player entity which triggered the building construction
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
+    @Priority(EventPriority.PRIORITY_TRIVIAL)
+    @ReceiveEvent
     public void onLaboratoryConstruction(BuildingConstructionCompletedEvent event, EntityRef player) {
         if (!event.buildingType.equals(BuildingType.Laboratory)) {
             return;
@@ -119,7 +121,8 @@ public class ResearchSystem extends BaseComponentSystem {
      * @param oreon             The Oreon performing the upgrade task.
      * @param taskComponent     TaskComponent attached to the Oreon.
      */
-    @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_TRIVIAL)
+    @Priority(EventPriority.PRIORITY_TRIVIAL)
+    @ReceiveEvent(components = {TaskComponent.class})
     public void onLaboratoryUpgrade(BuildingUpgradeStartEvent upgradeStartEvent, EntityRef oreon, TaskComponent taskComponent) {
         EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);

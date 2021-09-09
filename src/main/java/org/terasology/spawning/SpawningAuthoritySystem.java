@@ -27,14 +27,14 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.DisplayNameComponent;
-import org.terasology.module.inventory.components.InventoryComponent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.logic.nameTags.NameTagComponent;
 import org.terasology.engine.logic.players.PlayerUtil;
 import org.terasology.engine.network.NetworkComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.random.MersenneRandom;
 import org.terasology.engine.world.block.BlockManager;
+import org.terasology.module.inventory.components.InventoryComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.namegenerator.creature.CreatureNameComponent;
 
 import java.util.ArrayList;

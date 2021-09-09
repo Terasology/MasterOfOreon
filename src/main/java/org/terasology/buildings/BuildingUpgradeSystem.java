@@ -31,6 +31,7 @@ import org.terasology.engine.context.Context;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
@@ -178,7 +179,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
      * @param oreon         The Oreon entity which completed the task.
      * @param taskComponent The task component attached to the Oreon.
      */
-    @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = {TaskComponent.class})
     public void onUpgradeStart(BuildingUpgradeStartEvent event, EntityRef oreon, TaskComponent taskComponent) {
         EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
