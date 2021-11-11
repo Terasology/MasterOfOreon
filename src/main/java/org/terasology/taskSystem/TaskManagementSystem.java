@@ -64,7 +64,8 @@ import org.terasology.engine.world.selection.BlockSelectionComponent;
 import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.minion.move.MinionMoveComponent;
+
+import org.terasology.module.pathfindingbehaviors.move.MinionMoveComponent;
 import org.terasology.notification.NotificationMessageEventMOO;
 import org.terasology.nui.Color;
 import org.terasology.spawning.OreonAttributeComponent;
