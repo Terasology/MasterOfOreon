@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -19,6 +19,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.world.BlockEntityRegistry;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.gestalt.entitysystem.component.Component;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.holdingSystem.components.HoldingComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.resources.system.BuildingResourceSystem;
@@ -45,7 +46,8 @@ public class StorageBuildingSystem extends BaseComponentSystem {
         buildingResourceSystem.initialize(blockEntityRegistry, inventoryManager);
     }
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
+    @Priority(EventPriority.PRIORITY_TRIVIAL)
+    @ReceiveEvent
     public void onDropItem(DropItemEvent event, EntityRef item, ItemComponent itemComponent) {
         EntityRef owner = item.getOwner();
 

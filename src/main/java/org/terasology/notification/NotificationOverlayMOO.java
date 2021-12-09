@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.notification;
 
 import org.terasology.engine.registry.In;
@@ -30,18 +17,8 @@ public class NotificationOverlayMOO extends CoreScreenLayer {
     private static final float TIME_VISIBLE_BASE = 5.0f;
 
     private static final float TIME_FADE = 0.3f;
-
-    private enum State {
-        FADE_IN,
-        VISIBLE,
-        FADE_OUT,
-        HIDDEN
-    }
-
     private float time;
-
     private State state = State.HIDDEN;
-
     @In
     private UIText notificationText;
 
@@ -95,7 +72,7 @@ public class NotificationOverlayMOO extends CoreScreenLayer {
 
     @Override
     public void onDraw(Canvas canvas) {
-        switch (state){
+        switch (state) {
             case FADE_IN:
                 canvas.setAlpha(time / TIME_FADE);
                 break;
@@ -163,5 +140,12 @@ public class NotificationOverlayMOO extends CoreScreenLayer {
     @Override
     public boolean isModal() {
         return false;
+    }
+
+    private enum State {
+        FADE_IN,
+        VISIBLE,
+        FADE_OUT,
+        HIDDEN
     }
 }

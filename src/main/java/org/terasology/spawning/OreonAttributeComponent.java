@@ -10,8 +10,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
  */
 public class OreonAttributeComponent implements Component<OreonAttributeComponent> {
     /**
-     * Defines the current level of the Oreon.
-     * Level of the Oreon decides the max value of a particular attribute that can be attained by Training.
+     * Defines the current level of the Oreon. Level of the Oreon decides the max value of a particular attribute that can be attained by
+     * Training.
      */
     @Replicate
     public int currentLevel = 1;

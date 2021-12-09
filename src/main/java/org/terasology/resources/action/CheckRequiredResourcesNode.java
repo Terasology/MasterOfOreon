@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.resources.action;
 
 import org.joml.Vector3i;
@@ -27,11 +14,11 @@ import org.terasology.engine.logic.behavior.BehaviorAction;
 import org.terasology.engine.logic.behavior.core.Actor;
 import org.terasology.engine.logic.behavior.core.BaseAction;
 import org.terasology.engine.logic.behavior.core.BehaviorState;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.BlockEntityRegistry;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.holdingSystem.components.HoldingComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.nui.properties.TextField;
 import org.terasology.resources.system.BuildingResourceSystem;
 import org.terasology.resources.system.ResourceSystem;
@@ -124,7 +111,8 @@ public class CheckRequiredResourcesNode extends BaseAction {
         if (storageRegion == null) {
             return;
         }
-        EntityRef chestEntity = blockEntityRegistry.getBlockEntityAt(storageRegion.get(MooConstants.CHEST_BLOCK_INDEX).getMax(new Vector3i()));
+        EntityRef chestEntity =
+                blockEntityRegistry.getBlockEntityAt(storageRegion.get(MooConstants.CHEST_BLOCK_INDEX).getMax(new Vector3i()));
 
         TaskComponent taskComponent = new TaskComponent();
         taskComponent.assignedTaskType = AssignedTaskType.GET_BLOCKS_FROM_CHEST;
@@ -135,7 +123,8 @@ public class CheckRequiredResourcesNode extends BaseAction {
 
         // Add place blocks into the required building as a subsequent task.
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
-        EntityRef targetChestEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.CHEST_BLOCK_INDEX).getMax(new Vector3i()));
+        EntityRef targetChestEntity =
+                blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.CHEST_BLOCK_INDEX).getMax(new Vector3i()));
         taskComponent.subsequentTask = new PlaceBlocksInChestTask(requiredResource, 1, targetChestEntity);
         taskComponent.subsequentTaskType = AssignedTaskType.PLACE_BLOCKS_IN_CHEST;
         taskComponent.subsequentTaskRegion = buildingComponent.boundingRegions.get(MooConstants.DINER_CHAIR_REGION_INDEX);

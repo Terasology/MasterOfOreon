@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.research;
 
 import org.joml.Vector3i;
@@ -29,21 +16,22 @@ import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnChangedComponent;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.prefab.PrefabManager;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.DisplayNameComponent;
-import org.terasology.module.inventory.components.InventoryComponent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.BlockEntityRegistry;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.module.inventory.components.InventoryComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.research.components.LaboratoryComponent;
 import org.terasology.research.events.ResearchStartEvent;
 import org.terasology.resources.system.BuildingResourceSystem;
@@ -90,10 +78,11 @@ public class ResearchSystem extends BaseComponentSystem {
     /**
      * This method adds books to a newly constructed Laboratory's bookcase
      *
-     * @param event  The event sent.
+     * @param event The event sent.
      * @param player The player entity which triggered the building construction
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_TRIVIAL)
+    @Priority(EventPriority.PRIORITY_TRIVIAL)
+    @ReceiveEvent
     public void onLaboratoryConstruction(BuildingConstructionCompletedEvent event, EntityRef player) {
         if (!event.buildingType.equals(BuildingType.Laboratory)) {
             return;
@@ -113,13 +102,15 @@ public class ResearchSystem extends BaseComponentSystem {
     }
 
     /**
-     * This method adds new books to the case after the Laboratory is upgraded. Receives an event sent by the {@link org.terasology.taskSystem.actions.PerformTaskNode}
+     * This method adds new books to the case after the Laboratory is upgraded. Receives an event sent by the {@link
+     * org.terasology.taskSystem.actions.PerformTaskNode}
      *
      * @param upgradeStartEvent The event sent.
-     * @param oreon             The Oreon performing the upgrade task.
-     * @param taskComponent     TaskComponent attached to the Oreon.
+     * @param oreon The Oreon performing the upgrade task.
+     * @param taskComponent TaskComponent attached to the Oreon.
      */
-    @ReceiveEvent(components = {TaskComponent.class}, priority = EventPriority.PRIORITY_TRIVIAL)
+    @Priority(EventPriority.PRIORITY_TRIVIAL)
+    @ReceiveEvent(components = TaskComponent.class)
     public void onLaboratoryUpgrade(BuildingUpgradeStartEvent upgradeStartEvent, EntityRef oreon, TaskComponent taskComponent) {
         EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
@@ -166,8 +157,8 @@ public class ResearchSystem extends BaseComponentSystem {
     /**
      * Adds a Research Task to the Holding when the player adds a Research Book to the pedestal inventory.
      *
-     * @param event              The event received
-     * @param inventoryEntity    The entity whose InventoryComponent is changed.
+     * @param event The event received
+     * @param inventoryEntity The entity whose InventoryComponent is changed.
      * @param inventoryComponent The changed component
      */
     @ReceiveEvent(components = LaboratoryComponent.class)
@@ -177,7 +168,8 @@ public class ResearchSystem extends BaseComponentSystem {
             for (EntityRef item : inventoryComponent.itemSlots) {
                 DisplayNameComponent nameComponent = item.getComponent(DisplayNameComponent.class);
 
-                // TODO: this is a dirty way to prevent the research task being added twice when the Exclamation point is placed in inventory
+                // TODO: this is a dirty way to prevent the research task being added twice when the Exclamation point is placed in
+                //  inventory
                 if (inventoryComponent.itemSlots.get(1) == EntityRef.NULL) {
                     // Check if item is research Book
                     if (nameComponent != null && nameComponent.name.equals(MooConstants.RESEARCH_BOOK_NAME)) {
@@ -214,7 +206,7 @@ public class ResearchSystem extends BaseComponentSystem {
      * Adds the resulting block of a research to the building chest.
      *
      * @param researchEvent The event received after Oreon performs Research Task.
-     * @param oreon         The Oreon which performed the task.
+     * @param oreon The Oreon which performed the task.
      * @param taskComponent The TaskComponent attached to the Oreon.
      */
     @ReceiveEvent
@@ -237,9 +229,8 @@ public class ResearchSystem extends BaseComponentSystem {
         for (String text : textList) {
             int i = text.indexOf("<recipe");
             if (i != -1) {
-                text = text.substring(i);
-                i = text.indexOf(">");
-                recipePrefabName = text.substring("<recipe".length(), i).replaceAll("\\s", "");
+                recipePrefabName = text.substring("<recipe".length(), text.indexOf(">", i))
+                        .replaceAll("\\s", "");
                 logger.info(recipePrefabName);
                 break;
             }
@@ -262,16 +253,19 @@ public class ResearchSystem extends BaseComponentSystem {
     }
 
     /**
-     * Removes the book and exclamation point from the Pedestal after Research is completed. Also places the book back
-     * into the Bookcase
+     * Removes the book and exclamation point from the Pedestal after Research is completed. Also places the book back into the Bookcase
      *
      * @param laboratory The building entity where the task was performed
      */
     private void removeBookFromPedestal(EntityRef laboratory) {
         ConstructedBuildingComponent buildingComponent = laboratory.getComponent(ConstructedBuildingComponent.class);
 
-        EntityRef pedestalEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.PEDESTAL_REGION_INDEX).getMax(new Vector3i()));
-        EntityRef bookcaseEntity = blockEntityRegistry.getBlockEntityAt(buildingComponent.boundingRegions.get(MooConstants.BOOKCASE_REGION_INDEX).getMax(new Vector3i()));
+        EntityRef pedestalEntity =
+                blockEntityRegistry.getBlockEntityAt(
+                        buildingComponent.boundingRegions.get(MooConstants.PEDESTAL_REGION_INDEX).getMax(new Vector3i()));
+        EntityRef bookcaseEntity =
+                blockEntityRegistry.getBlockEntityAt(
+                        buildingComponent.boundingRegions.get(MooConstants.BOOKCASE_REGION_INDEX).getMax(new Vector3i()));
 
         InventoryComponent pedestalInventory = pedestalEntity.getComponent(InventoryComponent.class);
 

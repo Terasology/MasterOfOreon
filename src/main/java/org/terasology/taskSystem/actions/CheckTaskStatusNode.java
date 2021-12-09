@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.actions;
 
 
@@ -32,11 +19,9 @@ import org.terasology.taskSystem.components.TaskComponent;
 
 @BehaviorAction(name = "check_task_status")
 public class CheckTaskStatusNode extends BaseAction {
+    private static final Logger logger = LoggerFactory.getLogger(CheckTaskStatusNode.class);
     @In
     private Time time;
-
-    private static final Logger logger = LoggerFactory.getLogger(CheckTaskStatusNode.class);
-
     private MersenneRandom mersenneRandom;
 
     @Override
@@ -57,8 +42,7 @@ public class CheckTaskStatusNode extends BaseAction {
     }
 
     /**
-     * Sets the Oreon's target in the {@link MinionMoveComponent} to a nearby selected block so that the Oreon can move
-     * to it.
+     * Sets the Oreon's target in the {@link MinionMoveComponent} to a nearby selected block so that the Oreon can move to it.
      *
      * @param oreon The character whose target is being set.
      */

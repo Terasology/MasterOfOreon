@@ -46,7 +46,7 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
 
     private BlockEntityRegistry blockEntityRegistry;
     private EntityRef notificationMessageEntity;
-    private DelayedNotificationSystem  delayedNotificationSystem;
+    private DelayedNotificationSystem delayedNotificationSystem;
 
     @Override
     public void construct(Actor oreon) {
@@ -90,7 +90,8 @@ public class AddCropTransferToStorageTaskNode extends BaseAction {
         harvestTask.numberOfCropBlocksHarvested = plantRegion.getSizeX() * plantRegion.getSizeZ();
 
         // Get the type of crop harvested
-        EntityRef plantBlockEntity = blockEntityRegistry.getBlockEntityAt(new Vector3i(plantRegion.minX(), plantRegion.minY() + 1, plantRegion.minZ()));
+        EntityRef plantBlockEntity = blockEntityRegistry.getBlockEntityAt(new Vector3i(plantRegion.minX(), plantRegion.minY() + 1,
+                plantRegion.minZ()));
         BlockComponent blockComponent = plantBlockEntity.getComponent(BlockComponent.class);
         harvestTask.harvestedCrop = blockComponent.getBlock().getURI().toString();
 

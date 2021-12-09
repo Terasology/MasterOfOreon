@@ -10,8 +10,8 @@ import org.terasology.taskSystem.Task;
 import org.terasology.taskSystem.TaskStatusType;
 
 /**
- * Component which gets attached to an Oreon entity when a task is assigned to it.
- * All fields are replicated from server to client since changes to this component happens always on the Authority TaskManagementSystem.
+ * Component which gets attached to an Oreon entity when a task is assigned to it. All fields are replicated from server to client since
+ * changes to this component happens always on the Authority TaskManagementSystem.
  */
 public class TaskComponent implements Component<TaskComponent> {
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
