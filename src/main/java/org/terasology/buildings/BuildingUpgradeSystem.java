@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.buildings;
 
 import org.joml.RoundingMode;
@@ -82,7 +69,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
         taskManagementSystem = context.get(TaskManagementSystem.class);
         structureTemplateProvider = context.get(StructureTemplateProvider.class);
 
-        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider, localPlayer.getCharacterEntity());
+        constructingFromStructureTemplate = new ConstructingFromStructureTemplate(structureTemplateProvider,
+                localPlayer.getCharacterEntity());
     }
 
     @ReceiveEvent
@@ -106,7 +94,7 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
      * Checks if the block activated using the upgrade tool is part of a building
      *
      * @param blockPos The position of the block to be checked
-     * @param player   The entity which sends the event
+     * @param player The entity which sends the event
      */
     private void checkIfPartOfBuilding(Vector3f blockPos, EntityRef player) {
         HoldingComponent holdingComponent = player.getComponent(HoldingComponent.class);
@@ -134,8 +122,8 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     }
 
     /**
-     * Receives the {@link UpgradeBuildingEvent} triggered by the Upgrade Button on the BuildingUpgradeScreen and adds a
-     * upgrade task to the holding
+     * Receives the {@link UpgradeBuildingEvent} triggered by the Upgrade Button on the BuildingUpgradeScreen and adds a upgrade task to the
+     * holding
      *
      * @param upgradeBuildingEvent The event received
      */
@@ -172,24 +160,30 @@ public class BuildingUpgradeSystem extends BaseComponentSystem {
     }
 
     /**
-     * This method handles the construction of the upgraded version of a building. The event is sent by {@link PerformTaskNode}
-     * after the Oreon has completed an Upgrade task.
+     * This method handles the construction of the upgraded version of a building. The event is sent by {@link PerformTaskNode} after the
+     * Oreon has completed an Upgrade task.
      *
-     * @param event         The upgrade event sent.
-     * @param oreon         The Oreon entity which completed the task.
+     * @param event The upgrade event sent.
+     * @param oreon The Oreon entity which completed the task.
      * @param taskComponent The task component attached to the Oreon.
      */
     @Priority(EventPriority.PRIORITY_HIGH)
-    @ReceiveEvent(components = {TaskComponent.class})
+    @ReceiveEvent(components = TaskComponent.class)
     public void onUpgradeStart(BuildingUpgradeStartEvent event, EntityRef oreon, TaskComponent taskComponent) {
         EntityRef building = entityManager.getEntity(taskComponent.task.requiredBuildingEntityID);
         ConstructedBuildingComponent buildingComponent = building.getComponent(ConstructedBuildingComponent.class);
 
         buildingComponent.currentLevel += 1;
         building.saveComponent(buildingComponent);
-        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType, buildingComponent.currentLevel, building, localPlayer.getCharacterEntity());
+        constructingFromStructureTemplate.constructBuilding(buildingComponent.centerLocation, buildingComponent.buildingType,
+                buildingComponent.currentLevel, building, localPlayer.getCharacterEntity());
 
-        taskManagementSystem.addBuildingToHolding(constructingFromStructureTemplate.getBuildingConstructionStartedEvent(buildingComponent.centerLocation, buildingComponent.buildingType, building), localPlayer.getCharacterEntity());
+        taskManagementSystem.addBuildingToHolding(
+                constructingFromStructureTemplate.getBuildingConstructionStartedEvent(
+                        buildingComponent.centerLocation,
+                        buildingComponent.buildingType,
+                        building),
+                localPlayer.getCharacterEntity());
     }
 
     @ReceiveEvent

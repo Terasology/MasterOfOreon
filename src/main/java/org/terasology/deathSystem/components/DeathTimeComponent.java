@@ -5,8 +5,8 @@ package org.terasology.deathSystem.components;
 import org.terasology.gestalt.entitysystem.component.Component;
 
 /**
- * This component is attached to an Oreon entity which has reached zero health and would be destroyed after the death
- * animation is completed.
+ * This component is attached to an Oreon entity which has reached zero health and would be destroyed after the death animation is
+ * completed.
  */
 public class DeathTimeComponent implements Component<DeathTimeComponent> {
     /**

@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.tooltip;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -33,13 +20,16 @@ import org.terasology.worldlyTooltipAPI.events.GetTooltipNameEvent;
 @RegisterSystem(RegisterMode.CLIENT)
 public class TooltipClientSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {OreonAttributeComponent.class, CreatureNameComponent.class})
-    public void addAttributesToTooltip(GetItemTooltip event, EntityRef entity, OreonAttributeComponent oreonAttributeComponent,  CreatureNameComponent oreonNameComponent) {
+    public void addAttributesToTooltip(GetItemTooltip event,
+                                       EntityRef entity,
+                                       OreonAttributeComponent attributes,
+                                       CreatureNameComponent oreonNameComponent) {
         event.getTooltipLines().add(new TooltipLine("Name : " + oreonNameComponent.firstName + " " + oreonNameComponent.lastName));
-        event.getTooltipLines().add(new TooltipLine("Level : " + oreonAttributeComponent.currentLevel));
-        event.getTooltipLines().add(new TooltipLine("Health : " + oreonAttributeComponent.health + " / " + oreonAttributeComponent.maxHealth));
-        event.getTooltipLines().add(new TooltipLine("Hunger : " + oreonAttributeComponent.hunger));
-        event.getTooltipLines().add(new TooltipLine("Strength : " + oreonAttributeComponent.strength + " / " + oreonAttributeComponent.maxStrength ));
-        event.getTooltipLines().add(new TooltipLine("Intelligence : " + oreonAttributeComponent.intelligence + " / " + oreonAttributeComponent.maxIntelligence ));
+        event.getTooltipLines().add(new TooltipLine("Level : " + attributes.currentLevel));
+        event.getTooltipLines().add(new TooltipLine("Health : " + attributes.health + " / " + attributes.maxHealth));
+        event.getTooltipLines().add(new TooltipLine("Hunger : " + attributes.hunger));
+        event.getTooltipLines().add(new TooltipLine("Strength : " + attributes.strength + " / " + attributes.maxStrength));
+        event.getTooltipLines().add(new TooltipLine("Intelligence : " + attributes.intelligence + " / " + attributes.maxIntelligence));
         event.getTooltipLines().add(new TooltipLine("AssignedTask : " + entity.getComponent(TaskComponent.class).assignedTaskType));
     }
 

@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.taskCompletion;
 
 import com.google.common.math.DoubleMath;
@@ -111,6 +98,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
     /**
      * Generates the BlockTheme with the blocks required for the construction of different buildings
+     *
      * @return The genrated theme
      */
     private BlockTheme buildBlockTheme() {
@@ -147,6 +135,7 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
 
     /**
      * Constructs the different parts of a building like its doors, windows etc.
+     *
      * @param compositeBuilding The Building object which is to be built
      * @param shape The bounding rectangle inside which construction is to be done
      * @param heightMap The height map of the base on which the building is being constructed
@@ -172,10 +161,12 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
         }
     }
 
-    //TODO: Move the following methods to separate classes i.e different classes for Doors, Windows etc so that different types of these parts can be handled at one place
+    //TODO: Move the following methods to separate classes i.e different classes for Doors, Windows etc so that different types of these
+    // parts can be handled at one place
 
     /**
      * Places the {@link RectBuildingPart} of a building into the world
+     *
      * @param rasterTarget
      * @param rectBuildingPart The part object which is being built
      * @param heightMap Height map of the base
@@ -240,7 +231,8 @@ public class ConstructingFromBuildingGenerator implements BuildTaskCompletion {
             if (SingleBlockDecoration.class.isInstance(decoration)) {
                 SingleBlockDecoration blockDecoration = SingleBlockDecoration.class.cast(decoration);
                 if (rasterTarget.getAffectedRegion().contains(blockDecoration.getPos())) {
-                    rasterTarget.setBlock(blockDecoration.getPos(), blockDecoration.getType(), Collections.singleton(blockDecoration.getSide()));
+                    rasterTarget.setBlock(blockDecoration.getPos(), blockDecoration.getType(),
+                            Collections.singleton(blockDecoration.getSide()));
                 }
             }
 

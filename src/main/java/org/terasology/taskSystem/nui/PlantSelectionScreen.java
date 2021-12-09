@@ -1,18 +1,5 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.taskSystem.nui;
 
 import org.terasology.engine.logic.players.LocalPlayer;
@@ -31,16 +18,14 @@ import java.util.List;
 import java.util.Random;
 
 public class PlantSelectionScreen extends CoreScreenLayer {
+    String plantSelected = "";
     private UIButton plantButton;
     private UIList<String> uiList;
     private ResettableUIText searchBar;
     @In
     private NUIManager nuiManager;
-
     @In
     private LocalPlayer localPlayer;
-
-    String plantSelected = "";
 
     @Override
     public void initialise() {
@@ -53,7 +38,7 @@ public class PlantSelectionScreen extends CoreScreenLayer {
 
         plantButton.subscribe(button -> {
             String task = AssignedTaskType.PLANT;
-            if (plantSelected != "") {
+            if (!plantSelected.equals("")) {
                 switch (plantSelected) {
                     case "Cookie Crops":
                         sendPlantTypeEvent(task, PlantType.CookieCrops);
@@ -90,10 +75,13 @@ public class PlantSelectionScreen extends CoreScreenLayer {
     }
 
     private void populatePlantScroll() {
-        if (uiList == null) return;
+        if (uiList == null) {
+            return;
+        }
         List<String> buttonList = new ArrayList<>();
-        for (int i = 0; i < PlantType.values().length - 1; i++)
+        for (int i = 0; i < PlantType.values().length - 1; i++) {
             buttonList.add(PlantType.values()[i].plantName);
+        }
         uiList.setEnabled(true);
         uiList.setList(buttonList);
         uiList.select(0);

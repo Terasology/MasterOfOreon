@@ -1,18 +1,5 @@
-/*
- * Copyright 2018 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.spawning;
 
 import org.joml.Vector3fc;
@@ -58,10 +45,11 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
     private InventoryManager inventoryManager;
 
 
-
     /**
      * Spawns the desired Oreon at the location of Portal which sends the event
-     * @param event The {@link OreonSpawnEvent} which is sent by the {@link org.terasology.spawning.nui.SpawnScreenLayer} when a player selects the Oreon to be spawned
+     *
+     * @param event The {@link OreonSpawnEvent} which is sent by the {@link org.terasology.spawning.nui.SpawnScreenLayer} when a
+     *         player selects the Oreon to be spawned
      * @param player The player entity which is spawning the Oreon.
      */
     @ReceiveEvent
@@ -92,6 +80,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Checks if the Oreon to be spawned has an item requirement and calls {@code removeNeededItem} item method
+     *
      * @param player The player entity spawning the Oreon
      * @param prefab The prefab of the Oreon to be spawned
      * @return A boolean value which signifies if the required items were found in inventory and successfully deducted
@@ -138,10 +127,11 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Makes a pass through all items in a player's inventory and adds the slot number of all required items to a list.
+     *
      * @param items The map which consists of all items and their quantity required for spawning
      * @param player The player entity spawning the Oreon
-     * @return A list of slot number of all items required for spawning. If the size of this is list is not equal to the
-     * number of items required then a required item was not found in the inventory
+     * @return A list of slot number of all items required for spawning. If the size of this is list is not equal to the number of items
+     *         required then a required item was not found in the inventory
      */
     private List<Integer> getSlotsForRequiredItems(Map<String, Integer> items, EntityRef player) {
         List<Integer> requiredSlots = new ArrayList<>();
@@ -173,11 +163,12 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Removes an item required for spawning from the player's inventory
+     *
      * @param items The map which consists of all items and their quantity required for spawning
      * @param slotNumber The slot number of the item to be removed
      * @param player The player entity spawning the Oreon
-     * @return True - if the item removal from the inventory was successful.<br>
-     *     False - if the required amount was not found in the inventory
+     * @return True - if the item removal from the inventory was successful.<br> False - if the required amount was not found in the
+     *         inventory
      */
     private boolean removeNeededItem(Map<String, Integer> items, int slotNumber, EntityRef player) {
         EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
@@ -197,7 +188,7 @@ public class SpawningAuthoritySystem extends BaseComponentSystem {
         return true;
     }
 
-    private void assignRandomAttributes(Prefab prefabToSpawn,EntityRef oreon) {
+    private void assignRandomAttributes(Prefab prefabToSpawn, EntityRef oreon) {
         OreonAttributeComponent oreonAttributes = new OreonAttributeComponent();
 
         MersenneRandom random = new MersenneRandom();
