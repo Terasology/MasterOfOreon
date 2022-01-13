@@ -16,7 +16,7 @@ import org.terasology.engine.logic.behavior.core.BehaviorState;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.block.BlockRegion;
-import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.module.behaviors.components.MinionMoveComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 
 @BehaviorAction(name = "find_next_block_on_boundary")
