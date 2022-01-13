@@ -14,7 +14,7 @@ import org.terasology.engine.logic.behavior.core.BehaviorState;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.random.MersenneRandom;
-import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.module.behaviors.components.MinionMoveComponent;
 import org.terasology.taskSystem.components.TaskComponent;
 
 @BehaviorAction(name = "check_task_status")

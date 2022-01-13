@@ -51,7 +51,7 @@ import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.holdingSystem.HoldingAuthoritySystem;
 import org.terasology.holdingSystem.components.AssignedAreaComponent;
 import org.terasology.holdingSystem.components.HoldingComponent;
-import org.terasology.minion.move.MinionMoveComponent;
+import org.terasology.module.behaviors.components.MinionMoveComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.notification.NotificationMessageEventMOO;
 import org.terasology.nui.Color;
