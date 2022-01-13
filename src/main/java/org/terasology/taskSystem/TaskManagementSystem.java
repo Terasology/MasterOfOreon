@@ -575,8 +575,7 @@ public class TaskManagementSystem extends BaseComponentSystem {
     private void setOreonTarget(Actor oreon, Vector3i target) {
         MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
 
-        moveComponent.target = new Vector3f(target.x, target.y, target.z);
-        moveComponent.type = MinionMoveComponent.Type.DIRECT;
+        moveComponent.target.set(target);
 
         logger.info("Set Oreon target to : " + moveComponent.target);
 

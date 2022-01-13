@@ -3,6 +3,7 @@
 package org.terasology.taskSystem.actions;
 
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.buildings.components.ConstructedBuildingComponent;
@@ -80,7 +81,7 @@ public class FindNextBlockOnBoundaryNode extends BaseAction {
         int y = taskComponent.taskRegion.minY();
 
         if (moveComponent.target == null) {
-            moveComponent.target = new Vector3f();
+            moveComponent.target = new Vector3i();
         }
         if (Math.round(worldPosition.x) == maxX) {
             if (Math.round(worldPosition.z) != maxZ) {
