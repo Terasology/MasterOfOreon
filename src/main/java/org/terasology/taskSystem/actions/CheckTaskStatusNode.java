@@ -3,7 +3,9 @@
 package org.terasology.taskSystem.actions;
 
 
+import org.joml.RoundingMode;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.engine.core.Time;
@@ -50,7 +52,7 @@ public class CheckTaskStatusNode extends BaseAction {
         MinionMoveComponent moveComponent = oreon.getComponent(MinionMoveComponent.class);
 
         LocationComponent locationComponent = oreon.getComponent(LocationComponent.class);
-        Vector3f worldPosition = locationComponent.getWorldPosition(new org.joml.Vector3f());
+        Vector3i worldPosition = new Vector3i(locationComponent.getWorldPosition(new Vector3f()), RoundingMode.FLOOR);
 
         int maxX = taskComponent.taskRegion.maxX();
         int maxZ = taskComponent.taskRegion.maxZ();
